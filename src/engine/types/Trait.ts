@@ -6,20 +6,33 @@ import { Context } from "./Context";
  * Designed to be able to conveniently instantiate and extend Trait
  */
 export class Trait {
-  constructor(
-    private _createActionName?: Trait["createActionName"],
-    private _apply?: Trait["apply"]
-  ) {}
+  constructor(private options: TraitOptions = {}) {}
 
-  createActionName(entity: Entity): string | undefined {
-    if (this._createActionName) {
-      return this._createActionName(entity);
+  action(entity: Entity, context: Context) {
+    if (this.options.action) {
+      return this.options.action(entity, context);
+    }
+    return "";
+  }
+
+  apply(entity: Entity, context: Context) {
+    if (this.options.apply) {
+      return this.options.apply(entity, context);
     }
   }
 
-  apply(context: Context, entity: Entity): Effect | undefined {
-    if (this._apply) {
-      return this._apply(context, entity);
+  isActive(entity: Entity, context: Context) {
+    if (this.options.isActive) {
+      return this.options.isActive(entity, context);
     }
+    return true;
   }
 }
+
+export type TraitOptions = {
+  action?: Derive<string>;
+  apply?: Derive<Effect | undefined | void>;
+  isActive?: Derive<boolean>;
+};
+
+export type Derive<T> = (entity: Entity, context: Context) => T;

@@ -1,15 +1,20 @@
 import { describeGame } from "./presentation/describeGame";
-import { Entity } from "./types/Entity";
 import { Game } from "./types/Game";
-import { ObservableTrait } from "./traits/ObservableTrait";
-import { CollectableTrait } from "./traits/CollectableTrait";
-import { Trait } from "./types/Trait";
+import { bridgeRepairEquipment } from "../entities/bridgeRepairEquipment";
+import { darkness } from "../entities/darkness";
+import { winMessage } from "../entities/winMessage";
+import { bridge } from "../entities/bridge";
+import { ladder } from "../entities/ladder";
+import { lighter } from "../entities/lighter";
 
 test("Can perform story example", () => {
-  const game = new Game("bridge", {
-    bridge: { entities: [bridge, bridgeRepairEquipment] },
-    goals: { entities: [winMessage] },
+  const game = new Game("cliff", {
+    cliff: { entities: [bridge, bridgeRepairEquipment] },
+    bridge: { entities: [bridge] },
+    pit: { entities: [darkness, ladder] },
+    otherSide: { entities: [winMessage] },
   });
+  game.context.inventory.push(lighter);
 
   expect(describeGame(game)).toEqual(
     `You stand in front of a bridge. It looks fragile.
@@ -22,8 +27,7 @@ Actions:
   game.perform("Cross the bridge");
 
   expect(describeGame(game)).toEqual(
-    `The bridge creaks. It seems very unstable.
-You are standing on the bridge.
+    `You are standing on the bridge. It seems very unstable.
 Actions:
 - Proceed
 - Go back`
@@ -43,13 +47,14 @@ Actions:
   expect(describeGame(game)).toEqual(
     `You see a ladder.
 Actions:
-- Climb ladder`
+- Climb ladder
+- Stop using lighter`
   );
 
   game.perform("Climb ladder");
 
   expect(describeGame(game)).toEqual(
-    `You stand in front of a bridge. It is broken.
+    `You stand in front of a bridge. It looks broken.
 There's a repair kit conveniently laying on the ground.
 Actions:
 - Cross the bridge
@@ -59,7 +64,8 @@ Actions:
   game.perform("Pick up repair kit");
 
   expect(describeGame(game)).toEqual(
-    `You stand in front of a bridge. It is broken.
+    `Picked up repair kit.
+You stand in front of a bridge. It looks broken.
 Actions:
 - Cross the bridge
 - Repair bridge`
@@ -78,27 +84,3 @@ Actions:
 
   expect(describeGame(game)).toEqual("You win!");
 });
-
-const bridge = new Entity<"fragile" | "broken" | "repaired">(
-  "bridge",
-  "fragile",
-  (state) => [
-    new Trait((entity) => `Cross the ${entity.name}`),
-    new ObservableTrait(`You stand in front of a bridge. It looks ${state}.`),
-  ]
-);
-
-const bridgeRepairEquipment = Entity.forTraits(
-  "repair kit",
-  new CollectableTrait(),
-  // new ConsumableTrait(),
-  // new UsableTrait(),
-  new ObservableTrait(
-    (entity) => `There's a ${entity.name} conveniently laying on the ground.`
-  )
-);
-
-const winMessage = Entity.forTraits(
-  "win-message",
-  new ObservableTrait("You win!")
-);

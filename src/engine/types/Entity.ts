@@ -1,15 +1,16 @@
 import { Trait } from "./Trait";
+import { Context } from "./Context";
 
 export class Entity<State = any> {
-  public get traits(): Trait[] {
-    return this.resolveTraits(this.state);
-  }
-
   constructor(
     public name: string,
     public state: State,
-    private resolveTraits: (state: State) => Trait[]
+    private resolveTraits: (state: State, context: Context) => Trait[]
   ) {}
+
+  public getTraits(context: Context): Trait[] {
+    return this.resolveTraits(this.state, context);
+  }
 
   static forTraits(name: string, ...traits: Trait[]) {
     return new Entity(name, undefined, () => traits);

@@ -6,23 +6,29 @@ import { Room } from "./Room";
 import { Context } from "./Context";
 
 export class Game<Config extends Record<keyof any, Room> = any> {
-  private context: Context = {
-    inventory: [],
-  };
+  public context: Context;
 
   public effect?: Effect;
 
   public get room() {
-    return this.roomId !== undefined ? this.config[this.roomId] : undefined;
+    return this.config[this.context.roomId];
   }
   public get entities() {
-    return this.room ? this.room.entities : [];
+    return [
+      ...(this.room ? this.room.entities : []),
+      ...this.context.inventory,
+    ];
   }
   public get actions() {
-    return createActions(this.entities);
+    return createActions(this.entities, this.context);
   }
 
-  constructor(public roomId: keyof Config, private config: Config) {}
+  constructor(roomId: keyof Config, private config: Config) {
+    this.context = {
+      inventory: [],
+      roomId: roomId as string,
+    };
+  }
 
   public perform(command: string) {
     const action = interpretCommand(command, this.actions);
