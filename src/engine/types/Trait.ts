@@ -1,6 +1,6 @@
 import { Entity } from "./Entity";
 import { Effect } from "./Effect";
-import { Context } from "./Context";
+import { World } from "./World";
 
 /**
  * Designed to be able to conveniently instantiate and extend Trait
@@ -8,22 +8,22 @@ import { Context } from "./Context";
 export class Trait {
   constructor(private options: TraitOptions = {}) {}
 
-  action(entity: Entity, context: Context) {
+  action(entity: Entity, world: World) {
     if (this.options.action) {
-      return this.options.action(entity, context);
+      return this.options.action(entity, world);
     }
     return "";
   }
 
-  apply(entity: Entity, context: Context) {
+  apply(entity: Entity, world: World) {
     if (this.options.apply) {
-      return this.options.apply(entity, context);
+      return this.options.apply(entity, world);
     }
   }
 
-  isActive(entity: Entity, context: Context) {
+  isActive(entity: Entity, world: World) {
     if (this.options.isActive) {
-      return this.options.isActive(entity, context);
+      return this.options.isActive(entity, world);
     }
     return true;
   }
@@ -35,4 +35,4 @@ export type TraitOptions = {
   isActive?: Derive<boolean>;
 };
 
-export type Derive<T> = (entity: Entity, context: Context) => T;
+export type Derive<T> = (entity: Entity, world: World) => T;

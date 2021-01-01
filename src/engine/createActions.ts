@@ -1,20 +1,19 @@
 import { Entity } from "./types/Entity";
 import { Action } from "./types/Action";
-import { Context } from "./types/Context";
+import { World } from "./types/World";
 
-export const createActions = (entities: Entity[], context: Context) => {
+export const createActions = (entities: Entity[], world: World) => {
   const actions: Action[] = [];
   for (const entity of entities) {
-    for (const trait of entity.getTraits(context)) {
-      if (!trait.isActive(entity, context)) {
+    for (const trait of entity.getTraits(world)) {
+      if (!trait.isActive(entity, world)) {
         continue;
       }
-      const name = trait.action(entity, context);
+      const name = trait.action(entity, world);
       if (name) {
         actions.push({
           name,
-          perform: (context: Context) =>
-            trait.apply(entity, context) || undefined,
+          perform: (world: World) => trait.apply(entity, world) || undefined,
         });
       }
     }

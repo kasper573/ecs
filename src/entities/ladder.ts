@@ -7,9 +7,9 @@ export const ladder = Entity.forTraits(
   new ObservableTrait({
     action: () => "Climb ladder",
     observe: () => "You see a ladder.",
-    isActive: (entity, context) => isLit(context),
-    apply: (entity, context) => {
-      context.roomId = "cliff";
+    isActive: (entity, world) => isLit(world),
+    apply: (entity, world) => {
+      world.sceneId = "cliff";
     },
   })
 );

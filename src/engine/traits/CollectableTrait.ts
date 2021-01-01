@@ -1,17 +1,18 @@
 import { Trait } from "../types/Trait";
 import { Entity } from "../types/Entity";
-import { Context } from "../types/Context";
+import { World } from "../types/World";
+import { removeItem } from "../functions/removeItem";
 
 export class CollectableTrait extends Trait {
-  isActive(entity: Entity, context: Context) {
-    return !context.inventory.includes(entity);
+  isActive(entity: Entity, world: World) {
+    return !world.inventory.includes(entity);
   }
 
-  apply(entity: Entity, context: Context) {
-    context.inventory.push(entity);
-
+  apply(entity: Entity, world: World) {
+    world.inventory.push(entity);
+    removeItem(world.scene, entity);
     return {
-      description: `Picked up ${entity.name}`,
+      description: `Picked up ${entity.name}.`,
     };
   }
 

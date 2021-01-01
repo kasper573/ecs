@@ -6,6 +6,6 @@ export const darkness = Entity.forTraits(
   "darkness",
   new ObservableTrait({
     observe: () => "It is very dark.",
-    isActive: (entity, context) => !isLit(context),
+    isActive: (entity, world) => !isLit(world),
   })
 );

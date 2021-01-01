@@ -1,15 +1,15 @@
 import { Trait } from "./Trait";
-import { Context } from "./Context";
+import { World } from "./World";
 
 export class Entity<State = any> {
   constructor(
     public name: string,
     public state: State,
-    private resolveTraits: (state: State, context: Context) => Trait[]
+    private resolveTraits: (state: State, world: World) => Trait[]
   ) {}
 
-  public getTraits(context: Context): Trait[] {
-    return this.resolveTraits(this.state, context);
+  public getTraits(world: World): Trait[] {
+    return this.resolveTraits(this.state, world);
   }
 
   static forTraits(name: string, ...traits: Trait[]) {

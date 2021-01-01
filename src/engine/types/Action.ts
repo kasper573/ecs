@@ -1,7 +1,7 @@
 import { Effect } from "./Effect";
-import { Context } from "./Context";
+import { World } from "./World";
 
 export type Action = {
   name: string;
-  perform: (context: Context) => Effect | undefined;
+  perform: (world: World) => Effect | undefined;
 };

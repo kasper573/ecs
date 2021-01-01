@@ -10,44 +10,44 @@ const fallDown: Effect = {
 export const bridge = new Entity<"fragile" | "broken" | "sturdy">(
   "bridge",
   "fragile",
-  (state, context) => [
+  (state, world) => [
     new Trait({
       action: (entity) => `Cross the ${entity.name}`,
-      isActive: (entity, context) => context.roomId === "cliff",
-      apply: (entity, context) => {
+      isActive: (entity, world) => world.sceneId === "cliff",
+      apply: (entity, world) => {
         if (state === "sturdy") {
-          context.roomId = "otherSide";
+          world.sceneId = "otherSide";
         } else if (state === "fragile") {
-          context.roomId = "bridge";
+          world.sceneId = "bridge";
         } else if (state === "broken") {
-          context.roomId = "pit";
+          world.sceneId = "pit";
           return fallDown;
         }
       },
     }),
     new Trait({
       action: () => "Proceed",
-      isActive: (entity, context) => context.roomId === "bridge",
-      apply: (entity, context) => {
+      isActive: (entity, world) => world.sceneId === "bridge",
+      apply: (entity, world) => {
         if (state === "sturdy") {
-          context.roomId = "otherSide";
+          world.sceneId = "otherSide";
         } else {
           entity.state = "broken";
-          context.roomId = "pit";
+          world.sceneId = "pit";
           return fallDown;
         }
       },
     }),
     new Trait({
       action: () => "Go back",
-      isActive: (entity, context) => context.roomId === "bridge",
-      apply: (entity, context) => {
-        context.roomId = "cliff";
+      isActive: (entity, world) => world.sceneId === "bridge",
+      apply: (entity, world) => {
+        world.sceneId = "cliff";
       },
     }),
     new ObservableTrait({
       observe: () =>
-        context.roomId === "bridge"
+        world.sceneId === "bridge"
           ? "You are standing on the bridge. It seems very unstable."
           : `You stand in front of a bridge. It looks ${state}.`,
     }),
