@@ -3,12 +3,10 @@
 # Tasks
 
 - [x] Boilerplate
-- [ ] Rename Game to World
-- [ ] Rename Room to Scene
 
 # POCs
 
-- [ ] Text adventure game
+- [~] Text adventure game
 - [ ] Text adventure game + Twitch votes
 - [ ] Text adventure game + Twitch votes + Multiplayer aspect (ie. jackbox.tv)
       (Before we can do this we need ideas on what the viewers can do when connecting to game)
@@ -31,8 +29,8 @@
 
 # Brainstorm
 
-rooms that you can traverse between
-rooms to contain objects you can observe or interact with
+scenes that you can traverse between
+scenes to contain objects you can observe or interact with
 objects to have traits:
 
 - usable

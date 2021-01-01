@@ -3,10 +3,11 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./fixtures/theme";
+import { world } from "./world";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App theme={theme} />
+    <App theme={theme} world={world} />
   </React.StrictMode>,
   document.getElementById("root")
 );
