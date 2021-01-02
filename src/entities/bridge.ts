@@ -1,7 +1,7 @@
 import { Effect } from "../engine/types/Effect";
 import { Entity } from "../engine/types/Entity";
-import { Trait } from "../engine/types/Trait";
-import { ObservableTrait } from "../engine/traits/ObservableTrait";
+import { Component } from "../engine/types/Component";
+import { Observable } from "../engine/components/Observable";
 
 const fallDown: Effect = {
   description: "The bridge collapses under your weight. You fall down a pit.",
@@ -11,7 +11,7 @@ export const bridge = new Entity<"fragile" | "broken" | "sturdy">(
   "bridge",
   "fragile",
   (state, world) => [
-    new Trait({
+    new Component({
       action: (entity) => `Cross the ${entity.name}`,
       isActive: (entity, world) => world.sceneId === "cliff",
       apply: (entity, world) => {
@@ -25,7 +25,7 @@ export const bridge = new Entity<"fragile" | "broken" | "sturdy">(
         }
       },
     }),
-    new Trait({
+    new Component({
       action: () => "Proceed",
       isActive: (entity, world) => world.sceneId === "bridge",
       apply: (entity, world) => {
@@ -38,14 +38,14 @@ export const bridge = new Entity<"fragile" | "broken" | "sturdy">(
         }
       },
     }),
-    new Trait({
+    new Component({
       action: () => "Go back",
       isActive: (entity, world) => world.sceneId === "bridge",
       apply: (entity, world) => {
         world.sceneId = "cliff";
       },
     }),
-    new ObservableTrait({
+    new Observable({
       observe: () =>
         world.sceneId === "bridge"
           ? "You are standing on the bridge. It seems very unstable."

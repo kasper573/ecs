@@ -3,10 +3,10 @@ import { Effect } from "./Effect";
 import { World } from "./World";
 
 /**
- * Designed to be able to conveniently instantiate and extend Trait
+ * Designed to be able to conveniently instantiate and extend Component
  */
-export class Trait {
-  constructor(private options: TraitOptions = {}) {}
+export class Component {
+  constructor(private options: ComponentOptions = {}) {}
 
   action(entity: Entity, world: World) {
     if (this.options.action) {
@@ -29,7 +29,7 @@ export class Trait {
   }
 }
 
-export type TraitOptions = {
+export type ComponentOptions = {
   action?: Derive<string>;
   apply?: Derive<Effect | undefined | void>;
   isActive?: Derive<boolean>;

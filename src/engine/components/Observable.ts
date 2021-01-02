@@ -1,21 +1,21 @@
-import { Derive, Trait, TraitOptions } from "../types/Trait";
+import { Derive, Component, ComponentOptions } from "../types/Component";
 import { Entity } from "../types/Entity";
 import { World } from "../types/World";
 
-export class ObservableTrait extends Trait {
-  public readonly observe: ObservableTraitOptions["observe"];
+export class Observable extends Component {
+  public readonly observe: ObservableComponentOptions["observe"];
 
   isActive(entity: Entity, world: World) {
     const isInInventory = world.inventory.includes(entity);
     return !isInInventory && super.isActive(entity, world);
   }
 
-  constructor(options: ObservableTraitOptions) {
+  constructor(options: ObservableComponentOptions) {
     super(options);
     this.observe = options.observe;
   }
 }
 
-export type ObservableTraitOptions = TraitOptions & {
+export type ObservableComponentOptions = ComponentOptions & {
   observe: Derive<string>;
 };

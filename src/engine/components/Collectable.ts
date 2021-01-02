@@ -1,9 +1,9 @@
-import { Trait } from "../types/Trait";
+import { Component } from "../types/Component";
 import { Entity } from "../types/Entity";
 import { World } from "../types/World";
 import { removeItem } from "../functions/removeItem";
 
-export class CollectableTrait extends Trait {
+export class Collectable extends Component {
   isActive(entity: Entity, world: World) {
     return !world.inventory.includes(entity);
   }

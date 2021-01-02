@@ -1,12 +1,12 @@
 import { Entity } from "../engine/types/Entity";
-import { Trait } from "../engine/types/Trait";
+import { Component } from "../engine/types/Component";
 import { World } from "../engine/types/World";
 
 export const lighter = new Entity<"lit" | "unlit">(
   "lighter",
   "unlit",
   (state) => [
-    new Trait({
+    new Component({
       isActive: (entity, world) => world.sceneId === "pit",
       action: () => (state === "lit" ? "Stop using lighter" : "Use lighter"),
       apply: (entity) => {

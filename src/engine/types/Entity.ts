@@ -1,26 +1,26 @@
-import { Trait } from "./Trait";
+import { Component } from "./Component";
 import { World } from "./World";
 
 export class Entity<State = any> {
   constructor(
     public name: string,
     public state: State,
-    private resolveTraits: (state: State, world: World) => Trait[]
+    private resolveComponents: (state: State, world: World) => Component[]
   ) {}
 
-  public getTraits(world: World): Trait[] {
-    return this.resolveTraits(this.state, world);
+  public getComponents(world: World): Component[] {
+    return this.resolveComponents(this.state, world);
   }
 
-  static forTraits(name: string, ...traits: Trait[]) {
-    return new Entity(name, undefined, () => traits);
+  static forComponents(name: string, ...components: Component[]) {
+    return new Entity(name, undefined, () => components);
   }
 
-  static switch<T extends Record<string, Trait[]>>(
+  static switch<T extends Record<string, Component[]>>(
     name: string,
-    traits: T,
-    initial: keyof T = Object.keys(traits)[0]
+    components: T,
+    initial: keyof T = Object.keys(components)[0]
   ) {
-    return new Entity<keyof T>(name, initial, (key) => traits[key]);
+    return new Entity<keyof T>(name, initial, (key) => components[key]);
   }
 }

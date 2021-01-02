@@ -1,7 +1,7 @@
 import { Entity } from "../engine/types/Entity";
-import { ObservableTrait } from "../engine/traits/ObservableTrait";
+import { Observable } from "../engine/components/Observable";
 
-export const winMessage = Entity.forTraits(
+export const winMessage = Entity.forComponents(
   "win-message",
-  new ObservableTrait({ observe: () => "You win!" })
+  new Observable({ observe: () => "You win!" })
 );

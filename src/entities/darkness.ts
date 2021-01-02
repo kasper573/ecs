@@ -1,10 +1,10 @@
 import { Entity } from "../engine/types/Entity";
-import { ObservableTrait } from "../engine/traits/ObservableTrait";
+import { Observable } from "../engine/components/Observable";
 import { isLit } from "./lighter";
 
-export const darkness = Entity.forTraits(
+export const darkness = Entity.forComponents(
   "darkness",
-  new ObservableTrait({
+  new Observable({
     observe: () => "It is very dark.",
     isActive: (entity, world) => !isLit(world),
   })

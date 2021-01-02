@@ -1,10 +1,10 @@
 import { Entity } from "../engine/types/Entity";
-import { ObservableTrait } from "../engine/traits/ObservableTrait";
+import { Observable } from "../engine/components/Observable";
 import { isLit } from "./lighter";
 
-export const ladder = Entity.forTraits(
+export const ladder = Entity.forComponents(
   "ladder",
-  new ObservableTrait({
+  new Observable({
     action: () => "Climb ladder",
     observe: () => "You see a ladder.",
     isActive: (entity, world) => isLit(world),

@@ -1,17 +1,17 @@
 import { Entity } from "../engine/types/Entity";
-import { CollectableTrait } from "../engine/traits/CollectableTrait";
-import { ObservableTrait } from "../engine/traits/ObservableTrait";
-import { Trait } from "../engine/types/Trait";
+import { Collectable } from "../engine/components/Collectable";
+import { Observable } from "../engine/components/Observable";
+import { Component } from "../engine/types/Component";
 import { bridge } from "./bridge";
 
-export const bridgeRepairEquipment = Entity.forTraits(
+export const bridgeRepairEquipment = Entity.forComponents(
   "repair kit",
-  new CollectableTrait(),
-  new ObservableTrait({
+  new Collectable(),
+  new Observable({
     observe: (entity) =>
       `There's a ${entity.name} conveniently laying on the ground.`,
   }),
-  new Trait({
+  new Component({
     action: () => "Repair bridge",
     isActive: (entity, world) =>
       world.inventory.includes(entity) &&
