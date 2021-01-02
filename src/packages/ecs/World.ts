@@ -37,13 +37,6 @@ export class World<SceneEntities extends Record<keyof any, Entity[]> = any> {
   ) {
     this.scenes = createScenes(sceneEntities);
   }
-
-  public perform(command: string) {
-    const action = interpretCommand(command, this.actions);
-    this.effect = action
-      ? action.perform(this)
-      : createUnknownCommandEffect(command);
-  }
 }
 
 const createScenes = <Entities extends Record<keyof any, Entity[]>>(

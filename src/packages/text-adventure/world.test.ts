@@ -1,5 +1,6 @@
 import { describeWorld } from "../ecs-text/describeWorld";
 import { createWorld } from "./world";
+import { performCommand } from "../ecs/performCommand";
 
 test("Can play through optimistic route of story", () => {
   const world = createWorld();
@@ -11,7 +12,7 @@ Actions:
 - Pick up repair kit`
   );
 
-  world.perform("Cross the bridge");
+  performCommand(world, "Cross the bridge");
 
   expect(describeWorld(world)).toEqual(
     `You are standing on the bridge. It seems very unstable.
@@ -20,7 +21,7 @@ Actions:
 - Go back`
   );
 
-  world.perform("Proceed");
+  performCommand(world, "Proceed");
 
   expect(describeWorld(world)).toEqual(
     `The bridge collapses under your weight. You fall down a pit.
@@ -29,7 +30,7 @@ Actions:
 - Use lighter`
   );
 
-  world.perform("Use lighter");
+  performCommand(world, "Use lighter");
 
   expect(describeWorld(world)).toEqual(
     `You see a ladder.
@@ -38,7 +39,7 @@ Actions:
 - Stop using lighter`
   );
 
-  world.perform("Climb ladder");
+  performCommand(world, "Climb ladder");
 
   expect(describeWorld(world)).toEqual(
     `You stand in front of a bridge. It looks broken.
@@ -48,7 +49,7 @@ Actions:
 - Pick up repair kit`
   );
 
-  world.perform("Pick up repair kit");
+  performCommand(world, "Pick up repair kit");
 
   expect(describeWorld(world)).toEqual(
     `Picked up repair kit.
@@ -58,7 +59,7 @@ Actions:
 - Repair bridge`
   );
 
-  world.perform("Repair bridge");
+  performCommand(world, "Repair bridge");
 
   expect(describeWorld(world)).toEqual(
     `You repaired the bridge.
@@ -67,7 +68,7 @@ Actions:
 - Cross the bridge`
   );
 
-  world.perform("Cross the bridge");
+  performCommand(world, "Cross the bridge");
 
   expect(describeWorld(world)).toEqual("You win!");
 });
