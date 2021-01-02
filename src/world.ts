@@ -1,16 +1,20 @@
 import { World } from "./engine/types/World";
-import { bridge } from "./entities/bridge";
-import { bridgeRepairEquipment } from "./entities/bridgeRepairEquipment";
-import { darkness } from "./entities/darkness";
-import { ladder } from "./entities/ladder";
-import { winMessage } from "./entities/winMessage";
-import { lighter } from "./entities/lighter";
+import { Bridge } from "./entities/Bridge";
+import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
+import { Darkness } from "./entities/Darkness";
+import { Ladder } from "./entities/Ladder";
+import { WinMessage } from "./entities/WinMessage";
+import { Lighter } from "./entities/Lighter";
 
-export const world = new World("cliff", {
-  cliff: [bridge, bridgeRepairEquipment],
-  bridge: [bridge],
-  pit: [darkness, ladder],
-  otherSide: [winMessage],
-});
+export const createWorld = () => {
+  const bridge = new Bridge();
+  const world = new World("cliff", {
+    cliff: [bridge, new BridgeRepairEquipment()],
+    bridge: [bridge],
+    pit: [new Darkness(), new Ladder()],
+    otherSide: [new WinMessage()],
+  });
 
-world.inventory.push(lighter);
+  world.inventory.push(new Lighter());
+  return world;
+};

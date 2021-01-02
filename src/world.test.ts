@@ -1,21 +1,8 @@
 import { describeWorld } from "./engine/presentation/describeWorld";
-import { World } from "./engine/types/World";
-import { bridgeRepairEquipment } from "./entities/bridgeRepairEquipment";
-import { darkness } from "./entities/darkness";
-import { winMessage } from "./entities/winMessage";
-import { bridge } from "./entities/bridge";
-import { ladder } from "./entities/ladder";
-import { lighter } from "./entities/lighter";
+import { createWorld } from "./world";
 
 test("Can play through optimistic route of story", () => {
-  const world = new World("cliff", {
-    cliff: [bridge, bridgeRepairEquipment],
-    bridge: [bridge],
-    pit: [darkness, ladder],
-    otherSide: [winMessage],
-  });
-  world.inventory.push(lighter);
-
+  const world = createWorld();
   expect(describeWorld(world)).toEqual(
     `You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
