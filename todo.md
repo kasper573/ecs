@@ -1,10 +1,23 @@
-# TODO
-
-# Tasks
+# Immediate tasks
 
 - [x] Boilerplate
+- [ ] Refactor engine and entities
+  - [x] Rename Traits to Components
+  - [x] Stop using singleton pattern for entities
+  - [x] Create class based EntityContainer/ComponentContainer abstraction
+  - [~] Extract application code from engine (move to separate folder)
+  - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
+  - [ ] Create some folder structure for multiple stories
+  - [ ] Reconsider folder structure of the engine
+  - [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
+  - [ ] Have a look at ECS projects on NPM and see I could use one of them
+  - [ ] Set up proper monorepo infrastructure
+- [ ] Syntax based actions instead of select from list
+- [ ] Write unit tests for engine
+- [ ] Twitch votes integration
+- [ ] Refactor everything to FP
 
-# POCs
+# Long term tasks
 
 - [~] Text adventure game
 - [ ] Text adventure game + Twitch votes
@@ -13,31 +26,8 @@
 - [ ] More game mechanics
 - [ ] 2d/3d unity implementation
 
-# Specifications
-
-## Text adventure game
-
-- [x] Game describes the current game state to the player.
-- [x] Game displays a number of actions
-- [x] Player can perform any of the displayed actions
-
-## Twitch integration
+# Twitch integration notes
 
 - [ ] App should be able to signal twitch to start a vote given parameters: 1 Question, X Answers
 - [ ] App should be able to receive vote results: Nr. of votes / question
 - [ ] (Stretch goal) Viewers can input their own answers and then the community votes for which one to select
-
-# Brainstorm
-
-scenes that you can traverse between
-scenes to contain objects you can observe or interact with
-objects to have traits:
-
-- usable
-- consumable
-- carryable
-- observable
-- composable
-- aliases
-  objects need to be able to react to actions/events
-  inventory that can be filled with objects with the carryable trait

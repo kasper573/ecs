@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
+import App from "./packages/react-text-adventure/App";
 import reportWebVitals from "./reportWebVitals";
-import { theme } from "./fixtures/theme";
-import { world } from "./world";
+import { theme } from "./packages/react-text-adventure/theme";
+import { createWorld } from "./packages/text-adventure/world";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App theme={theme} world={world} />
+    <App theme={theme} world={createWorld()} />
   </React.StrictMode>,
   document.getElementById("root")
 );
