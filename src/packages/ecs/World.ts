@@ -1,7 +1,5 @@
 import { Effect } from "./Effect";
 import { createActions } from "./createActions";
-import { interpretCommand } from "./interpretCommand";
-import { createUnknownCommandEffect } from "./createUnknownCommandEffect";
 import { Inventory } from "./Inventory";
 import { Action } from "./Action";
 import { Container } from "./Container";
@@ -13,6 +11,16 @@ export class World<SceneEntities extends Record<keyof any, Entity[]> = any> {
   public inventory: Inventory = new Container();
   public scenes: Record<keyof SceneEntities, Scene>;
 
+  public get sceneId() {
+    return this._sceneId;
+  }
+  public set sceneId(value: keyof SceneEntities) {
+    if (value in this.scenes) {
+      this._sceneId = value;
+    } else {
+      throw new Error(`Scene does not exist: ${value}`);
+    }
+  }
   public get scene() {
     return this.scenes[this.sceneId];
   }
@@ -24,7 +32,7 @@ export class World<SceneEntities extends Record<keyof any, Entity[]> = any> {
   }
 
   constructor(
-    public sceneId: keyof SceneEntities,
+    private _sceneId: keyof SceneEntities,
     sceneEntities: SceneEntities
   ) {
     this.scenes = createScenes(sceneEntities);
