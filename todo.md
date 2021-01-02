@@ -7,6 +7,7 @@
   - [x] Create class based EntityContainer/ComponentContainer abstraction
   - [~] Extract application code from engine (move to separate folder)
     - [ ] Move World inventory to text-adventure
+          (make sure to create new Describable component in text-adventure that handles the extra inventory logic)
     - [ ] Rename effect to "action description" or something. Maybe it doesn't belong in ecs, but in ecs-text too?
   - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
   - [ ] Create some folder structure for multiple stories
@@ -17,8 +18,8 @@
   - [ ] Remove World.effect, return it from performCommand, let useWorld store it in react state
   - [ ] Add test coverage
   - [ ] Entity Component Container should be read only
+- [~] Write unit tests for engine
 - [ ] Syntax based actions instead of select from list
-- [ ] Write unit tests for engine
 - [ ] Twitch votes integration
 - [ ] Refactor everything to FP
 
