@@ -4,6 +4,7 @@
 - [ ] Refactor engine and entities
   - [x] Rename Traits to Components
   - [x] Stop using singleton pattern for entities
+  - [x] Create class based EntityContainer/ComponentContainer abstraction
   - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
   - [ ] Extract application code from engine (move to separate folder)
   - [ ] Create some folder structure for multiple stories
@@ -12,6 +13,7 @@
   - [ ] Have a look at ECS projects on NPM and see I could use one of them
 - [ ] Write unit tests for engine
 - [ ] Twitch votes integration
+- [ ] Refactor everything to FP
 
 # Long term tasks
 

@@ -1,3 +1,4 @@
-import { EntityContainer } from "./EntityContainer";
+import { Container } from "./Container";
+import { Entity } from "./Entity";
 
-export type Scene = EntityContainer;
+export type Scene = Container<Entity>;

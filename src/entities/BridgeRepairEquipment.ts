@@ -3,12 +3,11 @@ import { Collectable } from "../engine/components/Collectable";
 import { Observable } from "../engine/components/Observable";
 import { Component } from "../engine/types/Component";
 import { Bridge } from "./Bridge";
-import { findInstance } from "../engine/functions/findInstance";
 
 export class BridgeRepairEquipment extends Entity {
   constructor() {
     super("repair kit", undefined, (state, world) => {
-      const bridge = findInstance(world.scene, Bridge);
+      const bridge = world.scene.findType(Bridge);
       return [
         new Collectable(),
         new Observable({

@@ -1,7 +1,6 @@
 import { Entity } from "../engine/types/Entity";
 import { Component } from "../engine/types/Component";
 import { World } from "../engine/types/World";
-import { findInstance } from "../engine/functions/findInstance";
 
 export class Lighter extends Entity<"lit" | "unlit"> {
   constructor() {
@@ -18,7 +17,7 @@ export class Lighter extends Entity<"lit" | "unlit"> {
 }
 
 export const isLit = (world: World) => {
-  const lighter = findInstance(world.inventory, Lighter);
+  const lighter = world.inventory.findType(Lighter);
   if (lighter) {
     return lighter.state === "lit";
   }
