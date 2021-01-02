@@ -1,8 +1,8 @@
-import { World } from "../types/World";
+import { World } from "../ecs/World";
 import { describeEffect } from "./describeEffect";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
-import { createActions } from "../createActions";
+import { createActions } from "../ecs/createActions";
 
 export const describeWorld = (world: World) => {
   const { effect, entities } = world;

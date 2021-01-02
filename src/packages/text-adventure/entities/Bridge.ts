@@ -1,7 +1,7 @@
-import { Effect } from "../engine/types/Effect";
-import { Entity } from "../engine/types/Entity";
-import { Component } from "../engine/types/Component";
-import { Observable } from "../engine/components/Observable";
+import { Effect } from "../../ecs/Effect";
+import { Entity } from "../../ecs/Entity";
+import { Component } from "../../ecs/Component";
+import { Describable } from "../../ecs-text/Describable";
 
 const fallDown: Effect = {
   description: "The bridge collapses under your weight. You fall down a pit.",
@@ -46,8 +46,8 @@ export class Bridge extends Entity<BridgeState> {
           world.sceneId = "cliff";
         },
       }),
-      new Observable({
-        observe: () =>
+      new Describable({
+        describe: () =>
           world.sceneId === "bridge"
             ? "You are standing on the bridge. It seems very unstable."
             : `You stand in front of a bridge. It looks ${state}.`,

@@ -1,12 +1,12 @@
-import { Entity } from "../engine/types/Entity";
-import { Observable } from "../engine/components/Observable";
+import { Entity } from "../../ecs/Entity";
+import { Describable } from "../../ecs-text/Describable";
 import { isLit } from "./Lighter";
 
 export class Darkness extends Entity {
   constructor() {
     super("darkness", undefined, () => [
-      new Observable({
-        observe: () => "It is very dark.",
+      new Describable({
+        describe: () => "It is very dark.",
         isActive: (entity, world) => !isLit(world),
       }),
     ]);

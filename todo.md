@@ -5,12 +5,14 @@
   - [x] Rename Traits to Components
   - [x] Stop using singleton pattern for entities
   - [x] Create class based EntityContainer/ComponentContainer abstraction
+  - [~] Extract application code from engine (move to separate folder)
   - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
-  - [ ] Extract application code from engine (move to separate folder)
   - [ ] Create some folder structure for multiple stories
   - [ ] Reconsider folder structure of the engine
   - [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
   - [ ] Have a look at ECS projects on NPM and see I could use one of them
+  - [ ] Set up proper monorepo infrastructure
+- [ ] Syntax based actions instead of select from list
 - [ ] Write unit tests for engine
 - [ ] Twitch votes integration
 - [ ] Refactor everything to FP

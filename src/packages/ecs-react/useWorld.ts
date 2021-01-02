@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { World } from "./types/World";
+import { World } from "../ecs/World";
 
 export const useWorld = (world: World) => {
   const [, forceRender] = useReducer((s) => s + 1, 0);

@@ -1,7 +1,7 @@
-import { Entity } from "../engine/types/Entity";
-import { Collectable } from "../engine/components/Collectable";
-import { Observable } from "../engine/components/Observable";
-import { Component } from "../engine/types/Component";
+import { Entity } from "../../ecs/Entity";
+import { Collectable } from "../Collectable";
+import { Describable } from "../../ecs-text/Describable";
+import { Component } from "../../ecs/Component";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
@@ -10,8 +10,8 @@ export class BridgeRepairEquipment extends Entity {
       const bridge = world.scene.findType(Bridge);
       return [
         new Collectable(),
-        new Observable({
-          observe: (entity) =>
+        new Describable({
+          describe: (entity) =>
             `There's a ${entity.name} conveniently laying on the ground.`,
         }),
         new Component({

@@ -1,6 +1,6 @@
-import { Entity } from "../engine/types/Entity";
-import { Component } from "../engine/types/Component";
-import { World } from "../engine/types/World";
+import { Entity } from "../../ecs/Entity";
+import { Component } from "../../ecs/Component";
+import { World } from "../../ecs/World";
 
 export class Lighter extends Entity<"lit" | "unlit"> {
   constructor() {

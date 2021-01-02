@@ -1,13 +1,13 @@
-import { Entity } from "../engine/types/Entity";
-import { Observable } from "../engine/components/Observable";
+import { Entity } from "../../ecs/Entity";
+import { Describable } from "../../ecs-text/Describable";
 import { isLit } from "./Lighter";
 
 export class Ladder extends Entity {
   constructor() {
     super("ladder", undefined, () => [
-      new Observable({
+      new Describable({
         action: () => "Climb ladder",
-        observe: () => "You see a ladder.",
+        describe: () => "You see a ladder.",
         isActive: (entity, world) => isLit(world),
         apply: (entity, world) => {
           world.sceneId = "cliff";

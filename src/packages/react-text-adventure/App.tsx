@@ -2,9 +2,9 @@ import React from "react";
 import styled, { DefaultTheme, ThemeProvider } from "styled-components";
 import { Console } from "./Console";
 import { GlobalStyle } from "./GlobalStyle";
-import { World } from "../engine/types/World";
-import { describeWorld } from "../engine/presentation/describeWorld";
-import { useWorld } from "../engine/useWorld";
+import { World } from "../ecs/World";
+import { describeWorld } from "../ecs-text/describeWorld";
+import { useWorld } from "../ecs-react/useWorld";
 
 export type AppProps = {
   theme: DefaultTheme;

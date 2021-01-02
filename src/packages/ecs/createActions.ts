@@ -1,6 +1,6 @@
-import { Entity } from "./types/Entity";
-import { Action } from "./types/Action";
-import { World } from "./types/World";
+import { Entity } from "./Entity";
+import { Action } from "./Action";
+import { World } from "./World";
 
 export const createActions = (entities: Entity[], world: World) => {
   const actions: Action[] = [];

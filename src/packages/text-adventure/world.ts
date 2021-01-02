@@ -1,4 +1,4 @@
-import { World } from "./engine/types/World";
+import { World } from "../ecs/World";
 import { Bridge } from "./entities/Bridge";
 import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
 import { Darkness } from "./entities/Darkness";

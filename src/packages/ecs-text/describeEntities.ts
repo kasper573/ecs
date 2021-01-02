@@ -1,6 +1,6 @@
-import { Entity } from "../types/Entity";
-import { Observable } from "../components/Observable";
-import { World } from "../types/World";
+import { Entity } from "../ecs/Entity";
+import { Describable } from "./Describable";
+import { World } from "../ecs/World";
 
 export const describeEntities = (entities: Entity[], world: World) =>
   entities
@@ -13,6 +13,6 @@ export const describeEntities = (entities: Entity[], world: World) =>
 export const describeEntity = (entity: Entity, world: World): string[] =>
   entity
     .getComponents(world)
-    .filterType(Observable)
+    .filterType(Describable)
     .filter((component) => component.isActive(entity, world))
-    .map((obs) => obs.observe(entity, world));
+    .map((obs) => obs.describe(entity, world));

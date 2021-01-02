@@ -1,6 +1,6 @@
-import { Component } from "../types/Component";
-import { Entity } from "../types/Entity";
-import { World } from "../types/World";
+import { Component } from "../ecs/Component";
+import { Entity } from "../ecs/Entity";
+import { World } from "../ecs/World";
 
 export class Collectable extends Component {
   isActive(entity: Entity, world: World) {

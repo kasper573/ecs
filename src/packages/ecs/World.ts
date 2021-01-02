@@ -1,7 +1,7 @@
 import { Effect } from "./Effect";
-import { createActions } from "../createActions";
-import { interpretCommand } from "../interpretCommand";
-import { createUnknownCommandEffect } from "../createUnknownCommandEffect";
+import { createActions } from "./createActions";
+import { interpretCommand } from "./interpretCommand";
+import { createUnknownCommandEffect } from "./createUnknownCommandEffect";
 import { Inventory } from "./Inventory";
 import { Action } from "./Action";
 import { Container } from "./Container";

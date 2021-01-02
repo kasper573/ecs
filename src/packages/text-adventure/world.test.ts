@@ -1,4 +1,4 @@
-import { describeWorld } from "./engine/presentation/describeWorld";
+import { describeWorld } from "../ecs-text/describeWorld";
 import { createWorld } from "./world";
 
 test("Can play through optimistic route of story", () => {
