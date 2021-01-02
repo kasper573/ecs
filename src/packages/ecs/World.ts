@@ -1,4 +1,3 @@
-import { Effect } from "./Effect";
 import { createActions } from "./createActions";
 import { Inventory } from "./Inventory";
 import { Action } from "./Action";
@@ -7,7 +6,6 @@ import { Entity } from "./Entity";
 import { Scene } from "./Scene";
 
 export class World<SceneEntities extends Record<keyof any, Entity[]> = any> {
-  public effect?: Effect;
   public inventory: Inventory = new Container();
   public scenes: Record<keyof SceneEntities, Scene>;
 

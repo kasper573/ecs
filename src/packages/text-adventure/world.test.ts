@@ -12,36 +12,36 @@ Actions:
 - Pick up repair kit`
   );
 
-  performCommand(world, "Cross the bridge");
+  let lastEffect = performCommand(world, "Cross the bridge");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `You are standing on the bridge. It seems very unstable.
 Actions:
 - Proceed
 - Go back`
   );
 
-  performCommand(world, "Proceed");
+  lastEffect = performCommand(world, "Proceed");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `The bridge collapses under your weight. You fall down a pit.
 It is very dark.
 Actions:
 - Use lighter`
   );
 
-  performCommand(world, "Use lighter");
+  lastEffect = performCommand(world, "Use lighter");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `You see a ladder.
 Actions:
 - Climb ladder
 - Stop using lighter`
   );
 
-  performCommand(world, "Climb ladder");
+  lastEffect = performCommand(world, "Climb ladder");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `You stand in front of a bridge. It looks broken.
 There's a repair kit conveniently laying on the ground.
 Actions:
@@ -49,9 +49,9 @@ Actions:
 - Pick up repair kit`
   );
 
-  performCommand(world, "Pick up repair kit");
+  lastEffect = performCommand(world, "Pick up repair kit");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `Picked up repair kit.
 You stand in front of a bridge. It looks broken.
 Actions:
@@ -59,16 +59,16 @@ Actions:
 - Repair bridge`
   );
 
-  performCommand(world, "Repair bridge");
+  lastEffect = performCommand(world, "Repair bridge");
 
-  expect(describeWorld(world)).toEqual(
+  expect(describeWorld(world, lastEffect)).toEqual(
     `You repaired the bridge.
 You stand in front of a bridge. It looks sturdy.
 Actions:
 - Cross the bridge`
   );
 
-  performCommand(world, "Cross the bridge");
+  lastEffect = performCommand(world, "Cross the bridge");
 
-  expect(describeWorld(world)).toEqual("You win!");
+  expect(describeWorld(world, lastEffect)).toEqual("You win!");
 });

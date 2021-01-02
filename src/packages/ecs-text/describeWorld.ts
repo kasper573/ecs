@@ -3,12 +3,13 @@ import { describeEffect } from "./describeEffect";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 import { createActions } from "../ecs/createActions";
+import { Effect } from "../ecs/Effect";
 
-export const describeWorld = (world: World) => {
-  const { effect, entities } = world;
+export const describeWorld = (world: World, lastEffect?: Effect) => {
+  const { entities } = world;
   const parts: string[] = [];
-  if (effect) {
-    parts.push(describeEffect(effect));
+  if (lastEffect) {
+    parts.push(describeEffect(lastEffect));
   }
   const entitiesDescribed = describeEntities(entities, world);
   if (entitiesDescribed) {

@@ -12,12 +12,12 @@ export type AppProps = {
 };
 
 const App = ({ theme, world }: AppProps) => {
-  const perform = useWorld(world);
+  const { perform, lastEffect } = useWorld(world);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <MaximizedConsole onCommand={perform}>
-        {describeWorld(world)}
+        {describeWorld(world, lastEffect)}
       </MaximizedConsole>
     </ThemeProvider>
   );
