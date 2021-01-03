@@ -1,5 +1,5 @@
 import { Entity } from "../ecs/Entity";
-import { Describable as TextDescribable } from "../ecs-text/Describable";
+import { Describable as TextDescribable } from "../ecs-describable/Describable";
 import { World } from "../ecs/World";
 import { HasInventory } from "./HasInventory";
 

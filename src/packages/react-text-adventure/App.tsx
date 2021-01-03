@@ -3,7 +3,7 @@ import styled, { DefaultTheme, ThemeProvider } from "styled-components";
 import { Console } from "./Console";
 import { GlobalStyle } from "./GlobalStyle";
 import { World } from "../ecs/World";
-import { describeWorld } from "../ecs-text/describeWorld";
+import { describeWorld } from "../ecs-describable/describeWorld";
 import { useWorld } from "../ecs-react/useWorld";
 
 export type AppProps = {

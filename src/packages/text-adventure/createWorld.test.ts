@@ -1,4 +1,4 @@
-import { describeWorld } from "../ecs-text/describeWorld";
+import { describeWorld } from "../ecs-describable/describeWorld";
 import { createWorld } from "./createWorld";
 import { performCommand } from "../ecs/performCommand";
 
