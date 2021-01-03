@@ -1,19 +1,22 @@
-// performCommand.test.ts
 import { World } from "./World";
 
-new World("test", { test: [] });
+new World({ state: {}, sceneId: "test", scenes: { test: [] } });
 
-test("performing an action returns the expected effect", () => {});
-test("performing an action stores the expected effect in world state", () => {});
-test("performing an action invokes the specified function", () => {});
-test("gets unknown command effect when performing an unknown command", () => {});
-test("gets unknown command effect when performing an unknown command", () => {});
+// World.ts
+test("world entities resolve to the the current scene entities by default", () => {});
+test("world entities resolution can be customized to derive from world state", () => {});
+test("world actions are derived from world entities", () => {});
 
 // createActions.ts
 test("creates expected actions for the specified entities", () => {});
 
 // interpretCommand.ts
 test("can find the matching action for a command", () => {});
+
+// performCommand.test.ts
+test("gets unknown command effect when performing an unknown command", () => {});
+test("performing an action returns the expected effect", () => {});
+test("performing an action invokes the specified function", () => {});
 
 // Entity.ts
 test("can derive entity components based on entity state", () => {});

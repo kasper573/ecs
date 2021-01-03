@@ -1,4 +1,4 @@
-import { Describable } from "../ecs-text/Describable";
+import { Describable } from "./Describable";
 
 new Describable({ describe: () => "" });
 

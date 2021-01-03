@@ -5,23 +5,23 @@ import { World } from "./World";
 /**
  * Designed to be able to conveniently instantiate and extend Component
  */
-export class Component {
-  constructor(private options: ComponentOptions = {}) {}
+export class Component<WorldState = any> {
+  constructor(private options: ComponentOptions<WorldState> = {}) {}
 
-  action(entity: Entity, world: World) {
+  action(entity: Entity, world: World<WorldState>) {
     if (this.options.action) {
       return this.options.action(entity, world);
     }
     return "";
   }
 
-  apply(entity: Entity, world: World) {
+  apply(entity: Entity, world: World<WorldState>) {
     if (this.options.apply) {
       return this.options.apply(entity, world);
     }
   }
 
-  isActive(entity: Entity, world: World) {
+  isActive(entity: Entity, world: World<WorldState>) {
     if (this.options.isActive) {
       return this.options.isActive(entity, world);
     }
@@ -29,10 +29,13 @@ export class Component {
   }
 }
 
-export type ComponentOptions = {
-  action?: Derive<string>;
-  apply?: Derive<Effect | undefined | void>;
-  isActive?: Derive<boolean>;
+export type ComponentOptions<WorldState> = {
+  action?: Derive<string, WorldState>;
+  apply?: Derive<Effect | undefined | void, WorldState>;
+  isActive?: Derive<boolean, WorldState>;
 };
 
-export type Derive<T> = (entity: Entity, world: World) => T;
+export type Derive<T, WorldState> = (
+  entity: Entity,
+  world: World<WorldState>
+) => T;

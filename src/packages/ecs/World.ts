@@ -1,49 +1,59 @@
 import { createActions } from "./createActions";
-import { Inventory } from "./Inventory";
-import { Action } from "./Action";
 import { Container } from "./Container";
 import { Entity } from "./Entity";
 import { Scene } from "./Scene";
 
-export class World<SceneEntities extends Record<keyof any, Entity[]> = any> {
-  public inventory: Inventory = new Container();
-  public scenes: Record<keyof SceneEntities, Scene>;
+export class World<State = any> {
+  public scenes: Record<SceneId, Scene>;
+  public state: State;
 
+  private _sceneId: SceneId;
   public get sceneId() {
     return this._sceneId;
   }
-  public set sceneId(value: keyof SceneEntities) {
+
+  public set sceneId(value: SceneId) {
     if (value in this.scenes) {
       this._sceneId = value;
     } else {
       throw new Error(`Scene does not exist: ${value}`);
     }
   }
+
+  private readonly getEntities = (world: World<State>) =>
+    world.scene ? Array.from(world.scene) : [];
+
   public get scene() {
-    return this.scenes[this.sceneId];
+    return this.scenes[this._sceneId];
   }
   public get entities() {
-    return [...(this.scene ? this.scene : []), ...this.inventory];
+    return this.getEntities(this);
   }
-  public get actions(): Action[] {
+  public get actions() {
     return createActions(this.entities, this);
   }
 
-  constructor(
-    private _sceneId: keyof SceneEntities,
-    sceneEntities: SceneEntities
-  ) {
-    this.scenes = createScenes(sceneEntities);
+  constructor(options: WorldOptions<State>) {
+    this.state = options.state;
+    this.scenes = Object.keys(options.scenes).reduce(
+      (scenes, sceneId) => ({
+        ...scenes,
+        [sceneId]: new Container<Entity>(...options.scenes[sceneId]),
+      }),
+      {}
+    );
+    this.sceneId = this._sceneId = options.sceneId;
+    if (options.entities) {
+      this.getEntities = options.entities;
+    }
   }
 }
 
-const createScenes = <Entities extends Record<keyof any, Entity[]>>(
-  entities: Entities
-) =>
-  Object.keys(entities).reduce(
-    (scenes, sceneId: keyof Entities) => ({
-      ...scenes,
-      [sceneId]: new Container<Entity>(...entities[sceneId]),
-    }),
-    {} as Record<keyof Entities, Container<Entity>>
-  );
+export type WorldOptions<State> = {
+  sceneId: SceneId;
+  scenes: Record<SceneId, Entity[]>;
+  state: State;
+  entities?: (world: World<State>) => Entity[];
+};
+
+type SceneId = string | number;

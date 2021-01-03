@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./packages/react-text-adventure/App";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./packages/react-text-adventure/theme";
-import { createWorld } from "./packages/text-adventure/world";
+import { createWorld } from "./packages/text-adventure/createWorld";
 
 ReactDOM.render(
   <React.StrictMode>

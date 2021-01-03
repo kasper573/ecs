@@ -1,5 +1,5 @@
 import { describeWorld } from "../ecs-text/describeWorld";
-import { createWorld } from "./world";
+import { createWorld } from "./createWorld";
 import { performCommand } from "../ecs/performCommand";
 
 test("Can play through optimistic route of story", () => {

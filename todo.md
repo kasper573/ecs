@@ -5,19 +5,23 @@
   - [x] Rename Traits to Components
   - [x] Stop using singleton pattern for entities
   - [x] Create class based EntityContainer/ComponentContainer abstraction
-  - [~] Extract application code from engine (move to separate folder)
-    - [ ] Move World inventory to text-adventure
-          (make sure to create new Describable component in text-adventure that handles the extra inventory logic)
-    - [ ] Rename effect to "action description" or something. Maybe it doesn't belong in ecs, but in ecs-text too?
+  - [x] Extract application code from engine (move to separate folder)
   - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
   - [ ] Create some folder structure for multiple stories
-  - [ ] Reconsider folder structure of the engine
+  - [x] Reconsider folder structure of the engine
   - [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
   - [ ] Have a look at ECS projects on NPM and see I could use one of them
   - [ ] Set up proper monorepo infrastructure
-  - [ ] Remove World.effect, return it from performCommand, let useWorld store it in react state
+  - [x] Remove World.effect, return it from performCommand, let useWorld store it in react state
   - [ ] Add test coverage
   - [ ] Entity Component Container should be read only
+  - [ ] World should have specific Entity types
+  - [ ] Entities should resolve components specific for the WorldState
+  - [ ] World.sceneId should be generic type to allow type safe Enum workflow
+  - [ ] Remove action from Component, move to specific InteractionComponent (maybe move all interactivity to ecs-interaction)
+  - [ ] Rename ecs-text to ecs-describable
+  - [ ] Rename effect to "action description" or something. Maybe it doesn't belong in ecs, but in ecs-text too?
+  - [x] Don't use loose strings for scene ids
 - [~] Write unit tests for engine
 - [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration

@@ -1,8 +1,10 @@
 import { Entity } from "../../ecs/Entity";
-import { Collectable } from "../Collectable";
-import { Describable } from "../../ecs-text/Describable";
+import { Collectable } from "../../ecs-collectable/Collectable";
+import { Describable } from "../../ecs-collectable/Describable";
 import { Component } from "../../ecs/Component";
 import { Bridge } from "./Bridge";
+import { TextAdventureState } from "../TextAventureState";
+import { Scenes } from "../Scenes";
 
 export class BridgeRepairEquipment extends Entity {
   constructor() {
@@ -14,11 +16,11 @@ export class BridgeRepairEquipment extends Entity {
           describe: (entity) =>
             `There's a ${entity.name} conveniently laying on the ground.`,
         }),
-        new Component({
+        new Component<TextAdventureState>({
           action: () => "Repair bridge",
           isActive: (entity, world) =>
-            world.inventory.includes(entity) &&
-            world.sceneId === "cliff" &&
+            world.state.inventory.includes(entity) &&
+            world.sceneId === Scenes.cliff &&
             !!bridge &&
             bridge.state !== "sturdy",
           apply: () => {

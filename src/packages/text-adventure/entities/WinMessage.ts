@@ -1,5 +1,5 @@
 import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-text/Describable";
+import { Describable } from "../../ecs-collectable/Describable";
 
 export class WinMessage extends Entity {
   constructor() {

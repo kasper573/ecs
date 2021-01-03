@@ -1,21 +1,16 @@
 import { Derive, Component, ComponentOptions } from "../ecs/Component";
-import { Entity } from "../ecs/Entity";
-import { World } from "../ecs/World";
 
-export class Describable extends Component {
-  public readonly describe: DescribableComponentOptions["describe"];
+export class Describable<WorldState = any> extends Component<WorldState> {
+  public readonly describe: DescribableComponentOptions<WorldState>["describe"];
 
-  isActive(entity: Entity, world: World) {
-    const isInInventory = world.inventory.includes(entity);
-    return !isInInventory && super.isActive(entity, world);
-  }
-
-  constructor(options: DescribableComponentOptions) {
+  constructor(options: DescribableComponentOptions<WorldState>) {
     super(options);
     this.describe = options.describe;
   }
 }
 
-export type DescribableComponentOptions = ComponentOptions & {
-  describe: Derive<string>;
+export type DescribableComponentOptions<
+  WorldState = any
+> = ComponentOptions<WorldState> & {
+  describe: Derive<string, WorldState>;
 };

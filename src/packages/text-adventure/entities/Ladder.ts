@@ -1,6 +1,7 @@
 import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-text/Describable";
-import { isLit } from "./Lighter";
+import { Describable } from "../../ecs-collectable/Describable";
+import { Lighter } from "./Lighter";
+import { Scenes } from "../Scenes";
 
 export class Ladder extends Entity {
   constructor() {
@@ -8,9 +9,9 @@ export class Ladder extends Entity {
       new Describable({
         action: () => "Climb ladder",
         describe: () => "You see a ladder.",
-        isActive: (entity, world) => isLit(world),
+        isActive: (entity, world) => Lighter.isLit(world),
         apply: (entity, world) => {
-          world.sceneId = "cliff";
+          world.sceneId = Scenes.cliff;
         },
       }),
     ]);
