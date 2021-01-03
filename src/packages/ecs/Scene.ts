@@ -1,4 +1,4 @@
 import { Container } from "./Container";
 import { Entity } from "./Entity";
 
-export type Scene = Container<Entity>;
+export class Scene extends Container<Entity> {}
