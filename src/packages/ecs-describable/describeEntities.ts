@@ -1,6 +1,6 @@
 import { Entity } from "../ecs/Entity";
-import { Describable } from "./Describable";
 import { World } from "../ecs/World";
+import { Describable } from "./Describable";
 
 export const describeEntities = (entities: Entity[], world: World) =>
   entities

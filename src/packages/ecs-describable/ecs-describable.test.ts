@@ -1,8 +1,8 @@
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
+import { Interactive } from "../ecs-interactive/Interactive";
 import { Describable } from "./Describable";
 import { describeWorld } from "./describeWorld";
-import { Interactive } from "../ecs-interactive/Interactive";
 
 test("Describable entities are presented as text", () => {
   const entity = new Entity("entity", {}, () => [

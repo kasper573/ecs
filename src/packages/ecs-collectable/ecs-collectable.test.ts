@@ -1,10 +1,10 @@
-import { Collectable } from "./Collectable";
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
-import { Inventory } from "./Inventory";
-import { Describable } from "./Describable";
 import { describeEntity } from "../ecs-describable/describeEntities";
 import { createActions } from "../ecs-interactive/createActions";
+import { Inventory } from "./Inventory";
+import { Describable } from "./Describable";
+import { Collectable } from "./Collectable";
 
 describe("Collectable", () => {
   test("Picking up a Collectable entity removes it from the scene", () => {

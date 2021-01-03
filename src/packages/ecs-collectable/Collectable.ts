@@ -1,7 +1,7 @@
 import { Entity } from "../ecs/Entity";
 import { World } from "../ecs/World";
-import { HasInventory } from "./HasInventory";
 import { Interactive } from "../ecs-interactive/Interactive";
+import { HasInventory } from "./HasInventory";
 
 export class Collectable extends Interactive<HasInventory> {
   isActive(entity: Entity, world: World<HasInventory>) {

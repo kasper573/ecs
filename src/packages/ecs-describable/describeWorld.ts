@@ -1,9 +1,9 @@
 import { World } from "../ecs/World";
+import { createActions } from "../ecs-interactive/createActions";
+import { Effect } from "../ecs-interactive/Effect";
 import { describeEffect } from "./describeEffect";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
-import { createActions } from "../ecs-interactive/createActions";
-import { Effect } from "../ecs-interactive/Effect";
 
 export const describeWorld = (world: World, lastEffect?: Effect) => {
   const parts: string[] = [];

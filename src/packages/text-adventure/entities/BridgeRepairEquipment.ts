@@ -2,9 +2,9 @@ import { Entity } from "../../ecs/Entity";
 import { Collectable } from "../../ecs-collectable/Collectable";
 import { Describable } from "../../ecs-collectable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { Bridge } from "./Bridge";
 import { TextAdventureState } from "../TextAventureState";
 import { Scenes } from "../Scenes";
+import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
   constructor() {

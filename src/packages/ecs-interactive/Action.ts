@@ -1,5 +1,5 @@
-import { Effect } from "./Effect";
 import { World } from "../ecs/World";
+import { Effect } from "./Effect";
 
 export type Action = {
   name: string;

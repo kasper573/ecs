@@ -1,8 +1,8 @@
 import { Entity } from "../../ecs/Entity";
 import { Describable } from "../../ecs-collectable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { Lighter } from "./Lighter";
 import { Scenes } from "../Scenes";
+import { Lighter } from "./Lighter";
 
 export class Ladder extends Entity {
   constructor() {

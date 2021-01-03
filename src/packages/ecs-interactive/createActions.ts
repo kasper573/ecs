@@ -1,5 +1,5 @@
-import { Action } from "./Action";
 import { World } from "../ecs/World";
+import { Action } from "./Action";
 import { Interactive } from "./Interactive";
 
 export const createActions = (world: World) => {

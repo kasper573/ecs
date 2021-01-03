@@ -1,7 +1,7 @@
 import { World } from "../ecs/World";
 import { Entity } from "../ecs/Entity";
-import { Effect } from "./Effect";
 import { Component, ComponentOptions, Derive } from "../ecs/Component";
+import { Effect } from "./Effect";
 
 export class Interactive<WorldState = any> extends Component<WorldState> {
   constructor(protected options: InteractiveOptions<WorldState> = {}) {
