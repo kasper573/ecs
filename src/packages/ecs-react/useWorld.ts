@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { World } from "../ecs/World";
-import { performCommand } from "../ecs/performCommand";
-import { Effect } from "../ecs/Effect";
+import { performCommand } from "../ecs-interactive/performCommand";
+import { Effect } from "../ecs-interactive/Effect";
 
 export const useWorld = (world: World) => {
   const [lastEffect, setLastEffect] = useState<Effect | undefined>();

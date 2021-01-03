@@ -4,6 +4,7 @@ import { Entity } from "../ecs/Entity";
 import { Inventory } from "./Inventory";
 import { Describable } from "./Describable";
 import { describeEntity } from "../ecs-describable/describeEntities";
+import { createActions } from "../ecs-interactive/createActions";
 
 describe("Collectable", () => {
   test("Picking up a Collectable entity removes it from the scene", () => {
@@ -15,7 +16,7 @@ describe("Collectable", () => {
   test("A Collectable entity in your inventory has its pick up action disabled", () => {
     const { world, pickUp } = setup();
     pickUp.perform(world);
-    expect(world.actions).not.toContainEqual(pickUp);
+    expect(createActions(world)).not.toContainEqual(pickUp);
   });
 });
 
@@ -43,6 +44,8 @@ const setup = () => {
     scenes: { a: [entity] },
   });
   const pickUpName = Collectable.prototype.action.call(null, entity);
-  const pickUp = world.actions.find((action) => action.name === pickUpName)!;
+  const pickUp = createActions(world).find(
+    (action) => action.name === pickUpName
+  )!;
   return { entity, world, pickUp };
 };

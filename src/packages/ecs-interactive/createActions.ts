@@ -1,11 +1,13 @@
-import { Entity } from "./Entity";
 import { Action } from "./Action";
-import { World } from "./World";
+import { World } from "../ecs/World";
+import { Interactive } from "./Interactive";
 
-export const createActions = (entities: Entity[], world: World) => {
+export const createActions = (world: World) => {
   const actions: Action[] = [];
-  for (const entity of entities) {
-    for (const component of entity.getComponents(world)) {
+  for (const entity of world.entities) {
+    for (const component of entity
+      .getComponents(world)
+      .filterType(Interactive)) {
       if (!component.isActive(entity, world)) {
         continue;
       }

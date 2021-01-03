@@ -1,4 +1,3 @@
-import { createActions } from "./createActions";
 import { Container } from "./Container";
 import { Entity } from "./Entity";
 import { Scene } from "./Scene";
@@ -28,9 +27,6 @@ export class World<State = any> {
   }
   public get entities() {
     return this.getEntities(this);
-  }
-  public get actions() {
-    return createActions(this.entities, this);
   }
 
   constructor(optionsOrEntities: WorldOptions<State> | Entity[]) {

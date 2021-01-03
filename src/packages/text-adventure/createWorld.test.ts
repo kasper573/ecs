@@ -1,6 +1,6 @@
 import { describeWorld } from "../ecs-describable/describeWorld";
 import { createWorld } from "./createWorld";
-import { performCommand } from "../ecs/performCommand";
+import { performCommand } from "../ecs-interactive/performCommand";
 
 test("Can play through optimistic route of story", () => {
   const world = createWorld();

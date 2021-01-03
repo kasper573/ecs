@@ -6,7 +6,6 @@
   - [x] Stop using singleton pattern for entities
   - [x] Create class based EntityContainer/ComponentContainer abstraction
   - [x] Extract application code from engine (move to separate folder)
-  - [ ] Refactor all new Component usages (maybe make abstract?) and Observable/Collectable used as Usable. We need UsableComponent.
   - [ ] Create some folder structure for multiple stories
   - [x] Reconsider folder structure of the engine
   - [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
@@ -18,7 +17,8 @@
   - [ ] World should have specific Entity types
   - [ ] Entities should resolve components specific for the WorldState
   - [ ] World.sceneId should be generic type to allow type safe Enum workflow
-  - [ ] Remove action from Component, move to specific InteractionComponent (maybe move all interactivity to ecs-interaction)
+  - [x] Refactor all new Component usages to use Interactive
+  - [x] Move all interactivity to ecs-interactive
   - [x] Rename ecs-text to ecs-describable
   - [ ] Rename effect to "action description" or something. Maybe it doesn't belong in ecs, but in ecs-describable too?
   - [x] Don't use loose strings for scene ids

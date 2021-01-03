@@ -1,7 +1,7 @@
 import { Entity } from "../../ecs/Entity";
 import { Collectable } from "../../ecs-collectable/Collectable";
 import { Describable } from "../../ecs-collectable/Describable";
-import { Component } from "../../ecs/Component";
+import { Interactive } from "../../ecs-interactive/Interactive";
 import { Bridge } from "./Bridge";
 import { TextAdventureState } from "../TextAventureState";
 import { Scenes } from "../Scenes";
@@ -16,7 +16,7 @@ export class BridgeRepairEquipment extends Entity {
           describe: (entity) =>
             `There's a ${entity.name} conveniently laying on the ground.`,
         }),
-        new Component<TextAdventureState>({
+        new Interactive<TextAdventureState>({
           action: () => "Repair bridge",
           isActive: (entity, world) =>
             world.state.inventory.includes(entity) &&

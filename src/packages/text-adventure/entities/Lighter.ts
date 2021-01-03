@@ -1,13 +1,13 @@
 import { Entity } from "../../ecs/Entity";
-import { Component } from "../../ecs/Component";
 import { World } from "../../ecs/World";
 import { TextAdventureState } from "../TextAventureState";
 import { Scenes } from "../Scenes";
+import { Interactive } from "../../ecs-interactive/Interactive";
 
 export class Lighter extends Entity<"lit" | "unlit"> {
   constructor() {
     super("lighter", "unlit", (state) => [
-      new Component({
+      new Interactive({
         isActive: (entity, world) => world.sceneId === Scenes.pit,
         action: () => (state === "lit" ? "Stop using lighter" : "Use lighter"),
         apply: (entity) => {
