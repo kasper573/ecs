@@ -33,8 +33,11 @@ export class World<State = any> {
     return createActions(this.entities, this);
   }
 
-  constructor(options: WorldOptions<State>) {
-    this.state = options.state;
+  constructor(optionsOrEntities: WorldOptions<State> | Entity[]) {
+    const options = Array.isArray(optionsOrEntities)
+      ? { scenes: { default: optionsOrEntities } }
+      : optionsOrEntities;
+    this.state = options.state || ({} as State);
     this.scenes = Object.keys(options.scenes).reduce(
       (scenes, sceneId) => ({
         ...scenes,
@@ -42,7 +45,8 @@ export class World<State = any> {
       }),
       {}
     );
-    this.sceneId = this._sceneId = options.sceneId;
+    this.sceneId = this._sceneId =
+      options.sceneId ?? Object.keys(this.scenes)[0];
     if (options.entities) {
       this.getEntities = options.entities;
     }
@@ -50,9 +54,9 @@ export class World<State = any> {
 }
 
 export type WorldOptions<State> = {
-  sceneId: SceneId;
+  sceneId?: SceneId;
   scenes: Record<SceneId, Entity[]>;
-  state: State;
+  state?: State;
   entities?: (world: World<State>) => Entity[];
 };
 
