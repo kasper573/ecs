@@ -11,12 +11,12 @@
   - [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
   - [ ] Have a look at ECS projects on NPM and see I could use one of them
   - [ ] Set up proper monorepo infrastructure
-  - [x] Remove World.effect, return it from performCommand, let useWorld store it in react state
+  - [x] Remove System.effect, return it from performCommand, let useSystem store it in react state
   - [ ] Add test coverage
   - [ ] Entity Component Container should be read only
-  - [ ] World should have specific Entity types
-  - [ ] Entities should resolve components specific for the WorldState
-  - [ ] World.sceneId should be generic type to allow type safe Enum workflow
+  - [ ] System should have specific Entity types
+  - [ ] Entities should resolve components specific for the SystemState
+  - [ ] System.sceneId should be generic type to allow type safe Enum workflow
   - [x] Refactor all new Component usages to use Interactive
   - [x] Move all interactivity to ecs-interactive
   - [x] Rename ecs-text to ecs-describable
@@ -24,7 +24,7 @@
   - [x] Don't use loose strings for scene ids
   - [ ] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
         (To achieve this components need lifecycle and mount events)
-  - [ ] entity.getComponents(world).resolveType(Describable).describe(entity, world);
+  - [ ] entity.getComponents(system).resolveType(Describable).describe(entity, system);
         should be entity.resolveComponent<Describable>.description
   - [x] Rename World to System
 - [~] Write unit tests for engine
