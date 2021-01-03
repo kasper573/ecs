@@ -1,7 +1,7 @@
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { Effect } from "./Effect";
 
 export type Action = {
   name: string;
-  perform: (world: World) => Effect | undefined;
+  perform: (system: System) => Effect | undefined;
 };

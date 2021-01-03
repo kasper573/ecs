@@ -9,13 +9,13 @@ export class Ladder extends Entity {
     super("ladder", undefined, () => [
       new Describable({
         describe: () => "You see a ladder.",
-        isActive: (entity, world) => Lighter.isLit(world),
+        isActive: (entity, system) => Lighter.isLit(system),
       }),
       new Interactive({
         action: () => "Climb ladder",
-        isActive: (entity, world) => Lighter.isLit(world),
-        apply: (entity, world) => {
-          world.sceneId = Scenes.cliff;
+        isActive: (entity, system) => Lighter.isLit(system),
+        apply: (entity, system) => {
+          system.sceneId = Scenes.cliff;
         },
       }),
     ]);

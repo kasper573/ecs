@@ -2,7 +2,7 @@ import { Container } from "./Container";
 import { Entity } from "./Entity";
 import { Scene } from "./Scene";
 
-export class World<State = any> {
+export class System<State = any> {
   public scenes: Record<SceneId, Scene>;
   public state: State;
 
@@ -19,8 +19,8 @@ export class World<State = any> {
     }
   }
 
-  private readonly getEntities = (world: World<State>) =>
-    world.scene ? Array.from(world.scene) : [];
+  private readonly getEntities = (system: System<State>) =>
+    system.scene ? Array.from(system.scene) : [];
 
   public get scene() {
     return this.scenes[this._sceneId];
@@ -29,7 +29,7 @@ export class World<State = any> {
     return this.getEntities(this);
   }
 
-  constructor(optionsOrEntities: WorldOptions<State> | Entity[]) {
+  constructor(optionsOrEntities: SystemOptions<State> | Entity[]) {
     const options = Array.isArray(optionsOrEntities)
       ? { scenes: { default: optionsOrEntities } }
       : optionsOrEntities;
@@ -49,11 +49,11 @@ export class World<State = any> {
   }
 }
 
-export type WorldOptions<State> = {
+export type SystemOptions<State> = {
   sceneId?: SceneId;
   scenes: Record<SceneId, Entity[]>;
   state?: State;
-  entities?: (world: World<State>) => Entity[];
+  entities?: (system: System<State>) => Entity[];
 };
 
 type SceneId = string | number;

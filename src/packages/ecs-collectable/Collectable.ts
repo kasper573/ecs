@@ -1,16 +1,16 @@
 import { Entity } from "../ecs/Entity";
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { Interactive } from "../ecs-interactive/Interactive";
 import { HasInventory } from "./HasInventory";
 
 export class Collectable extends Interactive<HasInventory> {
-  isActive(entity: Entity, world: World<HasInventory>) {
-    return !world.state.inventory.includes(entity);
+  isActive(entity: Entity, system: System<HasInventory>) {
+    return !system.state.inventory.includes(entity);
   }
 
-  apply(entity: Entity, world: World<HasInventory>) {
-    world.state.inventory.push(entity);
-    world.scene.remove(entity);
+  apply(entity: Entity, system: System<HasInventory>) {
+    system.state.inventory.push(entity);
+    system.scene.remove(entity);
     return {
       description: `Picked up ${entity.name}.`,
     };

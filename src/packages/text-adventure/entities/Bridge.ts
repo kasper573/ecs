@@ -12,44 +12,44 @@ export type BridgeState = "fragile" | "broken" | "sturdy";
 
 export class Bridge extends Entity<BridgeState> {
   constructor() {
-    super("bridge", "fragile", (state, world) => [
+    super("bridge", "fragile", (state, system) => [
       new Interactive({
         action: (entity) => `Cross the ${entity.name}`,
-        isActive: (entity, world) => world.sceneId === Scenes.cliff,
-        apply: (entity, world) => {
+        isActive: (entity, system) => system.sceneId === Scenes.cliff,
+        apply: (entity, system) => {
           if (state === "sturdy") {
-            world.sceneId = Scenes.otherSide;
+            system.sceneId = Scenes.otherSide;
           } else if (state === "fragile") {
-            world.sceneId = Scenes.bridge;
+            system.sceneId = Scenes.bridge;
           } else if (state === "broken") {
-            world.sceneId = Scenes.pit;
+            system.sceneId = Scenes.pit;
             return fallDown;
           }
         },
       }),
       new Interactive({
         action: () => "Proceed",
-        isActive: (entity, world) => world.sceneId === Scenes.bridge,
-        apply: (entity, world) => {
+        isActive: (entity, system) => system.sceneId === Scenes.bridge,
+        apply: (entity, system) => {
           if (state === "sturdy") {
-            world.sceneId = Scenes.otherSide;
+            system.sceneId = Scenes.otherSide;
           } else {
             entity.state = "broken";
-            world.sceneId = Scenes.pit;
+            system.sceneId = Scenes.pit;
             return fallDown;
           }
         },
       }),
       new Interactive({
         action: () => "Go back",
-        isActive: (entity, world) => world.sceneId === Scenes.bridge,
-        apply: (entity, world) => {
-          world.sceneId = Scenes.cliff;
+        isActive: (entity, system) => system.sceneId === Scenes.bridge,
+        apply: (entity, system) => {
+          system.sceneId = Scenes.cliff;
         },
       }),
       new Describable({
         describe: () =>
-          world.sceneId === Scenes.bridge
+          system.sceneId === Scenes.bridge
             ? "You are standing on the bridge. It seems very unstable."
             : `You stand in front of a bridge. It looks ${state}.`,
       }),

@@ -1,22 +1,22 @@
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { Action } from "./Action";
 import { Interactive } from "./Interactive";
 
-export const createActions = (world: World) => {
+export const createActions = (system: System) => {
   const actions: Action[] = [];
-  for (const entity of world.entities) {
+  for (const entity of system.entities) {
     for (const component of entity
-      .getComponents(world)
+      .getComponents(system)
       .filterType(Interactive)) {
-      if (!component.isActive(entity, world)) {
+      if (!component.isActive(entity, system)) {
         continue;
       }
-      const name = component.action(entity, world);
+      const name = component.action(entity, system);
       if (name) {
         actions.push({
           name,
-          perform: (world: World) =>
-            component.apply(entity, world) || undefined,
+          perform: (system: System) =>
+            component.apply(entity, system) || undefined,
         });
       }
     }

@@ -26,7 +26,7 @@
         (To achieve this components need lifecycle and mount events)
   - [ ] entity.getComponents(world).resolveType(Describable).describe(entity, world);
         should be entity.resolveComponent<Describable>.description
-  - [ ] Rename World to System
+  - [x] Rename World to System
 - [~] Write unit tests for engine
 - [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration

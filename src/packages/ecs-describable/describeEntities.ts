@@ -1,18 +1,18 @@
 import { Entity } from "../ecs/Entity";
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { Describable } from "./Describable";
 
-export const describeEntities = (entities: Entity[], world: World) =>
+export const describeEntities = (entities: Entity[], system: System) =>
   entities
     .reduce(
-      (lines, entity) => [...lines, ...describeEntity(entity, world)],
+      (lines, entity) => [...lines, ...describeEntity(entity, system)],
       [] as string[]
     )
     .join("\n");
 
-export const describeEntity = (entity: Entity, world: World): string[] =>
+export const describeEntity = (entity: Entity, system: System): string[] =>
   entity
-    .getComponents(world)
+    .getComponents(system)
     .filterType(Describable)
-    .filter((component) => component.isActive(entity, world))
-    .map((obs) => obs.describe(entity, world));
+    .filter((component) => component.isActive(entity, system))
+    .map((obs) => obs.describe(entity, system));

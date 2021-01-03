@@ -7,7 +7,7 @@ export class Darkness extends Entity {
     super("darkness", undefined, () => [
       new Describable({
         describe: () => "It is very dark.",
-        isActive: (entity, world) => !Lighter.isLit(world),
+        isActive: (entity, system) => !Lighter.isLit(system),
       }),
     ]);
   }

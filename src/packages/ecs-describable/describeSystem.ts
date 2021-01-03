@@ -1,20 +1,20 @@
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { Effect } from "../ecs-interactive/Effect";
 import { describeEffect } from "./describeEffect";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
-export const describeWorld = (world: World, lastEffect?: Effect) => {
+export const describeSystem = (system: System, lastEffect?: Effect) => {
   const parts: string[] = [];
   if (lastEffect) {
     parts.push(describeEffect(lastEffect));
   }
-  const entitiesDescribed = describeEntities(world.entities, world);
+  const entitiesDescribed = describeEntities(system.entities, system);
   if (entitiesDescribed) {
     parts.push(entitiesDescribed);
   }
-  const actions = createActions(world);
+  const actions = createActions(system);
   if (actions.length) {
     const actionsDescribed = actions
       .map((action) => `- ${describeAction(action)}`)

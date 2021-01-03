@@ -1,14 +1,14 @@
 import { Entity } from "../ecs/Entity";
 import { Describable as TextDescribable } from "../ecs-describable/Describable";
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { HasInventory } from "./HasInventory";
 
 /**
- * Inventory items should not be described in the world
+ * Inventory items should not be described in the system
  */
 export class Describable extends TextDescribable<HasInventory> {
-  isActive(entity: Entity, world: World<HasInventory>) {
-    const isInInventory = world.state.inventory.includes(entity);
-    return !isInInventory && super.isActive(entity, world);
+  isActive(entity: Entity, system: System<HasInventory>) {
+    const isInInventory = system.state.inventory.includes(entity);
+    return !isInInventory && super.isActive(entity, system);
   }
 }

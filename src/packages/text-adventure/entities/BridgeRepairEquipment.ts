@@ -8,8 +8,8 @@ import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
   constructor() {
-    super("repair kit", undefined, (state, world) => {
-      const bridge = world.scene.findType(Bridge);
+    super("repair kit", undefined, (state, system) => {
+      const bridge = system.scene.findType(Bridge);
       return [
         new Collectable(),
         new Describable({
@@ -18,9 +18,9 @@ export class BridgeRepairEquipment extends Entity {
         }),
         new Interactive<TextAdventureState>({
           action: () => "Repair bridge",
-          isActive: (entity, world) =>
-            world.state.inventory.includes(entity) &&
-            world.sceneId === Scenes.cliff &&
+          isActive: (entity, system) =>
+            system.state.inventory.includes(entity) &&
+            system.sceneId === Scenes.cliff &&
             !!bridge &&
             bridge.state !== "sturdy",
           apply: () => {

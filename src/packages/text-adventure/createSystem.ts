@@ -1,5 +1,5 @@
 import { Container } from "../ecs/Container";
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { Bridge } from "./entities/Bridge";
 import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
 import { Darkness } from "./entities/Darkness";
@@ -9,9 +9,9 @@ import { Lighter } from "./entities/Lighter";
 import { TextAdventureState } from "./TextAventureState";
 import { Scenes } from "./Scenes";
 
-export const createWorld = () => {
+export const createSystem = () => {
   const bridge = new Bridge();
-  return new World<TextAdventureState>({
+  return new System<TextAdventureState>({
     sceneId: Scenes.cliff,
     scenes: {
       [Scenes.cliff]: [bridge, new BridgeRepairEquipment()],
@@ -20,6 +20,6 @@ export const createWorld = () => {
       [Scenes.otherSide]: [new WinMessage()],
     },
     state: { inventory: new Container(new Lighter()) },
-    entities: (world) => [...(world.scene || []), ...world.state.inventory],
+    entities: (system) => [...(system.scene || []), ...system.state.inventory],
   });
 };

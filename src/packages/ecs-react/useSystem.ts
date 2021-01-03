@@ -1,13 +1,13 @@
 import { useReducer, useState } from "react";
-import { World } from "../ecs/World";
+import { System } from "../ecs/System";
 import { performCommand } from "../ecs-interactive/performCommand";
 import { Effect } from "../ecs-interactive/Effect";
 
-export const useWorld = (world: World) => {
+export const useSystem = (system: System) => {
   const [lastEffect, setLastEffect] = useState<Effect | undefined>();
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const performAndSaveEffect = (command: string) => {
-    const effect = performCommand(world, command);
+    const effect = performCommand(system, command);
     setLastEffect(effect);
     forceRender();
   };

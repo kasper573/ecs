@@ -1,10 +1,10 @@
-import { describeWorld } from "../ecs-describable/describeWorld";
+import { describeSystem } from "../ecs-describable/describeSystem";
 import { performCommand } from "../ecs-interactive/performCommand";
-import { createWorld } from "./createWorld";
+import { createSystem } from "./createSystem";
 
 test("Can play through optimistic route of story", () => {
-  const world = createWorld();
-  expect(describeWorld(world)).toEqual(
+  const system = createSystem();
+  expect(describeSystem(system)).toEqual(
     `You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 Actions:
@@ -12,36 +12,36 @@ Actions:
 - Pick up repair kit`
   );
 
-  let lastEffect = performCommand(world, "Cross the bridge");
+  let lastEffect = performCommand(system, "Cross the bridge");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `You are standing on the bridge. It seems very unstable.
 Actions:
 - Proceed
 - Go back`
   );
 
-  lastEffect = performCommand(world, "Proceed");
+  lastEffect = performCommand(system, "Proceed");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `The bridge collapses under your weight. You fall down a pit.
 It is very dark.
 Actions:
 - Use lighter`
   );
 
-  lastEffect = performCommand(world, "Use lighter");
+  lastEffect = performCommand(system, "Use lighter");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `You see a ladder.
 Actions:
 - Climb ladder
 - Stop using lighter`
   );
 
-  lastEffect = performCommand(world, "Climb ladder");
+  lastEffect = performCommand(system, "Climb ladder");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `You stand in front of a bridge. It looks broken.
 There's a repair kit conveniently laying on the ground.
 Actions:
@@ -49,9 +49,9 @@ Actions:
 - Pick up repair kit`
   );
 
-  lastEffect = performCommand(world, "Pick up repair kit");
+  lastEffect = performCommand(system, "Pick up repair kit");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `Picked up repair kit.
 You stand in front of a bridge. It looks broken.
 Actions:
@@ -59,16 +59,16 @@ Actions:
 - Repair bridge`
   );
 
-  lastEffect = performCommand(world, "Repair bridge");
+  lastEffect = performCommand(system, "Repair bridge");
 
-  expect(describeWorld(world, lastEffect)).toEqual(
+  expect(describeSystem(system, lastEffect)).toEqual(
     `You repaired the bridge.
 You stand in front of a bridge. It looks sturdy.
 Actions:
 - Cross the bridge`
   );
 
-  lastEffect = performCommand(world, "Cross the bridge");
+  lastEffect = performCommand(system, "Cross the bridge");
 
-  expect(describeWorld(world, lastEffect)).toEqual("You win!");
+  expect(describeSystem(system, lastEffect)).toEqual("You win!");
 });

@@ -1,23 +1,23 @@
 import React from "react";
 import styled, { DefaultTheme, ThemeProvider } from "styled-components";
-import { World } from "../ecs/World";
-import { describeWorld } from "../ecs-describable/describeWorld";
-import { useWorld } from "../ecs-react/useWorld";
+import { System } from "../ecs/System";
+import { describeSystem } from "../ecs-describable/describeSystem";
+import { useSystem } from "../ecs-react/useSystem";
 import { GlobalStyle } from "./GlobalStyle";
 import { Console } from "./Console";
 
 export type AppProps = {
   theme: DefaultTheme;
-  world: World;
+  system: System;
 };
 
-const App = ({ theme, world }: AppProps) => {
-  const { perform, lastEffect } = useWorld(world);
+const App = ({ theme, system }: AppProps) => {
+  const { perform, lastEffect } = useSystem(system);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <MaximizedConsole onCommand={perform}>
-        {describeWorld(world, lastEffect)}
+        {describeSystem(system, lastEffect)}
       </MaximizedConsole>
     </ThemeProvider>
   );
