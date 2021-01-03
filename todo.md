@@ -24,6 +24,8 @@
   - [x] Don't use loose strings for scene ids
   - [ ] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
         (To achieve this components need lifecycle and mount events)
+  - [ ] entity.getComponents(world).resolveType(Describable).describe(entity, world);
+        should be entity.resolveComponent<Describable>.description
 - [~] Write unit tests for engine
 - [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration
