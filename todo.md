@@ -22,6 +22,8 @@
   - [ ] Rename ecs-text to ecs-describable
   - [ ] Rename effect to "action description" or something. Maybe it doesn't belong in ecs, but in ecs-text too?
   - [x] Don't use loose strings for scene ids
+  - [ ] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
+        (To achieve this components need lifecycle and mount events)
 - [~] Write unit tests for engine
 - [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration

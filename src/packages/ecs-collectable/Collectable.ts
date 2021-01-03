@@ -8,8 +8,6 @@ export class Collectable extends Component<HasInventory> {
     return !world.state.inventory.includes(entity);
   }
 
-  // TODO should look for Describables on the same entity and disable them instead of reimplementing Describable
-
   apply(entity: Entity, world: World<HasInventory>) {
     world.state.inventory.push(entity);
     world.scene.remove(entity);
