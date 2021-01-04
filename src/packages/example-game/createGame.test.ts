@@ -1,9 +1,9 @@
 import { describeSystem } from "../ecs-describable/describeSystem";
 import { performCommand } from "../ecs-interactive/performCommand";
-import { createSystem } from "./createSystem";
+import { createGame } from "./createGame";
 
 test("Can play through optimistic route of story", () => {
-  const system = createSystem();
+  const system = createGame();
   expect(describeSystem(system)).toEqual(
     `You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.

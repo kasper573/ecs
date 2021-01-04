@@ -1,8 +1,8 @@
 import React from "react";
 import styled, { DefaultTheme, ThemeProvider } from "styled-components";
-import { System } from "../ecs/System";
-import { describeSystem } from "../ecs-describable/describeSystem";
-import { useSystem } from "../ecs-react/useSystem";
+import { System } from "../../ecs/System";
+import { describeSystem } from "../../ecs-describable/describeSystem";
+import { useSystem } from "../../ecs-react/useSystem";
 import { GlobalStyle } from "./GlobalStyle";
 import { Console } from "./Console";
 

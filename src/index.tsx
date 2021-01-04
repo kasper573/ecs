@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./packages/react-text-adventure/App";
+import App from "./packages/example-game/react/App";
 import reportWebVitals from "./reportWebVitals";
-import { theme } from "./packages/react-text-adventure/theme";
-import { createSystem } from "./packages/text-adventure/createSystem";
+import { theme } from "./packages/example-game/react/theme";
+import { createGame } from "./packages/example-game/createGame";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App theme={theme} system={createSystem()} />
+    <App theme={theme} system={createGame()} />
   </React.StrictMode>,
   document.getElementById("root")
 );

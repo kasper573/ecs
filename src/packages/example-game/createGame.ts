@@ -9,7 +9,7 @@ import { Lighter } from "./entities/Lighter";
 import { TextAdventureState } from "./TextAventureState";
 import { Scenes } from "./Scenes";
 
-export const createSystem = () => {
+export const createGame = () => {
   const bridge = new Bridge();
   return new System<TextAdventureState>({
     sceneId: Scenes.cliff,
