@@ -1,6 +1,6 @@
-import { Container } from "./Container";
 import { Entity } from "./Entity";
 import { Scene } from "./Scene";
+import { SceneId, SystemOptions } from "./SystemOptions";
 
 export class System<State = any> {
   public scenes: Record<SceneId, Scene>;
@@ -29,31 +29,35 @@ export class System<State = any> {
     return this.getEntities(this);
   }
 
-  constructor(optionsOrEntities: SystemOptions<State> | Entity[]) {
-    const options = Array.isArray(optionsOrEntities)
-      ? { scenes: { default: optionsOrEntities } }
-      : optionsOrEntities;
+  constructor(optionsOrEntities: SystemOptions<State> | Entity[] = []) {
+    const options = normalizeOptions(optionsOrEntities);
     this.state = options.state || ({} as State);
-    this.scenes = Object.keys(options.scenes).reduce(
-      (scenes, sceneId) => ({
-        ...scenes,
-        [sceneId]: new Container<Entity>(...options.scenes[sceneId]),
-      }),
-      {}
-    );
+    this.scenes = createScenes(options.scenes);
     this.sceneId = this._sceneId =
       options.sceneId ?? Object.keys(this.scenes)[0];
-    if (options.entities) {
-      this.getEntities = options.entities;
-    }
+    this.getEntities = options.entities ?? this.getEntities;
   }
 }
 
-export type SystemOptions<State> = {
-  sceneId?: SceneId;
-  scenes: Record<SceneId, Entity[]>;
-  state?: State;
-  entities?: (system: System<State>) => Entity[];
-};
+const createScenes = <State>(
+  sceneOptions: SystemOptions<State>["scenes"] = {}
+) =>
+  Object.keys(sceneOptions).reduce(
+    (scenes, sceneId) => ({
+      ...scenes,
+      [sceneId]: new Scene(...sceneOptions[sceneId]),
+    }),
+    {}
+  );
 
-type SceneId = string | number;
+const normalizeOptions = <State>(
+  optionsOrEntities: SystemOptions<State> | Entity[] = []
+) =>
+  Array.isArray(optionsOrEntities)
+    ? { scenes: { [defaultSceneId]: optionsOrEntities } }
+    : {
+        ...optionsOrEntities,
+        scenes: optionsOrEntities.scenes ?? { [defaultSceneId]: [] },
+      };
+
+const defaultSceneId: SceneId = "default";
