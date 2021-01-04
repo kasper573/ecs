@@ -5,18 +5,6 @@ new System({ state: {}, sceneId: "test", scenes: { test: [] } });
 // System.ts
 test("system entities resolve to the the current scene entities by default", () => {});
 test("system entities resolution can be customized to derive from system state", () => {});
-test("system actions are derived from system entities", () => {});
-
-// createActions.ts
-test("creates expected actions for the specified entities", () => {});
-
-// interpretCommand.ts
-test("can find the matching action for a command", () => {});
-
-// performCommand.test.ts
-test("gets unknown command effect when performing an unknown command", () => {});
-test("performing an action returns the expected effect", () => {});
-test("performing an action invokes the specified function", () => {});
 
 // Entity.ts
 test("can derive entity components based on entity state", () => {});
