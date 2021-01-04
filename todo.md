@@ -12,7 +12,7 @@
         (To achieve this components need lifecycle and mount events)
   - [ ] entity.getComponents(system).resolveType(Describable).describe(entity, system);
         should be entity.resolveComponent<Describable>.description
-- [~] Write unit tests for engine
+- [x] Write unit tests for engine
 - [ ] Enable test coverage
 - [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration
