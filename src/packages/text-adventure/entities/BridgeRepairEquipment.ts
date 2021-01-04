@@ -1,24 +1,26 @@
 import { Entity } from "../../ecs/Entity";
-import { Collectable } from "../Collectable";
-import { Describable } from "../../ecs-text/Describable";
-import { Component } from "../../ecs/Component";
+import { Collectable } from "../../ecs-collectable/Collectable";
+import { Describable } from "../../ecs-collectable/Describable";
+import { Interactive } from "../../ecs-interactive/Interactive";
+import { TextAdventureState } from "../TextAventureState";
+import { Scenes } from "../Scenes";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
   constructor() {
-    super("repair kit", undefined, (state, world) => {
-      const bridge = world.scene.findType(Bridge);
+    super("repair kit", undefined, (state, system) => {
+      const bridge = system.scene.findType(Bridge);
       return [
         new Collectable(),
         new Describable({
           describe: (entity) =>
             `There's a ${entity.name} conveniently laying on the ground.`,
         }),
-        new Component({
+        new Interactive<TextAdventureState>({
           action: () => "Repair bridge",
-          isActive: (entity, world) =>
-            world.inventory.includes(entity) &&
-            world.sceneId === "cliff" &&
+          isActive: (entity, system) =>
+            system.state.inventory.includes(entity) &&
+            system.sceneId === Scenes.cliff &&
             !!bridge &&
             bridge.state !== "sturdy",
           apply: () => {

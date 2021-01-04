@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import App from "./packages/react-text-adventure/App";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./packages/react-text-adventure/theme";
-import { createWorld } from "./packages/text-adventure/world";
+import { createSystem } from "./packages/text-adventure/createSystem";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App theme={theme} world={createWorld()} />
+    <App theme={theme} system={createSystem()} />
   </React.StrictMode>,
   document.getElementById("root")
 );

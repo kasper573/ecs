@@ -1,3 +1,3 @@
-import { Action } from "../ecs/Action";
+import { Action } from "../ecs-interactive/Action";
 
 export const describeAction = (action: Action) => action.name;

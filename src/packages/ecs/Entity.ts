@@ -1,17 +1,20 @@
 import { Component } from "./Component";
-import { World } from "./World";
+import { System } from "./System";
 import { Container } from "./Container";
 
-export class Entity<State = any> {
+export class Entity<State = any, SystemState = any> {
   constructor(
     public name: string,
     public state: State,
-    private resolveComponents: (state: State, world: World) => Component[]
+    private resolveComponents: (
+      state: State,
+      system: System<SystemState>
+    ) => Component[]
   ) {}
 
-  public getComponents(world: World) {
-    return new Container<Component>(
-      ...this.resolveComponents(this.state, world)
+  public getComponents(system: System<SystemState>) {
+    return new Container<Component<SystemState>>(
+      ...this.resolveComponents(this.state, system)
     );
   }
 }
