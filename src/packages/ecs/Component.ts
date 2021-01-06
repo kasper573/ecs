@@ -12,7 +12,7 @@ export class Component<
 
   constructor(protected options: Partial<Options> = {}) {}
 
-  isActive() {
+  get isActive() {
     return resolve(this.options.isActive) ?? this.isActiveDefault;
   }
 

@@ -16,5 +16,5 @@ export const describeEntity = <SystemState>(
 ): string[] =>
   entity
     .findComponents(Describable)
-    .filter((component) => component.isActive())
+    .filter((component) => component.isActive)
     .map((component) => component.description);

@@ -6,7 +6,7 @@ export const createActions = <SystemState>(system: System<SystemState>) => {
   const actions: Action[] = [];
   for (const entity of system.entities) {
     for (const component of entity.findComponents(Interactive)) {
-      if (!component.isActive()) {
+      if (!component.isActive) {
         continue;
       }
       const name = component.action;
