@@ -1,9 +1,12 @@
 import { System } from "../ecs/System";
 import { interpretCommand } from "./interpretCommand";
-import { createUnknownCommandEffect } from "./createUnknownCommandEffect";
+import { createUnknownCommandResult } from "./createUnknownCommandResult";
 import { createActions } from "./createActions";
 
-export const performCommand = (system: System, command: string) => {
+export const performCommand = <SystemState>(
+  system: System<SystemState>,
+  command: string
+) => {
   const action = interpretCommand(command, createActions(system));
-  return action ? action.perform(system) : createUnknownCommandEffect(command);
+  return action ? action.perform() : createUnknownCommandResult(command);
 };

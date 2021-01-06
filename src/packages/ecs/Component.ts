@@ -1,22 +1,53 @@
 import { Entity } from "./Entity";
-import { System } from "./System";
 
-export class Component<SystemState = any> {
-  constructor(protected options: ComponentOptions<SystemState> = {}) {}
+export class Component<
+  TEntity,
+  Options extends ComponentOptions = ComponentOptions
+> {
+  // @ts-ignore
+  entity: TEntity extends Entity<any> ? TEntity : never;
 
-  isActive(entity: Entity, system: System<SystemState>) {
-    if (this.options.isActive) {
-      return this.options.isActive(entity, system);
+  defaultActive: boolean = true;
+
+  constructor(protected options: Resolvable<Options> = {}) {}
+
+  isActive() {
+    return this.resolveOption("isActive", this.defaultActive);
+  }
+
+  update() {
+    if (this.options.update) {
+      this.options.update();
     }
-    return true;
+  }
+
+  protected resolveOption<K extends keyof Options>(
+    key: K,
+    defaultValue: Options[K]
+  ): Options[K] {
+    return resolveOption(this.options, key, defaultValue);
   }
 }
 
-export type ComponentOptions<SystemState> = {
-  isActive?: Derive<boolean, SystemState>;
+export type ComponentOptions = {
+  isActive: boolean;
+  update: () => void | undefined;
 };
 
-export type Derive<T, SystemState> = (
-  entity: Entity,
-  system: System<SystemState>
-) => T;
+type Resolvable<T> = {
+  [K in keyof T]?: T[K] extends (...args: any) => any
+    ? T[K]
+    : T[K] | (() => T[K]);
+};
+
+function resolveOption<T, K extends keyof T>(
+  options: Resolvable<T>,
+  key: K,
+  defaultValue: T[K]
+): T[K] {
+  const value = options[key];
+  if (typeof value === "function") {
+    return value();
+  }
+  return (value as T[K]) ?? defaultValue;
+}

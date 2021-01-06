@@ -1,18 +1,20 @@
 import { useReducer, useState } from "react";
 import { System } from "../ecs/System";
 import { performCommand } from "../ecs-interactive/performCommand";
-import { Effect } from "../ecs-interactive/Effect";
+import { InteractionResult } from "../ecs-interactive/InteractionResult";
 
-export const useSystem = (system: System) => {
-  const [lastEffect, setLastEffect] = useState<Effect | undefined>();
+export const useSystem = <SystemState>(system: System<SystemState>) => {
+  const [interactionResult, setInteractionResult] = useState<
+    InteractionResult | undefined
+  >();
   const [, forceRender] = useReducer((s) => s + 1, 0);
-  const performAndSaveEffect = (command: string) => {
-    const effect = performCommand(system, command);
-    setLastEffect(effect);
+  const performAndSaveResult = (command: string) => {
+    const result = performCommand(system, command);
+    setInteractionResult(result);
     forceRender();
   };
   return {
-    perform: performAndSaveEffect,
-    lastEffect,
+    perform: performAndSaveResult,
+    interactionResult,
   };
 };

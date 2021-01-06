@@ -1,10 +1,10 @@
 import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-collectable/Describable";
+import { Describable } from "../../ecs-describable/Describable";
+import { TextAdventureState } from "../TextAventureState";
 
-export class WinMessage extends Entity {
+export class WinMessage extends Entity<TextAdventureState> {
   constructor() {
-    super("win-message", undefined, () => [
-      new Describable({ describe: () => "You win!" }),
-    ]);
+    super();
+    this.components = [new Describable({ description: "You win!" })];
   }
 }

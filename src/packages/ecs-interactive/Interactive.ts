@@ -1,28 +1,17 @@
-import { System } from "../ecs/System";
-import { Entity } from "../ecs/Entity";
-import { Component, ComponentOptions, Derive } from "../ecs/Component";
-import { Effect } from "./Effect";
+import { Component, ComponentOptions } from "../ecs/Component";
+import { InteractionResult } from "./InteractionResult";
 
-export class Interactive<SystemState = any> extends Component<SystemState> {
-  constructor(protected options: InteractiveOptions<SystemState> = {}) {
-    super(options);
+export class Interactive<Entity> extends Component<Entity, InteractiveOptions> {
+  get action() {
+    return this.resolveOption("action", "");
   }
 
-  action(entity: Entity, system: System<SystemState>) {
-    if (this.options.action) {
-      return this.options.action(entity, system);
-    }
-    return "";
-  }
-
-  apply(entity: Entity, system: System<SystemState>) {
-    if (this.options.apply) {
-      return this.options.apply(entity, system);
-    }
+  apply() {
+    return this.resolveOption("apply", undefined);
   }
 }
 
-export type InteractiveOptions<SystemState> = ComponentOptions<SystemState> & {
-  action?: Derive<string, SystemState>;
-  apply?: Derive<Effect | undefined | void, SystemState>;
+export type InteractiveOptions = ComponentOptions & {
+  action: string;
+  apply: InteractionResult | undefined | void;
 };

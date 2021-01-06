@@ -1,10 +1,10 @@
 import { Entity } from "./Entity";
-import { Scene } from "./Scene";
 import { SceneId, SystemOptions } from "./SystemOptions";
+import { Scene } from "./Scene";
 
-export class System<State = any> {
-  public scenes: Record<SceneId, Scene>;
-  public state: State;
+export class System<SystemState> {
+  public scenes: Record<SceneId, Scene<SystemState>>;
+  public state: SystemState;
 
   private _sceneId: SceneId;
   public get sceneId() {
@@ -19,28 +19,50 @@ export class System<State = any> {
     }
   }
 
-  private readonly getEntities = (system: System<State>) =>
+  private readonly getEntities = (system: System<SystemState>) =>
     system.scene ? Array.from(system.scene) : [];
 
   public get scene() {
     return this.scenes[this._sceneId];
   }
   public get entities() {
-    return this.getEntities(this);
+    const entities = this.getEntities(this);
+    assignEntitiesToSystem(entities, this);
+    return entities;
   }
 
-  constructor(optionsOrEntities: SystemOptions<State> | Entity[] = []) {
+  update() {
+    for (const entity of this.entities) {
+      for (const component of entity.components) {
+        component.update();
+      }
+    }
+  }
+
+  constructor(
+    optionsOrEntities: SystemOptions<SystemState> | Entity<SystemState>[] = []
+  ) {
     const options = normalizeOptions(optionsOrEntities);
-    this.state = options.state || ({} as State);
+    this.state = options.state || ({} as SystemState);
     this.scenes = createScenes(options.scenes);
     this.sceneId = this._sceneId =
       options.sceneId ?? Object.keys(this.scenes)[0];
     this.getEntities = options.entities ?? this.getEntities;
+    this.update();
   }
 }
 
-const createScenes = <State>(
-  sceneOptions: SystemOptions<State>["scenes"] = {}
+const assignEntitiesToSystem = <SystemState>(
+  entities: Entity<SystemState>[],
+  system: System<SystemState>
+) => {
+  for (const entity of entities) {
+    entity.system = system;
+  }
+};
+
+const createScenes = <SystemState>(
+  sceneOptions: SystemOptions<SystemState>["scenes"] = {}
 ) =>
   Object.keys(sceneOptions).reduce(
     (scenes, sceneId) => ({
@@ -50,8 +72,8 @@ const createScenes = <State>(
     {}
   );
 
-const normalizeOptions = <State>(
-  optionsOrEntities: SystemOptions<State> | Entity[] = []
+const normalizeOptions = <SystemState>(
+  optionsOrEntities: SystemOptions<SystemState> | Entity<SystemState>[] = []
 ) =>
   Array.isArray(optionsOrEntities)
     ? { scenes: { [defaultSceneId]: optionsOrEntities } }

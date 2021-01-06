@@ -1,18 +1,20 @@
 import { Entity } from "../ecs/Entity";
-import { System } from "../ecs/System";
 import { Describable } from "./Describable";
 
-export const describeEntities = (entities: Entity[], system: System) =>
+export const describeEntities = <SystemState>(
+  entities: Entity<SystemState>[]
+) =>
   entities
     .reduce(
-      (lines, entity) => [...lines, ...describeEntity(entity, system)],
+      (lines, entity) => [...lines, ...describeEntity(entity)],
       [] as string[]
     )
     .join("\n");
 
-export const describeEntity = (entity: Entity, system: System): string[] =>
+export const describeEntity = <SystemState>(
+  entity: Entity<SystemState>
+): string[] =>
   entity
-    .getComponents(system)
-    .filterType(Describable)
-    .filter((component) => component.isActive(entity, system))
-    .map((obs) => obs.describe(entity, system));
+    .findComponents(Describable)
+    .filter((component) => component.isActive())
+    .map((component) => component.description);

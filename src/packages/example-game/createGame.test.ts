@@ -12,36 +12,36 @@ Actions:
 - Pick up repair kit`
   );
 
-  let lastEffect = performCommand(system, "Cross the bridge");
+  let lastResult = performCommand(system, "Cross the bridge");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `You are standing on the bridge. It seems very unstable.
 Actions:
 - Proceed
 - Go back`
   );
 
-  lastEffect = performCommand(system, "Proceed");
+  lastResult = performCommand(system, "Proceed");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `The bridge collapses under your weight. You fall down a pit.
 It is very dark.
 Actions:
 - Use lighter`
   );
 
-  lastEffect = performCommand(system, "Use lighter");
+  lastResult = performCommand(system, "Use lighter");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `You see a ladder.
 Actions:
 - Climb ladder
 - Stop using lighter`
   );
 
-  lastEffect = performCommand(system, "Climb ladder");
+  lastResult = performCommand(system, "Climb ladder");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `You stand in front of a bridge. It looks broken.
 There's a repair kit conveniently laying on the ground.
 Actions:
@@ -49,9 +49,9 @@ Actions:
 - Pick up repair kit`
   );
 
-  lastEffect = performCommand(system, "Pick up repair kit");
+  lastResult = performCommand(system, "Pick up repair kit");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `Picked up repair kit.
 You stand in front of a bridge. It looks broken.
 Actions:
@@ -59,16 +59,16 @@ Actions:
 - Repair bridge`
   );
 
-  lastEffect = performCommand(system, "Repair bridge");
+  lastResult = performCommand(system, "Repair bridge");
 
-  expect(describeSystem(system, lastEffect)).toEqual(
+  expect(describeSystem(system, lastResult)).toEqual(
     `You repaired the bridge.
 You stand in front of a bridge. It looks sturdy.
 Actions:
 - Cross the bridge`
   );
 
-  lastEffect = performCommand(system, "Cross the bridge");
+  lastResult = performCommand(system, "Cross the bridge");
 
-  expect(describeSystem(system, lastEffect)).toEqual("You win!");
+  expect(describeSystem(system, lastResult)).toEqual("You win!");
 });

@@ -1,23 +1,25 @@
 import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-collectable/Describable";
+import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Scenes } from "../Scenes";
+import { TextAdventureState } from "../TextAventureState";
 import { Lighter } from "./Lighter";
 
-export class Ladder extends Entity {
+export class Ladder extends Entity<TextAdventureState> {
   constructor() {
-    super("ladder", undefined, () => [
+    super();
+    this.components = [
       new Describable({
-        describe: () => "You see a ladder.",
-        isActive: (entity, system) => Lighter.isLit(system),
+        description: "You see a ladder.",
+        isActive: () => Lighter.isLit(this.system),
       }),
       new Interactive({
-        action: () => "Climb ladder",
-        isActive: (entity, system) => Lighter.isLit(system),
-        apply: (entity, system) => {
-          system.sceneId = Scenes.cliff;
+        action: "Climb ladder",
+        isActive: () => Lighter.isLit(this.system),
+        apply: () => {
+          this.system.sceneId = Scenes.cliff;
         },
       }),
-    ]);
+    ];
   }
 }

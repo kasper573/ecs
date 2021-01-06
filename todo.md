@@ -3,25 +3,17 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [ ] Enable test coverage
-- [ ] Syntax based actions instead of select from list
 - [ ] Twitch votes integration
-- [ ] Refactor everything to FP
+- [ ] Create basic editor to allow prototyping stories
+- [ ] Syntax based actions instead of select from list
+- [ ] (Stretch goal) Refactor everything to FP
+- [ ] (Stretch goal) Reimplement ECS using react components that don't render but only
+      emit state via context, then use that state and render text in top level
 
 # Refactor
 
-## API/Convenience/Runtime
-
-- [ ] entity.getComponents(system).resolveType(Describable).describe(entity, system);
-      should be entity.resolveComponent<Describable>.description
-- [ ] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
-      (To achieve this components need lifecycle and mount events)
-- [ ] Rename effect to "action description" or something.
-- [ ] Entity Component Container should be read only
-
 ## Type improvements
 
-- [ ] System should have specific Entity types
-- [ ] Entities should resolve components specific for the SystemState
 - [ ] System.sceneId should be generic type to allow type safe Enum workflow
 
 ## Nice to have
@@ -29,10 +21,6 @@
 - [ ] Create some folder structure for multiple stories
 - [ ] Have a look at ECS projects on NPM and see I could use one of them
 - [ ] Set up proper monorepo infrastructure
-
-## Other
-
-- [ ] Carryable entities have no scene, is that ok? How do they reference this.scene, if we implement that? Give this some thought in general!
 
 # Long term tasks
 
@@ -62,3 +50,14 @@
 - [x] Rename ecs-text to ecs-describable
 - [x] Don't use loose strings for scene ids
 - [x] Rename World to System
+- [x] entity.getComponents(system).resolveType(Describable).describe(entity, system);
+      should be entity.resolveComponent<Describable>.description
+- [x] Separate stateful and stateless entities
+- [x] Remove name from entity, let it be state for entities that need it
+- [x] Options object for Entity constructor
+- [x] Entity Component Container should be read only
+- [x] System should have specific Entity types
+- [x] Entities should resolve components specific for the SystemState
+- [x] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
+      (To achieve this components need lifecycle and mount events)
+- [x] Rename Effect to InteractionResult

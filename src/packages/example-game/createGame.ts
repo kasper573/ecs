@@ -1,5 +1,5 @@
-import { Container } from "../ecs/Container";
 import { System } from "../ecs/System";
+import { Inventory } from "../ecs-collectable/Inventory";
 import { Bridge } from "./entities/Bridge";
 import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
 import { Darkness } from "./entities/Darkness";
@@ -19,7 +19,7 @@ export const createGame = () => {
       [Scenes.pit]: [new Darkness(), new Ladder()],
       [Scenes.otherSide]: [new WinMessage()],
     },
-    state: { inventory: new Container(new Lighter()) },
+    state: { inventory: new Inventory(new Lighter()) },
     entities: (system) => [...(system.scene || []), ...system.state.inventory],
   });
 };

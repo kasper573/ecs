@@ -1,27 +1,37 @@
-import { Entity } from "../../ecs/Entity";
-import { System } from "../../ecs/System";
 import { TextAdventureState } from "../TextAventureState";
 import { Scenes } from "../Scenes";
 import { Interactive } from "../../ecs-interactive/Interactive";
+import { StatefulEntity } from "../../ecs/StatefulEntity";
+import { System } from "../../ecs/System";
 
-export class Lighter extends Entity<"lit" | "unlit"> {
+export type LighterState = "lit" | "unlit";
+
+export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
+  get actionText() {
+    return this.state === "lit" ? "Stop using lighter" : "Use lighter";
+  }
+
+  get isLit() {
+    return this.state === "lit";
+  }
+
+  toggle() {
+    this.state = this.state === "lit" ? "unlit" : "lit";
+  }
+
   constructor() {
-    super("lighter", "unlit", (state) => [
+    super("unlit");
+    this.components = [
       new Interactive({
-        isActive: (entity, system) => system.sceneId === Scenes.pit,
-        action: () => (state === "lit" ? "Stop using lighter" : "Use lighter"),
-        apply: (entity) => {
-          entity.state = entity.state === "lit" ? "unlit" : "lit";
-        },
+        isActive: () => this.system.sceneId === Scenes.pit,
+        action: () => this.actionText,
+        apply: () => this.toggle(),
       }),
-    ]);
+    ];
   }
 
   static isLit(system: System<TextAdventureState>) {
     const lighter = system.state.inventory.findType(Lighter);
-    if (lighter) {
-      return lighter.state === "lit";
-    }
-    return false;
+    return lighter ? lighter.isLit : false;
   }
 }

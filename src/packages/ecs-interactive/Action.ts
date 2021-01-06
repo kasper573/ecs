@@ -1,7 +1,6 @@
-import { System } from "../ecs/System";
-import { Effect } from "./Effect";
+import { InteractionResult } from "./InteractionResult";
 
 export type Action = {
   name: string;
-  perform: (system: System) => Effect | undefined;
+  perform: () => InteractionResult | undefined;
 };

@@ -1,16 +1,18 @@
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
-import { Effect } from "../ecs-interactive/Effect";
-import { describeEffect } from "./describeEffect";
+import { InteractionResult } from "../ecs-interactive/InteractionResult";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
-export const describeSystem = (system: System, lastEffect?: Effect) => {
+export const describeSystem = <SystemState>(
+  system: System<SystemState>,
+  lastResult?: InteractionResult
+) => {
   const parts: string[] = [];
-  if (lastEffect) {
-    parts.push(describeEffect(lastEffect));
+  if (lastResult) {
+    parts.push(lastResult);
   }
-  const entitiesDescribed = describeEntities(system.entities, system);
+  const entitiesDescribed = describeEntities(system.entities);
   if (entitiesDescribed) {
     parts.push(entitiesDescribed);
   }
