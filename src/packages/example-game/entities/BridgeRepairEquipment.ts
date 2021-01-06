@@ -32,7 +32,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
           this.system.sceneId === Scenes.cliff &&
           !!this.bridge &&
           this.bridge.state !== "sturdy",
-        apply: () => {
+        perform: () => {
           if (this.bridge) {
             this.bridge.state = "sturdy";
             return "You repaired the bridge.";

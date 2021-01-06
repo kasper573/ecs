@@ -18,7 +18,7 @@ export class Collectable<
     super({
       isActive: () => !this.isCollected,
       action: () => `Pick up ${this.entity.state.name}`,
-      apply: () => {
+      perform: () => {
         this.inventory.push(this.entity!);
         for (const scene of Object.values(this.entity.system.scenes)) {
           scene.remove(this.entity);

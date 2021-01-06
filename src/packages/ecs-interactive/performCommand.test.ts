@@ -14,7 +14,7 @@ test("performing an action returns the expected result", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        apply: () => "Result",
+        perform: () => "Result",
       }),
     ]),
   ]);
@@ -28,7 +28,7 @@ test("performing an action invokes the specified function", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        apply: () => {
+        perform: () => {
           didInvoke = true;
         },
       }),

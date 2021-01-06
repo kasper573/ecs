@@ -14,7 +14,7 @@ export const createActions = <SystemState>(system: System<SystemState>) => {
         actions.push(
           wrapAction(system, {
             name,
-            perform: () => component.apply() || undefined,
+            perform: () => component.perform() || undefined,
           })
         );
       }

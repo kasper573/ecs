@@ -25,7 +25,7 @@ export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
       new Interactive({
         isActive: () => this.system.sceneId === Scenes.pit,
         action: () => this.actionText,
-        apply: () => this.toggle(),
+        perform: () => this.toggle(),
       }),
     ];
   }

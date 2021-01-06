@@ -17,7 +17,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
       new Interactive({
         action: "Cross the bridge",
         isActive: () => this.system.sceneId === Scenes.cliff,
-        apply: () => {
+        perform: () => {
           if (this.state === "sturdy") {
             this.system.sceneId = Scenes.otherSide;
           } else if (this.state === "fragile") {
@@ -31,7 +31,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
       new Interactive({
         action: "Proceed",
         isActive: () => this.system.sceneId === Scenes.bridge,
-        apply: () => {
+        perform: () => {
           if (this.state === "sturdy") {
             this.system.sceneId = Scenes.otherSide;
           } else {
@@ -44,7 +44,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
       new Interactive({
         action: "Go back",
         isActive: () => this.system.sceneId === Scenes.bridge,
-        apply: () => {
+        perform: () => {
           this.system.sceneId = Scenes.cliff;
         },
       }),

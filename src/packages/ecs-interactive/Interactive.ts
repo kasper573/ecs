@@ -7,14 +7,14 @@ export class Interactive<Entity> extends Component<Entity, InteractiveOptions> {
     return resolve(this.options.action) ?? "";
   }
 
-  apply() {
-    if (this.options.apply) {
-      return this.options.apply();
+  perform() {
+    if (this.options.perform) {
+      return this.options.perform();
     }
   }
 }
 
 export type InteractiveOptions = ComponentOptions & {
   action: Resolvable<string>;
-  apply: () => InteractionResult | undefined | void;
+  perform: () => InteractionResult | undefined | void;
 };

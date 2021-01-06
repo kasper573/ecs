@@ -16,7 +16,7 @@ export class Ladder extends Entity<TextAdventureState> {
       new Interactive({
         action: "Climb ladder",
         isActive: () => Lighter.isLit(this.system),
-        apply: () => {
+        perform: () => {
           this.system.sceneId = Scenes.cliff;
         },
       }),
