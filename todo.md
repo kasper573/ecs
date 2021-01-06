@@ -14,6 +14,7 @@
 
 ## Type improvements
 
+- [ ] Rename action apply
 - [ ] System.sceneId should be generic type to allow type safe Enum workflow
 
 ## Nice to have
@@ -61,3 +62,4 @@
 - [x] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
       (To achieve this components need lifecycle and mount events)
 - [x] Rename Effect to InteractionResult
+- [x] Component options cleanup

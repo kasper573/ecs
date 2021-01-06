@@ -28,7 +28,7 @@ export class Collectable<
       update: () => {
         const { isCollected, entity } = this;
         for (const desc of entity.findComponents(Describable)) {
-          desc.defaultActive = !isCollected;
+          desc.isActiveDefault = !isCollected;
         }
       },
     });

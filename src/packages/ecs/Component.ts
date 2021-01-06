@@ -1,4 +1,5 @@
 import { Entity } from "./Entity";
+import { Resolvable, resolve } from "./Resolvable";
 
 export class Component<
   TEntity,
@@ -7,12 +8,12 @@ export class Component<
   // @ts-ignore
   entity: TEntity extends Entity<any> ? TEntity : never;
 
-  defaultActive: boolean = true;
+  isActiveDefault: boolean = true;
 
-  constructor(protected options: Resolvable<Options> = {}) {}
+  constructor(protected options: Partial<Options> = {}) {}
 
   isActive() {
-    return this.resolveOption("isActive", this.defaultActive);
+    return resolve(this.options.isActive) ?? this.isActiveDefault;
   }
 
   update() {
@@ -20,34 +21,9 @@ export class Component<
       this.options.update();
     }
   }
-
-  protected resolveOption<K extends keyof Options>(
-    key: K,
-    defaultValue: Options[K]
-  ): Options[K] {
-    return resolveOption(this.options, key, defaultValue);
-  }
 }
 
 export type ComponentOptions = {
-  isActive: boolean;
+  isActive: Resolvable<boolean>;
   update: () => void | undefined;
 };
-
-type Resolvable<T> = {
-  [K in keyof T]?: T[K] extends (...args: any) => any
-    ? T[K]
-    : T[K] | (() => T[K]);
-};
-
-function resolveOption<T, K extends keyof T>(
-  options: Resolvable<T>,
-  key: K,
-  defaultValue: T[K]
-): T[K] {
-  const value = options[key];
-  if (typeof value === "function") {
-    return value();
-  }
-  return (value as T[K]) ?? defaultValue;
-}

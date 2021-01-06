@@ -14,7 +14,7 @@ test("performing an action returns the expected result", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        apply: "Result",
+        apply: () => "Result",
       }),
     ]),
   ]);

@@ -15,7 +15,7 @@ test("actions can have results", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        apply: "Bar",
+        apply: () => "Bar",
       }),
     ]),
   ]);
