@@ -1,14 +1,19 @@
 import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-collectable/Describable";
+import { Describable } from "../../ecs-describable/Describable";
+import { TextAdventureState } from "../TextAventureState";
 import { Lighter } from "./Lighter";
 
-export class Darkness extends Entity {
+export class Darkness extends Entity<TextAdventureState> {
   constructor() {
-    super("darkness", undefined, () => [
+    super();
+    this.components = [
       new Describable({
-        describe: () => "It is very dark.",
-        isActive: (entity, system) => !Lighter.isLit(system),
+        description: "It is very dark.",
+        isActive: () => {
+          const lighter = this.system.state.inventory.findType(Lighter);
+          return !lighter || !lighter.isLit;
+        },
       }),
-    ]);
+    ];
   }
 }

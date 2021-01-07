@@ -1,58 +1,62 @@
-import { Effect } from "../../ecs-interactive/Effect";
+import { InteractionResult } from "../../ecs-interactive/InteractionResult";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { Entity } from "../../ecs/Entity";
-import { Describable } from "../../ecs-collectable/Describable";
-import { Scenes } from "../Scenes";
+import { Describable } from "../../ecs-describable/Describable";
+import { StatefulEntity } from "../../ecs/StatefulEntity";
+import { TextAdventureState } from "../TextAventureState";
+import { TextAdventureSM } from "../TextAdventureSM";
 
-const fallDown: Effect = {
-  description: "The bridge collapses under your weight. You fall down a pit.",
-};
+const fallDown: InteractionResult =
+  "The bridge collapses under your weight. You fall down a pit.";
 
 export type BridgeState = "fragile" | "broken" | "sturdy";
 
-export class Bridge extends Entity<BridgeState> {
+export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
+  get sceneManager() {
+    return this.system.modules.resolveType(TextAdventureSM);
+  }
   constructor() {
-    super("bridge", "fragile", (state, system) => [
+    super("fragile");
+    this.components = [
       new Interactive({
-        action: (entity) => `Cross the ${entity.name}`,
-        isActive: (entity, system) => system.sceneId === Scenes.cliff,
-        apply: (entity, system) => {
-          if (state === "sturdy") {
-            system.sceneId = Scenes.otherSide;
-          } else if (state === "fragile") {
-            system.sceneId = Scenes.bridge;
-          } else if (state === "broken") {
-            system.sceneId = Scenes.pit;
+        action: "Cross the bridge",
+        isActive: () => this.sceneManager.sceneId === "cliff",
+        perform: () => {
+          if (this.state === "sturdy") {
+            this.sceneManager.sceneId = "otherSide";
+          } else if (this.state === "fragile") {
+            this.sceneManager.sceneId = "bridge";
+          } else if (this.state === "broken") {
+            this.sceneManager.sceneId = "pit";
             return fallDown;
           }
         },
       }),
       new Interactive({
-        action: () => "Proceed",
-        isActive: (entity, system) => system.sceneId === Scenes.bridge,
-        apply: (entity, system) => {
-          if (state === "sturdy") {
-            system.sceneId = Scenes.otherSide;
+        action: "Proceed",
+        isActive: () => this.sceneManager.sceneId === "bridge",
+        perform: () => {
+          if (this.state === "sturdy") {
+            this.sceneManager.sceneId = "otherSide";
           } else {
-            entity.state = "broken";
-            system.sceneId = Scenes.pit;
+            this.state = "broken";
+            this.sceneManager.sceneId = "pit";
             return fallDown;
           }
         },
       }),
       new Interactive({
-        action: () => "Go back",
-        isActive: (entity, system) => system.sceneId === Scenes.bridge,
-        apply: (entity, system) => {
-          system.sceneId = Scenes.cliff;
+        action: "Go back",
+        isActive: () => this.sceneManager.sceneId === "bridge",
+        perform: () => {
+          this.sceneManager.sceneId = "cliff";
         },
       }),
       new Describable({
-        describe: () =>
-          system.sceneId === Scenes.bridge
+        description: () =>
+          this.sceneManager.sceneId === "bridge"
             ? "You are standing on the bridge. It seems very unstable."
-            : `You stand in front of a bridge. It looks ${state}.`,
+            : `You stand in front of a bridge. It looks ${this.state}.`,
       }),
-    ]);
+    ];
   }
 }

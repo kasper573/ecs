@@ -3,21 +3,22 @@ import styled, { DefaultTheme, ThemeProvider } from "styled-components";
 import { System } from "../../ecs/System";
 import { describeSystem } from "../../ecs-describable/describeSystem";
 import { useSystem } from "../../ecs-react/useSystem";
+import { TextAdventureState } from "../TextAventureState";
 import { GlobalStyle } from "./GlobalStyle";
 import { Console } from "./Console";
 
 export type AppProps = {
   theme: DefaultTheme;
-  system: System;
+  system: System<TextAdventureState>;
 };
 
 const App = ({ theme, system }: AppProps) => {
-  const { perform, lastEffect } = useSystem(system);
+  const { perform, interactionResult } = useSystem(system);
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <MaximizedConsole onCommand={perform}>
-        {describeSystem(system, lastEffect)}
+        {describeSystem(system, interactionResult)}
       </MaximizedConsole>
     </ThemeProvider>
   );

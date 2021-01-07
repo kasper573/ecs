@@ -1,63 +1,71 @@
 import { Entity } from "./Entity";
-import { Scene } from "./Scene";
-import { SceneId, SystemOptions } from "./SystemOptions";
+import { Container } from "./Container";
+import { SystemModule } from "./SystemModule";
+import { isArray } from "./isArray";
 
-export class System<State = any> {
-  public scenes: Record<SceneId, Scene>;
-  public state: State;
+export class System<SystemState> {
+  state: SystemState;
+  modules: Container<SystemModule>;
 
-  private _sceneId: SceneId;
-  public get sceneId() {
-    return this._sceneId;
+  private readonly getEntities: SystemOptions<SystemState>["entities"];
+
+  public get entities() {
+    const entities = this.getEntities(this.state);
+    assignEntitiesToSystem(entities, this);
+    return entities;
   }
 
-  public set sceneId(value: SceneId) {
-    if (value in this.scenes) {
-      this._sceneId = value;
-    } else {
-      throw new Error(`Scene does not exist: ${value}`);
+  update() {
+    for (const entity of this.entities) {
+      for (const component of entity.components) {
+        component.update();
+      }
     }
   }
 
-  private readonly getEntities = (system: System<State>) =>
-    system.scene ? Array.from(system.scene) : [];
-
-  public get scene() {
-    return this.scenes[this._sceneId];
-  }
-  public get entities() {
-    return this.getEntities(this);
-  }
-
-  constructor(optionsOrEntities: SystemOptions<State> | Entity[] = []) {
-    const options = normalizeOptions(optionsOrEntities);
-    this.state = options.state || ({} as State);
-    this.scenes = createScenes(options.scenes);
-    this.sceneId = this._sceneId =
-      options.sceneId ?? Object.keys(this.scenes)[0];
-    this.getEntities = options.entities ?? this.getEntities;
+  constructor(constructorOptions: ConstructorOptions<SystemState>) {
+    const options = normalizeOptions(constructorOptions);
+    this.modules = new Container(...(options.modules ?? []));
+    this.state = options.state ?? ({} as SystemState);
+    this.getEntities = options.entities;
+    this.update();
   }
 }
 
-const createScenes = <State>(
-  sceneOptions: SystemOptions<State>["scenes"] = {}
-) =>
-  Object.keys(sceneOptions).reduce(
-    (scenes, sceneId) => ({
-      ...scenes,
-      [sceneId]: new Scene(...sceneOptions[sceneId]),
-    }),
-    {}
-  );
+const normalizeOptions = <SystemState>(
+  options: ConstructorOptions<SystemState>
+): SystemOptions<SystemState> => {
+  if (isArray(options)) {
+    return { entities: () => options };
+  }
+  const { entities } = options;
+  return {
+    ...options,
+    entities: isArray(entities) ? () => entities : entities ?? (() => []),
+  };
+};
 
-const normalizeOptions = <State>(
-  optionsOrEntities: SystemOptions<State> | Entity[] = []
-) =>
-  Array.isArray(optionsOrEntities)
-    ? { scenes: { [defaultSceneId]: optionsOrEntities } }
-    : {
-        ...optionsOrEntities,
-        scenes: optionsOrEntities.scenes ?? { [defaultSceneId]: [] },
-      };
+const assignEntitiesToSystem = <SystemState>(
+  entities: readonly Entity<SystemState>[],
+  system: System<SystemState>
+) => {
+  for (const entity of entities) {
+    entity.system = system;
+  }
+};
 
-const defaultSceneId: SceneId = "default";
+type ConstructorOptions<SystemState> =
+  | {
+      modules?: SystemModule[];
+      state?: SystemState;
+      entities?:
+        | ((state: SystemState) => readonly Entity<SystemState>[])
+        | readonly Entity<SystemState>[];
+    }
+  | readonly Entity<SystemState>[];
+
+type SystemOptions<SystemState> = {
+  modules?: SystemModule[];
+  state?: SystemState;
+  entities: (state: SystemState) => readonly Entity<SystemState>[];
+};

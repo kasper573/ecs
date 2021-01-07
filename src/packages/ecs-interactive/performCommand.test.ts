@@ -3,32 +3,32 @@ import { Entity } from "../ecs/Entity";
 import { performCommand } from "./performCommand";
 import { Interactive } from "./Interactive";
 
-test("gets unknown command effect when trying to perform an unknown command", () => {
+test("gets unknown command result when trying to perform an unknown command", () => {
   const system = new System([]);
-  const effect = performCommand(system, "Do something");
-  expect(effect).toEqual({ description: `Could not "Do something"` });
+  const result = performCommand(system, "Do something");
+  expect(result).toEqual(`Could not "Do something"`);
 });
 
-test("performing an action returns the expected effect", () => {
+test("performing an action returns the expected result", () => {
   const system = new System([
-    new Entity("entity", {}, () => [
+    new Entity([
       new Interactive({
-        action: () => "Foo",
-        apply: () => ({ description: "Effect" }),
+        action: "Foo",
+        perform: () => "Result",
       }),
     ]),
   ]);
-  const effect = performCommand(system, "Foo");
-  expect(effect).toEqual({ description: "Effect" });
+  const result = performCommand(system, "Foo");
+  expect(result).toEqual("Result");
 });
 
 test("performing an action invokes the specified function", () => {
   let didInvoke = false;
   const system = new System([
-    new Entity("entity", {}, () => [
+    new Entity([
       new Interactive({
-        action: () => "Foo",
-        apply: () => {
+        action: "Foo",
+        perform: () => {
           didInvoke = true;
         },
       }),

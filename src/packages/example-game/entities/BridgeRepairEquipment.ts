@@ -1,36 +1,47 @@
-import { Entity } from "../../ecs/Entity";
-import { Collectable } from "../../ecs-collectable/Collectable";
-import { Describable } from "../../ecs-collectable/Describable";
+import {
+  Collectable,
+  CollectableEntityState,
+} from "../../ecs-collectable/Collectable";
+import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
+import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { TextAdventureState } from "../TextAventureState";
-import { Scenes } from "../Scenes";
+import { TextAdventureSM } from "../TextAdventureSM";
 import { Bridge } from "./Bridge";
 
-export class BridgeRepairEquipment extends Entity {
+export class BridgeRepairEquipment extends StatefulEntity<
+  CollectableEntityState,
+  TextAdventureState
+> {
+  get sceneManager() {
+    return this.system.modules.resolveType(TextAdventureSM);
+  }
+  get bridge() {
+    return this.sceneManager.scene.findType(Bridge);
+  }
+
   constructor() {
-    super("repair kit", undefined, (state, system) => {
-      const bridge = system.scene.findType(Bridge);
-      return [
-        new Collectable(),
-        new Describable({
-          describe: (entity) =>
-            `There's a ${entity.name} conveniently laying on the ground.`,
-        }),
-        new Interactive<TextAdventureState>({
-          action: () => "Repair bridge",
-          isActive: (entity, system) =>
-            system.state.inventory.includes(entity) &&
-            system.sceneId === Scenes.cliff &&
-            !!bridge &&
-            bridge.state !== "sturdy",
-          apply: () => {
-            if (bridge) {
-              bridge.state = "sturdy";
-              return { description: "You repaired the bridge." };
-            }
-          },
-        }),
-      ];
-    });
+    super({ name: "repair kit" });
+    this.components = [
+      new Collectable(),
+      new Describable({
+        description: () =>
+          `There's a ${this.state.name} conveniently laying on the ground.`,
+      }),
+      new Interactive({
+        action: "Repair bridge",
+        isActive: () =>
+          this.system.state.inventory.includes(this) &&
+          this.sceneManager.sceneId === "cliff" &&
+          !!this.bridge &&
+          this.bridge.state !== "sturdy",
+        perform: () => {
+          if (this.bridge) {
+            this.bridge.state = "sturdy";
+            return "You repaired the bridge.";
+          }
+        },
+      }),
+    ];
   }
 }

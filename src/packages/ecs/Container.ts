@@ -17,10 +17,10 @@ export class Container<T> extends Array<T> {
   resolveType<C extends T>(type: Class<C>) {
     const instance = this.findType(type);
     if (!instance) {
-      throw new Error(`Could not resolve instance of ${type?.name}`);
+      throw new Error(`Could not resolve instance of ${type.name}`);
     }
     return instance;
   }
 }
 
-type Class<T> = new (...args: any[]) => T;
+export type Class<T> = new (...args: any[]) => T;

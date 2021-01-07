@@ -1,16 +1,15 @@
-import { Derive, Component, ComponentOptions } from "../ecs/Component";
+import { Component, ComponentOptions } from "../ecs/Component";
+import { Resolvable, resolve } from "../ecs/Resolvable";
 
-export class Describable<SystemState = any> extends Component<SystemState> {
-  public readonly describe: DescribableComponentOptions<SystemState>["describe"];
-
-  constructor(options: DescribableComponentOptions<SystemState>) {
-    super(options);
-    this.describe = options.describe;
+export class Describable<Entity> extends Component<
+  Entity,
+  DescribableComponentOptions
+> {
+  get description() {
+    return resolve(this.options.description) ?? "";
   }
 }
 
-export type DescribableComponentOptions<
-  SystemState = any
-> = ComponentOptions<SystemState> & {
-  describe: Derive<string, SystemState>;
+export type DescribableComponentOptions = ComponentOptions & {
+  description: Resolvable<string>;
 };

@@ -1,22 +1,29 @@
 import { Entity } from "./Entity";
-import { System } from "./System";
+import { Resolvable, resolve } from "./Resolvable";
 
-export class Component<SystemState = any> {
-  constructor(protected options: ComponentOptions<SystemState> = {}) {}
+export class Component<
+  TEntity,
+  Options extends ComponentOptions = ComponentOptions
+> {
+  // @ts-ignore
+  entity: TEntity extends Entity<any> ? TEntity : never;
 
-  isActive(entity: Entity, system: System<SystemState>) {
-    if (this.options.isActive) {
-      return this.options.isActive(entity, system);
+  isActiveDefault: boolean = true;
+
+  constructor(protected options: Partial<Options> = {}) {}
+
+  get isActive() {
+    return resolve(this.options.isActive) ?? this.isActiveDefault;
+  }
+
+  update() {
+    if (this.options.update) {
+      this.options.update();
     }
-    return true;
   }
 }
 
-export type ComponentOptions<SystemState> = {
-  isActive?: Derive<boolean, SystemState>;
+export type ComponentOptions = {
+  isActive: Resolvable<boolean>;
+  update: () => void | undefined;
 };
-
-export type Derive<T, SystemState> = (
-  entity: Entity,
-  system: System<SystemState>
-) => T;
