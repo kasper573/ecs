@@ -6,7 +6,7 @@ export class Entity<SystemState> {
   // @ts-ignore
   system: System<SystemState>;
 
-  private _components: ReadonlyArray<Component<this>> = [];
+  private _components: readonly Component<this>[] = [];
   public get components() {
     return this._components;
   }
@@ -17,9 +17,9 @@ export class Entity<SystemState> {
     }
   }
 
-  constructor(components?: ReadonlyArray<Component<Entity<SystemState>>>) {
+  constructor(components?: readonly Component<Entity<SystemState>>[]) {
     if (components) {
-      this.components = components as ReadonlyArray<Component<this>>;
+      this.components = components as readonly Component<this>[];
     }
   }
 

@@ -7,19 +7,19 @@ import { Ladder } from "./entities/Ladder";
 import { WinMessage } from "./entities/WinMessage";
 import { Lighter } from "./entities/Lighter";
 import { TextAdventureState } from "./TextAventureState";
-import { Scenes } from "./Scenes";
+import { TextAdventureSM } from "./TextAdventureSM";
 
 export const createGame = () => {
   const bridge = new Bridge();
+  const sceneManager = new TextAdventureSM("cliff", {
+    cliff: [bridge, new BridgeRepairEquipment()],
+    bridge: [bridge],
+    pit: [new Darkness(), new Ladder()],
+    otherSide: [new WinMessage()],
+  });
   return new System<TextAdventureState>({
-    sceneId: Scenes.cliff,
-    scenes: {
-      [Scenes.cliff]: [bridge, new BridgeRepairEquipment()],
-      [Scenes.bridge]: [bridge],
-      [Scenes.pit]: [new Darkness(), new Ladder()],
-      [Scenes.otherSide]: [new WinMessage()],
-    },
+    modules: [sceneManager],
     state: { inventory: new Inventory(new Lighter()) },
-    entities: (system) => [...(system.scene || []), ...system.state.inventory],
+    entities: (state) => [...(sceneManager.scene ?? []), ...state.inventory],
   });
 };

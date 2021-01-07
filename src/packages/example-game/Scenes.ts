@@ -1,6 +1,1 @@
-export enum Scenes {
-  cliff,
-  bridge,
-  pit,
-  otherSide,
-}
+export type Scenes = "cliff" | "bridge" | "pit" | "otherSide";

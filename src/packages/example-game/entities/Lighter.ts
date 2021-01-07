@@ -1,12 +1,16 @@
 import { TextAdventureState } from "../TextAventureState";
-import { Scenes } from "../Scenes";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { System } from "../../ecs/System";
+import { TextAdventureSM } from "../TextAdventureSM";
 
 export type LighterState = "lit" | "unlit";
 
 export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
+  get sceneManager() {
+    return this.system.modules.resolveType(TextAdventureSM);
+  }
+
   get actionText() {
     return this.state === "lit" ? "Stop using lighter" : "Use lighter";
   }
@@ -23,7 +27,7 @@ export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
     super("unlit");
     this.components = [
       new Interactive({
-        isActive: () => this.system.sceneId === Scenes.pit,
+        isActive: () => this.sceneManager.sceneId === "pit",
         action: () => this.actionText,
         perform: () => this.toggle(),
       }),

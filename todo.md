@@ -12,15 +12,12 @@
 
 # Refactor
 
-## Type improvements
+- [ ] Set up proper monorepo infrastructure
 
-- [ ] System.sceneId should be generic type to allow type safe Enum workflow
-
-## Nice to have
+# Nice to have
 
 - [ ] Create some folder structure for multiple stories
 - [ ] Have a look at ECS projects on NPM and see I could use one of them
-- [ ] Set up proper monorepo infrastructure
 
 # Long term tasks
 
@@ -63,3 +60,5 @@
 - [x] Rename Effect to InteractionResult
 - [x] Component options cleanup
 - [x] Rename action apply
+- [x] Move scene code to separate package
+- [x] System.sceneId should be generic type to allow type safe Enum workflow

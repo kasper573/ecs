@@ -6,15 +6,18 @@ import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { TextAdventureState } from "../TextAventureState";
-import { Scenes } from "../Scenes";
+import { TextAdventureSM } from "../TextAdventureSM";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends StatefulEntity<
   CollectableEntityState,
   TextAdventureState
 > {
+  get sceneManager() {
+    return this.system.modules.resolveType(TextAdventureSM);
+  }
   get bridge() {
-    return this.system.scene.findType(Bridge);
+    return this.sceneManager.scene.findType(Bridge);
   }
 
   constructor() {
@@ -29,7 +32,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
         action: "Repair bridge",
         isActive: () =>
           this.system.state.inventory.includes(this) &&
-          this.system.sceneId === Scenes.cliff &&
+          this.sceneManager.sceneId === "cliff" &&
           !!this.bridge &&
           this.bridge.state !== "sturdy",
         perform: () => {

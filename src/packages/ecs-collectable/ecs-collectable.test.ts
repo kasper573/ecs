@@ -3,14 +3,15 @@ import { describeEntity } from "../ecs-describable/describeEntities";
 import { System } from "../ecs/System";
 import { StatefulEntity } from "../ecs/StatefulEntity";
 import { Describable } from "../ecs-describable/Describable";
+import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { HasInventory } from "./HasInventory";
 import { Inventory } from "./Inventory";
 import { Collectable, CollectableEntityState } from "./Collectable";
 
 test("Picking up a Collectable entity removes it from the scene", () => {
-  const { entity, system, pickUp } = setup();
+  const { entity, pickUp, sceneManager } = setup();
   pickUp.perform();
-  expect(system.scene.includes(entity)).toBe(false);
+  expect(sceneManager.scene).not.toContain(entity);
 });
 
 test("A Collectable entity in your inventory has its pick up action disabled", () => {
@@ -35,11 +36,12 @@ const setup = () => {
     { name: "entity" },
     [new Describable({ description: "A visible entity" }), new Collectable()]
   );
+  const sceneManager = new SceneManager("default", { default: [entity] });
   const system = new System<HasInventory>({
+    modules: [sceneManager],
     state: { inventory: new Inventory() },
-    scenes: { default: [entity] },
-    entities: (system) => [...(system.scene || []), ...system.state.inventory],
+    entities: (state) => [...(sceneManager.scene ?? []), ...state.inventory],
   });
   const [pickUp] = createActions(system);
-  return { entity, system, pickUp };
+  return { entity, system, pickUp, sceneManager };
 };
