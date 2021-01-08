@@ -1,10 +1,10 @@
 import { Component } from "./Component";
 import { System } from "./System";
 import { Class, Container } from "./Container";
+import { trustedUndefined } from "./trustedUndefined";
 
 export class Entity<SystemState> {
-  // @ts-ignore
-  system: System<SystemState>;
+  system: System<SystemState> = trustedUndefined();
 
   private _components: readonly Component<this>[] = [];
   public get components() {

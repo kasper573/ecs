@@ -1,12 +1,12 @@
 import { Entity } from "./Entity";
 import { Resolvable, resolve } from "./Resolvable";
+import { trustedUndefined } from "./trustedUndefined";
 
 export class Component<
   TEntity,
   Options extends ComponentOptions = ComponentOptions
 > {
-  // @ts-ignore
-  entity: TEntity extends Entity<any> ? TEntity : never;
+  entity: TEntity extends Entity<any> ? TEntity : never = trustedUndefined();
 
   isActiveDefault: boolean = true;
 
