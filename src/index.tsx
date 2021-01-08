@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./packages/example-game/react/App";
+import App from "./packages/twitch-text-adventure/react/App";
 import reportWebVitals from "./reportWebVitals";
-import { theme } from "./packages/example-game/react/theme";
-import { createGame } from "./packages/example-game/createGame";
+import { theme } from "./packages/twitch-text-adventure/react/theme";
+import { createGame } from "./packages/twitch-text-adventure/createGame";
 
 ReactDOM.render(
   <React.StrictMode>

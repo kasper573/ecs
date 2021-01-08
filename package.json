@@ -21,7 +21,7 @@
     "collectCoverageFrom": [
       "src/packages/**/*.{js,jsx,ts,tsx}",
       "!src/packages/ecs-react/**",
-      "!src/packages/example-game/**",
+      "!src/packages/twitch-text-adventure/**",
       "!<rootDir>/node_modules/**"
     ],
     "coverageThreshold": {
