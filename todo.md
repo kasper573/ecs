@@ -2,7 +2,7 @@
 
 - [x] Boilerplate
 - [x] Write unit tests for engine
-- [ ] Enable test coverage
+- [x] Enable test coverage
 - [ ] Twitch votes integration
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Syntax based actions instead of select from list
