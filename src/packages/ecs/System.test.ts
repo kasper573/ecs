@@ -2,6 +2,30 @@ import { Entity } from "./Entity";
 import { System } from "./System";
 import { Component } from "./Component";
 
+describe("system entries can be configured", () => {
+  test("by an array of entities", () => {
+    const entities = [new Entity()];
+    const system = new System(entities);
+    expect(system.entities).toBe(entities);
+  });
+  describe("by a config object", () => {
+    test("where config.entities is undefined", () => {
+      const system = new System({});
+      expect(system.entities).toEqual([]);
+    });
+    test("where config.entities is an array of entities", () => {
+      const entities = [new Entity()];
+      const system = new System({ entities });
+      expect(system.entities).toBe(entities);
+    });
+    test("where config.entities is a function that returns entities", () => {
+      const entities = [new Entity()];
+      const system = new System({ entities: () => entities });
+      expect(system.entities).toBe(entities);
+    });
+  });
+});
+
 test("system entities resolution can be customized to derive from system state", () => {
   type SystemState = "a" | "b";
   const entities = {
