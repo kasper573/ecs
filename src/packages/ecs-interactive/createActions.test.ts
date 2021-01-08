@@ -40,6 +40,15 @@ test("actions can have side effects", () => {
   expect(sideEffect).toEqual("Bar");
 });
 
+test("individual actions throw an error when performed more than once", () => {
+  const system = new System([
+    new Entity([new Interactive({ action: () => "Foo" })]),
+  ]);
+  const [action] = createActions(system);
+  action.perform();
+  expect(action.perform).toThrow();
+});
+
 test("components get updated after actions perform", () => {
   let componentUpdates = 0;
   const system = new System([
