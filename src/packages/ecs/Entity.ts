@@ -31,7 +31,7 @@ export class Entity<SystemState> {
     return Container.prototype.findType.bind(this.components)(type);
   }
 
-  resolveType<C extends Component<this>>(type: Class<C>): C {
+  resolveComponent<C extends Component<this>>(type: Class<C>): C {
     return Container.prototype.resolveType.bind(this.components)(type);
   }
 }
