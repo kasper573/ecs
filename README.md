@@ -4,6 +4,11 @@ A text adventure engine with twitch.tv integration built with Typescript and Rea
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Getting started
+
+- Rename .env.example to .env and replace the variables with your settings
+- Run `yarn run start` to start the game
+
 ## Available Scripts
 
 In the project directory, you can run:

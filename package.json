@@ -13,6 +13,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll",
+    "bot": "ts-node --project tsconfig.node.json src/packages/twitch-text-adventure-bot/index.ts",
     "eject": "react-scripts eject",
     "lint": "eslint --ext js,ts,tsx src",
     "lint-fix": "eslint --ext js,ts,tsx src --fix"
@@ -74,12 +75,16 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^5.1.4",
+    "@types/tmi.js": "^1.7.0",
     "babel-eslint": "^10.1.0",
+    "dotenv": "^8.2.0",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.6",
     "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "react-scripts": "4.0.1",
+    "tmi.js": "^1.7.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
   }
 }

@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "esModuleInterop": true
+  },
+  "include": ["src/packages/twitch-text-adventure-bot"]
+}
