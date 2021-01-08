@@ -4,6 +4,11 @@ import { Interactive } from "../ecs-interactive/Interactive";
 import { Describable } from "./Describable";
 import { describeSystem } from "./describeSystem";
 
+test("The default description is empty string", () => {
+  const d = new Describable();
+  expect(d.description).toEqual("");
+});
+
 test("Describable entities are presented as text", () => {
   const entity = new Entity([
     new Describable({ description: "A visible entity" }),
