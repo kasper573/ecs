@@ -5,7 +5,7 @@ import { Interactive } from "./Interactive";
 export const createActions = <SystemState>(system: System<SystemState>) => {
   const actions: Action[] = [];
   for (const entity of system.entities) {
-    for (const component of entity.findComponents(Interactive)) {
+    for (const component of entity.components.filterType(Interactive)) {
       if (!component.isActive) {
         continue;
       }

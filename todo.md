@@ -13,6 +13,8 @@
 # Refactor
 
 - [ ] Set up proper monorepo infrastructure
+- [ ] Implement something that will clean up all event handlers in ECS containers
+- [ ] Try to make System entities a Container
 
 # Nice to have
 

@@ -5,6 +5,6 @@ import { TextAdventureState } from "../TextAventureState";
 export class WinMessage extends Entity<TextAdventureState> {
   constructor() {
     super();
-    this.components = [new Describable({ description: "You win!" })];
+    this.components.push(new Describable({ description: "You win!" }));
   }
 }

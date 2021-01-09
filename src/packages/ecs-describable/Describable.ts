@@ -1,5 +1,5 @@
 import { Component, ComponentOptions } from "../ecs/Component";
-import { Resolvable, resolve } from "../ecs/Resolvable";
+import { Resolvable, resolve } from "../ecs/util/Resolvable";
 
 export class Describable<Entity> extends Component<
   Entity,

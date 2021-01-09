@@ -1,6 +1,6 @@
 import { Entity } from "./Entity";
-import { Resolvable, resolve } from "./Resolvable";
-import { trustedUndefined } from "./trustedUndefined";
+import { Resolvable, resolve } from "./util/Resolvable";
+import { trustedUndefined } from "./util/trustedUndefined";
 
 export class Component<
   TEntity,

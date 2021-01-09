@@ -11,7 +11,7 @@ export class Ladder extends Entity<TextAdventureState> {
   }
   constructor() {
     super();
-    this.components = [
+    this.components.push(
       new Describable({
         description: "You see a ladder.",
         isActive: () => Lighter.isLit(this.system),
@@ -22,7 +22,7 @@ export class Ladder extends Entity<TextAdventureState> {
         perform: () => {
           this.sceneManager.sceneId = "cliff";
         },
-      }),
-    ];
+      })
+    );
   }
 }

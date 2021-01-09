@@ -6,14 +6,14 @@ import { Lighter } from "./Lighter";
 export class Darkness extends Entity<TextAdventureState> {
   constructor() {
     super();
-    this.components = [
+    this.components.push(
       new Describable({
         description: "It is very dark.",
         isActive: () => {
           const lighter = this.system.state.inventory.findType(Lighter);
           return !lighter || !lighter.isLit;
         },
-      }),
-    ];
+      })
+    );
   }
 }

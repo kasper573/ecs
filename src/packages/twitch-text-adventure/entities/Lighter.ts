@@ -25,13 +25,13 @@ export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
 
   constructor() {
     super("unlit");
-    this.components = [
+    this.components.push(
       new Interactive({
         isActive: () => this.sceneManager.sceneId === "pit",
         action: () => this.actionText,
         perform: () => this.toggle(),
-      }),
-    ];
+      })
+    );
   }
 
   static isLit(system: System<TextAdventureState>) {

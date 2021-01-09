@@ -1,11 +1,11 @@
 import { Entity } from "./Entity";
 import { Container } from "./Container";
 import { SystemModule } from "./SystemModule";
-import { isArray } from "./isArray";
+import { isArray } from "./util/isArray";
 
 export class System<SystemState> {
   state: SystemState;
-  modules: Container<SystemModule>;
+  readonly modules: Container<SystemModule>;
 
   private readonly getEntities: SystemOptions<SystemState>["entities"];
 
@@ -28,6 +28,12 @@ export class System<SystemState> {
     this.modules = new Container(...(options.modules ?? []));
     this.state = options.state ?? ({} as SystemState);
     this.getEntities = options.entities;
+
+    this.modules.connect(
+      (...mods) => mods.forEach((mod) => mod.plugin(this)),
+      (...mods) => mods.forEach((mod) => mod.detach())
+    );
+
     this.update();
   }
 }

@@ -16,7 +16,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
   }
   constructor() {
     super("fragile");
-    this.components = [
+    this.components.push(
       new Interactive({
         action: "Cross the bridge",
         isActive: () => this.sceneManager.sceneId === "cliff",
@@ -56,7 +56,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
           this.sceneManager.sceneId === "bridge"
             ? "You are standing on the bridge. It seems very unstable."
             : `You stand in front of a bridge. It looks ${this.state}.`,
-      }),
-    ];
+      })
+    );
   }
 }

@@ -22,7 +22,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
 
   constructor() {
     super({ name: "repair kit" });
-    this.components = [
+    this.components.push(
       new Collectable(),
       new Describable({
         description: () =>
@@ -41,7 +41,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
             return "You repaired the bridge.";
           }
         },
-      }),
-    ];
+      })
+    );
   }
 }
