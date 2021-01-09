@@ -2,6 +2,7 @@ import { Entity } from "./Entity";
 import { Container } from "./Container";
 import { SystemModule } from "./SystemModule";
 import { isArray } from "./util/isArray";
+import { trustedUndefined } from "./util/trustedUndefined";
 
 export class System<SystemState> {
   state: SystemState;
@@ -30,8 +31,8 @@ export class System<SystemState> {
     this.getEntities = options.entities;
 
     this.modules.connect(
-      (...mods) => mods.forEach((mod) => mod.plugin(this)),
-      (...mods) => mods.forEach((mod) => mod.detach())
+      (...mods) => mods.forEach((mod) => (mod.system = this)),
+      (...mods) => mods.forEach((mod) => (mod.system = trustedUndefined()))
     );
 
     this.update();

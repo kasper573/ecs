@@ -1,11 +1,6 @@
 import { System } from "./System";
+import { trustedUndefined } from "./util/trustedUndefined";
 
 export abstract class SystemModule {
-  protected system?: System<any>;
-  plugin(system: System<any>) {
-    this.system = system;
-  }
-  detach() {
-    this.system = undefined;
-  }
+  public system: System<any> = trustedUndefined();
 }
