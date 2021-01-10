@@ -3,7 +3,12 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [x] Enable test coverage
+- [ ] Create unit tests for SystemModule/System connection
+- [ ] Create unit tests for Entity/Component connection
+- [ ] Create unit tests for ObservableArray
+- [ ] Implement something that will clean up all event handlers in ECS containers
 - [ ] Twitch votes integration
+- [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Syntax based actions instead of select from list
 - [ ] (Stretch goal) Refactor everything to FP
@@ -13,7 +18,6 @@
 # Refactor
 
 - [ ] Set up proper monorepo infrastructure
-- [ ] Implement something that will clean up all event handlers in ECS containers
 - [ ] Try to make System entities a Container
 
 # Nice to have
