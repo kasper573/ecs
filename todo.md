@@ -22,6 +22,13 @@
 - [ ] Create some folder structure for multiple stories
 - [ ] Have a look at ECS projects on NPM and see I could use one of them
 
+# Other ECS projects
+
+- https://ecsy.io/
+- https://github.com/nidorx/ecs-lib
+- https://nova-engine.github.io/ecs/
+- https://javelin.games/ecs/
+
 # Long term tasks
 
 - [~] Text adventure game
