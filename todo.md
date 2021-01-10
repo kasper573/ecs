@@ -3,7 +3,6 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [x] Enable test coverage
-- [ ] Stateless system (make Inventory a module)
 - [ ] Twitch votes integration (chat bot)
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Add readme to each package describing what each does and how to use it
@@ -78,3 +77,4 @@
 - [x] Create unit tests for SystemModule/System connection
 - [x] Create unit tests for Entity/Component connection
 - [x] Create unit tests for ObservableArray
+- [x] Stateless system (make Inventory a module)
