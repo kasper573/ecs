@@ -3,8 +3,10 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [x] Enable test coverage
-- [ ] Implement something that will clean up all event handlers in ECS containers
-- [ ] Twitch votes integration
+- [ ] Stateless system (make Inventory a module)
+- [ ] Add runtime check to disallow creating of entities when deriving entities from system state
+- [ ] Twitch votes integration (chat bot)
+- [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Syntax based actions instead of select from list
@@ -16,6 +18,7 @@
 
 - [ ] Set up proper monorepo infrastructure
 - [ ] Try to make System entities a Container
+- [ ] Get rid of trustedUndefined
 
 # Nice to have
 
