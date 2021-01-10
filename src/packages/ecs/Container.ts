@@ -25,23 +25,6 @@ export class Container<T> extends ObservableArray<T> {
     }
     return instance;
   }
-
-  connect(plugin: (...items: T[]) => void, detach: (...items: T[]) => void) {
-    plugin(...this);
-    const handleChange = (added: T[], removed: T[]) => {
-      if (added.length) {
-        plugin(...added);
-      }
-      if (removed.length) {
-        detach(...removed);
-      }
-    };
-    this.events.on("change", handleChange);
-    return () => {
-      this.events.off("change", handleChange);
-      detach(...this);
-    };
-  }
 }
 
 export type Class<T> = new (...args: any[]) => T;

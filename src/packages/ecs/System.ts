@@ -3,6 +3,7 @@ import { Container } from "./Container";
 import { SystemModule } from "./SystemModule";
 import { isArray } from "./util/isArray";
 import { trustedUndefined } from "./util/trustedUndefined";
+import { connectObservableArray } from "./util/connectObservableArray";
 
 export class System<SystemState> {
   state: SystemState;
@@ -30,10 +31,10 @@ export class System<SystemState> {
     this.state = options.state ?? ({} as SystemState);
     this.getEntities = options.entities;
 
-    this.modules.connect(
-      (...mods) => mods.forEach((mod) => (mod.system = this)),
-      (...mods) => mods.forEach((mod) => (mod.system = trustedUndefined()))
-    );
+    connectObservableArray(this.modules, (added, removed) => {
+      added.forEach((mod) => (mod.system = this));
+      removed.forEach((mod) => (mod.system = trustedUndefined()));
+    });
 
     this.update();
   }
