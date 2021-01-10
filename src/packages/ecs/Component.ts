@@ -6,7 +6,7 @@ export class Component<
   TEntity,
   Options extends ComponentOptions = ComponentOptions
 > {
-  entity: TEntity extends Entity<any> ? TEntity : never = trustedUndefined();
+  entity: TEntity extends Entity ? TEntity : never = trustedUndefined();
 
   isActiveDefault: boolean = true;
 

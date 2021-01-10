@@ -1,12 +1,12 @@
-import { TextAdventureState } from "../TextAventureState";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { System } from "../../ecs/System";
 import { TextAdventureSM } from "../TextAdventureSM";
+import { Inventory } from "../../ecs-collectable/Inventory";
 
 export type LighterState = "lit" | "unlit";
 
-export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
+export class Lighter extends StatefulEntity<LighterState> {
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
   }
@@ -34,8 +34,9 @@ export class Lighter extends StatefulEntity<LighterState, TextAdventureState> {
     );
   }
 
-  static isLit(system: System<TextAdventureState>) {
-    const lighter = system.state.inventory.findType(Lighter);
+  static isLit(system: System) {
+    const inventory = system.modules.resolveType(Inventory);
+    const lighter = inventory.findType(Lighter);
     return lighter ? lighter.isLit : false;
   }
 }

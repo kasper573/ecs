@@ -2,17 +2,17 @@ import { Interactive } from "../ecs-interactive/Interactive";
 import { StatefulEntity } from "../ecs/StatefulEntity";
 import { Describable } from "../ecs-describable/Describable";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
-import { HasInventory } from "./HasInventory";
+import { Inventory } from "./Inventory";
 
 export class Collectable<
-  Entity extends StatefulEntity<CollectableEntityState, HasInventory>
+  Entity extends StatefulEntity<CollectableState>
 > extends Interactive<Entity> {
   get sceneManager() {
     return this.entity.system.modules.resolveType(SceneManager);
   }
 
   get inventory() {
-    return this.entity.system.state.inventory;
+    return this.entity.system.modules.resolveType(Inventory);
   }
 
   get isCollected() {
@@ -40,6 +40,6 @@ export class Collectable<
   }
 }
 
-export type CollectableEntityState = {
+export type CollectableState = {
   name: string;
 };

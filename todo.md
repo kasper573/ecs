@@ -4,7 +4,6 @@
 - [x] Write unit tests for engine
 - [x] Enable test coverage
 - [ ] Stateless system (make Inventory a module)
-- [ ] Add runtime check to disallow creating of entities when deriving entities from system state
 - [ ] Twitch votes integration (chat bot)
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Add readme to each package describing what each does and how to use it
@@ -24,6 +23,7 @@
 
 - [ ] Create some folder structure for multiple stories
 - [ ] Have a look at ECS projects on NPM and see I could use one of them
+- [ ] Add runtime check to disallow creating of entities when deriving entities from system state
 
 # Other ECS projects
 

@@ -4,8 +4,8 @@ import { InteractionResult } from "../ecs-interactive/InteractionResult";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
-export const describeSystem = <SystemState>(
-  system: System<SystemState>,
+export const describeSystem = (
+  system: System,
   lastResult?: InteractionResult
 ) => {
   const parts: string[] = [];

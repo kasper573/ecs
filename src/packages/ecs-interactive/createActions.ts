@@ -2,7 +2,7 @@ import { System } from "../ecs/System";
 import { Action } from "./Action";
 import { Interactive } from "./Interactive";
 
-export const createActions = <SystemState>(system: System<SystemState>) => {
+export const createActions = (system: System) => {
   const actions: Action[] = [];
   for (const entity of system.entities) {
     for (const component of entity.components.filterType(Interactive)) {
@@ -26,10 +26,7 @@ export const createActions = <SystemState>(system: System<SystemState>) => {
 /**
  * Wrapped actions can only perform once and will signal a system update once performed.
  */
-const wrapAction = <SystemState>(
-  system: System<SystemState>,
-  { name, perform }: Action
-): Action => {
+const wrapAction = (system: System, { name, perform }: Action): Action => {
   let performed = false;
   return {
     name,

@@ -2,8 +2,10 @@ import { Client as TmiClient } from "tmi.js";
 import { SystemModule } from "../ecs/SystemModule";
 import { performCommand } from "../ecs-interactive/performCommand";
 import { InteractionResult } from "../ecs-interactive/InteractionResult";
+import { System } from "../ecs/System";
 
-export class TwitchIntegration extends SystemModule {
+export class TwitchIntegration implements SystemModule {
+  system?: System;
   private tmiClient: TmiClient;
   constructor({
     channel,
@@ -11,7 +13,6 @@ export class TwitchIntegration extends SystemModule {
     token,
     onCommand,
   }: TwitchIntegrationOptions) {
-    super();
     this.tmiClient = new TmiClient({
       options: { debug: true },
       connection: {

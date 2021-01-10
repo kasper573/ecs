@@ -3,13 +3,12 @@ import styled, { DefaultTheme, ThemeProvider } from "styled-components";
 import { System } from "../../ecs/System";
 import { describeSystem } from "../../ecs-describable/describeSystem";
 import { useSystem } from "../../ecs-react/useSystem";
-import { TextAdventureState } from "../TextAventureState";
 import { GlobalStyle } from "./GlobalStyle";
 import { Console } from "./Console";
 
 export type AppProps = {
   theme: DefaultTheme;
-  system: System<TextAdventureState>;
+  system: System;
 };
 
 const App = ({ theme, system }: AppProps) => {

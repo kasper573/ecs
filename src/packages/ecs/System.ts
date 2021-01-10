@@ -5,14 +5,13 @@ import { isArray } from "./isArray";
 import { trustedUndefined } from "./trustedUndefined";
 import { connectObservableArray } from "./connectObservableArray";
 
-export class System<SystemState> {
-  state: SystemState;
+export class System {
   readonly modules: Container<SystemModule>;
 
-  private readonly getEntities: SystemOptions<SystemState>["entities"];
+  private readonly getEntities: SystemOptions["entities"];
 
   public get entities() {
-    const entities = this.getEntities(this.state);
+    const entities = this.getEntities();
     assignEntitiesToSystem(entities, this);
     return entities;
   }
@@ -25,10 +24,9 @@ export class System<SystemState> {
     }
   }
 
-  constructor(constructorOptions: ConstructorOptions<SystemState> = []) {
+  constructor(constructorOptions: ConstructorOptions = []) {
     const options = normalizeOptions(constructorOptions);
     this.modules = new Container(...(options.modules ?? []));
-    this.state = options.state ?? ({} as SystemState);
     this.getEntities = options.entities;
 
     connectObservableArray(this.modules, (added, removed) => {
@@ -40,9 +38,7 @@ export class System<SystemState> {
   }
 }
 
-const normalizeOptions = <SystemState>(
-  options: ConstructorOptions<SystemState>
-): SystemOptions<SystemState> => {
+const normalizeOptions = (options: ConstructorOptions): SystemOptions => {
   if (isArray(options)) {
     return { entities: () => options };
   }
@@ -53,27 +49,23 @@ const normalizeOptions = <SystemState>(
   };
 };
 
-const assignEntitiesToSystem = <SystemState>(
-  entities: readonly Entity<SystemState>[],
-  system: System<SystemState>
+const assignEntitiesToSystem = (
+  entities: readonly Entity[],
+  system: System
 ) => {
   for (const entity of entities) {
     entity.system = system;
   }
 };
 
-type ConstructorOptions<SystemState> =
+type ConstructorOptions =
   | {
       modules?: SystemModule[];
-      state?: SystemState;
-      entities?:
-        | ((state: SystemState) => readonly Entity<SystemState>[])
-        | readonly Entity<SystemState>[];
+      entities?: (() => readonly Entity[]) | readonly Entity[];
     }
-  | readonly Entity<SystemState>[];
+  | readonly Entity[];
 
-type SystemOptions<SystemState> = {
+type SystemOptions = {
   modules?: SystemModule[];
-  state?: SystemState;
-  entities: (state: SystemState) => readonly Entity<SystemState>[];
+  entities: () => readonly Entity[];
 };

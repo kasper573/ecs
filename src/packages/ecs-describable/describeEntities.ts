@@ -1,9 +1,7 @@
 import { Entity } from "../ecs/Entity";
 import { Describable } from "./Describable";
 
-export const describeEntities = <SystemState>(
-  entities: readonly Entity<SystemState>[]
-) =>
+export const describeEntities = (entities: readonly Entity[]) =>
   entities
     .reduce(
       (lines, entity) => [...lines, ...describeEntity(entity)],
@@ -11,9 +9,7 @@ export const describeEntities = <SystemState>(
     )
     .join("\n");
 
-export const describeEntity = <SystemState>(
-  entity: Entity<SystemState>
-): readonly string[] =>
+export const describeEntity = (entity: Entity): readonly string[] =>
   entity.components
     .filterType(Describable)
     .filter((component) => component.isActive)

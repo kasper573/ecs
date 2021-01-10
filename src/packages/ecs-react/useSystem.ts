@@ -3,7 +3,7 @@ import { System } from "../ecs/System";
 import { performCommand } from "../ecs-interactive/performCommand";
 import { InteractionResult } from "../ecs-interactive/InteractionResult";
 
-export const useSystem = <SystemState>(system: System<SystemState>) => {
+export const useSystem = (system: System) => {
   const [interactionResult, setInteractionResult] = useState<
     InteractionResult | undefined
   >();
