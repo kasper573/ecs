@@ -3,8 +3,6 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [x] Enable test coverage
-- [ ] Create unit tests for SystemModule/System connection
-- [ ] Create unit tests for Entity/Component connection
 - [ ] Create unit tests for ObservableArray
 - [ ] Implement something that will clean up all event handlers in ECS containers
 - [ ] Twitch votes integration
@@ -68,3 +66,5 @@
 - [x] Rename action apply
 - [x] Move scene code to separate package
 - [x] System.sceneId should be generic type to allow type safe Enum workflow
+- [x] Create unit tests for SystemModule/System connection
+- [x] Create unit tests for Entity/Component connection

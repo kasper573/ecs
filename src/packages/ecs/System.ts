@@ -24,7 +24,7 @@ export class System<SystemState> {
     }
   }
 
-  constructor(constructorOptions: ConstructorOptions<SystemState>) {
+  constructor(constructorOptions: ConstructorOptions<SystemState> = []) {
     const options = normalizeOptions(constructorOptions);
     this.modules = new Container(...(options.modules ?? []));
     this.state = options.state ?? ({} as SystemState);

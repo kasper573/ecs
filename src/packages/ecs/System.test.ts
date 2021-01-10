@@ -1,6 +1,7 @@
 import { Entity } from "./Entity";
 import { System } from "./System";
 import { Component } from "./Component";
+import { SystemModule } from "./SystemModule";
 
 describe("system entries can be configured", () => {
   test("by an array of entities", () => {
@@ -23,6 +24,28 @@ describe("system entries can be configured", () => {
       const system = new System({ entities: () => entities });
       expect(system.entities).toBe(entities);
     });
+  });
+});
+
+describe("system modules", () => {
+  test("are given a reference to their system on initialization", () => {
+    const mod = new SystemModule();
+    const system = new System({ modules: [mod] });
+    expect(mod.system).toBe(system);
+  });
+
+  test("are given a reference to their system when added after initialization", () => {
+    const mod = new SystemModule();
+    const system = new System();
+    system.modules.push(mod);
+    expect(mod.system).toBe(system);
+  });
+
+  test("loses the reference to their system when removed from the system", () => {
+    const mod = new SystemModule();
+    const system = new System({ modules: [mod] });
+    system.modules.remove(mod);
+    expect(mod.system).toBeUndefined();
   });
 });
 
