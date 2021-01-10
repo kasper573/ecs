@@ -1,8 +1,8 @@
 import { Component } from "./Component";
 import { System } from "./System";
 import { Container } from "./Container";
-import { trustedUndefined } from "./util/trustedUndefined";
-import { connectObservableArray } from "./util/connectObservableArray";
+import { trustedUndefined } from "./trustedUndefined";
+import { connectObservableArray } from "./connectObservableArray";
 
 export class Entity<SystemState> {
   system: System<SystemState> = trustedUndefined();

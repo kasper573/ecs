@@ -1,5 +1,5 @@
 import { Component, ComponentOptions } from "../ecs/Component";
-import { Resolvable, resolve } from "../ecs/util/Resolvable";
+import { Resolvable, resolve } from "../ecs/Resolvable";
 import { InteractionResult } from "./InteractionResult";
 
 export class Interactive<Entity> extends Component<Entity, InteractiveOptions> {

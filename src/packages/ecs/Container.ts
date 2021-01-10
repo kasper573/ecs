@@ -1,4 +1,4 @@
-import { ObservableArray } from "./util/ObservableArray";
+import { ObservableArray } from "./ObservableArray";
 
 export class Container<T> extends ObservableArray<T> {
   remove(...toRemove: T[]) {
