@@ -27,10 +27,19 @@ const App = ({ theme, system, timeLeft, votesPerAction }: AppProps) => {
             } votes)`,
         })}
 Time left: ${Math.round(timeLeft / 1000)}s`}
+        <VoteInstruction>
+          Vote by typing one of the action numbers into twitch chat.
+        </VoteInstruction>
       </MaximizedConsole>
     </ThemeProvider>
   );
 };
+
+const VoteInstruction = styled.div`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+`;
 
 const MaximizedConsole = styled(Console)`
   height: 100%;

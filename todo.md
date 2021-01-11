@@ -4,8 +4,6 @@
 - [x] Write unit tests for engine
 - [x] Enable test coverage
 - [x] Twitch votes integration (chat bot)
-- [ ] Display instruction on how to vote
-- [ ] Display last vote result
 - [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
@@ -13,6 +11,11 @@
 - [ ] (Stretch goal) Refactor everything to FP
 - [ ] (Stretch goal) Reimplement ECS using react components that don't render but only
       emit state via context, then use that state and render text in top level
+
+# Polish
+
+- [ ] Instead of performing the voted action immediately, programmatically
+      type the action string into the console input while playing keypress sounds
 
 # Refactor
 
@@ -82,3 +85,4 @@
 - [x] Stateless system (make Inventory a module)
 - [x] Show number of votes next to action.
 - [x] Show action number instead of dash (-)
+- [x] Display instruction on how to vote
