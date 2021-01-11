@@ -39,10 +39,11 @@
 
 # Long term tasks
 
-- [~] Text adventure game
-- [ ] Text adventure game + Twitch votes
+- [x] Text adventure game
+- [x] Text adventure game + Twitch votes
 - [ ] Text adventure game + Twitch votes + Multiplayer aspect (ie. jackbox.tv)
       (Before we can do this we need ideas on what the viewers can do when connecting to game)
+- [ ] Go write a nice story and build the game
 - [ ] More game mechanics
 - [ ] 2d/3d unity implementation
 
