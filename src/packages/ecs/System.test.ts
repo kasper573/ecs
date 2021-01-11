@@ -27,28 +27,6 @@ describe("system entries can be configured", () => {
   });
 });
 
-describe("system modules", () => {
-  test("are given a reference to their system on initialization", () => {
-    const mod: SystemModule = {};
-    const system = new System({ modules: [mod] });
-    expect(mod.system).toBe(system);
-  });
-
-  test("are given a reference to their system when added after initialization", () => {
-    const mod: SystemModule = {};
-    const system = new System();
-    system.modules.push(mod);
-    expect(mod.system).toBe(system);
-  });
-
-  test("loses the reference to their system when removed from the system", () => {
-    const mod: SystemModule = {};
-    const system = new System({ modules: [mod] });
-    system.modules.remove(mod);
-    expect(mod.system).toBeUndefined();
-  });
-});
-
 test("system entities resolution can be derivative", () => {
   const entities = {
     a: [new Entity()],
