@@ -4,6 +4,7 @@
 - [x] Write unit tests for engine
 - [x] Enable test coverage
 - [x] Twitch votes integration (chat bot)
+- [ ] Write tests for poll/chatbot code
 - [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
