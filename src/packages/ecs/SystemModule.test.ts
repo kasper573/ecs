@@ -1,7 +1,5 @@
 import { SystemModule } from "./SystemModule";
 import { System } from "./System";
-import { Component } from "./Component";
-import { Entity } from "./Entity";
 
 describe("system modules", () => {
   test("are given a reference to their system on initialization", () => {
