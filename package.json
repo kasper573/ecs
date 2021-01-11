@@ -77,6 +77,7 @@
     "@types/styled-components": "^5.1.4",
     "@types/tmi.js": "^1.7.0",
     "babel-eslint": "^10.1.0",
+    "cancelable-promise": "^3.2.0",
     "dotenv": "^8.2.0",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.3.6",

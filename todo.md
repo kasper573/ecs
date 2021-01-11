@@ -4,6 +4,10 @@
 - [x] Write unit tests for engine
 - [x] Enable test coverage
 - [x] Twitch votes integration (chat bot)
+- [ ] Show number of votes next to action.
+- [ ] Show action number instead of dash (-)
+- [ ] Display instruction on how to vote
+- [ ] Display last vote result
 - [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)

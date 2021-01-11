@@ -7,6 +7,7 @@ import { createGame } from "./packages/twitch-text-adventure/createGame";
 import { ActionPoll } from "./packages/ecs-interactive-poll/ActionPoll";
 import { createPollClient } from "./packages/twitch-text-adventure/createPollClient";
 import { Countdown } from "./packages/twitch-text-adventure/Countdown";
+import { pollChatbotWithCountdown } from "./packages/twitch-text-adventure/pollWithCountdown";
 
 const system = createGame();
 const client = createPollClient();
@@ -14,11 +15,9 @@ const countdown = new Countdown();
 countdown.onInterval(1000, render);
 
 system.modules.push(
-  new ActionPoll("What now?", async (question: string, answers: string[]) => {
-    await client.poll(question, answers);
-    await countdown.start(30 * 1000);
-    return client.determineWinner();
-  }),
+  new ActionPoll("What now?", (question, answers) =>
+    pollChatbotWithCountdown(client, countdown, question, answers, 15 * 1000)
+  ),
   { update: render }
 );
 
