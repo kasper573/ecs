@@ -4,8 +4,6 @@
 - [x] Write unit tests for engine
 - [x] Enable test coverage
 - [x] Twitch votes integration (chat bot)
-- [ ] Show number of votes next to action.
-- [ ] Show action number instead of dash (-)
 - [ ] Display instruction on how to vote
 - [ ] Display last vote result
 - [ ] Add readme to each package describing what each does and how to use it
@@ -82,3 +80,5 @@
 - [x] Create unit tests for Entity/Component connection
 - [x] Create unit tests for ObservableArray
 - [x] Stateless system (make Inventory a module)
+- [x] Show number of votes next to action.
+- [x] Show action number instead of dash (-)

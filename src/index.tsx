@@ -11,6 +11,8 @@ import { pollChatbotWithCountdown } from "./packages/twitch-text-adventure/pollW
 
 const system = createGame();
 const client = createPollClient();
+client.events.on("vote", render);
+
 const countdown = new Countdown();
 countdown.onInterval(1000, render);
 
@@ -24,7 +26,12 @@ system.modules.push(
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <App theme={theme} system={system} timeLeft={countdown.timeLeft} />
+      <App
+        theme={theme}
+        system={system}
+        timeLeft={countdown.timeLeft}
+        votesPerAction={client.votesPerAnswerIndex}
+      />
     </React.StrictMode>,
     document.getElementById("root")
   );

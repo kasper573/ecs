@@ -10,16 +10,22 @@ export type AppProps = {
   theme: DefaultTheme;
   system: System;
   timeLeft: number;
+  votesPerAction: number[];
 };
 
-const App = ({ theme, system, timeLeft }: AppProps) => {
+const App = ({ theme, system, timeLeft, votesPerAction }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <MaximizedConsole
         onCommand={(command) => performCommand(system, command)}
       >
-        {`${describeSystem(system)}
+        {`${describeSystem(system, {
+          describeAction: (action, index) =>
+            `${index + 1}. ${action.name} (${
+              votesPerAction[index] || 0
+            } votes)`,
+        })}
 Time left: ${Math.round(timeLeft / 1000)}s`}
       </MaximizedConsole>
     </ThemeProvider>

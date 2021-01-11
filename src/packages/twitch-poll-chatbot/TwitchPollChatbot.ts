@@ -1,6 +1,9 @@
+import { EventEmitter } from "events";
 import { Client, Events, Options } from "tmi.js";
+import TypedEmitter from "typed-emitter";
 
 export class TwitchPollChatbot extends Client {
+  events: TypedEmitter<TwitchPollChatbotEvents> = new EventEmitter();
   private votesPerUser: Record<string, number> = {};
   private answers: string[] = [];
   private hasConnectedPromise = new Promise((resolve) =>
@@ -8,7 +11,7 @@ export class TwitchPollChatbot extends Client {
     this.on("connected", () => wait(2000).then(resolve))
   );
 
-  get votes() {
+  get votesPerAnswerIndex() {
     const sums = Object.values(this.votesPerUser).reduce(
       (sums, index) => ({ ...sums, [index]: (sums[index] || 0) + 1 }),
       {} as Record<number, number>
@@ -17,7 +20,7 @@ export class TwitchPollChatbot extends Client {
   }
 
   get orderedVotes() {
-    return this.votes
+    return this.votesPerAnswerIndex
       .map((count, index) => ({
         count,
         index,
@@ -26,7 +29,7 @@ export class TwitchPollChatbot extends Client {
   }
 
   get hasVotes() {
-    return sum(this.votes) > 0;
+    return sum(this.votesPerAnswerIndex) > 0;
   }
 
   constructor(private options: TwitchPollChatboxOptions) {
@@ -51,7 +54,7 @@ export class TwitchPollChatbot extends Client {
     // Determine top vote or pick randomly
     const pickRandom = !this.hasVotes;
     const selectedIndex = pickRandom
-      ? Math.floor(0.5 + Math.random() * (this.votes.length - 1))
+      ? Math.floor(0.5 + Math.random() * (this.votesPerAnswerIndex.length - 1))
       : this.orderedVotes[0].index;
 
     // Announce result
@@ -62,12 +65,16 @@ export class TwitchPollChatbot extends Client {
       );
     }
 
+    // Reset votes when a winner has been determined
+    this.votesPerUser = {};
+
     return selectedIndex;
   }
 
-  vote(voteIndex: number, username: string) {
-    if (voteIndex >= 0 && voteIndex < this.votes.length) {
-      this.votesPerUser[username] = voteIndex;
+  vote(answerIndex: number, username: string) {
+    if (answerIndex >= 0 && answerIndex < this.votesPerAnswerIndex.length) {
+      this.votesPerUser[username] = answerIndex;
+      this.events.emit("vote", answerIndex);
     }
   }
 
@@ -96,6 +103,10 @@ export type TwitchPollChatboxOptions = Options & {
   parseVote: (message: string) => number | undefined;
   announceResult?: (selectedAnswer: string, wasRandom: boolean) => string;
   silent?: boolean;
+};
+
+export type TwitchPollChatbotEvents = {
+  vote: (answerIndex: number) => void;
 };
 
 const describeAnswers = (answers: string[]) =>
