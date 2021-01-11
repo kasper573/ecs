@@ -3,10 +3,10 @@
 - [x] Boilerplate
 - [x] Write unit tests for engine
 - [x] Enable test coverage
-- [ ] Twitch votes integration (chat bot)
-- [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
+- [x] Twitch votes integration (chat bot)
 - [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
+- [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Syntax based actions instead of select from list
 - [ ] (Stretch goal) Refactor everything to FP
 - [ ] (Stretch goal) Reimplement ECS using react components that don't render but only

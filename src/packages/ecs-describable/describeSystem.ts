@@ -1,14 +1,13 @@
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
-import { InteractionResult } from "../ecs-interactive/InteractionResult";
+import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
-export const describeSystem = (
-  system: System,
-  lastResult?: InteractionResult
-) => {
+export const describeSystem = (system: System) => {
   const parts: string[] = [];
+  const memory = system.modules.findType(InteractionMemory);
+  const lastResult = memory && memory[memory.length - 1];
   if (lastResult) {
     parts.push(lastResult);
   }

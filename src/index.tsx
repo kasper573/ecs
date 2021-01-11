@@ -4,23 +4,28 @@ import App from "./packages/twitch-text-adventure/react/App";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./packages/twitch-text-adventure/react/theme";
 import { createGame } from "./packages/twitch-text-adventure/createGame";
-import { TwitchIntegration } from "./packages/ecs-twitch-integration/TwitchIntegration";
+import { ActionPoll } from "./packages/ecs-interactive-poll/ActionPoll";
+import { createPollClient } from "./packages/twitch-text-adventure/createPollClient";
+import { Countdown } from "./packages/twitch-text-adventure/Countdown";
 
 const system = createGame();
+const client = createPollClient();
+const countdown = new Countdown();
+countdown.onInterval(1000, render);
 
-const twitchIntegration = new TwitchIntegration({
-  username: process.env.REACT_APP_TTA_BOT_USERNAME!,
-  token: process.env.REACT_APP_TTA_BOT_TOKEN!,
-  channel: process.env.REACT_APP_TTA_BOT_CHANNEL!,
-  onCommand: render,
-});
-system.modules.push(twitchIntegration);
-twitchIntegration.start();
+system.modules.push(
+  new ActionPoll("What now?", async (question: string, answers: string[]) => {
+    await client.poll(question, answers);
+    await countdown.start(30 * 1000);
+    return client.determineWinner();
+  }),
+  { update: render }
+);
 
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <App theme={theme} system={system} />
+      <App theme={theme} system={system} timeLeft={countdown.timeLeft} />
     </React.StrictMode>,
     document.getElementById("root")
   );

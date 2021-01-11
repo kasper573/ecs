@@ -22,6 +22,11 @@ export class System {
         component.update();
       }
     }
+    for (const mod of this.modules) {
+      if (mod.update) {
+        mod.update();
+      }
+    }
   }
 
   constructor(constructorOptions: ConstructorOptions = []) {
@@ -30,7 +35,12 @@ export class System {
     this.getEntities = options.entities;
 
     connectObservableArray(this.modules, (added, removed) => {
-      added.forEach((mod) => (mod.system = this));
+      added.forEach((mod) => {
+        mod.system = this;
+        if (mod.update) {
+          mod.update();
+        }
+      });
       removed.forEach((mod) => (mod.system = trustedUndefined()));
     });
 

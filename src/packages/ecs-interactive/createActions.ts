@@ -1,6 +1,7 @@
 import { System } from "../ecs/System";
 import { Action } from "./Action";
 import { Interactive } from "./Interactive";
+import { InteractionMemory } from "./InteractionMemory";
 
 export const createActions = (system: System) => {
   const actions: Action[] = [];
@@ -35,6 +36,10 @@ const wrapAction = (system: System, { name, perform }: Action): Action => {
         throw new Error("Actions can only be performed once");
       }
       const result = perform();
+      const memory = system.modules.findType(InteractionMemory);
+      if (memory) {
+        memory.push(result);
+      }
       system.update();
       performed = true;
       return result;
