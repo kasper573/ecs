@@ -3,6 +3,8 @@ import { TwitchPollChatbot } from "../twitch-poll-chatbot/TwitchPollChatbot";
 export const createPollClient = () => {
   const bot = new TwitchPollChatbot({
     silent: true,
+    defaultWinner: (bot) =>
+      Math.floor(0.5 + Math.random() * (bot.votesPerAnswerIndex.length - 1)),
     announceResult: (selectedAnswer, wasRandom) =>
       wasRandom
         ? `No votes, randomly chose "${selectedAnswer}"`

@@ -52,16 +52,16 @@ export class TwitchPollChatbot extends Client {
 
   async determineWinner() {
     // Determine top vote or pick randomly
-    const pickRandom = !this.hasVotes;
-    const selectedIndex = pickRandom
-      ? Math.floor(0.5 + Math.random() * (this.votesPerAnswerIndex.length - 1))
+    const useDefaultWinner = !this.hasVotes;
+    const selectedIndex = useDefaultWinner
+      ? this.options.defaultWinner(this)
       : this.orderedVotes[0].index;
 
     // Announce result
     if (this.options.announceResult) {
       const selectedAnswer = this.answers[selectedIndex];
       await this.announce(
-        this.options.announceResult(selectedAnswer, pickRandom)
+        this.options.announceResult(selectedAnswer, useDefaultWinner)
       );
     }
 
@@ -71,14 +71,14 @@ export class TwitchPollChatbot extends Client {
     return selectedIndex;
   }
 
-  vote(answerIndex: number, username: string) {
+  private vote(answerIndex: number, username: string) {
     if (answerIndex >= 0 && answerIndex < this.votesPerAnswerIndex.length) {
       this.votesPerUser[username] = answerIndex;
       this.events.emit("vote", answerIndex);
     }
   }
 
-  announce(message: string) {
+  private announce(message: string) {
     if (this.options.silent) {
       return Promise.resolve();
     }
@@ -87,7 +87,12 @@ export class TwitchPollChatbot extends Client {
     );
   }
 
-  onMessage: Events["message"] = (channel, userState, message, self) => {
+  private onMessage: Events["message"] = (
+    channel,
+    userState,
+    message,
+    self
+  ) => {
     // Ignore echoed messages.
     if (self) {
       return;
@@ -101,7 +106,11 @@ export class TwitchPollChatbot extends Client {
 
 export type TwitchPollChatboxOptions = Options & {
   parseVote: (message: string) => number | undefined;
-  announceResult?: (selectedAnswer: string, wasRandom: boolean) => string;
+  defaultWinner: (bot: TwitchPollChatbot) => number;
+  announceResult?: (
+    selectedAnswer: string,
+    wasDefaultWinner: boolean
+  ) => string;
   silent?: boolean;
 };
 
