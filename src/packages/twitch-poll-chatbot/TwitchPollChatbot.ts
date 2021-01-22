@@ -1,15 +1,12 @@
 import { EventEmitter } from "events";
-import { Client, Events, Options } from "tmi.js";
+import { Client, Events } from "tmi.js";
 import TypedEmitter from "typed-emitter";
 
-export class TwitchPollChatbot extends Client {
+export class TwitchPollChatbot {
   events: TypedEmitter<TwitchPollChatbotEvents> = new EventEmitter();
   private votesPerUser: Record<string, number> = {};
   private answers: string[] = [];
-  private hasConnectedPromise = new Promise((resolve) =>
-    // HACK waiting arbitrary seconds after connecting to give time to join channels
-    this.on("connected", () => wait(2000).then(resolve))
-  );
+  private hasConnectedPromise?: Promise<void>;
 
   get votesPerAnswerIndex() {
     const sums = Object.values(this.votesPerUser).reduce(
@@ -19,29 +16,63 @@ export class TwitchPollChatbot extends Client {
     return this.answers.map((a, index) => sums[index] || 0);
   }
 
-  get orderedVotes() {
+  private get orderedVotes() {
     return this.votesPerAnswerIndex
       .map((count, index) => ({
         count,
         index,
       }))
+      .filter(({ count }) => count > 0)
       .sort((a, b) => b.count - a.count);
   }
 
-  get hasVotes() {
-    return sum(this.votesPerAnswerIndex) > 0;
+  get winningVotes() {
+    const topVote = this.orderedVotes[0];
+    const winning = topVote ? [topVote] : [];
+    for (const vote of this.orderedVotes.slice(1)) {
+      if (vote.count === topVote.count) {
+        winning.push(vote);
+      } else {
+        break;
+      }
+    }
+    return winning;
   }
 
-  constructor(private options: TwitchPollChatboxOptions) {
-    super(options);
-    this.on("message", this.onMessage);
+  private get needsTieBreaker() {
+    return this.winningVotes.length !== 1;
+  }
+
+  constructor(
+    private client: Client,
+    private options: TwitchPollChatboxOptions
+  ) {
+    this.attach();
+  }
+
+  attach() {
+    this.detach();
+    this.hasConnectedPromise = new Promise<void>((resolve) => {
+      this.onConnected = () =>
+        wait(this.options.channelJoinDelay ?? 2000).then(resolve);
+      this.client.once("connected", this.onConnected);
+    });
+    this.client.on("message", this.onMessage);
+  }
+
+  detach() {
+    this.client.removeListener("message", this.onMessage);
+    this.client.removeListener("connected", this.onConnected);
+    this.hasConnectedPromise = undefined;
   }
 
   async poll(question: string, answers: string[]) {
     if (!answers.length) {
       throw new Error("Can't start a poll without answers");
     }
-
+    if (!this.hasConnectedPromise) {
+      throw new Error("Can't start a poll while detached");
+    }
     await this.hasConnectedPromise;
 
     // Announce new question
@@ -52,16 +83,16 @@ export class TwitchPollChatbot extends Client {
 
   async determineWinner() {
     // Determine top vote or pick randomly
-    const useDefaultWinner = !this.hasVotes;
-    const selectedIndex = useDefaultWinner
-      ? this.options.defaultWinner(this)
-      : this.orderedVotes[0].index;
+    const useTieBreaker = this.needsTieBreaker;
+    const selectedIndex = useTieBreaker
+      ? this.options.tieBreaker(this)
+      : this.winningVotes[0].index;
 
     // Announce result
     if (this.options.announceResult) {
       const selectedAnswer = this.answers[selectedIndex];
       await this.announce(
-        this.options.announceResult(selectedAnswer, useDefaultWinner)
+        this.options.announceResult(selectedAnswer, useTieBreaker)
       );
     }
 
@@ -83,7 +114,9 @@ export class TwitchPollChatbot extends Client {
       return Promise.resolve();
     }
     return Promise.all(
-      this.getChannels().map((channel) => this.say(channel, message))
+      this.client
+        .getChannels()
+        .map((channel) => this.client.say(channel, message))
     );
   }
 
@@ -102,16 +135,20 @@ export class TwitchPollChatbot extends Client {
       this.vote(voteIndex, userState.username);
     }
   };
+
+  // Should be noop by default. Is redefined by attach().
+  private onConnected = () => {};
 }
 
-export type TwitchPollChatboxOptions = Options & {
+export type TwitchPollChatboxOptions = {
   parseVote: (message: string) => number | undefined;
-  defaultWinner: (bot: TwitchPollChatbot) => number;
-  announceResult?: (
-    selectedAnswer: string,
-    wasDefaultWinner: boolean
-  ) => string;
+  tieBreaker: (bot: TwitchPollChatbot) => number;
+  announceResult?: (selectedAnswer: string, usedTieBreaker: boolean) => string;
   silent?: boolean;
+  /**
+   * Arbitrary wait time after connecting to give time to join channels
+   */
+  channelJoinDelay?: number;
 };
 
 export type TwitchPollChatbotEvents = {
@@ -122,6 +159,4 @@ const describeAnswers = (answers: string[]) =>
   answers.map((a, i) => `${i + 1}. ${a}`).join(", ");
 
 const wait = (timeout: number) =>
-  new Promise((resolve) => setTimeout(resolve, timeout));
-
-const sum = (a: number[]) => a.reduce((s, n) => s + n, 0);
+  new Promise<void>((resolve) => setTimeout(resolve, timeout));

@@ -5,20 +5,29 @@ import reportWebVitals from "./reportWebVitals";
 import { theme } from "./packages/twitch-text-adventure/react/theme";
 import { createGame } from "./packages/twitch-text-adventure/createGame";
 import { ActionPoll } from "./packages/ecs-interactive-poll/ActionPoll";
-import { createPollClient } from "./packages/twitch-text-adventure/createPollClient";
 import { Countdown } from "./packages/twitch-text-adventure/Countdown";
+import { createPollClient } from "./packages/twitch-text-adventure/createPollClient";
+import { createTMIClient } from "./packages/twitch-text-adventure/createTMIClient";
 import { pollChatbotWithCountdown } from "./packages/twitch-text-adventure/pollWithCountdown";
 
 const system = createGame();
-const client = createPollClient();
-client.events.on("vote", render);
+const tmiClient = createTMIClient();
+const pollClient = createPollClient(tmiClient);
+pollClient.events.on("vote", render);
+tmiClient.connect();
 
 const countdown = new Countdown();
 countdown.onInterval(1000, render);
 
 system.modules.push(
   new ActionPoll("What now?", (question, answers) =>
-    pollChatbotWithCountdown(client, countdown, question, answers, 15 * 1000)
+    pollChatbotWithCountdown(
+      pollClient,
+      countdown,
+      question,
+      answers,
+      15 * 1000
+    )
   ),
   { update: render }
 );
@@ -30,7 +39,7 @@ function render() {
         theme={theme}
         system={system}
         timeLeft={countdown.timeLeft}
-        votesPerAction={client.votesPerAnswerIndex}
+        votesPerAction={pollClient.votesPerAnswerIndex}
       />
     </React.StrictMode>,
     document.getElementById("root")
