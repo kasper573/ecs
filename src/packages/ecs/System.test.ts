@@ -1,6 +1,7 @@
 import { Entity } from "./Entity";
 import { System } from "./System";
 import { Component } from "./Component";
+import { SystemModule } from "./SystemModule";
 
 describe("system entries can be configured", () => {
   test("by an array of entities", () => {
@@ -26,18 +27,17 @@ describe("system entries can be configured", () => {
   });
 });
 
-test("system entities resolution can be customized to derive from system state", () => {
-  type SystemState = "a" | "b";
+test("system entities resolution can be derivative", () => {
   const entities = {
-    a: [new Entity<SystemState>()],
-    b: [new Entity<SystemState>()],
+    a: [new Entity()],
+    b: [new Entity()],
   };
-  const system = new System<SystemState>({
-    entities: (state) => entities[state],
-    state: "a",
+  let state: keyof typeof entities = "a";
+  const system = new System({
+    entities: () => entities[state],
   });
   expect(system.entities).toBe(entities.a);
-  system.state = "b";
+  state = "b";
   expect(system.entities).toBe(entities.b);
 });
 

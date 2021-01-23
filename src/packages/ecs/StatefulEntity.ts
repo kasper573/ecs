@@ -1,14 +1,8 @@
 import { Entity } from "./Entity";
 import { Component } from "./Component";
 
-export class StatefulEntity<
-  EntityState,
-  SystemState
-> extends Entity<SystemState> {
-  constructor(
-    public state: EntityState,
-    components?: Component<Entity<SystemState>>[]
-  ) {
+export class StatefulEntity<State> extends Entity {
+  constructor(public state: State, components?: Component<Entity>[]) {
     super(components);
   }
 }

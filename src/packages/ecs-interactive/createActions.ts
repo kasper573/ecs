@@ -1,11 +1,12 @@
 import { System } from "../ecs/System";
 import { Action } from "./Action";
 import { Interactive } from "./Interactive";
+import { InteractionMemory } from "./InteractionMemory";
 
-export const createActions = <SystemState>(system: System<SystemState>) => {
+export const createActions = (system: System) => {
   const actions: Action[] = [];
   for (const entity of system.entities) {
-    for (const component of entity.findComponents(Interactive)) {
+    for (const component of entity.components.filterType(Interactive)) {
       if (!component.isActive) {
         continue;
       }
@@ -26,10 +27,7 @@ export const createActions = <SystemState>(system: System<SystemState>) => {
 /**
  * Wrapped actions can only perform once and will signal a system update once performed.
  */
-const wrapAction = <SystemState>(
-  system: System<SystemState>,
-  { name, perform }: Action
-): Action => {
+const wrapAction = (system: System, { name, perform }: Action): Action => {
   let performed = false;
   return {
     name,
@@ -38,6 +36,10 @@ const wrapAction = <SystemState>(
         throw new Error("Actions can only be performed once");
       }
       const result = perform();
+      const memory = system.modules.findType(InteractionMemory);
+      if (memory) {
+        memory.push(result);
+      }
       system.update();
       performed = true;
       return result;

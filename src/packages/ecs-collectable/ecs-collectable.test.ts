@@ -4,9 +4,8 @@ import { System } from "../ecs/System";
 import { StatefulEntity } from "../ecs/StatefulEntity";
 import { Describable } from "../ecs-describable/Describable";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
-import { HasInventory } from "./HasInventory";
 import { Inventory } from "./Inventory";
-import { Collectable, CollectableEntityState } from "./Collectable";
+import { Collectable, CollectableState } from "./Collectable";
 
 test("Picking up a Collectable entity removes it from the scene", () => {
   const { entity, pickUp, sceneManager } = setup();
@@ -32,15 +31,15 @@ it("Collectable entities in the inventory are not described", () => {
 });
 
 const setup = () => {
-  const entity = new StatefulEntity<CollectableEntityState, HasInventory>(
-    { name: "entity" },
-    [new Describable({ description: "A visible entity" }), new Collectable()]
-  );
+  const entity = new StatefulEntity<CollectableState>({ name: "entity" }, [
+    new Describable({ description: "A visible entity" }),
+    new Collectable(),
+  ]);
   const sceneManager = new SceneManager("default", { default: [entity] });
-  const system = new System<HasInventory>({
-    modules: [sceneManager],
-    state: { inventory: new Inventory() },
-    entities: (state) => [...(sceneManager.scene ?? []), ...state.inventory],
+  const inventory = new Inventory();
+  const system = new System({
+    modules: [sceneManager, inventory],
+    entities: () => [...(sceneManager.scene ?? []), ...inventory],
   });
   const [pickUp] = createActions(system);
   return { entity, system, pickUp, sceneManager };

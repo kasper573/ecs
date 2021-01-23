@@ -7,8 +7,8 @@ test("scene represents the initial sceneId by default", () => {
     a: [new Entity()],
     b: [new Entity()],
   };
-  const sceneManager = new SceneManager<Scenes, unknown>("a", scenes);
-  expect(sceneManager.scene).toEqual(scenes.a);
+  const sceneManager = new SceneManager<Scenes>("a", scenes);
+  expect(sceneManager.scene).toEqual(expect.arrayContaining(scenes.a));
 });
 
 test("scene can be changed by changing sceneId", () => {
@@ -17,7 +17,7 @@ test("scene can be changed by changing sceneId", () => {
     a: [new Entity()],
     b: [new Entity()],
   };
-  const sceneManager = new SceneManager<Scenes, unknown>("a", scenes);
+  const sceneManager = new SceneManager<Scenes>("a", scenes);
   sceneManager.sceneId = "b";
-  expect(sceneManager.scene).toEqual(scenes.b);
+  expect(sceneManager.scene).toEqual(expect.arrayContaining(scenes.b));
 });

@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting started
 
-- Rename .env.example to .env and replace the variables with your settings
+- Copy .env.example to .env and replace the variables with your settings
 - Run `yarn run start` to start the game
 
 ## Available Scripts

@@ -2,7 +2,6 @@ import { InteractionResult } from "../../ecs-interactive/InteractionResult";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Describable } from "../../ecs-describable/Describable";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
-import { TextAdventureState } from "../TextAventureState";
 import { TextAdventureSM } from "../TextAdventureSM";
 
 const fallDown: InteractionResult =
@@ -10,13 +9,13 @@ const fallDown: InteractionResult =
 
 export type BridgeState = "fragile" | "broken" | "sturdy";
 
-export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
+export class Bridge extends StatefulEntity<BridgeState> {
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
   }
   constructor() {
     super("fragile");
-    this.components = [
+    this.components.push(
       new Interactive({
         action: "Cross the bridge",
         isActive: () => this.sceneManager.sceneId === "cliff",
@@ -56,7 +55,7 @@ export class Bridge extends StatefulEntity<BridgeState, TextAdventureState> {
           this.sceneManager.sceneId === "bridge"
             ? "You are standing on the bridge. It seems very unstable."
             : `You stand in front of a bridge. It looks ${this.state}.`,
-      }),
-    ];
+      })
+    );
   }
 }

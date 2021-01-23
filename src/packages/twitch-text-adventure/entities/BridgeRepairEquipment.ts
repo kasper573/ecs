@@ -1,20 +1,20 @@
 import {
   Collectable,
-  CollectableEntityState,
+  CollectableState,
 } from "../../ecs-collectable/Collectable";
 import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
-import { TextAdventureState } from "../TextAventureState";
 import { TextAdventureSM } from "../TextAdventureSM";
+import { Inventory } from "../../ecs-collectable/Inventory";
 import { Bridge } from "./Bridge";
 
-export class BridgeRepairEquipment extends StatefulEntity<
-  CollectableEntityState,
-  TextAdventureState
-> {
+export class BridgeRepairEquipment extends StatefulEntity<CollectableState> {
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
+  }
+  get inventory() {
+    return this.system.modules.resolveType(Inventory);
   }
   get bridge() {
     return this.sceneManager.scene.findType(Bridge);
@@ -22,7 +22,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
 
   constructor() {
     super({ name: "repair kit" });
-    this.components = [
+    this.components.push(
       new Collectable(),
       new Describable({
         description: () =>
@@ -31,7 +31,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
       new Interactive({
         action: "Repair bridge",
         isActive: () =>
-          this.system.state.inventory.includes(this) &&
+          this.inventory.includes(this) &&
           this.sceneManager.sceneId === "cliff" &&
           !!this.bridge &&
           this.bridge.state !== "sturdy",
@@ -41,7 +41,7 @@ export class BridgeRepairEquipment extends StatefulEntity<
             return "You repaired the bridge.";
           }
         },
-      }),
-    ];
+      })
+    );
   }
 }

@@ -11,3 +11,25 @@ test("Entities have a reference to their system", () => {
   const system = new System([new Entity()]);
   expect(system.entities[0].system).toBe(system);
 });
+
+describe("Entity components", () => {
+  test("are given a reference to their entity on initialization", () => {
+    const cmp = new Component();
+    const entity = new Entity([cmp]);
+    expect(cmp.entity).toBe(entity);
+  });
+
+  test("are given a reference to their entity when added after initialization", () => {
+    const cmp = new Component();
+    const entity = new Entity();
+    entity.components.push(cmp);
+    expect(cmp.entity).toBe(entity);
+  });
+
+  test("lose the reference to their entity when removed from the entity", () => {
+    const cmp = new Component();
+    const entity = new Entity([cmp]);
+    entity.components.remove(cmp);
+    expect(cmp.entity).toBeUndefined();
+  });
+});

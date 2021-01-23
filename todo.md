@@ -1,30 +1,44 @@
 # Immediate tasks
 
-- [x] Boilerplate
-- [x] Write unit tests for engine
-- [x] Enable test coverage
-- [ ] Twitch votes integration
+- [ ] Add readme to each package describing what each does and how to use it
 - [ ] Create basic editor to allow prototyping stories
+- [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Syntax based actions instead of select from list
 - [ ] (Stretch goal) Refactor everything to FP
 - [ ] (Stretch goal) Reimplement ECS using react components that don't render but only
       emit state via context, then use that state and render text in top level
 
+# Polish
+
+- [ ] Instead of performing the voted action immediately, programmatically
+      type the action string into the console input while playing keypress sounds
+
 # Refactor
 
 - [ ] Set up proper monorepo infrastructure
+- [ ] Try to make System entities a Container
+- [ ] Get rid of trustedUndefined
 
 # Nice to have
 
 - [ ] Create some folder structure for multiple stories
 - [ ] Have a look at ECS projects on NPM and see I could use one of them
+- [ ] Add runtime check to disallow creating of entities when deriving entities from system state
+
+# Other ECS projects
+
+- https://ecsy.io/
+- https://github.com/nidorx/ecs-lib
+- https://nova-engine.github.io/ecs/
+- https://javelin.games/ecs/
 
 # Long term tasks
 
-- [~] Text adventure game
-- [ ] Text adventure game + Twitch votes
+- [x] Text adventure game
+- [x] Text adventure game + Twitch votes
 - [ ] Text adventure game + Twitch votes + Multiplayer aspect (ie. jackbox.tv)
       (Before we can do this we need ideas on what the viewers can do when connecting to game)
+- [ ] Go write a nice story and build the game
 - [ ] More game mechanics
 - [ ] 2d/3d unity implementation
 
@@ -62,3 +76,14 @@
 - [x] Rename action apply
 - [x] Move scene code to separate package
 - [x] System.sceneId should be generic type to allow type safe Enum workflow
+- [x] Create unit tests for SystemModule/System connection
+- [x] Create unit tests for Entity/Component connection
+- [x] Create unit tests for ObservableArray
+- [x] Stateless system (make Inventory a module)
+- [x] Show number of votes next to action.
+- [x] Show action number instead of dash (-)
+- [x] Display instruction on how to vote
+- [x] Write unit tests for engine
+- [x] Enable test coverage
+- [x] Twitch votes integration (chat bot)
+- [x] Write tests for poll/chatbot code

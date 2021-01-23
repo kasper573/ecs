@@ -1,1 +1,6 @@
-export type SystemModule = unknown;
+import { System } from "./System";
+
+export interface SystemModule {
+  system?: System;
+  update?: () => any;
+}

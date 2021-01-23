@@ -1,8 +1,12 @@
-export class Container<T> extends Array<T> {
-  remove(item: T) {
-    const index = this.indexOf(item);
-    if (index !== -1) {
-      this.splice(index, 1);
+import { ObservableArray } from "./ObservableArray";
+
+export class Container<T> extends ObservableArray<T> {
+  remove(...toRemove: T[]) {
+    for (const item of toRemove) {
+      const index = this.indexOf(item);
+      if (index !== -1) {
+        this.splice(index, 1);
+      }
     }
   }
 
