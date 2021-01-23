@@ -24,6 +24,32 @@ testBotScenarios(
   }
 );
 
+test("no vote will be cast when parseVote() returns NaN", () =>
+  useBot(
+    new TwitchPollChatbot({
+      tieBreaker: () => -1,
+      parseVote: () => NaN,
+    }),
+    createTestClient(),
+    (bot, client) => {
+      client.events.emit("message", "", { username: "jestA" }, "bogus", false);
+      expect(bot.winningVotes.length).toBe(0);
+    }
+  ));
+
+test("no vote will be cast when parseVote() returns undefined", () =>
+  useBot(
+    new TwitchPollChatbot({
+      tieBreaker: () => -1,
+      parseVote: () => undefined,
+    }),
+    createTestClient(),
+    (bot, client) => {
+      client.events.emit("message", "", { username: "jestA" }, "bogus", false);
+      expect(bot.winningVotes.length).toBe(0);
+    }
+  ));
+
 test("throws error when trying to start a poll without answers", () =>
   useBot(
     new TwitchPollChatbot({
