@@ -7,6 +7,10 @@ export class TwitchPollChatbot {
   private votesPerUser: Record<string, number> = {};
   private answers: string[] = [];
 
+  /**
+   * Votes per answer index
+   * ie. bot.votes[2] gets the number of votes for answer index 2
+   */
   get votesPerAnswerIndex() {
     const sums = Object.values(this.votesPerUser).reduce(
       (sums, index) => ({ ...sums, [index]: (sums[index] || 0) + 1 }),
@@ -25,6 +29,12 @@ export class TwitchPollChatbot {
       .sort((a, b) => b.count - a.count);
   }
 
+  /**
+   * The top vote objects.
+   * - Empty if no votes cast
+   * - Array of one item if there was a clear winner
+   * - Array of n items if there was an n-way tie
+   */
   get winningVotes() {
     const topVote = this.orderedVotes[0];
     const winning = topVote ? [topVote] : [];
