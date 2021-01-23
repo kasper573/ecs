@@ -40,6 +40,21 @@ test("determineWinner() resets poll after returning the winner", () =>
   }));
 
 describe("determines the right winner", () => {
+  test("when no username is set", () =>
+    useBot(createBasicOptions(), (bot, client) => {
+      const eventAnswerIndexes: number[] = [];
+      bot.events.on("vote", (index) => eventAnswerIndexes.push(index));
+
+      bot.poll("que?", ["first", "second"]);
+
+      client.events.emit("message", "", {}, "1", false);
+
+      expect(eventAnswerIndexes).toEqual([]);
+      expect(bot.votesPerAnswerIndex).toEqual([0, 0]);
+      expect(bot.winningVotes).toEqual([]);
+      expect(bot.determineWinner()).toBe(-1);
+    }));
+
   test("when there is no tie breaker", () =>
     useBot(createBasicOptions(), (bot, client) => {
       const eventAnswerIndexes: number[] = [];
