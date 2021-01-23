@@ -26,7 +26,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/packages/**/*.{js,jsx,ts,tsx}",
-      "!src/packages/ecs-react/**",
+      "!src/packages/shared-components/**",
       "!src/packages/twitch-text-adventure/**",
       "!<rootDir>/node_modules/**"
     ],
