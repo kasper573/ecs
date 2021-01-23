@@ -3,4 +3,5 @@ declare module "cancelable-promise" {
     cancel(): void;
     isCanceled(): boolean;
   }
+  export const cancelable: <T>(promise: Promise<T>) => CancelablePromise<T>;
 }

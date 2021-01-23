@@ -7,41 +7,83 @@ import { InteractionResult } from "../ecs-interactive/InteractionResult";
 export class ActionPoll implements SystemModule {
   system?: System;
   result?: InteractionResult;
-  private promise?: CancelablePromise<number>;
+  private pending = false;
+  private pollPromise?: CancelablePromise<MixedPollResult>;
+  private resultPromise?: Promise<void>;
+  private pollOnUpdate = true;
+
+  get end() {
+    return this.resultPromise ?? Promise.resolve();
+  }
+
+  get done() {
+    return (async () => {
+      while (this.pending) {
+        await wait(0);
+        await this.end;
+      }
+    })();
+  }
 
   constructor(private question: string, private poll: Poll) {}
 
   update() {
-    this.pollForAction();
+    if (this.pollOnUpdate) {
+      this.pollForAction();
+    }
   }
 
   private pollForAction() {
     if (!this.system) {
       throw new Error("Can't poll without system");
     }
-    if (this.promise) {
-      this.promise.cancel();
-      this.promise = undefined;
+    if (this.pollPromise) {
+      this.pollPromise.cancel();
+      this.pollPromise = undefined;
+      this.resultPromise = undefined;
+      this.pending = false;
     }
     const actions = createActions(this.system);
     if (!actions.length) {
       return;
     }
     const actionNames = actions.map((action) => action.name);
-    this.promise = this.poll(this.question, actionNames);
-    this.promise.then(this.onPollResult);
+    this.pending = true;
+    this.pollPromise = this.poll(this.question, actionNames);
+    this.resultPromise = this.pollPromise.then(this.onPollResult);
   }
 
-  private onPollResult = (winningIndex: number) => {
+  private onPollResult = (mixedResult: MixedPollResult) => {
     if (!this.system) {
       throw new Error("Can't handle poll result without system");
     }
+    this.pending = false;
+    const { answerIndex, preventRecursion } = normalizeResult(mixedResult);
     const actions = createActions(this.system);
-    const action = actions[winningIndex];
+    const action = actions[answerIndex];
     if (action) {
+      if (preventRecursion) {
+        this.pollOnUpdate = false;
+      }
       this.result = action.perform();
+      this.pollOnUpdate = true;
     }
   };
 }
 
-type Poll = (question: string, answers: string[]) => CancelablePromise<number>;
+const wait = (timeout: number) =>
+  new Promise((resolve) => setTimeout(resolve, timeout));
+
+const normalizeResult = (mixed: MixedPollResult): PollResult =>
+  typeof mixed === "number"
+    ? { answerIndex: mixed, preventRecursion: false }
+    : mixed;
+
+export type Poll = (
+  question: string,
+  answers: string[]
+) => CancelablePromise<AnswerIndex> | CancelablePromise<PollResult>;
+
+type AnswerIndex = number;
+type PollResult = { answerIndex: AnswerIndex; preventRecursion: boolean };
+type MixedPollResult = AnswerIndex | PollResult;
