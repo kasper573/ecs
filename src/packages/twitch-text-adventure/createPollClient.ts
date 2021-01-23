@@ -1,9 +1,7 @@
-import { Client } from "tmi.js";
 import { TwitchPollChatbot } from "../twitch-poll-chatbot/TwitchPollChatbot";
 
-export const createPollClient = (client: Client) =>
-  new TwitchPollChatbot(client, {
-    silent: true,
+export const createPollClient = () =>
+  new TwitchPollChatbot({
     tieBreaker: (bot) => {
       // No one has voted
       if (bot.winningVotes.length === 0) {
@@ -14,10 +12,6 @@ export const createPollClient = (client: Client) =>
       const answerIndex = bot.winningVotes[randomVoteIndex].index;
       return answerIndex;
     },
-    announceResult: (selectedAnswer, usedTieBreaker) =>
-      usedTieBreaker
-        ? `Tie breaker, randomly chose "${selectedAnswer}"`
-        : `Will ${selectedAnswer.toLowerCase()}`,
     parseVote: (message) => {
       const match = /^(\d+)$/.exec(message);
       if (match) {

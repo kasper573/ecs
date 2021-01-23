@@ -6,7 +6,6 @@ export class TwitchPollChatbot {
   events: TypedEmitter<TwitchPollChatbotEvents> = new EventEmitter();
   private votesPerUser: Record<string, number> = {};
   private answers: string[] = [];
-  private hasConnectedPromise?: Promise<void>;
 
   get votesPerAnswerIndex() {
     const sums = Object.values(this.votesPerUser).reduce(
@@ -43,58 +42,32 @@ export class TwitchPollChatbot {
     return this.winningVotes.length !== 1;
   }
 
-  constructor(
-    private client: Client,
-    private options: TwitchPollChatboxOptions
-  ) {
-    this.attach();
+  constructor(private options: TwitchPollChatboxOptions) {}
+
+  attach(client: Client) {
+    client.on("message", this.onMessage);
   }
 
-  attach() {
-    this.detach();
-    this.hasConnectedPromise = new Promise<void>((resolve) => {
-      this.onConnected = () =>
-        wait(this.options.channelJoinDelay ?? 2000).then(resolve);
-      this.client.once("connected", this.onConnected);
-    });
-    this.client.on("message", this.onMessage);
+  detach(client: Client) {
+    client.removeListener("message", this.onMessage);
   }
 
-  detach() {
-    this.client.removeListener("message", this.onMessage);
-    this.client.removeListener("connected", this.onConnected);
-    this.hasConnectedPromise = undefined;
-  }
-
-  async poll(question: string, answers: string[]) {
+  poll(question: string, answers: string[]) {
     if (!answers.length) {
       throw new Error("Can't start a poll without answers");
     }
-    if (!this.hasConnectedPromise) {
-      throw new Error("Can't start a poll while detached");
-    }
-    await this.hasConnectedPromise;
 
-    // Announce new question
+    // Reset votes and remember answers
     this.answers = answers;
     this.votesPerUser = {};
-    await this.announce(`${question}\n${describeAnswers(answers)}`);
   }
 
-  async determineWinner() {
+  determineWinner() {
     // Determine top vote or pick randomly
     const useTieBreaker = this.needsTieBreaker;
     const selectedIndex = useTieBreaker
       ? this.options.tieBreaker(this)
       : this.winningVotes[0].index;
-
-    // Announce result
-    if (this.options.announceResult) {
-      const selectedAnswer = this.answers[selectedIndex];
-      await this.announce(
-        this.options.announceResult(selectedAnswer, useTieBreaker)
-      );
-    }
 
     // Reset votes when a winner has been determined
     this.votesPerUser = {};
@@ -107,17 +80,6 @@ export class TwitchPollChatbot {
       this.votesPerUser[username] = answerIndex;
       this.events.emit("vote", answerIndex);
     }
-  }
-
-  private announce(message: string) {
-    if (this.options.silent) {
-      return Promise.resolve();
-    }
-    return Promise.all(
-      this.client
-        .getChannels()
-        .map((channel) => this.client.say(channel, message))
-    );
   }
 
   private onMessage: Events["message"] = (
@@ -135,28 +97,13 @@ export class TwitchPollChatbot {
       this.vote(voteIndex, userState.username);
     }
   };
-
-  // Should be noop by default. Is redefined by attach().
-  private onConnected = () => {};
 }
 
 export type TwitchPollChatboxOptions = {
   parseVote: (message: string) => number | undefined;
   tieBreaker: (bot: TwitchPollChatbot) => number;
-  announceResult?: (selectedAnswer: string, usedTieBreaker: boolean) => string;
-  silent?: boolean;
-  /**
-   * Arbitrary wait time after connecting to give time to join channels
-   */
-  channelJoinDelay?: number;
 };
 
 export type TwitchPollChatbotEvents = {
   vote: (answerIndex: number) => void;
 };
-
-const describeAnswers = (answers: string[]) =>
-  answers.map((a, i) => `${i + 1}. ${a}`).join(", ");
-
-const wait = (timeout: number) =>
-  new Promise<void>((resolve) => setTimeout(resolve, timeout));

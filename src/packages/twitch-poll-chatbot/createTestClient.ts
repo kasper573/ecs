@@ -9,30 +9,16 @@ import TypedEmitter from "typed-emitter";
  */
 export const createTestClient = (
   events: TypedEmitter<Events> = new EventEmitter()
-) => ({
-  ...MockedClient({}),
-  events,
-
+) => {
+  const mock = MockedClient({}) as TestClient;
+  mock.events = events;
   // Lazy: Should bind all EventEmitter methods, but I'm just binding the ones we use.
-  on: events.on.bind(events),
-  once: events.once.bind(events),
-  removeListener: events.removeListener.bind(events),
+  mock.on = events.on.bind(events);
+  mock.once = events.once.bind(events);
+  mock.removeListener = events.removeListener.bind(events);
+  return mock;
+};
 
-  say: async (channel: string, message: string) => {
-    events.emit("message", channel, {}, message, true);
-    return [message] as [string];
-  },
-  connect: async () => {
-    const args = ["bogus", 0] as [string, number];
-    events.emit("connected", ...args);
-    return args;
-  },
-  disconnect: async () => {
-    events.emit("disconnected", "bogus");
-    return ["bogus", 0] as [string, number];
-  },
-});
-
-export type TestClient = ReturnType<typeof createTestClient>;
+export type TestClient = Client & { events: TypedEmitter<Events> };
 
 const MockedClient = mocked(Client);

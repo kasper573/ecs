@@ -12,8 +12,9 @@ import { pollChatbotWithCountdown } from "./packages/twitch-text-adventure/pollW
 
 const system = createGame();
 const tmiClient = createTMIClient();
-const pollClient = createPollClient(tmiClient);
+const pollClient = createPollClient();
 pollClient.events.on("vote", render);
+pollClient.attach(tmiClient);
 tmiClient.connect();
 
 const countdown = new Countdown();
