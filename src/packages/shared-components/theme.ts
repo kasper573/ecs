@@ -1,6 +1,7 @@
-import { DefaultTheme } from "styled-components";
+import { createMuiTheme, Theme } from "@material-ui/core";
 
-export const theme: DefaultTheme = {
-  backgroundColor: "black",
-  textColor: "white",
-};
+export const theme: Theme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
