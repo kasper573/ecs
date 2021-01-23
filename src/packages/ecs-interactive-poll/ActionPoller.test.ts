@@ -2,21 +2,21 @@ import { cancelable } from "cancelable-promise";
 import { System } from "../ecs/System";
 import { Entity } from "../ecs/Entity";
 import { Interactive } from "../ecs-interactive/Interactive";
-import { ActionPoll } from "./ActionPoll";
+import { ActionPoller } from "./ActionPoller";
 
 test("Can't poll without a system", () => {
-  const poller = new ActionPoll("?", () => noRecursionAnswer(0));
+  const poller = new ActionPoller("?", () => noRecursionAnswer(0));
   expect(() => poller.update()).toThrow();
 });
 
 test("Is ended by default", async () => {
-  const poller = new ActionPoll("?", () => noRecursionAnswer(0));
+  const poller = new ActionPoller("?", () => noRecursionAnswer(0));
   await expect(poller.end).resolves.toBeUndefined();
 });
 
 it("Cancels active poll on every new poll", () => {
   const promises: Array<ReturnType<typeof noRecursionAnswer>> = [];
-  const poller = new ActionPoll("?", () => {
+  const poller = new ActionPoller("?", () => {
     const p = noRecursionAnswer(0);
     promises.push(p);
     return p;
@@ -41,7 +41,7 @@ it("Cancels active poll on every new poll", () => {
 
 test("Poll answers is equal to the system actions", () => {
   let answers: string[] = [];
-  const poller = new ActionPoll("?", (q, a) => {
+  const poller = new ActionPoller("?", (q, a) => {
     answers = a;
     return noRecursionAnswer(0);
   });
@@ -65,7 +65,7 @@ test("Poll answers is equal to the system actions", () => {
 
 test("Selected answer will perform the corresponding action", async () => {
   let didPerform = false;
-  const poller = new ActionPoll("?", () => noRecursionAnswer(0));
+  const poller = new ActionPoller("?", () => noRecursionAnswer(0));
   new System({
     modules: [poller],
     entities: [
@@ -85,7 +85,7 @@ test("Selected answer will perform the corresponding action", async () => {
 
 test("Selecting an invalid answer will not perform any action", async () => {
   let didPerform = false;
-  const poller = new ActionPoll("?", () => noRecursionAnswer(-1));
+  const poller = new ActionPoller("?", () => noRecursionAnswer(-1));
   new System({
     modules: [poller],
     entities: [
@@ -105,7 +105,7 @@ test("Selecting an invalid answer will not perform any action", async () => {
 
 test("Poll won't start without system actions available", () => {
   let didPollStart = false;
-  const poller = new ActionPoll("?", () => {
+  const poller = new ActionPoller("?", () => {
     didPollStart = true;
     return noRecursionAnswer(0);
   });
@@ -124,7 +124,7 @@ test("Poll result won't be used if system has been detached", async () => {
       ]),
     ],
   });
-  const poller = new ActionPoll("?", () => {
+  const poller = new ActionPoller("?", () => {
     system.modules.remove(poller);
     return noRecursionAnswer(0);
   });
@@ -134,7 +134,7 @@ test("Poll result won't be used if system has been detached", async () => {
 
 test("Poll result can choose to prevent recursion", async () => {
   let count = 0;
-  const poller = new ActionPoll("?", () =>
+  const poller = new ActionPoller("?", () =>
     cancelable(
       Promise.resolve({ answerIndex: 0, preventRecursion: !(count < 3) })
     )
@@ -158,7 +158,7 @@ test("Poll result can choose to prevent recursion", async () => {
 
 test("Poll result can be numeric or options object", async () => {
   let performs = 0;
-  const poller = new ActionPoll("?", () =>
+  const poller = new ActionPoller("?", () =>
     performs === 0
       ? cancelable(Promise.resolve(0))
       : cancelable(Promise.resolve({ answerIndex: 0, preventRecursion: true }))

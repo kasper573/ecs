@@ -4,7 +4,7 @@ import App from "./packages/twitch-text-adventure/react/App";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./packages/twitch-text-adventure/react/theme";
 import { createGame } from "./packages/twitch-text-adventure/createGame";
-import { ActionPoll } from "./packages/ecs-interactive-poll/ActionPoll";
+import { ActionPoller } from "./packages/ecs-interactive-poll/ActionPoller";
 import { Countdown } from "./packages/twitch-text-adventure/Countdown";
 import { createPollClient } from "./packages/twitch-text-adventure/createPollClient";
 import { createTMIClient } from "./packages/twitch-text-adventure/createTMIClient";
@@ -21,7 +21,7 @@ const countdown = new Countdown();
 countdown.onInterval(1000, render);
 
 system.modules.push(
-  new ActionPoll("What now?", (question, answers) =>
+  new ActionPoller("What now?", (question, answers) =>
     pollChatbotWithCountdown(
       pollClient,
       countdown,

@@ -4,7 +4,7 @@ import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { InteractionResult } from "../ecs-interactive/InteractionResult";
 
-export class ActionPoll implements SystemModule {
+export class ActionPoller implements SystemModule {
   system?: System;
   result?: InteractionResult;
   private pending = false;
