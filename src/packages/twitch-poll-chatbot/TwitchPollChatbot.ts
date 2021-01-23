@@ -94,7 +94,7 @@ export class TwitchPollChatbot {
 
   private onMessage: Events["message"] = (channel, userState, message) => {
     const voteIndex = this.options.parseVote(message);
-    if (userState.username && voteIndex !== undefined) {
+    if (userState.username && voteIndex !== undefined && !isNaN(voteIndex)) {
       this.vote(voteIndex, userState.username);
     }
   };
