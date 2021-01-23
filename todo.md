@@ -2,6 +2,7 @@
 
 - [ ] Create basic editor to allow prototyping stories
 - [ ] Add readme to each package describing what each does and how to use it
+- [ ] Refactor twitch-text-adventure to be a service instead of a single game
 - [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
 - [ ] Syntax based actions instead of select from list
 - [ ] (Stretch goal) Refactor everything to FP

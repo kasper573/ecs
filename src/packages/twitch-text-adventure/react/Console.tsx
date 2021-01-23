@@ -34,8 +34,6 @@ export const Console = ({ children, onCommand, ...props }: ConsoleProps) => {
 };
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.textColor};
   padding: 10px;
   box-sizing: border-box;
   white-space: pre;
