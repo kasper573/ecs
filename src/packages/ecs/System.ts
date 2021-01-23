@@ -16,15 +16,17 @@ export class System {
     return entities;
   }
 
-  update() {
+  update(updateModules = true) {
     for (const entity of this.entities) {
       for (const component of entity.components) {
         component.update();
       }
     }
-    for (const mod of this.modules) {
-      if (mod.update) {
-        mod.update();
+    if (updateModules) {
+      for (const mod of this.modules) {
+        if (mod.update) {
+          mod.update();
+        }
       }
     }
   }
@@ -44,7 +46,7 @@ export class System {
       removed.forEach((mod) => (mod.system = trustedUndefined()));
     });
 
-    this.update();
+    this.update(false);
   }
 }
 
