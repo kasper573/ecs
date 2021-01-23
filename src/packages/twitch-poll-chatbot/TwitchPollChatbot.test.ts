@@ -22,6 +22,11 @@ test("can define how to parse votes", () => {
   );
 });
 
+test("throws error when trying to start a poll without answers", () =>
+  useBot(createBasicOptions(), (bot) =>
+    expect(() => bot.poll("que?", [])).toThrow()
+  ));
+
 test("determineWinner() resets poll after returning the winner", () =>
   useBot(createBasicOptions(), (bot, client) => {
     bot.poll("que?", ["a", "b"]);
