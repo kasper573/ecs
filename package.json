@@ -18,7 +18,6 @@
     "build:editor": "cross-env REACT_APP_ENTRY=editor react-app-rewired build",
     "test": "react-app-rewired test",
     "test:coverage": "react-app-rewired test --coverage --watchAll",
-    "bot": "ts-node --project tsconfig.node.json src/packages/twitch-text-adventure-bot/index.ts",
     "eject": "react-scripts eject",
     "lint": "eslint --ext js,ts,tsx src",
     "lint-fix": "eslint --ext js,ts,tsx src --fix"
