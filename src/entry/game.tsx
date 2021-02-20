@@ -27,7 +27,7 @@ system.modules.push(
       countdown,
       question,
       answers,
-      15 * 1000
+      30 * 1000
     )
   ),
   { update: render }
