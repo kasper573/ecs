@@ -43,7 +43,7 @@ Actions:
   performCommand(system, "Punch bag");
 
   expect(describeSystem(system)).toEqual(
-    `The punching bag breaks. You say out loud "I just wanted to destroy something beautiful.
+    `The punching bag breaks. You say out loud "I just wanted to destroy something beautiful".
 You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.

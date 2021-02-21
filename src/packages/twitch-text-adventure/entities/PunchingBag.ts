@@ -63,7 +63,7 @@ const describeBagState = (currentHp: number, maxHp: number) => {
     return {
       description: "It's falling apart.",
       punchResult:
-        'The punching bag breaks. You say out loud "I just wanted to destroy something beautiful.',
+        'The punching bag breaks. You say out loud "I just wanted to destroy something beautiful".',
     };
   }
   return {
