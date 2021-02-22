@@ -1,5 +1,5 @@
 import { EditorSelection } from "./EditorSelection";
-import { SerializableSystem } from "./persisted/SerializableSystem";
+import { SerializableSystem } from "./SerializableSystem";
 
 /**
  * Immutable state representing the current state of the editor.

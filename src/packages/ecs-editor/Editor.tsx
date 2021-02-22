@@ -7,16 +7,16 @@ import {
   SceneIcon,
   SystemIcon,
 } from "./icons";
-import { updateState } from "./state/mutations/updateState";
-import { EditorState } from "./state/EditorState";
-import { selectEditorObjects } from "./state/selectEditorObjects";
+import { updateState } from "./mutations/updateState";
+import { EditorState } from "./types/EditorState";
+import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { Row } from "./Row";
 import { CrudList } from "./CrudList";
-import { SerializableSystem } from "./state/persisted/SerializableSystem";
-import { SerializableScene } from "./state/persisted/SerializableScene";
-import { SerializableEntity } from "./state/persisted/SerializableEntity";
-import { SerializableComponent } from "./state/persisted/SerializableComponent";
-import { SerializableProperty } from "./state/persisted/SerializableProperty";
+import { SerializableSystem } from "./types/SerializableSystem";
+import { SerializableScene } from "./types/SerializableScene";
+import { SerializableEntity } from "./types/SerializableEntity";
+import { SerializableComponent } from "./types/SerializableComponent";
+import { SerializableProperty } from "./types/SerializableProperty";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;

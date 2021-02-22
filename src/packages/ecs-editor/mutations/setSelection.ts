@@ -1,5 +1,5 @@
-import { EditorState } from "../EditorState";
-import { EditorSelection } from "../EditorSelection";
+import { EditorState } from "../types/EditorState";
+import { EditorSelection } from "../types/EditorSelection";
 import { resetSelection } from "./resetSelection";
 
 /**

@@ -5,29 +5,10 @@ import {
   createProperty,
   createScene,
   createSystem,
-} from "../factories";
-import { EditorState } from "../EditorState";
-import { SystemCreateAction } from "../actions/SystemCreateAction";
-import { SystemDeleteAction } from "../actions/SystemDeleteAction";
-import { SystemRenameAction } from "../actions/SystemRenameAction";
-import { SystemSelectAction } from "../actions/SystemSelectAction";
-import { SceneCreateAction } from "../actions/SceneCreateAction";
-import { SceneRenameAction } from "../actions/SceneRenameAction";
-import { SceneDeleteAction } from "../actions/SceneDeleteAction";
-import { SceneSelectAction } from "../actions/SceneSelectAction";
-import { EntityCreateAction } from "../actions/EntityCreateAction";
-import { EntityRenameAction } from "../actions/EntityRenameAction";
-import { EntityDeleteAction } from "../actions/EntityDeleteAction";
-import { EntitySelectAction } from "../actions/EntitySelectAction";
-import { ComponentCreateAction } from "../actions/ComponentCreateAction";
-import { ComponentRenameAction } from "../actions/ComponentRenameAction";
-import { ComponentDeleteAction } from "../actions/ComponentDeleteAction";
-import { ComponentSelectAction } from "../actions/ComponentSelectAction";
-import { PropertyCreateAction } from "../actions/PropertyCreateAction";
-import { PropertyRenameAction } from "../actions/PropertyRenameAction";
-import { PropertyDeleteAction } from "../actions/PropertyDeleteAction";
-import { PropertySelectAction } from "../actions/PropertySelectAction";
-import { selectEditorObjects } from "../selectEditorObjects";
+} from "../functions/factories";
+import { EditorState } from "../types/EditorState";
+import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { EditorActions } from "../types/EditorActions";
 import { updateComponent } from "./updateComponent";
 import { updateEntity } from "./updateEntity";
 import { reactToDelete } from "./reactToDelete";
@@ -204,25 +185,3 @@ export function updateState(
   }
   return state;
 }
-
-type EditorActions =
-  | SystemCreateAction
-  | SystemRenameAction
-  | SystemDeleteAction
-  | SystemSelectAction
-  | SceneCreateAction
-  | SceneRenameAction
-  | SceneDeleteAction
-  | SceneSelectAction
-  | EntityCreateAction
-  | EntityRenameAction
-  | EntityDeleteAction
-  | EntitySelectAction
-  | ComponentCreateAction
-  | ComponentRenameAction
-  | ComponentDeleteAction
-  | ComponentSelectAction
-  | PropertyCreateAction
-  | PropertyRenameAction
-  | PropertyDeleteAction
-  | PropertySelectAction;

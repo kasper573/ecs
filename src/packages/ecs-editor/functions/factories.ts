@@ -1,7 +1,7 @@
-import { SerializableSystem } from "./persisted/SerializableSystem";
-import { SerializableScene } from "./persisted/SerializableScene";
-import { SerializableEntity } from "./persisted/SerializableEntity";
-import { SerializableComponent } from "./persisted/SerializableComponent";
+import { SerializableSystem } from "../types/SerializableSystem";
+import { SerializableScene } from "../types/SerializableScene";
+import { SerializableEntity } from "../types/SerializableEntity";
+import { SerializableComponent } from "../types/SerializableComponent";
 
 export const createSystem = (name: string): SerializableSystem => ({
   name,

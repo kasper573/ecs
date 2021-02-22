@@ -1,6 +1,6 @@
-import { EditorState } from "../EditorState";
-import { SerializableScene } from "../persisted/SerializableScene";
-import { selectEditorObjects } from "../selectEditorObjects";
+import { EditorState } from "../types/EditorState";
+import { SerializableScene } from "../types/SerializableScene";
+import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { updateSystem } from "./updateSystem";
 
 /**

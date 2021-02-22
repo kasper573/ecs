@@ -1,5 +1,5 @@
-import { EditorState } from "../EditorState";
-import { SerializableSystem } from "../persisted/SerializableSystem";
+import { EditorState } from "../types/EditorState";
+import { SerializableSystem } from "../types/SerializableSystem";
 
 /**
  * Update the specified system with a partial update

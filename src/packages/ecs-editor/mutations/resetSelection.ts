@@ -1,6 +1,6 @@
-import { EditorState } from "../EditorState";
-import { EditorSelection } from "../EditorSelection";
-import { EditorSelectionObjects } from "../EditorSelectionObjects";
+import { EditorState } from "../types/EditorState";
+import { EditorSelection } from "../types/EditorSelection";
+import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
 
 /**
  * Reset index to 0 for the specified object and all child objects

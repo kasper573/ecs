@@ -1,6 +1,6 @@
-import { EditorSelectionObjects } from "./EditorSelectionObjects";
-import { SerializableSystem } from "./persisted/SerializableSystem";
-import { EditorState } from "./EditorState";
+import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
+import { SerializableSystem } from "../types/SerializableSystem";
+import { EditorState } from "../types/EditorState";
 
 /**
  * Gets the EditorSelectionObjects for the current EditorSelection of the specified EditorState

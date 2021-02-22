@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "../reportWebVitals";
 import { Editor } from "../packages/ecs-editor/Editor";
 import { App } from "../packages/shared-components/App";
-import { createSystem } from "../packages/ecs-editor/state/factories";
+import { createSystem } from "../packages/ecs-editor/functions/factories";
 
 function render() {
   ReactDOM.render(

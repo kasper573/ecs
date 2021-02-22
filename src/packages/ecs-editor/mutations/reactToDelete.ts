@@ -1,6 +1,6 @@
-import { EditorSelectionObjects } from "../EditorSelectionObjects";
-import { EditorState } from "../EditorState";
-import { selectEditorObjects } from "../selectEditorObjects";
+import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
+import { EditorState } from "../types/EditorState";
+import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { resetSelection } from "./resetSelection";
 
 /**
