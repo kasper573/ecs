@@ -14,3 +14,14 @@ export type EditorObjects = {
   component?: SerializableComponent;
   property?: SerializableProperty;
 };
+
+/**
+ * The hierarchical order of all editor objects.
+ */
+export const editorObjectsOrder: Array<keyof EditorObjects> = [
+  "system",
+  "scene",
+  "entity",
+  "component",
+  "property",
+];
