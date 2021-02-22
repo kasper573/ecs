@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
+import { without } from "lodash";
 import TypedEmitter from "typed-emitter";
-import { without } from "./without";
 
 export class ObservableArray<T> extends Array<T> {
   readonly events: TypedEmitter<ObservableArrayEvents<T>> = new EventEmitter();
