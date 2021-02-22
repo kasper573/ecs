@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import { CrudListWithDialogs } from "./CrudListWithDialogs";
+import { useCrudDialogs } from "./useCrudDialogs";
 import {
   ComponentIcon,
   EntityIcon,
@@ -11,6 +11,12 @@ import { updateState } from "./state/mutations/updateState";
 import { EditorState } from "./state/EditorState";
 import { selectEditorObjects } from "./state/selectEditorObjects";
 import { Row } from "./Row";
+import { CrudList } from "./CrudList";
+import { SerializableSystem } from "./state/persisted/SerializableSystem";
+import { SerializableScene } from "./state/persisted/SerializableScene";
+import { SerializableEntity } from "./state/persisted/SerializableEntity";
+import { SerializableComponent } from "./state/persisted/SerializableComponent";
+import { SerializableProperty } from "./state/persisted/SerializableProperty";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -26,112 +32,119 @@ export const Editor = ({ defaultState }: EditorProps) => {
   });
   const selected = selectEditorObjects(state);
 
+  const [systemEvents, SystemDialogs] = useCrudDialogs<SerializableSystem>({
+    createDialogTitle: "Add system",
+    getItemName,
+    onCreateItem: (name) => dispatch({ type: "CREATE_SYSTEM", name }),
+    onRenameItem: (system, name) =>
+      dispatch({ type: "RENAME_SYSTEM", system, name }),
+    onDeleteItem: (system) => dispatch({ type: "DELETE_SYSTEM", system }),
+  });
+
+  const [sceneEvents, SceneDialogs] = useCrudDialogs<SerializableScene>({
+    createDialogTitle: "Add scene",
+    getItemName,
+    onCreateItem: (name) => dispatch({ type: "CREATE_SCENE", name }),
+    onRenameItem: (scene, name) =>
+      dispatch({ type: "RENAME_SCENE", scene, name }),
+    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", scene }),
+  });
+
+  const [entityEvents, EntityDialogs] = useCrudDialogs<SerializableEntity>({
+    createDialogTitle: "Add entity",
+    getItemName,
+    onCreateItem: (name) => dispatch({ type: "CREATE_ENTITY", name }),
+    onRenameItem: (entity, name) =>
+      dispatch({ type: "RENAME_ENTITY", entity, name }),
+    onDeleteItem: (entity) => dispatch({ type: "DELETE_ENTITY", entity }),
+  });
+
+  const [
+    componentEvents,
+    ComponentDialogs,
+  ] = useCrudDialogs<SerializableComponent>({
+    createDialogTitle: "Add component",
+    getItemName,
+    onCreateItem: (name) => dispatch({ type: "CREATE_COMPONENT", name }),
+    onRenameItem: (component, name) =>
+      dispatch({ type: "RENAME_COMPONENT", component, name }),
+    onDeleteItem: (component) =>
+      dispatch({ type: "DELETE_COMPONENT", component }),
+  });
+
+  const [
+    propertyEvents,
+    PropertyDialogs,
+  ] = useCrudDialogs<SerializableProperty>({
+    createDialogTitle: "Add property",
+    getItemName,
+    onCreateItem: (name) => dispatch({ type: "CREATE_PROPERTY", name }),
+    onRenameItem: (property, name) =>
+      dispatch({ type: "RENAME_PROPERTY", property, name }),
+    onDeleteItem: (property) => dispatch({ type: "DELETE_PROPERTY", property }),
+  });
+
   return (
     <Row>
-      <CrudListWithDialogs
+      <CrudList
         name="system"
         icon={SystemIcon}
         active={selected.system}
         items={state.systems}
-        getItemName={getItemName}
         getItemProps={getCommonItemProps}
-        onCreateItem={(name) => dispatch({ type: "CREATE_SYSTEM", name })}
-        onRenameItem={(system, name) =>
-          dispatch({ type: "RENAME_SYSTEM", system, name })
-        }
-        onDeleteItem={(system) => dispatch({ type: "DELETE_SYSTEM", system })}
-        onSelectItem={(system) =>
-          dispatch({
-            type: "SELECT_SYSTEM",
-            system,
-          })
-        }
+        onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
+        {...systemEvents}
       />
+      <SystemDialogs />
 
-      <CrudListWithDialogs
+      <CrudList
         name="scene"
         icon={SceneIcon}
         active={selected.scene}
         items={selected.system?.scenes ?? []}
-        getItemName={getItemName}
         getItemProps={getCommonItemProps}
-        onCreateItem={(name) => dispatch({ type: "CREATE_SCENE", name })}
-        onRenameItem={(scene, name) =>
-          dispatch({ type: "RENAME_SCENE", scene, name })
-        }
-        onDeleteItem={(scene) => dispatch({ type: "DELETE_SCENE", scene })}
-        onSelectItem={(scene) =>
-          dispatch({
-            type: "SELECT_SCENE",
-            scene,
-          })
-        }
+        onSelectItem={(scene) => dispatch({ type: "SELECT_SCENE", scene })}
+        {...sceneEvents}
       />
+      <SceneDialogs />
 
-      <CrudListWithDialogs
+      <CrudList
         name="entity"
         icon={EntityIcon}
         active={selected.entity}
         items={selected.scene?.entities ?? []}
-        getItemName={getItemName}
         getItemProps={getCommonItemProps}
-        onCreateItem={(name) => dispatch({ type: "CREATE_ENTITY", name })}
-        onRenameItem={(entity, name) =>
-          dispatch({ type: "RENAME_ENTITY", entity, name })
-        }
-        onDeleteItem={(entity) => dispatch({ type: "DELETE_ENTITY", entity })}
-        onSelectItem={(entity) =>
-          dispatch({
-            type: "SELECT_ENTITY",
-            entity,
-          })
-        }
+        onSelectItem={(entity) => dispatch({ type: "SELECT_ENTITY", entity })}
+        {...entityEvents}
       />
+      <EntityDialogs />
 
-      <CrudListWithDialogs
+      <CrudList
         name="component"
         icon={ComponentIcon}
         active={selected.component}
         items={selected.entity?.components ?? []}
-        getItemName={getItemName}
         getItemProps={getCommonItemProps}
-        onCreateItem={(name) => dispatch({ type: "CREATE_COMPONENT", name })}
-        onRenameItem={(component, name) =>
-          dispatch({ type: "RENAME_COMPONENT", component, name })
-        }
-        onDeleteItem={(component) =>
-          dispatch({ type: "DELETE_COMPONENT", component })
-        }
         onSelectItem={(component) =>
-          dispatch({
-            type: "SELECT_COMPONENT",
-            component,
-          })
+          dispatch({ type: "SELECT_COMPONENT", component })
         }
+        {...componentEvents}
       />
+      <ComponentDialogs />
 
-      <CrudListWithDialogs
+      <CrudList
         name="property"
         icon={PropertyIcon}
         active={selected.property}
         items={selected.component?.properties ?? []}
         selectable={false}
-        getItemName={getItemName}
         getItemProps={getCommonItemProps}
-        onCreateItem={(name) => dispatch({ type: "CREATE_PROPERTY", name })}
-        onRenameItem={(property, name) =>
-          dispatch({ type: "RENAME_PROPERTY", property, name })
-        }
-        onDeleteItem={(property) =>
-          dispatch({ type: "DELETE_PROPERTY", property })
-        }
         onSelectItem={(property) =>
-          dispatch({
-            type: "SELECT_PROPERTY",
-            property,
-          })
+          dispatch({ type: "SELECT_PROPERTY", property })
         }
+        {...propertyEvents}
       />
+      <PropertyDialogs />
     </Row>
   );
 };

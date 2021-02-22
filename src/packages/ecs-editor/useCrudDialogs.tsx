@@ -1,29 +1,23 @@
 import React, { useState } from "react";
-import { CrudList, CrudListProps } from "./CrudList";
 import { DeleteDialog } from "./dialogs/DeleteDialog";
 import { NameDialog } from "./dialogs/NameDialog";
 
 export type CrudListWithActionUIProps<T> = {
+  createDialogTitle: string;
   getItemName: (item: T) => string;
   onCreateItem: (name: string) => void;
   onRenameItem: (item: T, newName: string) => void;
   onDeleteItem: (item: T) => void;
-} & Omit<
-  // Omit the abstract CRUD events since we're replacing them with specific versions above
-  CrudListProps<T>,
-  "onCreateItem" | "onUpdateItem" | "onDeleteItem"
->;
+};
 
 type DialogKind = "create" | "rename" | "delete";
 
-export function CrudListWithDialogs<T>({
-  items,
-  name: listName,
+export function useCrudDialogs<T>({
+  createDialogTitle,
   getItemName,
   onCreateItem,
   onRenameItem,
   onDeleteItem,
-  ...listProps
 }: CrudListWithActionUIProps<T>) {
   // State
   const [dialog, setDialog] = useState<DialogKind>();
@@ -50,19 +44,11 @@ export function CrudListWithDialogs<T>({
     selectItem(item);
   };
 
-  return (
+  const Dialogs = () => (
     <>
-      <CrudList
-        {...listProps}
-        items={items}
-        name={listName}
-        onCreateItem={showCreateDialog}
-        onDeleteItem={showDeleteDialog}
-        onUpdateItem={showRenameDialog}
-      />
       <NameDialog
         open={dialog === "create"}
-        title={`Add ${listName}`}
+        title={createDialogTitle}
         defaultValue={selectedItemName}
         onClose={handleClose}
         onSave={onCreateItem}
@@ -82,4 +68,12 @@ export function CrudListWithDialogs<T>({
       />
     </>
   );
+
+  const events = {
+    onCreateItem: showCreateDialog,
+    onUpdateItem: showRenameDialog,
+    onDeleteItem: showDeleteDialog,
+  };
+
+  return [events, Dialogs] as const;
 }
