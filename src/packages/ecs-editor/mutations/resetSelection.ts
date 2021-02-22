@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { EditorSelection } from "../types/EditorSelection";
-import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
+import { EditorObjects } from "../types/EditorObjects";
 
 /**
  * Reset index to 0 for the specified object and all child objects
@@ -26,7 +26,7 @@ export const resetSelection = <K extends keyof EditorSelection>(
 /**
  * The hierarchical order of all editor objects.
  */
-const objectOrder: Array<keyof EditorSelectionObjects> = [
+const objectOrder: Array<keyof EditorObjects> = [
   "system",
   "scene",
   "entity",

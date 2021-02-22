@@ -5,9 +5,9 @@ import { SerializableComponent } from "./SerializableComponent";
 import { SerializableProperty } from "./SerializableProperty";
 
 /**
- * The objects resolved by the indexes in EditorSelection
+ * All known objects in the editor
  */
-export type EditorSelectionObjects = {
+export type EditorObjects = {
   system?: SerializableSystem;
   scene?: SerializableScene;
   entity?: SerializableEntity;

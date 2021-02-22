@@ -1,4 +1,4 @@
-import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
+import { EditorObjects } from "../types/EditorObjects";
 import { SerializableSystem } from "../types/SerializableSystem";
 import { EditorState } from "../types/EditorState";
 
@@ -8,7 +8,7 @@ import { EditorState } from "../types/EditorState";
 export const selectEditorObjects = ({
   systems,
   selection,
-}: EditorState): EditorSelectionObjects => {
+}: EditorState): EditorObjects => {
   const system = systems[selection.system] as SerializableSystem | undefined;
   const scene = system?.scenes[selection.scene];
   const entity = scene?.entities[selection.entity];

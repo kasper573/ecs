@@ -1,4 +1,4 @@
-import { EditorSelectionObjects } from "../types/EditorSelectionObjects";
+import { EditorObjects } from "../types/EditorObjects";
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { resetSelection } from "./resetSelection";
@@ -10,11 +10,11 @@ import { resetSelection } from "./resetSelection";
  * @param objectName The name of the object type that was deleted
  * @param deletedObject The object that was deleted
  */
-export const reactToDelete = <K extends keyof EditorSelectionObjects>(
+export const reactToDelete = <K extends keyof EditorObjects>(
   previousState: EditorState,
   currentState: EditorState,
   objectName: K,
-  deletedObject: EditorSelectionObjects[K]
+  deletedObject: EditorObjects[K]
 ) => {
   const selected = selectEditorObjects(previousState);
   if (selected[objectName] === deletedObject) {

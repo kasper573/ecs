@@ -1,6 +1,6 @@
-import { EditorSelectionObjects } from "./EditorSelectionObjects";
+import { EditorObjects } from "./EditorObjects";
 
 /**
  * Selected indexes of the editor objects
  */
-export type EditorSelection = Record<keyof EditorSelectionObjects, number>;
+export type EditorSelection = Record<keyof EditorObjects, number>;
