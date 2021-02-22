@@ -2,23 +2,44 @@ import React, { useState } from "react";
 import { DeleteDialog } from "./dialogs/DeleteDialog";
 import { NameDialog } from "./dialogs/NameDialog";
 
-export type CrudListWithActionUIProps<T> = {
+export type UseCrudDialogsProps<T> = {
+  /**
+   * The title for the create dialog
+   */
   createDialogTitle: string;
+  /**
+   * Gets the name for a given item
+   */
   getItemName: (item: T) => string;
+  /**
+   * Called when the create dialog flow has finished successfully
+   * @param name The specified name to create an item for
+   */
   onCreateItem: (name: string) => void;
+  /**
+   * Called when the rename dialog flow has finished successfully
+   * @param item The item selected to be renamed
+   * @param name The specified name to rename the item to
+   */
   onRenameItem: (item: T, newName: string) => void;
+  /**
+   * Called when the delete dialog flow has finished successfully
+   * @param item The item selected to be deleted
+   */
   onDeleteItem: (item: T) => void;
 };
 
-type DialogKind = "create" | "rename" | "delete";
-
+/**
+ * Provides create, rename and delete dialogs
+ * and emits results via event properties.
+ */
 export function useCrudDialogs<T>({
   createDialogTitle,
   getItemName,
   onCreateItem,
   onRenameItem,
   onDeleteItem,
-}: CrudListWithActionUIProps<T>) {
+}: UseCrudDialogsProps<T>) {
   // State
   const [dialog, setDialog] = useState<DialogKind>();
   const [selectedItem, selectItem] = useState<T>();
@@ -77,3 +98,5 @@ export function useCrudDialogs<T>({
 
   return [events, Dialogs] as const;
 }
+
+type DialogKind = "create" | "rename" | "delete";
