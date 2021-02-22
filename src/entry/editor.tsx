@@ -1,15 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "../reportWebVitals";
-import { EcsEditor } from "../packages/ecs-editor/ECSEditor";
+import { Editor } from "../packages/ecs-editor/Editor";
 import { App } from "../packages/shared-components/App";
-import { System } from "../packages/ecs/System";
+import { createSystem } from "../packages/ecs-editor/state/factories";
 
 function render() {
   ReactDOM.render(
     <React.StrictMode>
       <App>
-        <EcsEditor system={new System()} />
+        <Editor
+          defaultState={{
+            systems: [
+              createSystem("System A"),
+              createSystem("System B"),
+              createSystem("System C"),
+            ],
+          }}
+        />
       </App>
     </React.StrictMode>,
     document.getElementById("root")
