@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Theme } from "@material-ui/core/styles";
-import { EditorPanelName } from "./EditorPanelName";
+import { EditorPanelName as panels } from "./EditorPanelName";
 
 const panelSpacing = ({ theme }: { theme: Theme }) => theme.spacing(1);
 
@@ -15,25 +15,21 @@ export const EditorPanelContainer = styled.div`
   flex: 1;
   overflow: hidden;
   gap: ${panelSpacing}px ${panelSpacing}px;
-  grid-template-columns: auto 300px 300px;
+  grid-template-columns: 300px auto 300px 300px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "${EditorPanelName.Scene} ${EditorPanelName.Instances} ${
-  EditorPanelName.Inspector
-}"
-    "${EditorPanelName.Scene} ${EditorPanelName.Scenes} ${
-  EditorPanelName.Library
-}"
+    "${panels.Scenes} ${panels.Scene} ${panels.Instances} ${panels.Inspector}"
+    "${panels.Scenes} ${panels.Scene} ${panels.Instances} ${panels.Library}"
   ;
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
     grid-template-rows: auto auto auto auto auto;
     grid-template-areas:
-      "${EditorPanelName.Scene}"
-      "${EditorPanelName.Inspector}"
-      "${EditorPanelName.Instances}"
-      "${EditorPanelName.Library}"
-      "${EditorPanelName.Scenes}"
+      "${panels.Scene}"
+      "${panels.Inspector}"
+      "${panels.Instances}"
+      "${panels.Library}"
+      "${panels.Scenes}"
     ;
   },
 `;

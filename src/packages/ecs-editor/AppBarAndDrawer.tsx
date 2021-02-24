@@ -108,7 +108,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
-      height: "100%",
+      [theme.breakpoints.up("sm")]: {
+        height: "100%", // Fixes container size to trigger overflows
+      },
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
