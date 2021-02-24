@@ -64,7 +64,7 @@ export function CrudList<T>({
   ...listProps
 }: CrudListProps<T>) {
   return (
-    <FlexListWithDivider
+    <List
       subheader={<CrudListSubheader title={name} onCreate={onCreateItem} />}
       {...listProps}
     >
@@ -80,15 +80,6 @@ export function CrudList<T>({
           {...getItemProps(item)}
         />
       ))}
-    </FlexListWithDivider>
+    </List>
   );
 }
-
-const FlexListWithDivider = styled(List)`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  & + & {
-    border-left: 1px solid ${({ theme }) => theme.palette.text.secondary};
-  }
-`;

@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { Typography } from "@material-ui/core";
 import {
   ComponentIcon,
   EntityIcon,
@@ -9,12 +10,13 @@ import {
 import { updateState } from "./mutations/updateState";
 import { EditorState } from "./types/EditorState";
 import { selectEditorObjects } from "./functions/selectEditorObjects";
-import { Row } from "./Row";
+import { EditorPanelContainer } from "./EditorPanelContainer";
 import { CrudList } from "./CrudList";
 import { useCrudDialogsFor } from "./useCrudDialogsFor";
 import { AppBarAndDrawer } from "./AppBarAndDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 import { EditorTitle } from "./EditorTitle";
+import { EditorScenePanel } from "./EditorScenePanel";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -63,9 +65,15 @@ export const Editor = ({ defaultState }: EditorProps) => {
         />
       }
     >
-      <Row>
-        <SystemDialogs />
-
+      <SystemDialogs />
+      <SceneDialogs />
+      <EntityDialogs />
+      <CmpDialogs />
+      <PropDialogs />
+      <EditorPanelContainer>
+        <EditorScenePanel>
+          <Typography>This is the scene</Typography>
+        </EditorScenePanel>
         <CrudList
           name="scene"
           active={selected.scene}
@@ -74,7 +82,6 @@ export const Editor = ({ defaultState }: EditorProps) => {
           onSelectItem={(scene) => dispatch({ type: "SELECT_SCENE", scene })}
           {...sceneEvents}
         />
-        <SceneDialogs />
 
         <CrudList
           name="entity"
@@ -84,7 +91,6 @@ export const Editor = ({ defaultState }: EditorProps) => {
           onSelectItem={(entity) => dispatch({ type: "SELECT_ENTITY", entity })}
           {...entityEvents}
         />
-        <EntityDialogs />
 
         <CrudList
           name="component"
@@ -96,7 +102,6 @@ export const Editor = ({ defaultState }: EditorProps) => {
           }
           {...cmpEvents}
         />
-        <CmpDialogs />
 
         <CrudList
           name="property"
@@ -109,8 +114,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
           }
           {...propEvents}
         />
-        <PropDialogs />
-      </Row>
+      </EditorPanelContainer>
     </AppBarAndDrawer>
   );
 };

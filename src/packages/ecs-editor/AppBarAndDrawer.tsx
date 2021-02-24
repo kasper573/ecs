@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
+      flex: 1,
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -133,8 +134,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: drawerWidth,
     },
     content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
     },
   })
 );
