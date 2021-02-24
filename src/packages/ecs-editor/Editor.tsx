@@ -38,42 +38,70 @@ export const Editor = ({ defaultState }: EditorProps) => {
   const [cmpEvents, CmpDialogs] = useCrudDialogsFor("component", dispatch);
   const [propEvents, PropDialogs] = useCrudDialogsFor("property", dispatch);
 
-  return (
-    <AppBarAndDrawer
-      appBar={
-        <>
-          <EditorTitle>{selected.system?.name}</EditorTitle>
-          <EditAndDeleteButtons
-            name={selected.system?.name ?? ""}
-            onEdit={() => systemEvents.onUpdateItem(selected.system)}
-            onDelete={() => systemEvents.onDeleteItem(selected.system)}
-          />
-        </>
-      }
-      drawer={
-        <CrudList
-          name="system"
-          active={selected.system}
-          items={state.systems}
-          onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
-          getItemProps={({ name }) => ({
-            name,
-            icon: SystemIcon,
-            showEdit: false,
-            showDelete: false,
-          })}
-        />
-      }
-    >
+  const appBar = (
+    <>
+      <EditorTitle>{selected.system?.name}</EditorTitle>
+      <EditAndDeleteButtons
+        name={selected.system?.name ?? ""}
+        onEdit={() => systemEvents.onUpdateItem(selected.system)}
+        onDelete={() => systemEvents.onDeleteItem(selected.system)}
+      />
+    </>
+  );
+
+  const drawer = (
+    <CrudList
+      name="system"
+      active={selected.system}
+      items={state.systems}
+      onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
+      onCreateItem={systemEvents.onCreateItem}
+      getItemProps={({ name }) => ({
+        name,
+        icon: SystemIcon,
+        showEdit: false,
+        showDelete: false,
+      })}
+    />
+  );
+
+  const dialogs = (
+    <>
       <SystemDialogs />
       <SceneDialogs />
       <EntityDialogs />
       <CmpDialogs />
       <PropDialogs />
-      <EditorPanelContainer>
+    </>
+  );
+
+  if (!selected.system) {
+    return (
+      <AppBarAndDrawer
+        appBar={<Typography>No system selected</Typography>}
+        drawer={drawer}
+      >
+        {dialogs}
         <EditorScenePanel>
-          <Typography>This is the scene</Typography>
+          <Typography>
+            {state.systems.length > 0
+              ? "Please select a system"
+              : "Please create a system"}
+          </Typography>
         </EditorScenePanel>
+      </AppBarAndDrawer>
+    );
+  }
+
+  return (
+    <AppBarAndDrawer appBar={appBar} drawer={drawer}>
+      {dialogs}
+      <EditorPanelContainer>
+        {selected.scene && (
+          <EditorScenePanel>
+            <Typography>{selected.scene.name}</Typography>
+          </EditorScenePanel>
+        )}
         <CrudList
           name="scene"
           active={selected.scene}
