@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
-import { SerializableEntity } from "../types/SerializableEntity";
+import { SerializedEntity } from "../types/SerializedEntity";
 import { updateScene } from "./updateScene";
 
 /**
@@ -8,8 +8,8 @@ import { updateScene } from "./updateScene";
  */
 export const updateEntity = (
   state: EditorState,
-  entity: SerializableEntity,
-  update: Partial<SerializableEntity>
+  entity: SerializedEntity,
+  update: Partial<SerializedEntity>
 ): EditorState => {
   const { scene } = selectEditorObjects(state);
   if (!scene) {

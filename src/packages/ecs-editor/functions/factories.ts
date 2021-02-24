@@ -1,9 +1,9 @@
-import { SerializableSystem } from "../types/SerializableSystem";
-import { SerializableScene } from "../types/SerializableScene";
-import { SerializableEntity } from "../types/SerializableEntity";
-import { SerializableComponent } from "../types/SerializableComponent";
+import { SerializedSystem } from "../types/SerializedSystem";
+import { SerializedScene } from "../types/SerializedScene";
+import { SerializedEntity } from "../types/SerializedEntity";
+import { SerializedComponent } from "../types/SerializedComponent";
 
-export const createSystem = (name: string): SerializableSystem => ({
+export const createSystem = (name: string): SerializedSystem => ({
   name,
   scenes: [
     createScene("Scene A"),
@@ -18,7 +18,7 @@ export const createSystem = (name: string): SerializableSystem => ({
   ],
 });
 
-export const createScene = (name: string): SerializableScene => ({
+export const createScene = (name: string): SerializedScene => ({
   name,
   entities: [
     createEntity("Entity A"),
@@ -29,7 +29,7 @@ export const createScene = (name: string): SerializableScene => ({
   ],
 });
 
-export const createEntity = (name: string): SerializableEntity => ({
+export const createEntity = (name: string): SerializedEntity => ({
   name,
   components: [
     createComponent("Component A"),
@@ -40,7 +40,7 @@ export const createEntity = (name: string): SerializableEntity => ({
   ],
 });
 
-export const createComponent = (name: string): SerializableComponent => ({
+export const createComponent = (name: string): SerializedComponent => ({
   name,
   properties: [
     createProperty("propertyA", "value A"),

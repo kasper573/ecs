@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
-import { SerializableProperty } from "../types/SerializableProperty";
+import { SerializedProperty } from "../types/SerializedProperty";
 import { updateComponent } from "./updateComponent";
 
 /**
@@ -8,8 +8,8 @@ import { updateComponent } from "./updateComponent";
  */
 export const updateProperty = (
   state: EditorState,
-  property: SerializableProperty,
-  update: Partial<SerializableProperty>
+  property: SerializedProperty,
+  update: Partial<SerializedProperty>
 ): EditorState => {
   const { component } = selectEditorObjects(state);
   if (!component) {

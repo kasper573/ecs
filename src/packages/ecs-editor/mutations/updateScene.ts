@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { SerializableScene } from "../types/SerializableScene";
+import { SerializedScene } from "../types/SerializedScene";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { updateSystem } from "./updateSystem";
 
@@ -8,8 +8,8 @@ import { updateSystem } from "./updateSystem";
  */
 export const updateScene = (
   state: EditorState,
-  scene: SerializableScene,
-  update: Partial<SerializableScene>
+  scene: SerializedScene,
+  update: Partial<SerializedScene>
 ): EditorState => {
   const { system } = selectEditorObjects(state);
   if (!system) {

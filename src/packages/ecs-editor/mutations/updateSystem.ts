@@ -1,13 +1,13 @@
 import { EditorState } from "../types/EditorState";
-import { SerializableSystem } from "../types/SerializableSystem";
+import { SerializedSystem } from "../types/SerializedSystem";
 
 /**
  * Update the specified system with a partial update
  */
 export const updateSystem = (
   state: EditorState,
-  system: SerializableSystem,
-  update: Partial<SerializableSystem>
+  system: SerializedSystem,
+  update: Partial<SerializedSystem>
 ): EditorState => {
   const index = state.systems.indexOf(system);
   const updatedSystems = state.systems.slice();

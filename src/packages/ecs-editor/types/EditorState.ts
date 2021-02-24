@@ -1,5 +1,5 @@
 import { EditorSelection } from "./EditorSelection";
-import { SerializableSystem } from "./SerializableSystem";
+import { SerializedSystem } from "./SerializedSystem";
 
 /**
  * Immutable state representing the current state of the editor.
@@ -10,7 +10,7 @@ export type EditorState = {
   /**
    * The ECS trees serialized
    */
-  systems: SerializableSystem[];
+  systems: SerializedSystem[];
   /**
    * The current selection in the UI
    */
