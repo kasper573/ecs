@@ -7,4 +7,7 @@ export const EditorPanelContainer = styled.div(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   flex: 1,
+  [theme.breakpoints.down("xs")]: {
+    flexDirection: "column",
+  },
 }));
