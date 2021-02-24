@@ -1,6 +1,5 @@
 import { List, ListProps } from "@material-ui/core";
 import React from "react";
-import styled from "styled-components";
 import { CrudListItem, CrudListItemProps } from "./CrudListItem";
 import { CrudListSubheader } from "./CrudListSubheader";
 import { noop } from "./noop";

@@ -17,6 +17,9 @@ import { AppBarAndDrawer } from "./AppBarAndDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 import { EditorTitle } from "./EditorTitle";
 import { EditorScenePanel } from "./EditorScenePanel";
+import { EditorPanel } from "./EditorPanel";
+import { EditorPanelName } from "./EditorPanelName";
+import { EditorPanelFlat } from "./EditorPanelFlat";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -82,13 +85,13 @@ export const Editor = ({ defaultState }: EditorProps) => {
         drawer={drawer}
       >
         {dialogs}
-        <EditorScenePanel>
+        <EditorPanelFlat>
           <Typography>
             {state.systems.length > 0
               ? "Please select a system"
               : "Please create a system"}
           </Typography>
-        </EditorScenePanel>
+        </EditorPanelFlat>
       </AppBarAndDrawer>
     );
   }
@@ -98,50 +101,58 @@ export const Editor = ({ defaultState }: EditorProps) => {
       {dialogs}
       <EditorPanelContainer>
         {selected.scene && (
-          <EditorScenePanel>
+          <EditorScenePanel title="Scene">
             <Typography>{selected.scene.name}</Typography>
           </EditorScenePanel>
         )}
-        <CrudList
-          name="scene"
-          active={selected.scene}
-          items={selected.system?.scenes ?? []}
-          getItemProps={({ name }) => ({ name, icon: SceneIcon })}
-          onSelectItem={(scene) => dispatch({ type: "SELECT_SCENE", scene })}
-          {...sceneEvents}
-        />
-
-        <CrudList
-          name="entity"
-          active={selected.entity}
-          items={selected.scene?.entities ?? []}
-          getItemProps={({ name }) => ({ name, icon: EntityIcon })}
-          onSelectItem={(entity) => dispatch({ type: "SELECT_ENTITY", entity })}
-          {...entityEvents}
-        />
-
-        <CrudList
-          name="component"
-          active={selected.component}
-          items={selected.entity?.components ?? []}
-          getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
-          onSelectItem={(component) =>
-            dispatch({ type: "SELECT_COMPONENT", component })
-          }
-          {...cmpEvents}
-        />
-
-        <CrudList
-          name="property"
-          active={selected.property}
-          items={selected.component?.properties ?? []}
-          selectable={false}
-          getItemProps={({ name }) => ({ name, icon: PropertyIcon })}
-          onSelectItem={(property) =>
-            dispatch({ type: "SELECT_PROPERTY", property })
-          }
-          {...propEvents}
-        />
+        <EditorPanel title="Instances" name={EditorPanelName.Instances}>
+          Instances
+        </EditorPanel>
+        <EditorPanel title="Scenes" name={EditorPanelName.Scenes}>
+          <CrudList
+            name="scene"
+            active={selected.scene}
+            items={selected.system?.scenes ?? []}
+            getItemProps={({ name }) => ({ name, icon: SceneIcon })}
+            onSelectItem={(scene) => dispatch({ type: "SELECT_SCENE", scene })}
+            {...sceneEvents}
+          />
+        </EditorPanel>
+        <EditorPanel title="Library" name={EditorPanelName.Library}>
+          <CrudList
+            name="entity"
+            active={selected.entity}
+            items={selected.scene?.entities ?? []}
+            getItemProps={({ name }) => ({ name, icon: EntityIcon })}
+            onSelectItem={(entity) =>
+              dispatch({ type: "SELECT_ENTITY", entity })
+            }
+            {...entityEvents}
+          />
+          <CrudList
+            name="component"
+            active={selected.component}
+            items={selected.entity?.components ?? []}
+            getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
+            onSelectItem={(component) =>
+              dispatch({ type: "SELECT_COMPONENT", component })
+            }
+            {...cmpEvents}
+          />
+        </EditorPanel>
+        <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
+          <CrudList
+            name="property"
+            active={selected.property}
+            items={selected.component?.properties ?? []}
+            selectable={false}
+            getItemProps={({ name }) => ({ name, icon: PropertyIcon })}
+            onSelectItem={(property) =>
+              dispatch({ type: "SELECT_PROPERTY", property })
+            }
+            {...propEvents}
+          />
+        </EditorPanel>
       </EditorPanelContainer>
     </AppBarAndDrawer>
   );

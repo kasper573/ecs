@@ -137,6 +137,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexDirection: "column",
       flex: 1,
+      padding: theme.spacing(1),
     },
   })
 );
