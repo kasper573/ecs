@@ -6,7 +6,7 @@ import { describeEntities } from "./describeEntities";
 
 export const describeSystem = (
   system: System,
-  customDescribers: Describers = {}
+  customDescribers: SystemDescribers = {}
 ) => {
   const { describeAction, describeEntities } = {
     ...defaultDescribers,
@@ -32,4 +32,4 @@ export const describeSystem = (
 
 const defaultDescribers = { describeAction, describeEntities };
 
-type Describers = Partial<typeof defaultDescribers>;
+export type SystemDescribers = Partial<typeof defaultDescribers>;

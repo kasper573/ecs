@@ -29,8 +29,7 @@ system.modules.push(
       answers,
       30 * 1000
     )
-  ),
-  { update: render }
+  )
 );
 
 function render() {

@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { performCommand } from "../../ecs-interactive/performCommand";
-import { describeSystem } from "../../ecs-describable/describeSystem";
 import { System } from "../../ecs/System";
-import { Console } from "./Console";
+import { TextSystem } from "../../ecs-react/TextSystem";
 
 export type GameProps = {
   system: System;
@@ -11,20 +9,20 @@ export type GameProps = {
   votesPerAction: number[];
 };
 
-export const Game = ({ system, timeLeft, votesPerAction }: GameProps) => {
-  return (
-    <MaximizedConsole onCommand={(command) => performCommand(system, command)}>
-      {`${describeSystem(system, {
-        describeAction: (action, index) =>
-          `${index + 1}. ${action.name} (${votesPerAction[index] || 0} votes)`,
-      })}
-Time left: ${Math.round(timeLeft / 1000)}s`}
-      <VoteInstruction>
-        Vote by typing one of the action numbers into twitch chat.
-      </VoteInstruction>
-    </MaximizedConsole>
-  );
-};
+export const Game = ({ system, timeLeft, votesPerAction }: GameProps) => (
+  <MaximizedTextSystem
+    system={system}
+    describers={{
+      describeAction: (action, index) =>
+        `${index + 1}. ${action.name} (${votesPerAction[index] || 0} votes)`,
+    }}
+  >
+    <div>Time left: {Math.round(timeLeft / 1000)}s</div>
+    <VoteInstruction>
+      Vote by typing one of the action numbers into twitch chat.
+    </VoteInstruction>
+  </MaximizedTextSystem>
+);
 
 const VoteInstruction = styled.div`
   position: absolute;
@@ -32,6 +30,6 @@ const VoteInstruction = styled.div`
   right: 16px;
 `;
 
-const MaximizedConsole = styled(Console)`
+const MaximizedTextSystem = styled(TextSystem)`
   height: 100%;
 `;
