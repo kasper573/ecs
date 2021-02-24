@@ -19,6 +19,7 @@ export const EditorPanel = styled(
     </Paper>
   )
 )`
+  overflow-y: auto;
   padding: ${({ theme }) => theme.spacing(2)}px
     ${({ theme }) => theme.spacing(3)}px;
 `;

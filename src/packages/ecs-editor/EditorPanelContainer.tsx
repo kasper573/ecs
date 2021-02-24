@@ -16,7 +16,7 @@ export const EditorPanelContainer = styled.div`
   overflow: hidden;
   gap: ${panelSpacing}px ${panelSpacing}px;
   grid-template-columns: auto 300px 300px;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 1fr;
   grid-template-areas:
     "${EditorPanelName.Scene} ${EditorPanelName.Instances} ${
   EditorPanelName.Inspector
