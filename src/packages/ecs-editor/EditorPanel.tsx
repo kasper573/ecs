@@ -18,6 +18,7 @@ export const EditorPanel = styled(
     </Paper>
   )
 )`
+  position: relative; // Ensure children with position absolute gets docked in the panel
   ${({ theme }) => theme.breakpoints.up("sm")} {
     overflow-y: auto;
   }
