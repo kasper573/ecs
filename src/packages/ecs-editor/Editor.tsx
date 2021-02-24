@@ -16,10 +16,9 @@ import { useCrudDialogsFor } from "./useCrudDialogsFor";
 import { AppBarAndDrawer } from "./AppBarAndDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 import { EditorTitle } from "./EditorTitle";
-import { EditorScenePanel } from "./EditorScenePanel";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
-import { EditorPanelFlat } from "./EditorPanelFlat";
+import { EditorFlatPanel } from "./EditorFlatPanel";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -54,7 +53,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
 
   const drawer = (
     <CrudList
-      name="system"
+      title="Systems"
+      noun="System"
       active={selected.system}
       items={state.systems}
       onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
@@ -85,13 +85,13 @@ export const Editor = ({ defaultState }: EditorProps) => {
         drawer={drawer}
       >
         {dialogs}
-        <EditorPanelFlat>
+        <EditorFlatPanel>
           <Typography>
             {state.systems.length > 0
               ? "Please select a system"
               : "Please create a system"}
           </Typography>
-        </EditorPanelFlat>
+        </EditorFlatPanel>
       </AppBarAndDrawer>
     );
   }
@@ -101,16 +101,17 @@ export const Editor = ({ defaultState }: EditorProps) => {
       {dialogs}
       <EditorPanelContainer>
         {selected.scene && (
-          <EditorScenePanel title="Scene">
+          <EditorFlatPanel title="Scene">
             <Typography>{selected.scene.name}</Typography>
-          </EditorScenePanel>
+          </EditorFlatPanel>
         )}
         <EditorPanel title="Instances" name={EditorPanelName.Instances}>
           Instances
         </EditorPanel>
         <EditorPanel title="Scenes" name={EditorPanelName.Scenes}>
           <CrudList
-            name="scene"
+            title={EditorPanelName.Scenes}
+            noun="scene"
             active={selected.scene}
             items={selected.system?.scenes ?? []}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
@@ -120,7 +121,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
         </EditorPanel>
         <EditorPanel title="Library" name={EditorPanelName.Library}>
           <CrudList
-            name="entity"
+            title={EditorPanelName.Library}
+            noun="entity"
             active={selected.entity}
             items={selected.scene?.entities ?? []}
             getItemProps={({ name }) => ({ name, icon: EntityIcon })}
@@ -130,7 +132,6 @@ export const Editor = ({ defaultState }: EditorProps) => {
             {...entityEvents}
           />
           <CrudList
-            name="component"
             active={selected.component}
             items={selected.entity?.components ?? []}
             getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
@@ -142,7 +143,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
         </EditorPanel>
         <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
           <CrudList
-            name="property"
+            title={EditorPanelName.Inspector}
+            noun="property"
             active={selected.property}
             items={selected.component?.properties ?? []}
             selectable={false}

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Paper, PaperProps, Typography } from "@material-ui/core";
+import { Paper, PaperProps } from "@material-ui/core";
 import { EditorPanelName } from "./EditorPanelName";
 
 export type EditorPanelProps = PaperProps & {
@@ -14,7 +14,6 @@ export type EditorPanelProps = PaperProps & {
 export const EditorPanel = styled(
   ({ children, name, style, ...paperProps }: EditorPanelProps) => (
     <Paper {...paperProps} style={{ ...style, gridArea: name }}>
-      {name && <Title>{name}</Title>}
       {children}
     </Paper>
   )
@@ -22,11 +21,4 @@ export const EditorPanel = styled(
   ${({ theme }) => theme.breakpoints.up("sm")} {
     overflow-y: auto;
   }
-  padding: ${({ theme }) => theme.spacing(2)}px
-    ${({ theme }) => theme.spacing(3)}px;
 `;
-
-const Title = styled(Typography).attrs({
-  variant: "caption",
-  paragraph: true,
-})``;

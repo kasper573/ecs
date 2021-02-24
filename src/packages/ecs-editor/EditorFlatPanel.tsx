@@ -4,7 +4,7 @@ import { EditorPanel } from "./EditorPanel";
 /**
  * An EditorPanel with no elevation or background
  */
-export const EditorPanelFlat = styled(EditorPanel).attrs({
+export const EditorFlatPanel = styled(EditorPanel).attrs({
   elevation: 0,
 })`
   background: transparent;
