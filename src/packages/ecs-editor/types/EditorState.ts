@@ -3,16 +3,16 @@ import { SerializableSystem } from "./SerializableSystem";
 
 /**
  * Immutable state representing the current state of the editor.
- * Any changes to state must be done via mutation functions in state/mutations,
- * preferably via the main reducer updateState.ts.
+ * Any changes to state must be done via mutation functions in `mutations/`,
+ * preferably via the main reducer `mutations/updateState.ts`.
  */
 export type EditorState = {
   /**
-   * All the ECS serialized
+   * The ECS trees serialized
    */
   systems: SerializableSystem[];
   /**
-   * Represents the current selection in the UI
+   * The current selection in the UI
    */
   selection: EditorSelection;
 };

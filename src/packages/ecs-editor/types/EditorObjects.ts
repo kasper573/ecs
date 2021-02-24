@@ -16,6 +16,16 @@ export type EditorObjects = {
 };
 
 /**
+ * Names of all known objects in the editor
+ */
+export type EditorObjectName = keyof EditorObjects;
+
+/**
+ * Types of all the known objects in the editor
+ */
+export type EditorObject = Exclude<EditorObjects[EditorObjectName], undefined>;
+
+/**
  * The hierarchical order of all editor objects.
  */
 export const editorObjectsOrder: Array<keyof EditorObjects> = [

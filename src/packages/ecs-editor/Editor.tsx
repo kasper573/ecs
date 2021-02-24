@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import { useCrudDialogs } from "./useCrudDialogs";
 import {
   ComponentIcon,
   EntityIcon,
@@ -12,11 +11,7 @@ import { EditorState } from "./types/EditorState";
 import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { Row } from "./Row";
 import { CrudList } from "./CrudList";
-import { SerializableSystem } from "./types/SerializableSystem";
-import { SerializableScene } from "./types/SerializableScene";
-import { SerializableEntity } from "./types/SerializableEntity";
-import { SerializableComponent } from "./types/SerializableComponent";
-import { SerializableProperty } from "./types/SerializableProperty";
+import { useCrudDialogsFor } from "./useCrudDialogsFor";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -32,57 +27,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
   });
   const selected = selectEditorObjects(state);
 
-  const [systemEvents, SystemDialogs] = useCrudDialogs<SerializableSystem>({
-    createDialogTitle: "Add system",
-    getItemName,
-    onCreateItem: (name) => dispatch({ type: "CREATE_SYSTEM", name }),
-    onRenameItem: (system, name) =>
-      dispatch({ type: "RENAME_SYSTEM", system, name }),
-    onDeleteItem: (system) => dispatch({ type: "DELETE_SYSTEM", system }),
-  });
-
-  const [sceneEvents, SceneDialogs] = useCrudDialogs<SerializableScene>({
-    createDialogTitle: "Add scene",
-    getItemName,
-    onCreateItem: (name) => dispatch({ type: "CREATE_SCENE", name }),
-    onRenameItem: (scene, name) =>
-      dispatch({ type: "RENAME_SCENE", scene, name }),
-    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", scene }),
-  });
-
-  const [entityEvents, EntityDialogs] = useCrudDialogs<SerializableEntity>({
-    createDialogTitle: "Add entity",
-    getItemName,
-    onCreateItem: (name) => dispatch({ type: "CREATE_ENTITY", name }),
-    onRenameItem: (entity, name) =>
-      dispatch({ type: "RENAME_ENTITY", entity, name }),
-    onDeleteItem: (entity) => dispatch({ type: "DELETE_ENTITY", entity }),
-  });
-
-  const [
-    componentEvents,
-    ComponentDialogs,
-  ] = useCrudDialogs<SerializableComponent>({
-    createDialogTitle: "Add component",
-    getItemName,
-    onCreateItem: (name) => dispatch({ type: "CREATE_COMPONENT", name }),
-    onRenameItem: (component, name) =>
-      dispatch({ type: "RENAME_COMPONENT", component, name }),
-    onDeleteItem: (component) =>
-      dispatch({ type: "DELETE_COMPONENT", component }),
-  });
-
-  const [
-    propertyEvents,
-    PropertyDialogs,
-  ] = useCrudDialogs<SerializableProperty>({
-    createDialogTitle: "Add property",
-    getItemName,
-    onCreateItem: (name) => dispatch({ type: "CREATE_PROPERTY", name }),
-    onRenameItem: (property, name) =>
-      dispatch({ type: "RENAME_PROPERTY", property, name }),
-    onDeleteItem: (property) => dispatch({ type: "DELETE_PROPERTY", property }),
-  });
+  const [systemEvents, SystemDialogs] = useCrudDialogsFor("system", dispatch);
+  const [sceneEvents, SceneDialogs] = useCrudDialogsFor("scene", dispatch);
+  const [entityEvents, EntityDialogs] = useCrudDialogsFor("entity", dispatch);
+  const [cmpEvents, CmpDialogs] = useCrudDialogsFor("component", dispatch);
+  const [propEvents, PropDialogs] = useCrudDialogsFor("property", dispatch);
 
   return (
     <Row>
@@ -128,9 +77,9 @@ export const Editor = ({ defaultState }: EditorProps) => {
         onSelectItem={(component) =>
           dispatch({ type: "SELECT_COMPONENT", component })
         }
-        {...componentEvents}
+        {...cmpEvents}
       />
-      <ComponentDialogs />
+      <CmpDialogs />
 
       <CrudList
         name="property"
@@ -142,14 +91,12 @@ export const Editor = ({ defaultState }: EditorProps) => {
         onSelectItem={(property) =>
           dispatch({ type: "SELECT_PROPERTY", property })
         }
-        {...propertyEvents}
+        {...propEvents}
       />
-      <PropertyDialogs />
+      <PropDialogs />
     </Row>
   );
 };
-
-const getItemName = ({ name }: { name: string }) => name;
 
 const getCommonItemProps = ({ name }: { name: string }) => ({ name });
 
