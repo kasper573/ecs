@@ -48,6 +48,9 @@ export const createComponent = (name: string): SerializableComponent => ({
     createProperty("propertyC", "value C"),
     createProperty("propertyD", "value D"),
     createProperty("propertyE", "value E"),
+    createProperty("propertyF", "value F"),
+    createProperty("propertyG", "value G"),
+    createProperty("propertyH", "value H"),
   ],
 });
 
