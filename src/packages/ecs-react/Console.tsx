@@ -26,7 +26,6 @@ export const Console = ({ children, onCommand, ...props }: ConsoleProps) => {
           value={command}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          onBlur={(e) => e.target.focus()}
         />
       </InputFieldContainer>
     </Container>
