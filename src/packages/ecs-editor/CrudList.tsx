@@ -5,44 +5,47 @@ import { CrudListItem, CrudListItemProps } from "./CrudListItem";
 import { CrudListSubheader } from "./CrudListSubheader";
 import { noop } from "./noop";
 
-export type CrudListProps<T> = Omit<ListProps, "onChange"> &
-  Pick<CrudListItemProps, "name" | "icon"> & {
-    /**
-     * The list of items to display
-     */
-    items: T[];
-    /**
-     * The item that should be highlighted as active in the list.
-     * (Should be controlled by the item emitted by onSelectItem)
-     */
-    active?: T;
-    /**
-     * Resolves the CrudListItemProps to pass on to each rendered CrudListItem
-     */
-    getItemProps?: (item: T) => Partial<CrudListItemProps>;
-    /**
-     * Called when an item is selected
-     */
-    onSelectItem?: (item: T) => void;
-    /**
-     * Called when the Add new item button is pressed
-     */
-    onCreateItem?: () => void;
-    /**
-     * Called when the edit button for an item is pressed
-     */
-    onUpdateItem?: (item: T) => void;
-    /**
-     * Called when the delete button for an item is pressed
-     * @param item
-     */
-    onDeleteItem?: (item: T) => void;
-    /**
-     * Set to false to disable item selection.
-     * Defaults to true.
-     */
-    selectable?: boolean;
-  };
+export type CrudListProps<T> = Omit<ListProps, "onChange"> & {
+  /**
+   * The name to use as title
+   */
+  name: string;
+  /**
+   * The list of items to display
+   */
+  items: T[];
+  /**
+   * The item that should be highlighted as active in the list.
+   * (Should be controlled by the item emitted by onSelectItem)
+   */
+  active?: T;
+  /**
+   * Resolves the CrudListItemProps to pass on to each rendered CrudListItem
+   */
+  getItemProps?: (item: T) => Partial<CrudListItemProps>;
+  /**
+   * Called when an item is selected
+   */
+  onSelectItem?: (item: T) => void;
+  /**
+   * Called when the Add new item button is pressed
+   */
+  onCreateItem?: () => void;
+  /**
+   * Called when the edit button for an item is pressed
+   */
+  onUpdateItem?: (item: T) => void;
+  /**
+   * Called when the delete button for an item is pressed
+   * @param item
+   */
+  onDeleteItem?: (item: T) => void;
+  /**
+   * Set to false to disable item selection.
+   * Defaults to true.
+   */
+  selectable?: boolean;
+};
 
 /**
  * A List that exposes UI actions for select, create, update and
@@ -50,7 +53,6 @@ export type CrudListProps<T> = Omit<ListProps, "onChange"> &
  */
 export function CrudList<T>({
   name,
-  icon,
   items,
   active,
   selectable = true,
@@ -70,7 +72,6 @@ export function CrudList<T>({
         <CrudListItem
           key={index}
           name={name}
-          icon={icon}
           onClick={() => selectable && onSelectItem(item)}
           onEdit={() => onUpdateItem(item)}
           onDelete={() => onDeleteItem(item)}
