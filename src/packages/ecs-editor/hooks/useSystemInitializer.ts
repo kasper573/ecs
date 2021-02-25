@@ -1,32 +1,29 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { System } from "../../ecs/System";
-import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { initializeSystem } from "../functions/initializeSystem";
 import { EditorObjects } from "../types/EditorObjects";
+import { useAsRef } from "../../use-as-ref/useAsRef";
 
+/**
+ * Automates system initialization (Initializes a System using a SerializedSystem).
+ * Creates a new System instance whenever `selected.system` changes.
+ * Will use the `selected.scene` as initial scene in each new System instance.
+ *
+ * Returns the most recent System instance and a function to trigger the system reinitialization manually.
+ */
 export const useSystemInitializer = (selected: EditorObjects) => {
   const [system, setSystem] = useState<System>();
-  const [, refresh] = useReducer((n) => n + 1, 0);
+  const selectedSceneNameRef = useAsRef(selected.scene?.name);
 
   const resetSystem = () => {
     if (selected.system) {
-      setSystem(initializeSystem(selected.system));
+      setSystem(
+        initializeSystem(selected.system, selectedSceneNameRef.current)
+      );
     }
   };
 
-  const gotoSelectedScene = () => {
-    const sm = system?.modules.findType(SceneManager);
-    const newSceneId = selected.scene?.name;
-    const didSceneChange = newSceneId !== sm?.sceneId;
-    if (didSceneChange && sm && system) {
-      sm.sceneId = newSceneId;
-      system.update();
-      refresh();
-    }
-  };
-
-  useEffect(resetSystem, [selected.system]);
-  useEffect(gotoSelectedScene, [selected.scene, system]);
+  useEffect(resetSystem, [selected.system, selectedSceneNameRef]);
 
   return [system, resetSystem] as const;
 };

@@ -22,6 +22,7 @@ import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
 import { useSystemInitializer } from "./hooks/useSystemInitializer";
+import { useSceneSync } from "./hooks/useSceneSync";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -38,6 +39,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
 
   const selected = selectEditorObjects(state);
   const [system, resetSystem] = useSystemInitializer(selected);
+  useSceneSync(system, selected, dispatch);
 
   const [systemEvents, SystemDialogs] = useCrudDialogsFor("system", dispatch);
   const [sceneEvents, SceneDialogs] = useCrudDialogsFor("scene", dispatch);

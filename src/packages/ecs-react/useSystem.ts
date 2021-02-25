@@ -1,15 +1,13 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import { System } from "../ecs/System";
+import { useSystemUpdate } from "./useSystemUpdate";
 
+/**
+ * Updates component whenever the specified system changes or updates.
+ */
 export const useSystem = (system: System) => {
-  const [, refresh] = useReducer((n) => n + 1, 0);
-  useEffect(() => {
-    const updateModule = {
-      update: refresh,
-    };
-    system.modules.push(updateModule);
-    return () => {
-      system.modules.remove(updateModule);
-    };
-  }, [system]);
+  const [, refresh] = useReducer(inc, 0);
+  useSystemUpdate(system, refresh);
 };
+
+const inc = (n: number) => n + 1;
