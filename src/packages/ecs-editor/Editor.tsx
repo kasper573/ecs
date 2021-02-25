@@ -1,9 +1,11 @@
 import React, { useReducer } from "react";
-import { Typography } from "@material-ui/core";
+import { IconButton, Tooltip, Typography } from "@material-ui/core";
+import { TextSystem } from "../ecs-react/TextSystem";
 import {
   ComponentIcon,
   EntityIcon,
   PropertyIcon,
+  ResetIcon,
   SceneIcon,
   SystemIcon,
 } from "./icons";
@@ -19,6 +21,7 @@ import { EditorTitle } from "./EditorTitle";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
+import { useSystemInitializer } from "./useSystemInitializer";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -32,7 +35,9 @@ export const Editor = ({ defaultState }: EditorProps) => {
     ...createDefaultState(),
     ...defaultState,
   });
+
   const selected = selectEditorObjects(state);
+  const [system, resetSystem] = useSystemInitializer(selected);
 
   const [systemEvents, SystemDialogs] = useCrudDialogsFor("system", dispatch);
   const [sceneEvents, SceneDialogs] = useCrudDialogsFor("scene", dispatch);
@@ -43,6 +48,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
   const appBar = (
     <>
       <EditorTitle>{selected.system?.name}</EditorTitle>
+      <Tooltip title="Reset system" onClick={resetSystem}>
+        <IconButton aria-label="reset system">
+          <ResetIcon />
+        </IconButton>
+      </Tooltip>
       <EditAndDeleteButtons
         name={selected.system?.name ?? ""}
         onEdit={() => systemEvents.onUpdateItem(selected.system)}
@@ -102,7 +112,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
       <EditorPanelContainer>
         {selected.scene && (
           <EditorFlatPanel title="Scene">
-            <Typography>{selected.scene.name}</Typography>
+            {system && <TextSystem system={system} />}
           </EditorFlatPanel>
         )}
         <EditorPanel title="Instances" name={EditorPanelName.Instances}>

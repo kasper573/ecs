@@ -10,4 +10,5 @@ export {
   Delete as DeleteIcon,
   Edit as EditIcon,
   Add as AddIcon,
+  RotateLeft as ResetIcon,
 } from "@material-ui/icons";
