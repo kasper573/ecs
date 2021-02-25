@@ -1,11 +1,11 @@
-import { System } from "../ecs/System";
-import { Inventory } from "../ecs-collectable/Inventory";
-import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
-import { SceneManager } from "../ecs-scene-manager/SceneManager";
-import { Entity } from "../ecs/Entity";
-import { Describable } from "../ecs-describable/Describable";
-import { SerializedSystem } from "./types/SerializedSystem";
-import { SerializedEntity } from "./types/SerializedEntity";
+import { System } from "../../ecs/System";
+import { Inventory } from "../../ecs-collectable/Inventory";
+import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
+import { SceneManager } from "../../ecs-scene-manager/SceneManager";
+import { Entity } from "../../ecs/Entity";
+import { Describable } from "../../ecs-describable/Describable";
+import { SerializedSystem } from "../types/SerializedSystem";
+import { SerializedEntity } from "../types/SerializedEntity";
 
 export const initializeSystem = (
   serializedSystem: SerializedSystem

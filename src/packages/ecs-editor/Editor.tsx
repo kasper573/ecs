@@ -14,14 +14,14 @@ import { EditorState } from "./types/EditorState";
 import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { EditorPanelContainer } from "./EditorPanelContainer";
 import { CrudList } from "./CrudList";
-import { useCrudDialogsFor } from "./useCrudDialogsFor";
+import { useCrudDialogsFor } from "./hooks/useCrudDialogsFor";
 import { AppBarAndDrawer } from "./AppBarAndDrawer";
 import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 import { EditorTitle } from "./EditorTitle";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
-import { useSystemInitializer } from "./useSystemInitializer";
+import { useSystemInitializer } from "./hooks/useSystemInitializer";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;

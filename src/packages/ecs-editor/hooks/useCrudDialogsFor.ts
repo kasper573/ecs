@@ -1,13 +1,13 @@
 import { Dispatch } from "react";
-import { useCrudDialogs } from "./useCrudDialogs";
-import { EditorObjectName, EditorObjects } from "./types/EditorObjects";
+import { EditorObjectName, EditorObjects } from "../types/EditorObjects";
 import {
   EditorActions,
   EditorObjectCreateAction,
   EditorObjectDeleteAction,
   EditorObjectRenameAction,
-} from "./types/EditorActions";
-import { createObjectActionType } from "./types/EditorObjectAction";
+} from "../types/EditorActions";
+import { createObjectActionType } from "../types/EditorObjectAction";
+import { useCrudDialogs } from "./useCrudDialogs";
 
 /**
  * Convenience wrapper for `useCrudDialogs.ts`.

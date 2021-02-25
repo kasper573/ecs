@@ -1,8 +1,8 @@
 import { useEffect, useReducer, useState } from "react";
-import { System } from "../ecs/System";
-import { SceneManager } from "../ecs-scene-manager/SceneManager";
-import { initializeSystem } from "./initializeSystem";
-import { EditorObjects } from "./types/EditorObjects";
+import { System } from "../../ecs/System";
+import { SceneManager } from "../../ecs-scene-manager/SceneManager";
+import { initializeSystem } from "../functions/initializeSystem";
+import { EditorObjects } from "../types/EditorObjects";
 
 export const useSystemInitializer = (selected: EditorObjects) => {
   const [system, setSystem] = useState<System>();

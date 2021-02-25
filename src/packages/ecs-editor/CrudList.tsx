@@ -2,7 +2,7 @@ import { List, ListProps } from "@material-ui/core";
 import React from "react";
 import { CrudListItem, CrudListItemProps } from "./CrudListItem";
 import { CrudListSubheader, CrudListSubheaderProps } from "./CrudListSubheader";
-import { noop } from "./noop";
+import { noop } from "./functions/noop";
 
 export type CrudListProps<T> = Omit<ListProps, "onChange"> &
   Partial<Pick<CrudListSubheaderProps, "title" | "noun">> & {
