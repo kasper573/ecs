@@ -11,6 +11,7 @@
     "react-dom": "^17.0.1",
     "serialize-javascript": "^5.0.1",
     "styled-components": "^5.2.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -83,6 +84,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/serialize-javascript": "^5.0.0",
     "@types/styled-components": "^5.1.4",
+    "@types/uuid": "^8.3.0",
     "@types/tmi.js": "^1.7.0",
     "babel-eslint": "^10.1.0",
     "cancelable-promise": "^3.2.0",

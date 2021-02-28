@@ -35,7 +35,7 @@ import { EditorFlatPanel } from "./EditorFlatPanel";
 import { useSystemInitializer } from "./hooks/useSystemInitializer";
 import { useSceneSync } from "./hooks/useSceneSync";
 import { useCrudDialogs } from "./hooks/useCrudDialogs";
-import { uid } from "./uid";
+import { uuid } from "./uuid";
 import { CrudListSubheader } from "./CrudListSubheader";
 
 export type EditorProps = {
@@ -93,7 +93,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_ENTITYDEFINITION",
-        entityDefinition: createEntityDefinition({ id: uid(), name }),
+        entityDefinition: createEntityDefinition({ id: uuid(), name }),
       }),
     onRenameItem: (entityDefinition, name) =>
       dispatch({
@@ -116,7 +116,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
         type: "CREATE_ENTITYINITIALIZER",
         entityInitializer: createEntityInitializer({
           id: id as EntityInitializerId,
-          definitionId: uid(),
+          definitionId: uuid(),
         }),
       }),
     onRenameItem: (entityInitializer, id) =>
