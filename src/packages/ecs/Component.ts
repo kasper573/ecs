@@ -8,12 +8,15 @@ export class Component<
 > {
   entity: TEntity extends Entity ? TEntity : never = trustedUndefined();
 
-  isActiveDefault: boolean = true;
+  public options: Partial<Options> = {};
 
-  constructor(protected options: Partial<Options> = {}) {}
+  constructor(options: Partial<Options> = {}) {
+    this.options.isActiveDefault = true;
+    this.options = { ...this.options, ...options };
+  }
 
   get isActive() {
-    return resolve(this.options.isActive) ?? this.isActiveDefault;
+    return resolve(this.options.isActive) ?? this.options.isActiveDefault;
   }
 
   update() {
@@ -24,6 +27,7 @@ export class Component<
 }
 
 export type ComponentOptions = {
+  isActiveDefault: boolean;
   isActive: Resolvable<boolean>;
   update: () => void | undefined;
 };
