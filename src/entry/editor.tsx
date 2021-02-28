@@ -3,7 +3,15 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "../reportWebVitals";
 import { Editor } from "../packages/ecs-editor/Editor";
 import { App } from "../packages/shared-components/App";
-import { createSystem } from "../packages/ecs-editor/functions/factories";
+import { createSystemDefinition } from "../packages/ecs-serializable/factories";
+import { Describable } from "../packages/ecs-describable/Describable";
+import { Collectable } from "../packages/ecs-collectable/Collectable";
+import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
+
+const availableComponents = {
+  describable: Describable,
+  collectable: Collectable,
+};
 
 function render() {
   ReactDOM.render(
@@ -11,11 +19,12 @@ function render() {
       <App>
         <Editor
           defaultState={{
+            nativeComponents: availableComponents,
             systems: [
-              createSystem("System A"),
-              createSystem("System B"),
-              createSystem("System C"),
-            ],
+              createSystemDefinition({ name: "System A" }, availableComponents),
+              createSystemDefinition({ name: "System B" }, availableComponents),
+              createSystemDefinition({ name: "System C" }, availableComponents),
+            ] as SystemDefinition[],
           }}
         />
       </App>

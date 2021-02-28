@@ -1,5 +1,5 @@
 import { EditorObjects } from "../types/EditorObjects";
-import { SerializedSystem } from "../types/SerializedSystem";
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { EditorState } from "../types/EditorState";
 
 /**
@@ -8,17 +8,17 @@ import { EditorState } from "../types/EditorState";
 export const selectEditorObjects = ({
   systems,
   selection,
-}: EditorState): EditorObjects => {
-  const system = systems[selection.system] as SerializedSystem | undefined;
+}: EditorState): Partial<EditorObjects> => {
+  const system = systems[selection.system] as SystemDefinition | undefined;
   const scene = system?.scenes[selection.scene];
-  const entity = scene?.entities[selection.entity];
-  const component = entity?.components[selection.component];
-  const property = component?.properties[selection.property];
+  const instance = scene?.entities[selection.entityInitializer];
+  const entity = system?.library.entities[selection.entityDefinition];
+  const component = system?.library.components[selection.componentDefinition];
   return {
     system,
     scene,
-    entity,
-    component,
-    property,
+    entityInitializer: instance,
+    entityDefinition: entity,
+    componentDefinition: component,
   };
 };

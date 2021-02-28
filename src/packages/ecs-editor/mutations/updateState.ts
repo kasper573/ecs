@@ -1,21 +1,20 @@
 import { without } from "lodash";
 import {
-  createComponent,
-  createEntity,
-  createProperty,
-  createScene,
-  createSystem,
-} from "../functions/factories";
+  createEntityDefinition,
+  createEntityInitializer,
+  createSceneDefinition,
+  createSystemDefinition,
+} from "../../ecs-serializable/factories";
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { EditorActions } from "../types/EditorActions";
-import { updateComponent } from "./updateComponent";
-import { updateEntity } from "./updateEntity";
+import { updateEntityDefinition } from "./updateEntityDefinition";
 import { reactToDelete } from "./reactToDelete";
 import { updateScene } from "./updateScene";
 import { updateSystem } from "./updateSystem";
-import { setSelection } from "./setSelection";
-import { updateProperty } from "./updateProperty";
+import { selectObject } from "./selectObject";
+import { updateLibrary } from "./updateLibrary";
+import { updateEntityInitializer } from "./updateEntityInitializer";
 
 /**
  * Controls all state changes for the editor.
@@ -33,7 +32,10 @@ export function updateState(
     case "CREATE_SYSTEM":
       return {
         ...state,
-        systems: [...state.systems, createSystem(action.name)],
+        systems: [
+          ...state.systems,
+          createSystemDefinition(action.system, state.nativeComponents),
+        ],
       };
     case "DELETE_SYSTEM": {
       const deletedState = {
@@ -42,21 +44,21 @@ export function updateState(
       };
       return reactToDelete(state, deletedState, "system", action.system);
     }
-    case "RENAME_SYSTEM":
-      return updateSystem(state, action.system, { name: action.name });
+    case "UPDATE_SYSTEM":
+      return updateSystem(state, action.system, action.update);
     case "SELECT_SYSTEM":
-      const index = state.systems.indexOf(action.system);
-      if (index !== -1) {
-        return setSelection(state, "system", index);
-      }
-      break;
+      return selectObject(
+        state,
+        "system",
+        state.systems.indexOf(action.system)
+      );
 
     // Scenes
     case "CREATE_SCENE": {
       const { system } = selectEditorObjects(state);
       if (system) {
         return updateSystem(state, system, {
-          scenes: [...system.scenes, createScene(action.name)],
+          scenes: [...system.scenes, createSceneDefinition(action.scene)],
         });
       }
       break;
@@ -71,116 +73,105 @@ export function updateState(
       }
       break;
     }
-    case "RENAME_SCENE":
-      return updateScene(state, action.scene, { name: action.name });
+    case "UPDATE_SCENE":
+      return updateScene(state, action.scene, action.update);
     case "SELECT_SCENE": {
       const { system } = selectEditorObjects(state);
-      const index = system?.scenes.indexOf(action.scene);
-      if (index !== undefined && index !== -1) {
-        return setSelection(state, "scene", index);
-      }
-      break;
+      return selectObject(state, "scene", system?.scenes.indexOf(action.scene));
     }
 
-    // Entities
-    case "CREATE_ENTITY": {
+    // Entity instances
+    case "CREATE_ENTITYINITIALIZER": {
       const { scene } = selectEditorObjects(state);
       if (scene) {
         return updateScene(state, scene, {
-          entities: [...scene.entities, createEntity(action.name)],
-        });
-      }
-      break;
-    }
-    case "DELETE_ENTITY": {
-      const selected = selectEditorObjects(state);
-      if (selected.scene) {
-        const deletedState = updateScene(state, selected.scene, {
-          entities: without(selected.scene.entities, action.entity),
-        });
-        return reactToDelete(state, deletedState, "entity", action.entity);
-      }
-      break;
-    }
-    case "RENAME_ENTITY":
-      return updateEntity(state, action.entity, { name: action.name });
-    case "SELECT_ENTITY": {
-      const { scene } = selectEditorObjects(state);
-      const index = scene?.entities.indexOf(action.entity);
-      if (index !== undefined && index !== -1) {
-        return setSelection(state, "entity", index);
-      }
-      break;
-    }
-
-    // Components
-    case "CREATE_COMPONENT": {
-      const { entity } = selectEditorObjects(state);
-      if (entity) {
-        return updateEntity(state, entity, {
-          components: [...entity.components, createComponent(action.name)],
-        });
-      }
-      break;
-    }
-    case "DELETE_COMPONENT": {
-      const selected = selectEditorObjects(state);
-      if (selected.entity) {
-        const deletedState = updateEntity(state, selected.entity, {
-          components: without(selected.entity.components, action.component),
-        });
-        return reactToDelete(
-          state,
-          deletedState,
-          "component",
-          action.component
-        );
-      }
-      break;
-    }
-    case "RENAME_COMPONENT":
-      return updateComponent(state, action.component, { name: action.name });
-    case "SELECT_COMPONENT": {
-      const { entity } = selectEditorObjects(state);
-      const index = entity?.components.indexOf(action.component);
-      if (index !== undefined && index !== -1) {
-        return setSelection(state, "component", index);
-      }
-      break;
-    }
-
-    // Properties
-    case "CREATE_PROPERTY": {
-      const { component } = selectEditorObjects(state);
-      if (component) {
-        return updateComponent(state, component, {
-          properties: [
-            ...component.properties,
-            createProperty(action.name, action.name),
+          entities: [
+            ...scene.entities,
+            createEntityInitializer(action.entityInitializer),
           ],
         });
       }
       break;
     }
-    case "DELETE_PROPERTY": {
+    case "DELETE_ENTITYINITIALIZER": {
       const selected = selectEditorObjects(state);
-      if (selected.component) {
-        const deletedState = updateComponent(state, selected.component, {
-          properties: without(selected.component.properties, action.property),
+      if (selected.scene) {
+        const deletedState = updateScene(state, selected.scene, {
+          entities: without(selected.scene.entities, action.entityInitializer),
         });
-        return reactToDelete(state, deletedState, "property", action.property);
+        return reactToDelete(
+          state,
+          deletedState,
+          "entityInitializer",
+          action.entityInitializer
+        );
       }
       break;
     }
-    case "RENAME_PROPERTY":
-      return updateProperty(state, action.property, { name: action.name });
-    case "SELECT_PROPERTY": {
-      const { component } = selectEditorObjects(state);
-      const index = component?.properties.indexOf(action.property);
-      if (index !== undefined && index !== -1) {
-        return setSelection(state, "property", index);
-      }
-      break;
+    case "UPDATE_ENTITYINITIALIZER":
+      return updateEntityInitializer(
+        state,
+        action.entityInitializer,
+        action.update
+      );
+    case "SELECT_ENTITYINITIALIZER": {
+      const { scene } = selectEditorObjects(state);
+      return selectObject(
+        state,
+        "entityInitializer",
+        scene?.entities.indexOf(action.entityInitializer)
+      );
+    }
+
+    // Entity definitions
+    case "CREATE_ENTITYDEFINITION": {
+      const selected = selectEditorObjects(state);
+      return updateLibrary(state, selected.system, ({ entities }) => ({
+        entities: [
+          ...entities,
+          createEntityDefinition(action.entityDefinition),
+        ],
+      }));
+    }
+    case "DELETE_ENTITYDEFINITION": {
+      const selected = selectEditorObjects(state);
+      const deletedState = updateLibrary(
+        state,
+        selected.system,
+        ({ entities }) => ({
+          entities: without(entities, action.entityDefinition),
+        })
+      );
+      return reactToDelete(
+        state,
+        deletedState,
+        "entityDefinition",
+        action.entityDefinition
+      );
+    }
+    case "UPDATE_ENTITYDEFINITION":
+      return updateEntityDefinition(
+        state,
+        action.entityDefinition,
+        action.update
+      );
+    case "SELECT_ENTITYDEFINITION": {
+      const { system } = selectEditorObjects(state);
+      return selectObject(
+        state,
+        "entityDefinition",
+        system?.library.entities.indexOf(action.entityDefinition)
+      );
+    }
+
+    // Component definitions
+    case "SELECT_COMPONENTDEFINITION": {
+      const { system } = selectEditorObjects(state);
+      return selectObject(
+        state,
+        "componentDefinition",
+        system?.library.components.indexOf(action.componentDefinition)
+      );
     }
   }
   return state;

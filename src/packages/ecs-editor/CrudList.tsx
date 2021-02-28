@@ -2,7 +2,6 @@ import { List, ListProps } from "@material-ui/core";
 import React from "react";
 import { CrudListItem, CrudListItemProps } from "./CrudListItem";
 import { CrudListSubheader, CrudListSubheaderProps } from "./CrudListSubheader";
-import { noop } from "./functions/noop";
 
 export type CrudListProps<T> = Omit<ListProps, "onChange"> &
   Partial<Pick<CrudListSubheaderProps, "title" | "noun">> & {
@@ -21,6 +20,7 @@ export type CrudListProps<T> = Omit<ListProps, "onChange"> &
     getItemProps?: (item: T) => Partial<CrudListItemProps>;
     /**
      * Called when an item is selected
+     * (Items not selectable if this callback is not specified)
      */
     onSelectItem?: (item: T) => void;
     /**
@@ -29,15 +29,17 @@ export type CrudListProps<T> = Omit<ListProps, "onChange"> &
     onCreateItem?: () => void;
     /**
      * Called when the edit button for an item is pressed
+     * (No create button is shown if this callback is not specified)
      */
     onUpdateItem?: (item: T) => void;
     /**
-     * Called when the delete button for an item is pressed
-     * @param item
+     * Called when the delete button for an item is pressed.
+     * (No edit button is shown if this callback is not specified)
      */
     onDeleteItem?: (item: T) => void;
     /**
      * Set to false to disable item selection.
+     * (No delete button is shown if this callback is not specified)
      * Defaults to true.
      */
     selectable?: boolean;
@@ -52,14 +54,14 @@ export function CrudList<T>({
   noun,
   items,
   active,
-  selectable = true,
   getItemProps = () => ({}),
-  onSelectItem = noop,
-  onCreateItem = noop,
-  onUpdateItem = noop,
-  onDeleteItem = noop,
+  onSelectItem,
+  onCreateItem,
+  onUpdateItem,
+  onDeleteItem,
   ...listProps
 }: CrudListProps<T>) {
+  const selectable = !!onSelectItem;
   return (
     <List
       subheader={
@@ -77,9 +79,9 @@ export function CrudList<T>({
         <CrudListItem
           key={index}
           name={noun ?? `Item ${index + 1}`}
-          onClick={() => selectable && onSelectItem(item)}
-          onEdit={() => onUpdateItem(item)}
-          onDelete={() => onDeleteItem(item)}
+          onClick={onSelectItem ? () => onSelectItem(item) : undefined}
+          onEdit={onUpdateItem ? () => onUpdateItem(item) : undefined}
+          onDelete={onDeleteItem ? () => onDeleteItem(item) : undefined}
           selected={selectable && active === item}
           button={selectable}
           {...getItemProps(item)}

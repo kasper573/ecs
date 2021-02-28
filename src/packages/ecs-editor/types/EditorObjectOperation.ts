@@ -1,4 +1,4 @@
 /**
  * Common object operations
  */
-export type EditorObjectOperation = "create" | "rename" | "delete" | "select";
+export type EditorObjectOperation = "create" | "update" | "delete" | "select";

@@ -1,10 +1,25 @@
 import React, { useReducer } from "react";
-import { IconButton, Tooltip, Typography } from "@material-ui/core";
+import { IconButton, List, Tooltip, Typography } from "@material-ui/core";
 import { TextSystem } from "../ecs-react/TextSystem";
+import { SystemDefinition } from "../ecs-serializable/types/SystemDefinition";
+import {
+  createEntityDefinition,
+  createEntityInitializer,
+  createSceneDefinition,
+  createSystemDefinition,
+} from "../ecs-serializable/factories";
+import { SceneDefinition } from "../ecs-serializable/types/SceneDefinition";
+import { EntityDefinition } from "../ecs-serializable/types/EntityDefinition";
+import {
+  EntityInitializer,
+  EntityInitializerId,
+} from "../ecs-serializable/types/EntityInitializer";
 import {
   ComponentIcon,
-  EntityIcon,
-  PropertyIcon,
+  DeleteIcon,
+  EditIcon,
+  EntityDefinitionIcon,
+  EntityInitializerIcon,
   ResetIcon,
   SceneIcon,
   SystemIcon,
@@ -14,15 +29,16 @@ import { EditorState } from "./types/EditorState";
 import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { EditorPanelContainer } from "./EditorPanelContainer";
 import { CrudList } from "./CrudList";
-import { useCrudDialogsFor } from "./hooks/useCrudDialogsFor";
 import { AppBarAndDrawer } from "./AppBarAndDrawer";
-import { EditAndDeleteButtons } from "./EditAndDeleteButtons";
 import { EditorTitle } from "./EditorTitle";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
 import { useSystemInitializer } from "./hooks/useSystemInitializer";
 import { useSceneSync } from "./hooks/useSceneSync";
+import { useCrudDialogs } from "./hooks/useCrudDialogs";
+import { uid } from "./uid";
+import { CrudListSubheader } from "./CrudListSubheader";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -38,14 +54,82 @@ export const Editor = ({ defaultState }: EditorProps) => {
   });
 
   const selected = selectEditorObjects(state);
-  const [system, resetSystem] = useSystemInitializer(selected);
+  const [system, resetSystem] = useSystemInitializer(
+    selected,
+    state.nativeComponents
+  );
   useSceneSync(system, selected, dispatch);
 
-  const [systemEvents, SystemDialogs] = useCrudDialogsFor("system", dispatch);
-  const [sceneEvents, SceneDialogs] = useCrudDialogsFor("scene", dispatch);
-  const [entityEvents, EntityDialogs] = useCrudDialogsFor("entity", dispatch);
-  const [cmpEvents, CmpDialogs] = useCrudDialogsFor("component", dispatch);
-  const [propEvents, PropDialogs] = useCrudDialogsFor("property", dispatch);
+  const [systemEvents, SystemDialogs] = useCrudDialogs<SystemDefinition>({
+    createDialogTitle: "Add system",
+    getItemName: (item) => item.name,
+    onCreateItem: (name) =>
+      dispatch({
+        type: "CREATE_SYSTEM",
+        system: createSystemDefinition({ name }, state.nativeComponents),
+      }),
+    onRenameItem: (system, name) =>
+      dispatch({ type: "UPDATE_SYSTEM", system, update: { name } }),
+    onDeleteItem: (system) => dispatch({ type: "DELETE_SYSTEM", system }),
+  });
+
+  const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
+    createDialogTitle: "Add scene",
+    getItemName: (item) => item.name,
+    onCreateItem: (name) =>
+      dispatch({
+        type: "CREATE_SCENE",
+        scene: createSceneDefinition({ name }),
+      }),
+    onRenameItem: (scene, name) =>
+      dispatch({ type: "UPDATE_SCENE", scene, update: { name } }),
+    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", scene }),
+  });
+
+  const [
+    entityDefinitionEvents,
+    EntityDefinitionDialogs,
+  ] = useCrudDialogs<EntityDefinition>({
+    createDialogTitle: "Add entity",
+    getItemName: (item) => item.name,
+    onCreateItem: (name) =>
+      dispatch({
+        type: "CREATE_ENTITYDEFINITION",
+        entityDefinition: createEntityDefinition({ id: uid(), name }),
+      }),
+    onRenameItem: (entityDefinition, name) =>
+      dispatch({
+        type: "UPDATE_ENTITYDEFINITION",
+        entityDefinition,
+        update: { name },
+      }),
+    onDeleteItem: (entityDefinition) =>
+      dispatch({ type: "DELETE_ENTITYDEFINITION", entityDefinition }),
+  });
+
+  const [
+    entityInitializerEvents,
+    EntityInitializerDialogs,
+  ] = useCrudDialogs<EntityInitializer>({
+    createDialogTitle: "Add entity instance",
+    getItemName: (item) => item.id,
+    onCreateItem: (id) =>
+      dispatch({
+        type: "CREATE_ENTITYINITIALIZER",
+        entityInitializer: createEntityInitializer({
+          id: id as EntityInitializerId,
+          definitionId: uid(),
+        }),
+      }),
+    onRenameItem: (entityInitializer, id) =>
+      dispatch({
+        type: "UPDATE_ENTITYINITIALIZER",
+        entityInitializer,
+        update: { id: id as EntityInitializerId },
+      }),
+    onDeleteItem: (entityInitializer) =>
+      dispatch({ type: "DELETE_ENTITYINITIALIZER", entityInitializer }),
+  });
 
   const appBar = (
     <>
@@ -55,11 +139,22 @@ export const Editor = ({ defaultState }: EditorProps) => {
           <ResetIcon />
         </IconButton>
       </Tooltip>
-      <EditAndDeleteButtons
-        name={selected.system?.name ?? ""}
-        onEdit={() => systemEvents.onUpdateItem(selected.system)}
-        onDelete={() => systemEvents.onDeleteItem(selected.system)}
-      />
+      <Tooltip title={`Edit ${selected.system?.name}`}>
+        <IconButton
+          aria-label="edit"
+          onClick={() => systemEvents.onUpdateItem(selected.system!)}
+        >
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        title={`Delete ${selected.system?.name}`}
+        onClick={() => systemEvents.onDeleteItem(selected.system!)}
+      >
+        <IconButton edge="end" aria-label="delete">
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 
@@ -71,12 +166,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
       items={state.systems}
       onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
       onCreateItem={systemEvents.onCreateItem}
-      getItemProps={({ name }) => ({
-        name,
-        icon: SystemIcon,
-        showEdit: false,
-        showDelete: false,
-      })}
+      getItemProps={({ name }) => ({ name, icon: SystemIcon })}
     />
   );
 
@@ -84,9 +174,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
     <>
       <SystemDialogs />
       <SceneDialogs />
-      <EntityDialogs />
-      <CmpDialogs />
-      <PropDialogs />
+      <EntityDefinitionDialogs />
+      <EntityInitializerDialogs />
     </>
   );
 
@@ -108,18 +197,22 @@ export const Editor = ({ defaultState }: EditorProps) => {
     );
   }
 
+  // System and Scene available and selected
   return (
     <AppBarAndDrawer appBar={appBar} drawer={drawer}>
       {dialogs}
       <EditorPanelContainer>
-        {selected.scene && (
-          <EditorFlatPanel title="Scene">
-            {system && <TextSystem system={system} />}
-          </EditorFlatPanel>
-        )}
-        <EditorPanel title="Instances" name={EditorPanelName.Instances}>
-          Instances
-        </EditorPanel>
+        <EditorFlatPanel title="Scene">
+          {selected.scene ? (
+            system && <TextSystem system={system} />
+          ) : (
+            <Typography>
+              {selected.system.scenes.length > 0
+                ? "Please select a scene"
+                : "Please create a scene"}
+            </Typography>
+          )}
+        </EditorFlatPanel>
         <EditorPanel title="Scenes" name={EditorPanelName.Scenes}>
           <CrudList
             title={EditorPanelName.Scenes}
@@ -131,41 +224,49 @@ export const Editor = ({ defaultState }: EditorProps) => {
             {...sceneEvents}
           />
         </EditorPanel>
+        <EditorPanel title="Instances" name={EditorPanelName.Instances}>
+          <CrudList
+            title={EditorPanelName.Instances}
+            noun="instance"
+            active={selected.entityInitializer}
+            items={selected.scene?.entities ?? []}
+            getItemProps={({ id }) => ({
+              name: id,
+              icon: EntityInitializerIcon,
+            })}
+            onSelectItem={(entityInitializer) =>
+              dispatch({ type: "SELECT_ENTITYINITIALIZER", entityInitializer })
+            }
+            {...entityInitializerEvents}
+          />
+        </EditorPanel>
         <EditorPanel title="Library" name={EditorPanelName.Library}>
           <CrudList
             title={EditorPanelName.Library}
             noun="entity"
-            active={selected.entity}
-            items={selected.scene?.entities ?? []}
-            getItemProps={({ name }) => ({ name, icon: EntityIcon })}
-            onSelectItem={(entity) =>
-              dispatch({ type: "SELECT_ENTITY", entity })
+            active={selected.entityDefinition}
+            items={selected.system?.library.entities ?? []}
+            getItemProps={({ name }) => ({ name, icon: EntityDefinitionIcon })}
+            onSelectItem={(entityDefinition) =>
+              dispatch({ type: "SELECT_ENTITYDEFINITION", entityDefinition })
             }
-            {...entityEvents}
+            {...entityDefinitionEvents}
           />
           <CrudList
-            active={selected.component}
-            items={selected.entity?.components ?? []}
+            title="Components"
+            active={selected.componentDefinition}
+            items={selected.system?.library.components ?? []}
             getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
-            onSelectItem={(component) =>
-              dispatch({ type: "SELECT_COMPONENT", component })
+            onSelectItem={(componentDefinition) =>
+              dispatch({
+                type: "SELECT_COMPONENTDEFINITION",
+                componentDefinition,
+              })
             }
-            {...cmpEvents}
           />
         </EditorPanel>
         <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
-          <CrudList
-            title={EditorPanelName.Inspector}
-            noun="property"
-            active={selected.property}
-            items={selected.component?.properties ?? []}
-            selectable={false}
-            getItemProps={({ name }) => ({ name, icon: PropertyIcon })}
-            onSelectItem={(property) =>
-              dispatch({ type: "SELECT_PROPERTY", property })
-            }
-            {...propEvents}
-          />
+          <List subheader={<CrudListSubheader title="Inspector" />} />
         </EditorPanel>
       </EditorPanelContainer>
     </AppBarAndDrawer>
@@ -173,12 +274,14 @@ export const Editor = ({ defaultState }: EditorProps) => {
 };
 
 const createDefaultState = (): EditorState => ({
+  nativeComponents: {},
+  systems: [],
   selection: {
     system: 0,
-    component: 0,
-    entity: 0,
-    property: 0,
+    componentInitializer: 0,
+    componentDefinition: 0,
+    entityInitializer: 0,
+    entityDefinition: 0,
     scene: 0,
   },
-  systems: [],
 });

@@ -1,18 +1,20 @@
-import { SerializedSystem } from "./SerializedSystem";
-import { SerializedScene } from "./SerializedScene";
-import { SerializedEntity } from "./SerializedEntity";
-import { SerializedComponent } from "./SerializedComponent";
-import { SerializedProperty } from "./SerializedProperty";
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 
 /**
  * All known objects in the editor
  */
 export type EditorObjects = {
-  system?: SerializedSystem;
-  scene?: SerializedScene;
-  entity?: SerializedEntity;
-  component?: SerializedComponent;
-  property?: SerializedProperty;
+  system: SystemDefinition;
+  scene: SceneDefinition;
+  entityInitializer: EntityInitializer;
+  entityDefinition: EntityDefinition;
+  componentInitializer: ComponentInitializer;
+  componentDefinition: ComponentDefinition;
 };
 
 /**
@@ -23,7 +25,7 @@ export type EditorObjectName = keyof EditorObjects;
 /**
  * Types of all the known objects in the editor
  */
-export type EditorObject = Exclude<EditorObjects[EditorObjectName], undefined>;
+export type EditorObject = EditorObjects[EditorObjectName];
 
 /**
  * The hierarchical order of all editor objects.
@@ -31,7 +33,8 @@ export type EditorObject = Exclude<EditorObjects[EditorObjectName], undefined>;
 export const editorObjectsOrder: Array<keyof EditorObjects> = [
   "system",
   "scene",
-  "entity",
-  "component",
-  "property",
+  "entityInitializer",
+  "entityDefinition",
+  "componentInitializer",
+  "componentDefinition",
 ];

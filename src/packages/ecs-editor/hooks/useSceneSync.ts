@@ -11,7 +11,7 @@ import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
  */
 export const useSceneSync = (
   system: System | undefined,
-  selected: EditorObjects,
+  selected: Partial<EditorObjects>,
   dispatch: Dispatch<EditorActions>
 ) => {
   const [, refresh] = useReducer((n) => n + 1, 0);

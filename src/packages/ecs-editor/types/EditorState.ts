@@ -1,5 +1,6 @@
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { EditorSelection } from "./EditorSelection";
-import { SerializedSystem } from "./SerializedSystem";
 
 /**
  * Immutable state representing the current state of the editor.
@@ -8,9 +9,14 @@ import { SerializedSystem } from "./SerializedSystem";
  */
 export type EditorState = {
   /**
-   * The ECS trees serialized
+   * The native components needed by the
+   * ComponentDefinitions in the system libraries
    */
-  systems: SerializedSystem[];
+  nativeComponents: NativeComponents;
+  /**
+   * ECS definitions
+   */
+  systems: SystemDefinition[];
   /**
    * The current selection in the UI
    */

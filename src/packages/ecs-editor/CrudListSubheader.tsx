@@ -19,8 +19,9 @@ export type CrudListSubheaderProps = {
   noun?: string;
   /**
    * Called when the create button is pressed
+   * (No create button is shown if this callback is not specified)
    */
-  onCreate: () => void;
+  onCreate?: () => void;
 };
 
 /**
@@ -33,13 +34,15 @@ export const CrudListSubheader = ({
 }: CrudListSubheaderProps) => (
   <Container>
     {title}
-    <ListItemSecondaryAction>
-      <Tooltip title={`Add ${noun}`.trim()}>
-        <IconButton edge="end" aria-label="delete" onClick={onCreate}>
-          <AddIcon />
-        </IconButton>
-      </Tooltip>
-    </ListItemSecondaryAction>
+    {onCreate && (
+      <ListItemSecondaryAction>
+        <Tooltip title={`Add ${noun}`.trim()}>
+          <IconButton edge="end" aria-label="delete" onClick={onCreate}>
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    )}
   </Container>
 );
 

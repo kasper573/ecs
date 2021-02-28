@@ -5,18 +5,20 @@ import { EditorObjectName, EditorObjects } from "./EditorObjects";
 
 export type EditorObjectCreateAction<
   ObjectName extends EditorObjectName
-> = EditorObjectAction<"create", ObjectName, { name: string }>;
+> = EditorObjectAction<"create", ObjectName, EditorObjectPayload<ObjectName>>;
 
 export type EditorObjectDeleteAction<
   ObjectName extends EditorObjectName
 > = EditorObjectAction<"delete", ObjectName, EditorObjectPayload<ObjectName>>;
 
-export type EditorObjectRenameAction<
+export type EditorObjectUpdateAction<
   ObjectName extends EditorObjectName
 > = EditorObjectAction<
-  "rename",
+  "update",
   ObjectName,
-  EditorObjectPayload<ObjectName> & { name: string }
+  EditorObjectPayload<ObjectName> & {
+    update: Partial<EditorObjects[ObjectName]>;
+  }
 >;
 
 export type EditorObjectSelectAction<
@@ -25,7 +27,7 @@ export type EditorObjectSelectAction<
 
 export type EditorObjectPayload<ObjectName extends EditorObjectName> = Record<
   ObjectName,
-  Exclude<EditorObjects[ObjectName], undefined>
+  EditorObjects[ObjectName]
 >;
 
 // All editor actions
@@ -33,21 +35,22 @@ export type EditorObjectPayload<ObjectName extends EditorObjectName> = Record<
 export type EditorActions =
   | EditorObjectCreateAction<"system">
   | EditorObjectCreateAction<"scene">
-  | EditorObjectCreateAction<"entity">
-  | EditorObjectCreateAction<"component">
-  | EditorObjectCreateAction<"property">
-  | EditorObjectRenameAction<"system">
-  | EditorObjectRenameAction<"scene">
-  | EditorObjectRenameAction<"entity">
-  | EditorObjectRenameAction<"component">
-  | EditorObjectRenameAction<"property">
+  | EditorObjectCreateAction<"entityInitializer">
+  | EditorObjectCreateAction<"entityDefinition">
+  | EditorObjectCreateAction<"componentInitializer">
+  | EditorObjectUpdateAction<"system">
+  | EditorObjectUpdateAction<"scene">
+  | EditorObjectUpdateAction<"entityInitializer">
+  | EditorObjectUpdateAction<"entityDefinition">
+  | EditorObjectUpdateAction<"componentInitializer">
   | EditorObjectDeleteAction<"system">
   | EditorObjectDeleteAction<"scene">
-  | EditorObjectDeleteAction<"entity">
-  | EditorObjectDeleteAction<"component">
-  | EditorObjectDeleteAction<"property">
+  | EditorObjectDeleteAction<"entityInitializer">
+  | EditorObjectDeleteAction<"entityDefinition">
+  | EditorObjectDeleteAction<"componentInitializer">
   | EditorObjectSelectAction<"system">
   | EditorObjectSelectAction<"scene">
-  | EditorObjectSelectAction<"entity">
-  | EditorObjectSelectAction<"component">
-  | EditorObjectSelectAction<"property">;
+  | EditorObjectSelectAction<"entityInitializer">
+  | EditorObjectSelectAction<"entityDefinition">
+  | EditorObjectSelectAction<"componentInitializer">
+  | EditorObjectSelectAction<"componentDefinition">;

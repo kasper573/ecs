@@ -4,7 +4,8 @@
 export {
   Label as PropertyIcon,
   Map as SystemIcon,
-  Receipt as EntityIcon,
+  Receipt as EntityDefinitionIcon,
+  Receipt as EntityInitializerIcon,
   Room as SceneIcon,
   Settings as ComponentIcon,
   Delete as DeleteIcon,
