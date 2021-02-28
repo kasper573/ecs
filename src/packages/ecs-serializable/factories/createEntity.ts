@@ -4,7 +4,7 @@ import { EntityConstructorMap } from "../types/EntityConstructorMap";
 /**
  * Creates an Entity instance for the specified EntityInitializer
  */
-export const instantiateEntity = (
+export const createEntity = (
   { definitionId }: EntityInitializer,
   constructors: EntityConstructorMap
 ) => {

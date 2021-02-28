@@ -1,7 +1,7 @@
 import { EntityDefinition } from "../types/EntityDefinition";
 import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
 import { StatefulEntity } from "../../ecs/StatefulEntity";
-import { defineComponentOptions } from "./defineComponentOptions";
+import { createComponentOptions } from "./createComponentOptions";
 
 /**
  * Returns a Entity class representing the specified EntityDefinition.
@@ -26,7 +26,7 @@ export const defineEntity = (
         selectedComponents.map(([Component, options]) => {
           const component = new Component();
           if (options) {
-            component.options = defineComponentOptions(options);
+            component.options = createComponentOptions(options);
           }
           return component;
         })

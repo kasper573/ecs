@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { Entity } from "../ecs/Entity";
 import { Component, ComponentOptions } from "../ecs/Component";
-import { instantiateSystem } from "./factories/instantiateSystem";
+import { createSystem } from "./factories/createSystem";
 import { EntityInitializerId } from "./types/EntityInitializer";
 import {
   ComponentDefinition,
@@ -83,7 +83,7 @@ describe("instantiating a System using SystemDefinition", () => {
 
   it("succeeds when using serialized data", () => {
     const systemDefinition: SystemDefinition = JSON.parse(serializedSystem);
-    const system = instantiateSystem(systemDefinition, availableComponents);
+    const system = createSystem(systemDefinition, availableComponents);
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
@@ -132,7 +132,7 @@ describe("instantiating a System using SystemDefinition", () => {
       availableComponents
     );
 
-    expect(() => instantiateSystem(definition, availableComponents)).toThrow();
+    expect(() => createSystem(definition, availableComponents)).toThrow();
   });
 
   it("succeeds when using two components with different ids", () => {
@@ -194,7 +194,7 @@ export const mockSystem = (
   entities: EntityDefinition[],
   components: ComponentDefinition<typeof availableComponents>[] = []
 ) =>
-  instantiateSystem(
+  createSystem(
     createSystemDefinition(
       {
         name: "System A",

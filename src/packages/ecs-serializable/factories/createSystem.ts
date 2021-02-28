@@ -13,7 +13,7 @@ import { defineComponents } from "./defineComponents";
 /**
  * Creates a System instance for the specified SystemDefinition
  */
-export const instantiateSystem = <AvailableComponents extends NativeComponents>(
+export const createSystem = <AvailableComponents extends NativeComponents>(
   systemDefinition: SystemDefinition<AvailableComponents>,
   nativeComponents: AvailableComponents,
   preferredSceneId?: string

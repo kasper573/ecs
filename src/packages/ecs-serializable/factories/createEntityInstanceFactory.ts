@@ -4,7 +4,7 @@ import {
   EntityInitializerId,
 } from "../types/EntityInitializer";
 import { Entity } from "../../ecs/Entity";
-import { instantiateEntity } from "./instantiateEntity";
+import { createEntity } from "./createEntity";
 
 /**
  * Creates a factory that produces an Entity instance for each given EntityInitializer.
@@ -19,7 +19,7 @@ export const createEntityInstanceFactory = (
         `Entity instance with id "${initializer.id}" already exists`
       );
     }
-    const instance = instantiateEntity(initializer, constructors);
+    const instance = createEntity(initializer, constructors);
     instances.set(initializer.id, instance);
     return instance;
   };

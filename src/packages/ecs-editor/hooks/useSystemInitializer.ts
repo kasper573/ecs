@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { System } from "../../ecs/System";
-import { instantiateSystem } from "../../ecs-serializable/factories/instantiateSystem";
+import { createSystem } from "../../ecs-serializable/factories/createSystem";
 import { EditorObjects } from "../types/EditorObjects";
 import { useAsRef } from "../../use-as-ref/useAsRef";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
@@ -24,7 +24,7 @@ export const useSystemInitializer = <
   const resetSystem = () => {
     if (selected.system) {
       setSystem(
-        instantiateSystem(
+        createSystem(
           selected.system,
           availableComponents,
           selectedSceneNameRef.current
