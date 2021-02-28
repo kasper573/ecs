@@ -78,8 +78,3 @@ export const createComponentDefinition = <
 
 export const createComponentOptionsDefinition = (options: any) =>
   serializeJS(options) as ComponentOptionsDefinition;
-
-export const createProperty = (name: string, value: string) => ({
-  name,
-  value,
-});
