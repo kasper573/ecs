@@ -1,13 +1,11 @@
 import { without } from "lodash";
-import {
-  createEntityDefinition,
-  createEntityInitializer,
-  createSceneDefinition,
-  createSystemDefinition,
-} from "../../ecs-serializable/factories";
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { EditorActions } from "../types/EditorActions";
+import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
+import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
+import { createEntityInitializer } from "../../ecs-serializable/factories/createEntityInitializer";
+import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
 import { updateEntityDefinition } from "./updateEntityDefinition";
 import { reactToDelete } from "./reactToDelete";
 import { updateScene } from "./updateScene";

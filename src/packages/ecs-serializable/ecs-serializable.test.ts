@@ -2,15 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { Entity } from "../ecs/Entity";
 import { Component, ComponentOptions } from "../ecs/Component";
-import {
-  createComponentDefinition,
-  createComponentOptionsDefinition,
-  createEntityDefinition,
-  createEntityInitializer,
-  createSceneDefinition,
-  createSystemDefinition,
-} from "./factories";
-import { instantiateSystem } from "./functions/instantiateSystem";
+import { instantiateSystem } from "./factories/instantiateSystem";
 import { EntityInitializerId } from "./types/EntityInitializer";
 import {
   ComponentDefinition,
@@ -18,6 +10,12 @@ import {
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
+import { createSystemDefinition } from "./factories/createSystemDefinition";
+import { createSceneDefinition } from "./factories/createSceneDefinition";
+import { createEntityInitializer } from "./factories/createEntityInitializer";
+import { createEntityDefinition } from "./factories/createEntityDefinition";
+import { createComponentDefinition } from "./factories/createComponentDefinition";
+import { createComponentOptionsDefinition } from "./factories/createComponentOptionsDefinition";
 
 type FooOptions = ComponentOptions & { multiplier: number; fn: () => number };
 

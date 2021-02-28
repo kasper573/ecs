@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { System } from "../../ecs/System";
-import { instantiateSystem } from "../../ecs-serializable/functions/instantiateSystem";
+import { instantiateSystem } from "../../ecs-serializable/factories/instantiateSystem";
 import { EditorObjects } from "../types/EditorObjects";
 import { useAsRef } from "../../use-as-ref/useAsRef";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";

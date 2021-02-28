@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "../reportWebVitals";
 import { Editor } from "../packages/ecs-editor/Editor";
 import { App } from "../packages/shared-components/App";
-import { createSystemDefinition } from "../packages/ecs-serializable/factories";
 import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
+import { createSystemDefinition } from "../packages/ecs-serializable/factories/createSystemDefinition";
 
 const availableComponents = {
   describable: Describable,

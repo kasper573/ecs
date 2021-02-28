@@ -2,18 +2,16 @@ import React, { useReducer } from "react";
 import { IconButton, List, Tooltip, Typography } from "@material-ui/core";
 import { TextSystem } from "../ecs-react/TextSystem";
 import { SystemDefinition } from "../ecs-serializable/types/SystemDefinition";
-import {
-  createEntityDefinition,
-  createEntityInitializer,
-  createSceneDefinition,
-  createSystemDefinition,
-} from "../ecs-serializable/factories";
 import { SceneDefinition } from "../ecs-serializable/types/SceneDefinition";
 import { EntityDefinition } from "../ecs-serializable/types/EntityDefinition";
 import {
   EntityInitializer,
   EntityInitializerId,
 } from "../ecs-serializable/types/EntityInitializer";
+import { createSystemDefinition } from "../ecs-serializable/factories/createSystemDefinition";
+import { createSceneDefinition } from "../ecs-serializable/factories/createSceneDefinition";
+import { createEntityInitializer } from "../ecs-serializable/factories/createEntityInitializer";
+import { createEntityDefinition } from "../ecs-serializable/factories/createEntityDefinition";
 import {
   ComponentIcon,
   DeleteIcon,
