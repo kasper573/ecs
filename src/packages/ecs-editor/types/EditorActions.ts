@@ -1,5 +1,7 @@
 import { EditorObjectAction } from "./EditorObjectAction";
 import { EditorObjectName, EditorObjects } from "./EditorObjects";
+import { EditorAction } from "./EditorAction";
+import { EditorState } from "./EditorState";
 
 // Conventions for common object operations
 
@@ -30,9 +32,15 @@ export type EditorObjectPayload<ObjectName extends EditorObjectName> = Record<
   EditorObjects[ObjectName]
 >;
 
+export type UpdateStateAction = EditorAction<
+  "UPDATE_STATE",
+  { update: Partial<EditorState> }
+>;
+
 // All editor actions
 
 export type EditorActions =
+  | UpdateStateAction
   | EditorObjectCreateAction<"system">
   | EditorObjectCreateAction<"scene">
   | EditorObjectCreateAction<"entityInitializer">

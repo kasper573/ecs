@@ -26,6 +26,10 @@ export function updateState(
   action: EditorActions
 ): EditorState {
   switch (action.type) {
+    // Manual
+    case "UPDATE_STATE":
+      return { ...state, ...action.update };
+
     // Systems
     case "CREATE_SYSTEM":
       return {
@@ -45,11 +49,7 @@ export function updateState(
     case "UPDATE_SYSTEM":
       return updateSystem(state, action.system, action.update);
     case "SELECT_SYSTEM":
-      return selectObject(
-        state,
-        "system",
-        state.systems.indexOf(action.system)
-      );
+      return selectObject(state, "system", action.system);
 
     // Scenes
     case "CREATE_SCENE": {
@@ -74,8 +74,7 @@ export function updateState(
     case "UPDATE_SCENE":
       return updateScene(state, action.scene, action.update);
     case "SELECT_SCENE": {
-      const { system } = selectEditorObjects(state);
-      return selectObject(state, "scene", system?.scenes.indexOf(action.scene));
+      return selectObject(state, "scene", action.scene);
     }
 
     // Entity instances
@@ -113,12 +112,7 @@ export function updateState(
         action.update
       );
     case "SELECT_ENTITYINITIALIZER": {
-      const { scene } = selectEditorObjects(state);
-      return selectObject(
-        state,
-        "entityInitializer",
-        scene?.entities.indexOf(action.entityInitializer)
-      );
+      return selectObject(state, "entityInitializer", action.entityInitializer);
     }
 
     // Entity definitions
@@ -154,21 +148,15 @@ export function updateState(
         action.update
       );
     case "SELECT_ENTITYDEFINITION": {
-      const { system } = selectEditorObjects(state);
-      return selectObject(
-        state,
-        "entityDefinition",
-        system?.library.entities.indexOf(action.entityDefinition)
-      );
+      return selectObject(state, "entityDefinition", action.entityDefinition);
     }
 
     // Component definitions
     case "SELECT_COMPONENTDEFINITION": {
-      const { system } = selectEditorObjects(state);
       return selectObject(
         state,
         "componentDefinition",
-        system?.library.components.indexOf(action.componentDefinition)
+        action.componentDefinition
       );
     }
   }

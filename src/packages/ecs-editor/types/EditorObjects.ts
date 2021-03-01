@@ -23,14 +23,9 @@ export type EditorObjects = {
 export type EditorObjectName = keyof EditorObjects;
 
 /**
- * Types of all the known objects in the editor
- */
-export type EditorObject = EditorObjects[EditorObjectName];
-
-/**
  * The hierarchical order of all editor objects.
  */
-export const editorObjectsOrder: Array<keyof EditorObjects> = [
+export const editorObjectsOrder: Array<EditorObjectName> = [
   "system",
   "scene",
   "entityInitializer",

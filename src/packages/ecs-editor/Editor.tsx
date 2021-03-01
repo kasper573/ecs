@@ -37,6 +37,7 @@ import { useSceneSync } from "./hooks/useSceneSync";
 import { useCrudDialogs } from "./hooks/useCrudDialogs";
 import { uuid } from "./uuid";
 import { CrudListSubheader } from "./CrudListSubheader";
+import { useEnsureSelection } from "./hooks/useEnsureSelection";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -57,6 +58,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     state.nativeComponents
   );
   useSceneSync(system, selected, dispatch);
+  useEnsureSelection(state, dispatch);
 
   const [systemEvents, SystemDialogs] = useCrudDialogs<SystemDefinition>({
     createDialogTitle: "Add system",
@@ -274,12 +276,5 @@ export const Editor = ({ defaultState }: EditorProps) => {
 const createDefaultState = (): EditorState => ({
   nativeComponents: {},
   systems: [],
-  selection: {
-    system: 0,
-    componentInitializer: 0,
-    componentDefinition: 0,
-    entityInitializer: 0,
-    entityDefinition: 0,
-    scene: 0,
-  },
+  selection: {},
 });
