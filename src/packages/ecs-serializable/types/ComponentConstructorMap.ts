@@ -7,4 +7,4 @@ export type ComponentConstructorMap = Map<
   ComponentConstructor
 >;
 
-export type ComponentConstructor = new (...args: any[]) => Component<Entity>;
+export type ComponentConstructor = new <T>(...args: T[]) => Component<Entity>;

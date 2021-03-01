@@ -3,4 +3,4 @@ import { EntityDefinitionId } from "./EntityDefinition";
 
 export type EntityConstructorMap = Map<EntityDefinitionId, EntityConstructor>;
 
-export type EntityConstructor = new (...args: any[]) => Entity;
+export type EntityConstructor = new <T>(...args: T[]) => Entity;

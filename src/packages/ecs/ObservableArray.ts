@@ -29,10 +29,10 @@ export class ObservableArray<T> extends Array<T> {
   }
 }
 
-const automateEvents = <F extends (...args: any[]) => any, T>(
+const automateEvents = <F extends (...args: A[]) => R, T, A, R>(
   fun: F,
   array: ObservableArray<T>
-): ReturnType<F> => {
+): R => {
   const before = [...array];
   const ret = fun();
   const after = [...array];

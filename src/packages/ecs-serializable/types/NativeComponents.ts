@@ -3,5 +3,5 @@ import { Entity } from "../../ecs/Entity";
 
 export type NativeComponents = Record<
   string,
-  new (...args: any[]) => Component<Entity>
+  new <T>(...args: T[]) => Component<Entity>
 >;
