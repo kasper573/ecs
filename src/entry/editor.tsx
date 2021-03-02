@@ -7,10 +7,12 @@ import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
 import { createSystemDefinition } from "../packages/ecs-serializable/factories/createSystemDefinition";
+import { Interactive } from "../packages/ecs-interactive/Interactive";
 
 const nativeComponents = {
   describable: Describable,
   collectable: Collectable,
+  interactive: Interactive,
 };
 
 function render() {
