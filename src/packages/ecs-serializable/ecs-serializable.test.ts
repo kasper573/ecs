@@ -55,7 +55,7 @@ describe("instantiating a System using SystemDefinition", () => {
     const entity = createEntityDefinition({
       id: "1" as EntityDefinitionId,
       name: "Entity A",
-      components: [{ definitionId: component.id }],
+      components: [{ id: uid(), definitionId: component.id }],
     });
     const system = mockSystem([entity], [component]);
     expect(system.entities[0].components[0]).toBeInstanceOf(Foo);
@@ -72,6 +72,7 @@ describe("instantiating a System using SystemDefinition", () => {
       name: "Entity A",
       components: [
         {
+          id: uid(),
           definitionId: component.id,
           options: createComponentOptionsDefinition({ fn: () => 2 }),
         },
@@ -150,8 +151,8 @@ describe("instantiating a System using SystemDefinition", () => {
       id: "1" as EntityDefinitionId,
       name: "Entity A",
       components: [
-        { definitionId: component1.id },
-        { definitionId: component2.id },
+        { id: uid(), definitionId: component1.id },
+        { id: uid(), definitionId: component2.id },
       ],
     });
     const system = mockSystem([entity], [component1, component2]);
@@ -173,8 +174,8 @@ describe("instantiating a System using SystemDefinition", () => {
       id: "1" as EntityDefinitionId,
       name: "Entity A",
       components: [
-        { definitionId: component1.id },
-        { definitionId: component2.id },
+        { id: uid(), definitionId: component1.id },
+        { id: uid(), definitionId: component2.id },
       ],
     });
     expect(() => mockSystem([entity], [component1, component2])).toThrow();
@@ -184,15 +185,20 @@ describe("instantiating a System using SystemDefinition", () => {
     const entity = createEntityDefinition({
       id: "1" as EntityDefinitionId,
       name: "Entity A",
-      components: [{ definitionId: "bogus" as ComponentDefinitionId }],
+      components: [
+        { id: uid(), definitionId: "bogus" as ComponentDefinitionId },
+      ],
     });
     expect(() => mockSystem([entity], [])).toThrow();
   });
 });
 
+let idCounter = 0;
+const uid = <T extends string>() => ("id" + idCounter++) as T;
+
 export const mockSystem = (
   entities: EntityDefinition[],
-  components: ComponentDefinition<typeof availableComponents>[] = []
+  components: ComponentDefinition[] = []
 ) =>
   createSystem(
     createSystemDefinition(
