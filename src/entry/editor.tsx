@@ -8,7 +8,7 @@ import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
 import { createSystemDefinition } from "../packages/ecs-serializable/factories/createSystemDefinition";
 
-const availableComponents = {
+const nativeComponents = {
   describable: Describable,
   collectable: Collectable,
 };
@@ -19,11 +19,11 @@ function render() {
       <App>
         <Editor
           defaultState={{
-            nativeComponents: availableComponents,
+            nativeComponents,
             systems: [
-              createSystemDefinition({ name: "System A" }, availableComponents),
-              createSystemDefinition({ name: "System B" }, availableComponents),
-              createSystemDefinition({ name: "System C" }, availableComponents),
+              createSystemDefinition({ name: "System A" }, nativeComponents),
+              createSystemDefinition({ name: "System B" }, nativeComponents),
+              createSystemDefinition({ name: "System C" }, nativeComponents),
             ] as SystemDefinition[],
           }}
         />

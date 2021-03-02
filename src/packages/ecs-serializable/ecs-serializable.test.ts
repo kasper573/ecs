@@ -26,7 +26,7 @@ class Foo extends Component<Entity, FooOptions> {
   }
 }
 
-const availableComponents = {
+const nativeComponents = {
   foo: Foo,
 };
 
@@ -84,7 +84,7 @@ describe("instantiating a System using SystemDefinition", () => {
 
   it("succeeds when using serialized data", () => {
     const systemDefinition: SystemDefinition = JSON.parse(serializedSystem);
-    const system = createSystem(systemDefinition, availableComponents);
+    const system = createSystem(systemDefinition, nativeComponents);
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
@@ -130,10 +130,10 @@ describe("instantiating a System using SystemDefinition", () => {
           }),
         ],
       },
-      availableComponents
+      nativeComponents
     );
 
-    expect(() => createSystem(definition, availableComponents)).toThrow();
+    expect(() => createSystem(definition, nativeComponents)).toThrow();
   });
 
   it("succeeds when using two components with different ids", () => {
@@ -220,7 +220,7 @@ export const mockSystem = (
           }),
         ],
       },
-      availableComponents
+      nativeComponents
     ),
-    availableComponents
+    nativeComponents
   );

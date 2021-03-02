@@ -12,11 +12,9 @@ import { NativeComponents } from "../../ecs-serializable/types/NativeComponents"
  *
  * Returns the most recent System instance and a function to trigger the system reinitialization manually.
  */
-export const useSystemInitializer = <
-  AvailableComponents extends NativeComponents
->(
+export const useSystemInitializer = (
   selected: Partial<EditorObjects>,
-  availableComponents: AvailableComponents
+  nativeComponents: NativeComponents
 ) => {
   const [system, setSystem] = useState<System>();
   const selectedSceneNameRef = useAsRef(selected.scene?.name);
@@ -26,7 +24,7 @@ export const useSystemInitializer = <
       setSystem(
         createSystem(
           selected.system,
-          availableComponents,
+          nativeComponents,
           selectedSceneNameRef.current
         )
       );
@@ -36,7 +34,7 @@ export const useSystemInitializer = <
   useEffect(resetSystem, [
     selected.system,
     selectedSceneNameRef,
-    availableComponents,
+    nativeComponents,
   ]);
 
   return [system, resetSystem] as const;

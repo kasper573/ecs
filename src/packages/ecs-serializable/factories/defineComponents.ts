@@ -7,12 +7,9 @@ import { defineComponent } from "./defineComponent";
  * Returns a ComponentConstructorMap representing the
  * specified ComponentDefinitions, mapped by definition id.
  */
-export const defineComponents = <
-  NativeComponentName extends keyof AvailableComponents,
-  AvailableComponents extends NativeComponents
->(
-  definitions: ComponentDefinition<AvailableComponents, NativeComponentName>[],
-  availableComponents: AvailableComponents
+export const defineComponents = (
+  definitions: ComponentDefinition[],
+  nativeComponents: NativeComponents
 ) =>
   definitions.reduce((map: ComponentConstructorMap, definition) => {
     if (map.has(definition.id)) {
@@ -22,6 +19,6 @@ export const defineComponents = <
     }
     return map.set(
       definition.id,
-      defineComponent(definition, availableComponents)
+      defineComponent(definition, nativeComponents)
     );
   }, new Map());

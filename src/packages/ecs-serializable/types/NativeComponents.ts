@@ -1,7 +1,8 @@
-import { Component } from "../../ecs/Component";
-import { Entity } from "../../ecs/Entity";
+import { ComponentConstructor } from "./ComponentConstructorMap";
+
+export type NativeComponentName = string;
 
 export type NativeComponents = Record<
-  string,
-  new <T>(...args: T[]) => Component<Entity>
+  NativeComponentName,
+  ComponentConstructor
 >;

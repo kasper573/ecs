@@ -13,9 +13,9 @@ import { defineComponents } from "./defineComponents";
 /**
  * Creates a System instance for the specified SystemDefinition
  */
-export const createSystem = <AvailableComponents extends NativeComponents>(
-  systemDefinition: SystemDefinition<AvailableComponents>,
-  nativeComponents: AvailableComponents,
+export const createSystem = (
+  systemDefinition: SystemDefinition,
+  nativeComponents: NativeComponents,
   preferredSceneId?: string
 ): System => {
   const { entities = [], components = [] } = systemDefinition.library;
@@ -38,8 +38,8 @@ export const createSystem = <AvailableComponents extends NativeComponents>(
   });
 };
 
-const getEntriesByScene = <AvailableComponents extends NativeComponents>(
-  systemDefinition: SystemDefinition<AvailableComponents>,
+const getEntriesByScene = (
+  systemDefinition: SystemDefinition,
   entityConstructors: EntityConstructorMap
 ) => {
   return systemDefinition.scenes.reduce((scenes, scene) => {

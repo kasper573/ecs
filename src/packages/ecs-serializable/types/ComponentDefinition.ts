@@ -1,11 +1,8 @@
-import { NativeComponents } from "./NativeComponents";
+import { NativeComponentName } from "./NativeComponents";
 
 export type ComponentDefinitionId = Nominal<string, "ComponentDefinitionId">;
 
-export type ComponentDefinition<
-  AvailableComponents extends NativeComponents = {},
-  NativeComponentName extends keyof AvailableComponents = keyof AvailableComponents
-> = {
+export type ComponentDefinition = {
   /**
    * Automatically generated id (unique within parent System).
    */
