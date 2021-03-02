@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { DeleteDialog } from "../dialogs/DeleteDialog";
-import { NameDialog } from "../dialogs/NameDialog";
+import { DeleteDialog } from "../components/DeleteDialog";
+import { NameDialog } from "../components/NameDialog";
 
 export type UseCrudDialogsProps<T> = {
   /**

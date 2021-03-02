@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "../reportWebVitals";
-import { Editor } from "../packages/ecs-editor/Editor";
+import { Editor } from "../packages/ecs-editor/components/Editor";
 import { App } from "../packages/shared-components/App";
 import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";

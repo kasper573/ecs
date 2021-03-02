@@ -1,17 +1,25 @@
 import React, { useReducer } from "react";
 import { IconButton, List, Tooltip, Typography } from "@material-ui/core";
-import { TextSystem } from "../ecs-react/TextSystem";
-import { SystemDefinition } from "../ecs-serializable/types/SystemDefinition";
-import { SceneDefinition } from "../ecs-serializable/types/SceneDefinition";
-import { EntityDefinition } from "../ecs-serializable/types/EntityDefinition";
+import { TextSystem } from "../../ecs-react/TextSystem";
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../ecs-serializable/types/EntityInitializer";
-import { createSystemDefinition } from "../ecs-serializable/factories/createSystemDefinition";
-import { createSceneDefinition } from "../ecs-serializable/factories/createSceneDefinition";
-import { createEntityInitializer } from "../ecs-serializable/factories/createEntityInitializer";
-import { createEntityDefinition } from "../ecs-serializable/factories/createEntityDefinition";
+} from "../../ecs-serializable/types/EntityInitializer";
+import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
+import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
+import { createEntityInitializer } from "../../ecs-serializable/factories/createEntityInitializer";
+import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
+import { rootReducer } from "../reducers/rootReducer";
+import { EditorState } from "../types/EditorState";
+import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { useSystemInitializer } from "../hooks/useSystemInitializer";
+import { useSceneSync } from "../hooks/useSceneSync";
+import { useCrudDialogs } from "../hooks/useCrudDialogs";
+import { uuid } from "../uuid";
+import { useEnsureSelection } from "../hooks/useEnsureSelection";
 import {
   ComponentIcon,
   DeleteIcon,
@@ -22,9 +30,6 @@ import {
   SceneIcon,
   SystemIcon,
 } from "./icons";
-import { rootReducer } from "./reducers/rootReducer";
-import { EditorState } from "./types/EditorState";
-import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { EditorPanelContainer } from "./EditorPanelContainer";
 import { CrudList } from "./CrudList";
 import { AppBarAndDrawer } from "./AppBarAndDrawer";
@@ -32,12 +37,7 @@ import { EditorTitle } from "./EditorTitle";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
-import { useSystemInitializer } from "./hooks/useSystemInitializer";
-import { useSceneSync } from "./hooks/useSceneSync";
-import { useCrudDialogs } from "./hooks/useCrudDialogs";
-import { uuid } from "./uuid";
 import { CrudListSubheader } from "./CrudListSubheader";
-import { useEnsureSelection } from "./hooks/useEnsureSelection";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
