@@ -18,7 +18,7 @@ import { selectEditorObjects } from "../functions/selectEditorObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { uuid } from "../uuid";
+import { uuid } from "../functions/uuid";
 import { useEnsureSelection } from "../hooks/useEnsureSelection";
 import {
   ComponentIcon,
