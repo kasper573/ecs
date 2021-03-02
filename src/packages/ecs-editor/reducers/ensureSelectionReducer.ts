@@ -1,12 +1,12 @@
 import { editorObjectsOrder } from "../types/EditorObjects";
-import { EditorState } from "../types/EditorState";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
+import { EditorStateReducer } from "../types/EditorStateReducer";
 
 /**
  * Ensures selection for objects that has a default available.
  * (Returns the original state object if no selection was changed)
  */
-export const ensureSelection = (state: EditorState): EditorState => {
+export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   const newSelection = { ...state.selection };
   let didChange = false;
   for (const objectName of editorObjectsOrder) {

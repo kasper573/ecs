@@ -22,7 +22,7 @@ import {
   SceneIcon,
   SystemIcon,
 } from "./icons";
-import { updateState } from "./mutations/updateState";
+import { rootReducer } from "./reducers/rootReducer";
 import { EditorState } from "./types/EditorState";
 import { selectEditorObjects } from "./functions/selectEditorObjects";
 import { EditorPanelContainer } from "./EditorPanelContainer";
@@ -47,7 +47,7 @@ export type EditorProps = {
  * Renders controls to CRUD systems, scenes, entities, components and properties.
  */
 export const Editor = ({ defaultState }: EditorProps) => {
-  const [state, dispatch] = useReducer(updateState, {
+  const [state, dispatch] = useReducer(rootReducer, {
     ...createDefaultState(),
     ...defaultState,
   });
@@ -66,11 +66,15 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SYSTEM",
-        system: createSystemDefinition({ name }, state.nativeComponents),
+        payload: createSystemDefinition({ name }, state.nativeComponents),
       }),
     onRenameItem: (system, name) =>
-      dispatch({ type: "UPDATE_SYSTEM", system, update: { name } }),
-    onDeleteItem: (system) => dispatch({ type: "DELETE_SYSTEM", system }),
+      dispatch({
+        type: "UPDATE_SYSTEM",
+        payload: { system, update: { name } },
+      }),
+    onDeleteItem: (system) =>
+      dispatch({ type: "DELETE_SYSTEM", payload: system }),
   });
 
   const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
@@ -79,11 +83,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SCENE",
-        scene: createSceneDefinition({ name }),
+        payload: createSceneDefinition({ name }),
       }),
     onRenameItem: (scene, name) =>
-      dispatch({ type: "UPDATE_SCENE", scene, update: { name } }),
-    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", scene }),
+      dispatch({ type: "UPDATE_SCENE", payload: { scene, update: { name } } }),
+    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", payload: scene }),
   });
 
   const [
@@ -94,17 +98,16 @@ export const Editor = ({ defaultState }: EditorProps) => {
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
       dispatch({
-        type: "CREATE_ENTITYDEFINITION",
-        entityDefinition: createEntityDefinition({ id: uuid(), name }),
+        type: "CREATE_ENTITY_DEFINITION",
+        payload: createEntityDefinition({ id: uuid(), name }),
       }),
     onRenameItem: (entityDefinition, name) =>
       dispatch({
-        type: "UPDATE_ENTITYDEFINITION",
-        entityDefinition,
-        update: { name },
+        type: "UPDATE_ENTITY_DEFINITION",
+        payload: { entityDefinition, update: { name } },
       }),
     onDeleteItem: (entityDefinition) =>
-      dispatch({ type: "DELETE_ENTITYDEFINITION", entityDefinition }),
+      dispatch({ type: "DELETE_ENTITY_DEFINITION", payload: entityDefinition }),
   });
 
   const [
@@ -115,20 +118,25 @@ export const Editor = ({ defaultState }: EditorProps) => {
     getItemName: (item) => item.id,
     onCreateItem: (id) =>
       dispatch({
-        type: "CREATE_ENTITYINITIALIZER",
-        entityInitializer: createEntityInitializer({
+        type: "CREATE_ENTITY_INITIALIZER",
+        payload: createEntityInitializer({
           id: id as EntityInitializerId,
           definitionId: uuid(),
         }),
       }),
     onRenameItem: (entityInitializer, id) =>
       dispatch({
-        type: "UPDATE_ENTITYINITIALIZER",
-        entityInitializer,
-        update: { id: id as EntityInitializerId },
+        type: "UPDATE_ENTITY_INITIALIZER",
+        payload: {
+          entityInitializer,
+          update: { id: id as EntityInitializerId },
+        },
       }),
     onDeleteItem: (entityInitializer) =>
-      dispatch({ type: "DELETE_ENTITYINITIALIZER", entityInitializer }),
+      dispatch({
+        type: "DELETE_ENTITY_INITIALIZER",
+        payload: entityInitializer,
+      }),
   });
 
   const appBar = (
@@ -164,7 +172,9 @@ export const Editor = ({ defaultState }: EditorProps) => {
       noun="System"
       active={selected.system}
       items={state.systems}
-      onSelectItem={(system) => dispatch({ type: "SELECT_SYSTEM", system })}
+      onSelectItem={(system) =>
+        dispatch({ type: "SELECT_SYSTEM", payload: system })
+      }
       onCreateItem={systemEvents.onCreateItem}
       getItemProps={({ name }) => ({ name, icon: SystemIcon })}
     />
@@ -220,7 +230,9 @@ export const Editor = ({ defaultState }: EditorProps) => {
             active={selected.scene}
             items={selected.system?.scenes ?? []}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
-            onSelectItem={(scene) => dispatch({ type: "SELECT_SCENE", scene })}
+            onSelectItem={(scene) =>
+              dispatch({ type: "SELECT_SCENE", payload: scene })
+            }
             {...sceneEvents}
           />
         </EditorPanel>
@@ -235,7 +247,10 @@ export const Editor = ({ defaultState }: EditorProps) => {
               icon: EntityInitializerIcon,
             })}
             onSelectItem={(entityInitializer) =>
-              dispatch({ type: "SELECT_ENTITYINITIALIZER", entityInitializer })
+              dispatch({
+                type: "SELECT_ENTITY_INITIALIZER",
+                payload: entityInitializer,
+              })
             }
             {...entityInitializerEvents}
           />
@@ -248,7 +263,10 @@ export const Editor = ({ defaultState }: EditorProps) => {
             items={selected.system?.library.entities ?? []}
             getItemProps={({ name }) => ({ name, icon: EntityDefinitionIcon })}
             onSelectItem={(entityDefinition) =>
-              dispatch({ type: "SELECT_ENTITYDEFINITION", entityDefinition })
+              dispatch({
+                type: "SELECT_ENTITY_DEFINITION",
+                payload: entityDefinition,
+              })
             }
             {...entityDefinitionEvents}
           />
@@ -259,8 +277,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
             getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
             onSelectItem={(componentDefinition) =>
               dispatch({
-                type: "SELECT_COMPONENTDEFINITION",
-                componentDefinition,
+                type: "SELECT_COMPONENT_DEFINITION",
+                payload: componentDefinition,
               })
             }
           />

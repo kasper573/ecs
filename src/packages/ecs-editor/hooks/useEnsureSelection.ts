@@ -1,6 +1,6 @@
 import { Dispatch, useEffect } from "react";
 import { EditorState } from "../types/EditorState";
-import { ensureSelection } from "../mutations/ensureSelection";
+import { ensureSelectionReducer } from "../reducers/ensureSelectionReducer";
 import { EditorActions } from "../types/EditorActions";
 
 /**
@@ -11,8 +11,8 @@ export const useEnsureSelection = (
   dispatch: Dispatch<EditorActions>
 ) =>
   useEffect(() => {
-    const update = ensureSelection(state);
+    const update = ensureSelectionReducer(state);
     if (update !== state) {
-      dispatch({ type: "UPDATE_STATE", update });
+      dispatch({ type: "UPDATE_STATE", payload: update });
     }
   }, [state, dispatch]);

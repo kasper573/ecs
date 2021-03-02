@@ -1,16 +1,12 @@
-import { EditorState } from "../types/EditorState";
+import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
-import { updateSystem } from "./updateSystem";
+import { updateSystemReducer } from "./updateSystemReducer";
 
-/**
- * Update the specified scene with a partial update
- */
-export const updateScene = (
-  state: EditorState,
-  scene: SceneDefinition,
-  update: Partial<SceneDefinition>
-): EditorState => {
+export const updateSceneReducer: EditorStateReducer<{
+  scene: SceneDefinition;
+  update: Partial<SceneDefinition>;
+}> = (state, { scene, update }) => {
   const { system } = selectEditorObjects(state);
   if (!system) {
     return state;
@@ -18,7 +14,10 @@ export const updateScene = (
   const updatedScenes = system.scenes.slice();
   const index = updatedScenes.indexOf(scene);
   updatedScenes[index] = { ...scene, ...update };
-  return updateSystem(state, system, {
-    scenes: updatedScenes,
+  return updateSystemReducer(state, {
+    system,
+    update: {
+      scenes: updatedScenes,
+    },
   });
 };

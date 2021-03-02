@@ -36,7 +36,7 @@ export const useSceneSync = (
       (scene) => scene.name === systemSceneId
     );
     if (didSceneChange && scene) {
-      dispatch({ type: "SELECT_SCENE", scene });
+      dispatch({ type: "SELECT_SCENE", payload: scene });
     }
   };
 

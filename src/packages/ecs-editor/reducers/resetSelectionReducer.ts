@@ -6,7 +6,7 @@ import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefaul
 /**
  * Reset to the default selection for the specified object and all child objects
  */
-export const resetSelection = <ObjectName extends keyof EditorSelection>(
+export const resetSelectionReducer = <ObjectName extends keyof EditorSelection>(
   state: EditorState,
   fromObjectName: ObjectName
 ): EditorState => {

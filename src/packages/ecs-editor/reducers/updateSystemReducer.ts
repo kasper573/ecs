@@ -1,14 +1,10 @@
-import { EditorState } from "../types/EditorState";
+import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 
-/**
- * Update the specified system with a partial update
- */
-export const updateSystem = (
-  state: EditorState,
-  system: SystemDefinition,
-  update: Partial<SystemDefinition>
-): EditorState => {
+export const updateSystemReducer: EditorStateReducer<{
+  system: SystemDefinition;
+  update: Partial<SystemDefinition>;
+}> = (state, { system, update }) => {
   const index = state.systems.indexOf(system);
   const updatedSystems = state.systems.slice();
   updatedSystems[index] = { ...system, ...update };

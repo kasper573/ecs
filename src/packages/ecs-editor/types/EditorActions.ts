@@ -1,64 +1,31 @@
-import { EditorObjectAction } from "./EditorObjectAction";
-import { EditorObjectName, EditorObjects } from "./EditorObjects";
-import { EditorAction } from "./EditorAction";
-import { EditorState } from "./EditorState";
+import { ActionToReducer } from "../actionToReducer";
+import { EditorStateReducer } from "./EditorStateReducer";
 
-// Conventions for common object operations
+/**
+ * The actions you can dispatch when using the root reducer (see rootReducer.ts).
+ * (Automatically derived from actionToReducer.ts)
+ *
+ * Example:
+ * const [state, dispatch] = useReducer(rootReducer); // dispatch has the type React.Dispatch<EditorActions>
+ */
+export type EditorActions = EditorActionRecord[keyof EditorActionRecord];
 
-export type EditorObjectCreateAction<
-  ObjectName extends EditorObjectName
-> = EditorObjectAction<"create", ObjectName, EditorObjectPayload<ObjectName>>;
+type EditorAction<ActionName, Payload> = {
+  type: ActionName;
+  payload: Payload;
+};
 
-export type EditorObjectDeleteAction<
-  ObjectName extends EditorObjectName
-> = EditorObjectAction<"delete", ObjectName, EditorObjectPayload<ObjectName>>;
+type EditorActionRecord = {
+  [ActionName in keyof ActionToReducer]: EditorAction<
+    ActionName,
+    EditorActionPayloads[ActionName]
+  >;
+};
 
-export type EditorObjectUpdateAction<
-  ObjectName extends EditorObjectName
-> = EditorObjectAction<
-  "update",
-  ObjectName,
-  EditorObjectPayload<ObjectName> & {
-    update: Partial<EditorObjects[ObjectName]>;
-  }
->;
+type EditorActionPayloads = {
+  [ActionName in keyof ActionToReducer]: ReducerPayload<
+    ActionToReducer[ActionName]
+  >;
+};
 
-export type EditorObjectSelectAction<
-  ObjectName extends EditorObjectName
-> = EditorObjectAction<"select", ObjectName, EditorObjectPayload<ObjectName>>;
-
-export type EditorObjectPayload<ObjectName extends EditorObjectName> = Record<
-  ObjectName,
-  EditorObjects[ObjectName]
->;
-
-export type UpdateStateAction = EditorAction<
-  "UPDATE_STATE",
-  { update: Partial<EditorState> }
->;
-
-// All editor actions
-
-export type EditorActions =
-  | UpdateStateAction
-  | EditorObjectCreateAction<"system">
-  | EditorObjectCreateAction<"scene">
-  | EditorObjectCreateAction<"entityInitializer">
-  | EditorObjectCreateAction<"entityDefinition">
-  | EditorObjectCreateAction<"componentInitializer">
-  | EditorObjectUpdateAction<"system">
-  | EditorObjectUpdateAction<"scene">
-  | EditorObjectUpdateAction<"entityInitializer">
-  | EditorObjectUpdateAction<"entityDefinition">
-  | EditorObjectUpdateAction<"componentInitializer">
-  | EditorObjectDeleteAction<"system">
-  | EditorObjectDeleteAction<"scene">
-  | EditorObjectDeleteAction<"entityInitializer">
-  | EditorObjectDeleteAction<"entityDefinition">
-  | EditorObjectDeleteAction<"componentInitializer">
-  | EditorObjectSelectAction<"system">
-  | EditorObjectSelectAction<"scene">
-  | EditorObjectSelectAction<"entityInitializer">
-  | EditorObjectSelectAction<"entityDefinition">
-  | EditorObjectSelectAction<"componentInitializer">
-  | EditorObjectSelectAction<"componentDefinition">;
+type ReducerPayload<T> = T extends EditorStateReducer<infer P> ? P : never;
