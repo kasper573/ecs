@@ -1,6 +1,7 @@
 import { editorObjectsOrder } from "../types/EditorObjects";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
 import { EditorStateReducer } from "../types/EditorStateReducer";
+import { selectEditorObjects } from "../functions/selectEditorObjects";
 
 /**
  * Ensures selection for objects that has a default available.
@@ -8,9 +9,10 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
  */
 export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   const newSelection = { ...state.selection };
+  const selected = selectEditorObjects(state);
   let didChange = false;
   for (const objectName of editorObjectsOrder) {
-    const objectHasSelection = !!state.selection[objectName];
+    const objectHasSelection = !!selected[objectName];
     if (!objectHasSelection) {
       const objectDefault = getEditorSelectionDefault(state, objectName);
       if (objectDefault) {
