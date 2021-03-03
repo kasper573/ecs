@@ -7,7 +7,7 @@ import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
 import { Interactive } from "../packages/ecs-interactive/Interactive";
-import systemDefinitionsJson from "./serializedSystems.json";
+import systemDefinitionsJson from "./defaultEditorSystems.json";
 
 const systemDefinitions = (systemDefinitionsJson as object) as SystemDefinition[];
 const nativeComponents = {
