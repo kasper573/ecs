@@ -1,10 +1,5 @@
 import React, { useReducer } from "react";
-import {
-  IconButton,
-  ListItemSecondaryAction,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
+import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
@@ -49,7 +44,6 @@ import {
   EditorPanelHeaderLayout,
 } from "./EditorPanelHeader";
 import { EditorLibraryTree } from "./EditorLibraryTree";
-import { OpaqueListSubheader } from "./OpaqueListSubheader";
 import { CreateEntityInitializerButton } from "./CreateEntityInitializerButton";
 import { SimpleDialog } from "./SimpleDialog";
 
