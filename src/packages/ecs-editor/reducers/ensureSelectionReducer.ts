@@ -13,11 +13,20 @@ export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   let didChange = false;
   editorObjectsOrder.forEach(
     <ObjectName extends EditorObjectName>(objectName: ObjectName) => {
-      const objectHasSelection = !!selected[objectName];
-      if (!objectHasSelection) {
-        newSelection[objectName] = getEditorSelectionDefault(state, objectName);
-        didChange = true;
+      const objectForSelection = selected[objectName];
+      if (objectForSelection) {
+        return; // Current selection is valid, resolves to an object
       }
+      const defaultSelection = getEditorSelectionDefault(state, objectName);
+      const currentSelection = newSelection[objectName];
+      if (currentSelection === defaultSelection) {
+        // Current selection is already the default value,
+        // which means it's an invalid selection and we can't ensure any further
+        return;
+      }
+      // Current selection was invalid, resetting to default selection
+      newSelection[objectName] = defaultSelection;
+      didChange = true;
     }
   );
   if (!didChange) {
