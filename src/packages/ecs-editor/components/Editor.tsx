@@ -23,6 +23,7 @@ import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
+import { omit } from "../functions/omit";
 import {
   DeleteIcon,
   EditIcon,
@@ -267,7 +268,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
             onSelectItem={(scene) =>
               dispatch({ type: "SELECT_SCENE", payload: scene })
             }
-            {...sceneEvents}
+            {...omit(sceneEvents, "onCreateItem")}
           />
         </EditorPanel>
         {selected.scene && (
@@ -300,7 +301,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
                     payload: entityInitializer,
                   })
                 }
-                {...entityInitializerEvents}
+                {...omit(entityInitializerEvents, "onCreateItem")}
               />
             </EditorPanel>
             <EditorPanel name={EditorPanelName.Library}>
