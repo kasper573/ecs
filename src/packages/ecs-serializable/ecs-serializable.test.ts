@@ -17,6 +17,7 @@ import { createEntityDefinition } from "./factories/createEntityDefinition";
 import { createComponentDefinition } from "./factories/createComponentDefinition";
 import { createComponentOptionsDefinition } from "./factories/createComponentOptionsDefinition";
 import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
+import { SceneDefinitionId } from "./types/SceneDefinition";
 
 type FooOptions = ComponentOptions & { multiplier: number; fn: () => number };
 
@@ -122,6 +123,7 @@ describe("instantiating a System using SystemDefinition", () => {
         library: [],
         scenes: [
           createSceneDefinition({
+            id: "scene1" as SceneDefinitionId,
             name: "Scene A",
             entities: [
               createEntityInitializer({
@@ -225,6 +227,7 @@ export const mockSystem = (
         ],
         scenes: [
           createSceneDefinition({
+            id: "scene1" as SceneDefinitionId,
             name: "Scene A",
             entities: entities.map(({ id }, index) =>
               createEntityInitializer({

@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { EditorSelection } from "../types/EditorSelection";
-import { editorObjectsOrder } from "../types/EditorObjects";
+import { EditorObjectName, editorObjectsOrder } from "../types/EditorObjects";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
 
 /**
@@ -11,14 +11,13 @@ export const resetSelectionReducer = <ObjectName extends keyof EditorSelection>(
   fromObjectName: ObjectName
 ): EditorState => {
   const newSelection = { ...state.selection };
-  for (
-    let startIndex = editorObjectsOrder.indexOf(fromObjectName);
-    startIndex < editorObjectsOrder.length;
-    startIndex++
-  ) {
-    const objectName = editorObjectsOrder[startIndex];
-    newSelection[objectName] = getEditorSelectionDefault(state, objectName);
-  }
+  const startIndex = editorObjectsOrder.indexOf(fromObjectName);
+  editorObjectsOrder
+    .slice(startIndex)
+    .forEach(<ObjectName extends EditorObjectName>(objectName: ObjectName) => {
+      newSelection[objectName] = getEditorSelectionDefault(state, objectName);
+    });
+
   return {
     ...state,
     selection: newSelection,

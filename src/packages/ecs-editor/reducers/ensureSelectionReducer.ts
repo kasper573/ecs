@@ -1,4 +1,4 @@
-import { editorObjectsOrder } from "../types/EditorObjects";
+import { EditorObjectName, editorObjectsOrder } from "../types/EditorObjects";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
@@ -11,16 +11,15 @@ export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   const newSelection = { ...state.selection };
   const selected = selectEditorObjects(state);
   let didChange = false;
-  for (const objectName of editorObjectsOrder) {
-    const objectHasSelection = !!selected[objectName];
-    if (!objectHasSelection) {
-      const objectDefault = getEditorSelectionDefault(state, objectName);
-      if (objectDefault) {
-        newSelection[objectName] = objectDefault;
+  editorObjectsOrder.forEach(
+    <ObjectName extends EditorObjectName>(objectName: ObjectName) => {
+      const objectHasSelection = !!selected[objectName];
+      if (!objectHasSelection) {
+        newSelection[objectName] = getEditorSelectionDefault(state, objectName);
         didChange = true;
       }
     }
-  }
+  );
   if (!didChange) {
     return state;
   }

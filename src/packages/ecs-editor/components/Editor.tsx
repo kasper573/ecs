@@ -101,7 +101,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SCENE",
-        payload: createSceneDefinition({ name }),
+        payload: createSceneDefinition({ id: uuid(), name }),
       }),
     onRenameItem: (scene, name) =>
       dispatch({ type: "UPDATE_SCENE", payload: { scene, update: { name } } }),

@@ -19,7 +19,7 @@ type EditorSelectionProperties = typeof editorSelectionProperties;
 
 const editorSelectionProperties = {
   system: "id" as const,
-  scene: "name" as const,
+  scene: "id" as const,
   entityInitializer: "id" as const,
   libraryNode: "id" as const,
 };
