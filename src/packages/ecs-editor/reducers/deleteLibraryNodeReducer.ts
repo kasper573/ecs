@@ -1,24 +1,21 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
-export const deleteEntityDefinitionReducer: EditorStateReducer<EntityDefinition> = (
+export const deleteLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
   state,
-  entityDefinition
+  targetNode
 ) => {
-  const selected = selectEditorObjects(state);
   const deletedState = updateLibraryReducer(state, {
-    system: selected.system,
-    getUpdate: ({ entities }) => ({
-      entities: without(entities, entityDefinition),
-    }),
+    system: selectEditorObjects(state).system,
+    change: (library) => without(library, targetNode),
   });
   return reactToDeleteReducer(deletedState, {
     previousState: state,
-    objectName: "entityDefinition",
-    deletedObject: entityDefinition,
+    objectName: "libraryNode",
+    deletedObject: targetNode,
   });
 };

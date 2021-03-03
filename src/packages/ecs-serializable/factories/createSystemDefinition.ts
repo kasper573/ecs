@@ -1,5 +1,6 @@
 import { NativeComponents } from "../types/NativeComponents";
 import { SystemDefinition } from "../types/SystemDefinition";
+import { LibraryNodeId } from "../types/LibraryNode";
 import { createComponentDefinitions } from "./createComponentDefinitions";
 
 export const createSystemDefinition = (
@@ -7,9 +8,10 @@ export const createSystemDefinition = (
   nativeComponents: NativeComponents
 ): SystemDefinition => ({
   scenes: [],
-  library: {
-    entities: props.library?.entities ?? [],
-    components: createComponentDefinitions(nativeComponents),
-  },
+  library: createComponentDefinitions(nativeComponents).map((definition) => ({
+    id: (definition.id as string) as LibraryNodeId,
+    type: "component",
+    component: definition,
+  })),
   ...props,
 });

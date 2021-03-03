@@ -1,9 +1,7 @@
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 
 /**
  * All known objects in the editor
@@ -12,9 +10,7 @@ export type EditorObjects = {
   system: SystemDefinition;
   scene: SceneDefinition;
   entityInitializer: EntityInitializer;
-  entityDefinition: EntityDefinition;
-  componentInitializer: ComponentInitializer;
-  componentDefinition: ComponentDefinition;
+  libraryNode: LibraryNode;
 };
 
 /**
@@ -25,11 +21,9 @@ export type EditorObjectName = keyof EditorObjects;
 /**
  * The hierarchical order of all editor objects.
  */
-export const editorObjectsOrder: Array<EditorObjectName> = [
+export const editorObjectsOrder: EditorObjectName[] = [
   "system",
   "scene",
   "entityInitializer",
-  "entityDefinition",
-  "componentInitializer",
-  "componentDefinition",
+  "libraryNode",
 ];

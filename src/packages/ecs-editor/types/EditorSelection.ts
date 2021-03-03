@@ -1,9 +1,7 @@
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { EditorObjects } from "./EditorObjects";
 
 /**
@@ -14,9 +12,7 @@ export type EditorSelection = Partial<{
   system: SystemDefinition[EditorSelectionProperties["system"]];
   scene: SceneDefinition[EditorSelectionProperties["scene"]];
   entityInitializer: EntityInitializer[EditorSelectionProperties["entityInitializer"]];
-  entityDefinition: EntityDefinition[EditorSelectionProperties["entityDefinition"]];
-  componentInitializer: ComponentInitializer[EditorSelectionProperties["componentInitializer"]];
-  componentDefinition: ComponentDefinition[EditorSelectionProperties["componentDefinition"]];
+  libraryNode: LibraryNode[EditorSelectionProperties["libraryNode"]];
 }>;
 
 type EditorSelectionProperties = typeof editorSelectionProperties;
@@ -25,9 +21,7 @@ const editorSelectionProperties = {
   system: "name" as const,
   scene: "name" as const,
   entityInitializer: "id" as const,
-  entityDefinition: "id" as const,
-  componentInitializer: "id" as const,
-  componentDefinition: "id" as const,
+  libraryNode: "id" as const,
 };
 
 /**

@@ -19,27 +19,21 @@ export const selectEditorObjects = ({
     getEditorSelectionProperty("scene"),
     selection.scene
   );
-  const instance = findBy(
+  const entityInitializer = findBy(
     scene?.entities,
     getEditorSelectionProperty("entityInitializer"),
     selection.entityInitializer
   );
-  const entity = findBy(
-    system?.library.entities,
-    getEditorSelectionProperty("entityDefinition"),
-    selection.entityDefinition
-  );
-  const component = findBy(
-    system?.library.components,
-    getEditorSelectionProperty("componentDefinition"),
-    selection.componentDefinition
+  const libraryNode = findBy(
+    system?.library,
+    getEditorSelectionProperty("libraryNode"),
+    selection.libraryNode
   );
   return {
     system,
     scene,
-    entityInitializer: instance,
-    entityDefinition: entity,
-    componentDefinition: component,
+    entityInitializer,
+    libraryNode,
   };
 };
 

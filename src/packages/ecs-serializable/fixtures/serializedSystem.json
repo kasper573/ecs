@@ -10,17 +10,21 @@
       "name": "Scene A"
     }
   ],
-  "library": {
-    "components": [
-      {
+  "library": [
+    {
+      "id": "uuid0",
+      "type": "component",
+      "component": {
         "id": "uuid0",
         "properties": [],
         "name": "Foo",
         "nativeComponent": "foo"
       }
-    ],
-    "entities": [
-      {
+    },
+    {
+      "id": "uuid0",
+      "type": "entity",
+      "entity": {
         "id": "uuid1",
         "components": [
           {
@@ -30,7 +34,7 @@
         ],
         "name": "Entity A"
       }
-    ]
-  },
+    }
+  ],
   "name": "System A"
 }

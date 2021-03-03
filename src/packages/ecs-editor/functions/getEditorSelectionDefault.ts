@@ -1,7 +1,7 @@
-import { EditorObjectName, EditorObjects } from "../types/EditorObjects";
+import { EditorObjectName } from "../types/EditorObjects";
 import { EditorState } from "../types/EditorState";
 import { getEditorSelectionProperty } from "../types/EditorSelection";
-import { getEditorObjectList } from "./getEditorObjectList";
+import { peekEditorObjectList } from "./peekEditorObjectList";
 
 /**
  * Returns the selection for the first object in the list for the specified object.
@@ -11,12 +11,8 @@ export const getEditorSelectionDefault = <ObjectName extends EditorObjectName>(
   state: EditorState,
   objectName: ObjectName
 ) => {
-  const objectList = getEditorObjectList(
-    state,
-    objectName
-  ) as EditorObjects[ObjectName][];
+  const selectedObject = peekEditorObjectList(state, objectName);
   const selectionProperty = getEditorSelectionProperty(objectName);
-  const selectedObject = objectList[0];
   if (selectedObject) {
     return selectedObject[selectionProperty];
   }

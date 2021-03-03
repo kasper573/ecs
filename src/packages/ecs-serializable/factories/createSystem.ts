@@ -2,13 +2,12 @@ import { System } from "../../ecs/System";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { Entity } from "../../ecs/Entity";
 import { SystemDefinition } from "../types/SystemDefinition";
-import { EntityConstructorMap } from "../types/EntityConstructorMap";
 import { NativeComponents } from "../types/NativeComponents";
-import { createEntityInstanceFactory } from "./createEntityInstanceFactory";
+import { getDefinitionsInLibrary } from "../functions/getDefinitionsInLibrary";
 import { defineEntities } from "./defineEntities";
 import { defineComponents } from "./defineComponents";
+import { createEntityInstancesByScene } from "./createEntityInstancesByScene";
 
 /**
  * Creates a System instance for the specified SystemDefinition
@@ -18,11 +17,13 @@ export const createSystem = (
   nativeComponents: NativeComponents,
   preferredSceneId?: string
 ): System => {
-  const { entities = [], components = [] } = systemDefinition.library;
+  const { entities, components } = getDefinitionsInLibrary(
+    systemDefinition.library
+  );
   const componentConstructors = defineComponents(components, nativeComponents);
   const entityConstructors = defineEntities(entities, componentConstructors);
-  const entriesByScene = getEntriesByScene(
-    systemDefinition,
+  const entriesByScene = createEntityInstancesByScene(
+    systemDefinition.scenes,
     entityConstructors
   );
   const availableSceneIds = Object.keys(entriesByScene);
@@ -36,19 +37,4 @@ export const createSystem = (
     modules: [sceneManager, inventory, new InteractionMemory()],
     entities: () => [...(sceneManager.scene ?? []), ...inventory],
   });
-};
-
-const getEntriesByScene = (
-  systemDefinition: SystemDefinition,
-  entityConstructors: EntityConstructorMap
-) => {
-  return systemDefinition.scenes.reduce((scenes, scene) => {
-    const createEntityInstance = createEntityInstanceFactory(
-      entityConstructors
-    );
-    return {
-      ...scenes,
-      [scene.name]: scene.entities.map(createEntityInstance),
-    };
-  }, {} as Record<string, Entity[]>);
 };

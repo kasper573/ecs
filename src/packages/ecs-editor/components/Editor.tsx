@@ -3,7 +3,6 @@ import { IconButton, List, Tooltip, Typography } from "@material-ui/core";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import {
   EntityInitializer,
   EntityInitializerId,
@@ -21,10 +20,13 @@ import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
 import { useEnsureSelection } from "../hooks/useEnsureSelection";
 import {
-  ComponentIcon,
+  LibraryEntityNode,
+  LibraryNode,
+} from "../../ecs-serializable/types/LibraryNode";
+import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
+import {
   DeleteIcon,
   EditIcon,
-  EntityDefinitionIcon,
   EntityInitializerIcon,
   ResetIcon,
   SceneIcon,
@@ -38,6 +40,7 @@ import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
 import { CrudListSubheader } from "./CrudListSubheader";
+import { EditorLibraryTree } from "./EditorLibraryTree";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -91,23 +94,37 @@ export const Editor = ({ defaultState }: EditorProps) => {
   });
 
   const [
-    entityDefinitionEvents,
-    EntityDefinitionDialogs,
-  ] = useCrudDialogs<EntityDefinition>({
+    libraryEntityNodeEvents,
+    LibraryEntityNodeDialogs,
+  ] = useCrudDialogs<LibraryEntityNode>({
     createDialogTitle: "Add entity",
-    getItemName: (item) => item.name,
+    getItemName: getLibraryNodeLabel,
     onCreateItem: (name) =>
       dispatch({
-        type: "CREATE_ENTITY_DEFINITION",
-        payload: createEntityDefinition({ id: uuid(), name }),
+        type: "CREATE_LIBRARY_NODE",
+        payload: {
+          id: uuid(),
+          type: "entity",
+          entity: createEntityDefinition({ id: uuid(), name }),
+        },
       }),
-    onRenameItem: (entityDefinition, name) =>
+    onRenameItem: (target, name) =>
       dispatch({
-        type: "UPDATE_ENTITY_DEFINITION",
-        payload: { entityDefinition, update: { name } },
+        type: "UPDATE_LIBRARY_NODE",
+        payload: {
+          target,
+          replacement: {
+            id: target.id,
+            type: "entity",
+            entity: createEntityDefinition({ id: target.entity.id, name }),
+          },
+        },
       }),
-    onDeleteItem: (entityDefinition) =>
-      dispatch({ type: "DELETE_ENTITY_DEFINITION", payload: entityDefinition }),
+    onDeleteItem: (libraryNode) =>
+      dispatch({
+        type: "DELETE_LIBRARY_NODE",
+        payload: libraryNode as LibraryNode,
+      }),
   });
 
   const [
@@ -184,7 +201,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     <>
       <SystemDialogs />
       <SceneDialogs />
-      <EntityDefinitionDialogs />
+      <LibraryEntityNodeDialogs />
       <EntityInitializerDialogs />
     </>
   );
@@ -212,7 +229,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     <AppBarAndDrawer appBar={appBar} drawer={drawer}>
       {dialogs}
       <EditorPanelContainer>
-        <EditorFlatPanel title="Scene">
+        <EditorFlatPanel>
           {selected.scene ? (
             system && <TextSystem system={system} />
           ) : (
@@ -223,7 +240,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
             </Typography>
           )}
         </EditorFlatPanel>
-        <EditorPanel title="Scenes" name={EditorPanelName.Scenes}>
+        <EditorPanel name={EditorPanelName.Scenes}>
           <CrudList
             title={EditorPanelName.Scenes}
             noun="scene"
@@ -236,7 +253,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
             {...sceneEvents}
           />
         </EditorPanel>
-        <EditorPanel title="Instances" name={EditorPanelName.Instances}>
+        <EditorPanel name={EditorPanelName.Instances}>
           <CrudList
             title={EditorPanelName.Instances}
             noun="instance"
@@ -255,30 +272,19 @@ export const Editor = ({ defaultState }: EditorProps) => {
             {...entityInitializerEvents}
           />
         </EditorPanel>
-        <EditorPanel title="Library" name={EditorPanelName.Library}>
-          <CrudList
-            title={EditorPanelName.Library}
+        <EditorPanel name={EditorPanelName.Library}>
+          <CrudListSubheader
+            title="Library"
             noun="entity"
-            active={selected.entityDefinition}
-            items={selected.system?.library.entities ?? []}
-            getItemProps={({ name }) => ({ name, icon: EntityDefinitionIcon })}
-            onSelectItem={(entityDefinition) =>
-              dispatch({
-                type: "SELECT_ENTITY_DEFINITION",
-                payload: entityDefinition,
-              })
-            }
-            {...entityDefinitionEvents}
+            onCreate={libraryEntityNodeEvents.onCreateItem}
           />
-          <CrudList
-            title="Components"
-            active={selected.componentDefinition}
-            items={selected.system?.library.components ?? []}
-            getItemProps={({ name }) => ({ name, icon: ComponentIcon })}
-            onSelectItem={(componentDefinition) =>
+          <EditorLibraryTree
+            library={selected.system.library}
+            selected={selected.libraryNode}
+            onSelectedChange={(nodeId) =>
               dispatch({
-                type: "SELECT_COMPONENT_DEFINITION",
-                payload: componentDefinition,
+                type: "SELECT_LIBRARY_NODE",
+                payload: nodeId,
               })
             }
           />

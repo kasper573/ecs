@@ -10,11 +10,10 @@ import { createEntityInitializerReducer } from "./reducers/createEntityInitializ
 import { updateEntityInitializerReducer } from "./reducers/updateEntityInitializerReducer";
 import { deleteEntityInitializerReducer } from "./reducers/deleteEntityInitializerReducer";
 import { selectEntityInitializerReducer } from "./reducers/selectEntityInitializerReducer";
-import { createEntityDefinitionReducer } from "./reducers/createEntityDefinitionReducer";
-import { updateEntityDefinitionReducer } from "./reducers/updateEntityDefinitionReducer";
-import { deleteEntityDefinitionReducer } from "./reducers/deleteEntityDefinitionReducer";
-import { selectEntityDefinitionReducer } from "./reducers/selectEntityDefinitionReducer";
-import { selectComponentDefinitionReducer } from "./reducers/selectComponentDefinitionReducer";
+import { createLibraryNodeReducer } from "./reducers/createLibraryNodeReducer";
+import { updateLibraryNodeReducer } from "./reducers/updateLibraryNodeReducer";
+import { deleteLibraryNodeReducer } from "./reducers/deleteLibraryNodeReducer";
+import { selectLibraryNodeReducer } from "./reducers/selectLibraryNodeReducer";
 import { updateStateReducer } from "./reducers/updateStateReducer";
 
 /**
@@ -39,11 +38,10 @@ export const actionToReducer = {
   UPDATE_ENTITY_INITIALIZER: updateEntityInitializerReducer,
   DELETE_ENTITY_INITIALIZER: deleteEntityInitializerReducer,
   SELECT_ENTITY_INITIALIZER: selectEntityInitializerReducer,
-  CREATE_ENTITY_DEFINITION: createEntityDefinitionReducer,
-  UPDATE_ENTITY_DEFINITION: updateEntityDefinitionReducer,
-  DELETE_ENTITY_DEFINITION: deleteEntityDefinitionReducer,
-  SELECT_ENTITY_DEFINITION: selectEntityDefinitionReducer,
-  SELECT_COMPONENT_DEFINITION: selectComponentDefinitionReducer,
+  CREATE_LIBRARY_NODE: createLibraryNodeReducer,
+  UPDATE_LIBRARY_NODE: updateLibraryNodeReducer,
+  DELETE_LIBRARY_NODE: deleteLibraryNodeReducer,
+  SELECT_LIBRARY_NODE: selectLibraryNodeReducer,
 };
 
 export type ActionToReducer = typeof actionToReducer;
