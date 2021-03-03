@@ -9,7 +9,7 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { SystemDefinition } from "./types/SystemDefinition";
+import { SystemDefinition, SystemDefinitionId } from "./types/SystemDefinition";
 import { createSystemDefinition } from "./factories/createSystemDefinition";
 import { createSceneDefinition } from "./factories/createSceneDefinition";
 import { createEntityInitializer } from "./factories/createEntityInitializer";
@@ -117,6 +117,7 @@ describe("instantiating a System using SystemDefinition", () => {
   it("throws error when referencing entity definition that doesn't exist", () => {
     const definition = createSystemDefinition(
       {
+        id: "systemA" as SystemDefinitionId,
         name: "System A",
         library: [],
         scenes: [
@@ -204,6 +205,7 @@ export const mockSystem = (
   createSystem(
     createSystemDefinition(
       {
+        id: "systemA" as SystemDefinitionId,
         name: "System A",
         library: [
           ...components.map(

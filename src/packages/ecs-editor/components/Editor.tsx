@@ -81,7 +81,10 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SYSTEM",
-        payload: createSystemDefinition({ name }, state.nativeComponents),
+        payload: createSystemDefinition(
+          { id: uuid(), name },
+          state.nativeComponents
+        ),
       }),
     onRenameItem: (system, name) =>
       dispatch({

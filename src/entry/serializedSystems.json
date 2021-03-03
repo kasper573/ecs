@@ -53,7 +53,8 @@
         }
       }
     ],
-    "name": "System A"
+    "name": "System A",
+    "id": "system1"
   },
   {
     "scenes": [
@@ -100,7 +101,8 @@
         }
       }
     ],
-    "name": "System B"
+    "name": "System B",
+    "id": "system2"
   },
   {
     "scenes": [
@@ -147,6 +149,7 @@
         }
       }
     ],
-    "name": "System C"
+    "name": "System C",
+    "id": "system3"
   }
 ]

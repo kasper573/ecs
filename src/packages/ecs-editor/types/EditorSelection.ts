@@ -18,7 +18,7 @@ export type EditorSelection = Partial<{
 type EditorSelectionProperties = typeof editorSelectionProperties;
 
 const editorSelectionProperties = {
-  system: "name" as const,
+  system: "id" as const,
   scene: "name" as const,
   entityInitializer: "id" as const,
   libraryNode: "id" as const,
