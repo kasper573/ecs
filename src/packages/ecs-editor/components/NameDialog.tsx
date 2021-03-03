@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ChangeEvent, useEffect, useState } from "react";
 
-export type NameDialogProps = Pick<DialogProps, "open"> & {
+export type NameDialogProps = Pick<DialogProps, "open" | "onClose"> & {
   /**
    * The dialog title
    */
@@ -18,11 +18,6 @@ export type NameDialogProps = Pick<DialogProps, "open"> & {
    * The default value of the TextField in the dialog.
    */
   defaultValue: string;
-  /**
-   * Called when the dialog wants to be closed
-   * (either by selecting the close button or save button)
-   */
-  onClose: () => void;
   /**
    * Called when the dialog wants to save the entered name.
    * @param newValue The value of the TextField
@@ -38,18 +33,20 @@ export const NameDialog = ({
   open,
   title,
   defaultValue,
-  onClose,
+  onClose = () => {},
   onSave,
   ...dialogProps
 }: NameDialogProps) => {
   const [value, setValue] = useState(defaultValue);
+
+  const manualClose = () => onClose({}, "backdropClick");
 
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.currentTarget.value);
 
   const saveAndClose = () => {
     onSave(value);
-    onClose();
+    manualClose();
   };
 
   // Reset to default value every time dialog is opened
@@ -80,7 +77,7 @@ export const NameDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={manualClose} color="secondary">
           Cancel
         </Button>
         <Button onClick={saveAndClose} color="primary">

@@ -1,15 +1,17 @@
 import React, { useReducer } from "react";
-import { IconButton, List, Tooltip, Typography } from "@material-ui/core";
+import {
+  IconButton,
+  List,
+  ListItemSecondaryAction,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import {
-  EntityInitializer,
-  EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
 import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
-import { createEntityInitializer } from "../../ecs-serializable/factories/createEntityInitializer";
 import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
 import { rootReducer } from "../reducers/rootReducer";
 import { EditorState } from "../types/EditorState";
@@ -24,11 +26,15 @@ import {
   LibraryNode,
 } from "../../ecs-serializable/types/LibraryNode";
 import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
+import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
+import { useDialog } from "../hooks/useDialog";
+import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import {
   DeleteIcon,
   EditIcon,
   EntityInitializerIcon,
   ResetIcon,
+  SaveIcon,
   SceneIcon,
   SystemIcon,
 } from "./icons";
@@ -41,6 +47,9 @@ import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
 import { CrudListSubheader } from "./CrudListSubheader";
 import { EditorLibraryTree } from "./EditorLibraryTree";
+import { OpaqueListSubheader } from "./OpaqueListSubheader";
+import { CreateEntityInitializerButton } from "./CreateEntityInitializerButton";
+import { SimpleDialog } from "./SimpleDialog";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
@@ -62,6 +71,12 @@ export const Editor = ({ defaultState }: EditorProps) => {
   );
   useSceneSync(system, selected, dispatch);
   useEnsureSelection(state, dispatch);
+
+  const [showSaveDialog, saveDialog] = useDialog((props) => (
+    <SimpleDialog title="Save" {...props}>
+      <pre>{serializeJS(state.systems, { space: 2 })}</pre>
+    </SimpleDialog>
+  ));
 
   const [systemEvents, SystemDialogs] = useCrudDialogs<SystemDefinition>({
     createDialogTitle: "Add system",
@@ -131,22 +146,15 @@ export const Editor = ({ defaultState }: EditorProps) => {
     entityInitializerEvents,
     EntityInitializerDialogs,
   ] = useCrudDialogs<EntityInitializer>({
-    createDialogTitle: "Add entity instance",
-    getItemName: (item) => item.id,
-    onCreateItem: (id) =>
-      dispatch({
-        type: "CREATE_ENTITY_INITIALIZER",
-        payload: createEntityInitializer({
-          id: id as EntityInitializerId,
-          definitionId: uuid(),
-        }),
-      }),
-    onRenameItem: (entityInitializer, id) =>
+    createDialogTitle: "Initialize entity",
+    getItemName: (item) => item.name,
+    onCreateItem: () => {},
+    onRenameItem: (entityInitializer, name) =>
       dispatch({
         type: "UPDATE_ENTITY_INITIALIZER",
         payload: {
           entityInitializer,
-          update: { id: id as EntityInitializerId },
+          update: { name },
         },
       }),
     onDeleteItem: (entityInitializer) =>
@@ -180,6 +188,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
           <DeleteIcon />
         </IconButton>
       </Tooltip>
+      <Tooltip title="Save" onClick={showSaveDialog}>
+        <IconButton edge="end" aria-label="save">
+          <SaveIcon />
+        </IconButton>
+      </Tooltip>
     </>
   );
 
@@ -203,6 +216,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
       <SceneDialogs />
       <LibraryEntityNodeDialogs />
       <EntityInitializerDialogs />
+      {saveDialog}
     </>
   );
 
@@ -253,45 +267,67 @@ export const Editor = ({ defaultState }: EditorProps) => {
             {...sceneEvents}
           />
         </EditorPanel>
-        <EditorPanel name={EditorPanelName.Instances}>
-          <CrudList
-            title={EditorPanelName.Instances}
-            noun="instance"
-            active={selected.entityInitializer}
-            items={selected.scene?.entities ?? []}
-            getItemProps={({ id }) => ({
-              name: id,
-              icon: EntityInitializerIcon,
-            })}
-            onSelectItem={(entityInitializer) =>
-              dispatch({
-                type: "SELECT_ENTITY_INITIALIZER",
-                payload: entityInitializer,
-              })
-            }
-            {...entityInitializerEvents}
-          />
-        </EditorPanel>
-        <EditorPanel name={EditorPanelName.Library}>
-          <CrudListSubheader
-            title="Library"
-            noun="entity"
-            onCreate={libraryEntityNodeEvents.onCreateItem}
-          />
-          <EditorLibraryTree
-            library={selected.system.library}
-            selected={selected.libraryNode}
-            onSelectedChange={(nodeId) =>
-              dispatch({
-                type: "SELECT_LIBRARY_NODE",
-                payload: nodeId,
-              })
-            }
-          />
-        </EditorPanel>
-        <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
-          <List subheader={<CrudListSubheader title="Inspector" />} />
-        </EditorPanel>
+        {selected.scene && (
+          <>
+            <EditorPanel name={EditorPanelName.Instances}>
+              <OpaqueListSubheader>
+                {EditorPanelName.Instances}
+                <ListItemSecondaryAction>
+                  <CreateEntityInitializerButton
+                    entityDefinitions={
+                      getDefinitionsInLibrary(selected.system?.library ?? [])
+                        .entities
+                    }
+                    onCreate={(entityInitializer) =>
+                      dispatch({
+                        type: "CREATE_ENTITY_INITIALIZER",
+                        payload: entityInitializer,
+                      })
+                    }
+                  />
+                </ListItemSecondaryAction>
+              </OpaqueListSubheader>
+              <CrudList
+                active={selected.entityInitializer}
+                items={selected.scene?.entities ?? []}
+                getItemProps={({ name }) => ({
+                  name,
+                  icon: EntityInitializerIcon,
+                })}
+                onSelectItem={(entityInitializer) =>
+                  dispatch({
+                    type: "SELECT_ENTITY_INITIALIZER",
+                    payload: entityInitializer,
+                  })
+                }
+                onUpdateItem={entityInitializerEvents.onUpdateItem}
+                onDeleteItem={entityInitializerEvents.onDeleteItem}
+              />
+            </EditorPanel>
+            <EditorPanel name={EditorPanelName.Library}>
+              <CrudListSubheader
+                title="Library"
+                noun="entity"
+                onCreate={libraryEntityNodeEvents.onCreateItem}
+              />
+              <EditorLibraryTree
+                library={selected.system.library}
+                selected={selected.libraryNode}
+                onSelectedChange={(nodeId) =>
+                  dispatch({
+                    type: "SELECT_LIBRARY_NODE",
+                    payload: nodeId,
+                  })
+                }
+              />
+            </EditorPanel>
+            <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
+              <List subheader={<CrudListSubheader title="Inspector" />} />
+              {selected.libraryNode &&
+                getLibraryNodeLabel(selected.libraryNode)}
+            </EditorPanel>
+          </>
+        )}
       </EditorPanelContainer>
     </AppBarAndDrawer>
   );

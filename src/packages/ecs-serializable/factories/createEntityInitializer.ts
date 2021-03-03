@@ -1,7 +1,8 @@
 import { EntityInitializer } from "../types/EntityInitializer";
 
 export const createEntityInitializer = (
-  props: EntityInitializer
+  props: PartialFor<EntityInitializer, "name">
 ): EntityInitializer => ({
+  name: props.id,
   ...props,
 });

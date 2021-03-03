@@ -1,12 +1,11 @@
 import {
   IconButton,
   ListItemSecondaryAction,
-  ListSubheader,
   Tooltip,
 } from "@material-ui/core";
 import React from "react";
-import styled from "styled-components";
 import { AddIcon } from "./icons";
+import { OpaqueListSubheader } from "./OpaqueListSubheader";
 
 export type CrudListSubheaderProps = {
   /**
@@ -32,7 +31,7 @@ export const CrudListSubheader = ({
   noun,
   onCreate,
 }: CrudListSubheaderProps) => (
-  <Container>
+  <OpaqueListSubheader>
     {title}
     {onCreate && (
       <ListItemSecondaryAction>
@@ -43,9 +42,5 @@ export const CrudListSubheader = ({
         </Tooltip>
       </ListItemSecondaryAction>
     )}
-  </Container>
+  </OpaqueListSubheader>
 );
-
-const Container = styled(ListSubheader).attrs({ component: "div" })`
-  background: ${({ theme }) => theme.palette.background.paper};
-`;

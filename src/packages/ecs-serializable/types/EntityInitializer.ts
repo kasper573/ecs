@@ -4,9 +4,12 @@ export type EntityInitializerId = Nominal<string, "EntityInitializerId">;
 
 export type EntityInitializer = {
   /**
-   * User specified locally unique id (within parent Scene).
-   * Serves as name for presentation as well.
+   * Automatically generated locally unique id (within parent Scene).
    */
   id: EntityInitializerId;
+  /**
+   * User specified name
+   */
+  name: string;
   definitionId: EntityDefinitionId;
 };

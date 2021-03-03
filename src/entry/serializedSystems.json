@@ -1,0 +1,152 @@
+[
+  {
+    "scenes": [
+      {
+        "entities": [],
+        "name": "scene in system a"
+      }
+    ],
+    "library": [
+      {
+        "id": "describable",
+        "type": "component",
+        "component": {
+          "name": "describable",
+          "nativeComponent": "describable",
+          "id": "describable"
+        }
+      },
+      {
+        "id": "collectable",
+        "type": "component",
+        "component": {
+          "name": "collectable",
+          "nativeComponent": "collectable",
+          "id": "collectable"
+        }
+      },
+      {
+        "id": "interactive",
+        "type": "component",
+        "component": {
+          "name": "interactive",
+          "nativeComponent": "interactive",
+          "id": "interactive"
+        }
+      },
+      {
+        "id": "10370e96-b006-45ca-9f5d-ae3d8c2efef7",
+        "type": "entity",
+        "entity": {
+          "components": [],
+          "id": "30ac1a00-8bf4-4634-bbeb-3436e09f8fc0",
+          "name": "entity in system a"
+        }
+      },
+      {
+        "id": "b4828534-e68b-4db1-afaf-9dc55f2d7063",
+        "type": "entity",
+        "entity": {
+          "components": [],
+          "id": "c5339790-c490-4c56-a4bf-f2e6bf5ecd9f",
+          "name": "entity in system b"
+        }
+      }
+    ],
+    "name": "System A"
+  },
+  {
+    "scenes": [
+      {
+        "entities": [],
+        "name": "scene in system b"
+      }
+    ],
+    "library": [
+      {
+        "id": "describable",
+        "type": "component",
+        "component": {
+          "name": "describable",
+          "nativeComponent": "describable",
+          "id": "describable"
+        }
+      },
+      {
+        "id": "collectable",
+        "type": "component",
+        "component": {
+          "name": "collectable",
+          "nativeComponent": "collectable",
+          "id": "collectable"
+        }
+      },
+      {
+        "id": "interactive",
+        "type": "component",
+        "component": {
+          "name": "interactive",
+          "nativeComponent": "interactive",
+          "id": "interactive"
+        }
+      },
+      {
+        "id": "e02f7852-23df-4a49-82cd-1254cb0a74ba",
+        "type": "entity",
+        "entity": {
+          "components": [],
+          "id": "c0274117-1e0c-4d11-89d8-8a5d1d77ab97",
+          "name": "entity in system b"
+        }
+      }
+    ],
+    "name": "System B"
+  },
+  {
+    "scenes": [
+      {
+        "entities": [],
+        "name": "scene in system c"
+      }
+    ],
+    "library": [
+      {
+        "id": "describable",
+        "type": "component",
+        "component": {
+          "name": "describable",
+          "nativeComponent": "describable",
+          "id": "describable"
+        }
+      },
+      {
+        "id": "collectable",
+        "type": "component",
+        "component": {
+          "name": "collectable",
+          "nativeComponent": "collectable",
+          "id": "collectable"
+        }
+      },
+      {
+        "id": "interactive",
+        "type": "component",
+        "component": {
+          "name": "interactive",
+          "nativeComponent": "interactive",
+          "id": "interactive"
+        }
+      },
+      {
+        "id": "de280130-6780-485a-8086-dd8ae905765d",
+        "type": "entity",
+        "entity": {
+          "components": [],
+          "id": "3028b09d-60fd-4384-a95a-40e463129866",
+          "name": "entity in system c"
+        }
+      }
+    ],
+    "name": "System C"
+  }
+]

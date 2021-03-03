@@ -14,4 +14,5 @@ export {
   RotateLeft as ResetIcon,
   Folder as FolderIcon,
   FolderOpen as FolderOpenIcon,
+  SaveAlt as SaveIcon,
 } from "@material-ui/icons";

@@ -1,6 +1,5 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
-import { createEntityInitializer } from "../../ecs-serializable/factories/createEntityInitializer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { updateSceneReducer } from "./updateSceneReducer";
 
@@ -13,10 +12,7 @@ export const createEntityInitializerReducer: EditorStateReducer<EntityInitialize
     return updateSceneReducer(state, {
       scene,
       update: {
-        entities: [
-          ...scene.entities,
-          createEntityInitializer(entityInitializer),
-        ],
+        entities: [...scene.entities, entityInitializer],
       },
     });
   }

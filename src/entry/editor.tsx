@@ -6,9 +6,10 @@ import { App } from "../packages/shared-components/App";
 import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
-import { createSystemDefinition } from "../packages/ecs-serializable/factories/createSystemDefinition";
 import { Interactive } from "../packages/ecs-interactive/Interactive";
+import systemDefinitionsJson from "./serializedSystems.json";
 
+const systemDefinitions = (systemDefinitionsJson as object) as SystemDefinition[];
 const nativeComponents = {
   describable: Describable,
   collectable: Collectable,
@@ -22,11 +23,7 @@ function render() {
         <Editor
           defaultState={{
             nativeComponents,
-            systems: [
-              createSystemDefinition({ name: "System A" }, nativeComponents),
-              createSystemDefinition({ name: "System B" }, nativeComponents),
-              createSystemDefinition({ name: "System C" }, nativeComponents),
-            ] as SystemDefinition[],
+            systems: systemDefinitions,
           }}
         />
       </App>

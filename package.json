@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "lodash.without": "^4.4.0",
+    "material-ui-popup-state": "^1.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "serialize-javascript": "^5.0.1",
