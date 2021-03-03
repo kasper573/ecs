@@ -1,7 +1,6 @@
 import React, { useReducer } from "react";
 import {
   IconButton,
-  List,
   ListItemSecondaryAction,
   Tooltip,
   Typography,
@@ -45,7 +44,10 @@ import { EditorTitle } from "./EditorTitle";
 import { EditorPanel } from "./EditorPanel";
 import { EditorPanelName } from "./EditorPanelName";
 import { EditorFlatPanel } from "./EditorFlatPanel";
-import { CrudListSubheader } from "./CrudListSubheader";
+import {
+  EditorPanelHeader,
+  EditorPanelHeaderLayout,
+} from "./EditorPanelHeader";
 import { EditorLibraryTree } from "./EditorLibraryTree";
 import { OpaqueListSubheader } from "./OpaqueListSubheader";
 import { CreateEntityInitializerButton } from "./CreateEntityInitializerButton";
@@ -197,17 +199,21 @@ export const Editor = ({ defaultState }: EditorProps) => {
   );
 
   const drawer = (
-    <CrudList
-      title="Systems"
-      noun="System"
-      active={selected.system}
-      items={state.systems}
-      onSelectItem={(system) =>
-        dispatch({ type: "SELECT_SYSTEM", payload: system })
-      }
-      onCreateItem={systemEvents.onCreateItem}
-      getItemProps={({ name }) => ({ name, icon: SystemIcon })}
-    />
+    <>
+      <EditorPanelHeader
+        title={EditorPanelName.Scenes}
+        onCreate={systemEvents.onCreateItem}
+      />
+      <CrudList
+        title="Systems"
+        active={selected.system}
+        items={state.systems}
+        onSelectItem={(system) =>
+          dispatch({ type: "SELECT_SYSTEM", payload: system })
+        }
+        getItemProps={({ name }) => ({ name, icon: SystemIcon })}
+      />
+    </>
   );
 
   const dialogs = (
@@ -255,9 +261,12 @@ export const Editor = ({ defaultState }: EditorProps) => {
           )}
         </EditorFlatPanel>
         <EditorPanel name={EditorPanelName.Scenes}>
+          <EditorPanelHeader
+            title={EditorPanelName.Scenes}
+            onCreate={sceneEvents.onCreateItem}
+          />
           <CrudList
             title={EditorPanelName.Scenes}
-            noun="scene"
             active={selected.scene}
             items={selected.system?.scenes ?? []}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
@@ -270,23 +279,20 @@ export const Editor = ({ defaultState }: EditorProps) => {
         {selected.scene && (
           <>
             <EditorPanel name={EditorPanelName.Instances}>
-              <OpaqueListSubheader>
-                {EditorPanelName.Instances}
-                <ListItemSecondaryAction>
-                  <CreateEntityInitializerButton
-                    entityDefinitions={
-                      getDefinitionsInLibrary(selected.system?.library ?? [])
-                        .entities
-                    }
-                    onCreate={(entityInitializer) =>
-                      dispatch({
-                        type: "CREATE_ENTITY_INITIALIZER",
-                        payload: entityInitializer,
-                      })
-                    }
-                  />
-                </ListItemSecondaryAction>
-              </OpaqueListSubheader>
+              <EditorPanelHeaderLayout title={EditorPanelName.Instances}>
+                <CreateEntityInitializerButton
+                  entityDefinitions={
+                    getDefinitionsInLibrary(selected.system?.library ?? [])
+                      .entities
+                  }
+                  onCreate={(entityInitializer) =>
+                    dispatch({
+                      type: "CREATE_ENTITY_INITIALIZER",
+                      payload: entityInitializer,
+                    })
+                  }
+                />
+              </EditorPanelHeaderLayout>
               <CrudList
                 active={selected.entityInitializer}
                 items={selected.scene?.entities ?? []}
@@ -300,12 +306,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
                     payload: entityInitializer,
                   })
                 }
-                onUpdateItem={entityInitializerEvents.onUpdateItem}
-                onDeleteItem={entityInitializerEvents.onDeleteItem}
+                {...entityInitializerEvents}
               />
             </EditorPanel>
             <EditorPanel name={EditorPanelName.Library}>
-              <CrudListSubheader
+              <EditorPanelHeader
                 title="Library"
                 noun="entity"
                 onCreate={libraryEntityNodeEvents.onCreateItem}
@@ -321,8 +326,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
                 }
               />
             </EditorPanel>
-            <EditorPanel title="Inspector" name={EditorPanelName.Inspector}>
-              <List subheader={<CrudListSubheader title="Inspector" />} />
+            <EditorPanel name={EditorPanelName.Inspector}>
+              <EditorPanelHeader title="Inspector" />
               {selected.libraryNode &&
                 getLibraryNodeLabel(selected.libraryNode)}
             </EditorPanel>
