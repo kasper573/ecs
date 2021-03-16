@@ -198,12 +198,8 @@ export const Editor = ({ defaultState }: EditorProps) => {
 
   const drawer = (
     <>
-      <EditorPanelHeader
-        title={EditorPanelName.Scenes}
-        onCreate={systemEvents.onCreateItem}
-      />
+      <EditorPanelHeader title="Systems" onCreate={systemEvents.onCreateItem} />
       <CrudList
-        title="Systems"
         active={selected.system}
         items={state.systems}
         onSelectItem={(system) =>
