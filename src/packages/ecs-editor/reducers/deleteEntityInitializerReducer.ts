@@ -1,6 +1,6 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectEditorObjects } from "../selectors/selectEditorObjects";
+import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateSceneReducer } from "./updateSceneReducer";
@@ -9,7 +9,7 @@ export const deleteEntityInitializerReducer: EditorStateReducer<EntityInitialize
   state,
   entityInitializer
 ) => {
-  const selected = selectEditorObjects(state);
+  const selected = selectSelectedObjects(state);
   if (selected.scene) {
     const deletedState = updateSceneReducer(state, {
       scene: selected.scene,

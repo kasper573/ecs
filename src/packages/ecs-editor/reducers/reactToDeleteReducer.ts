@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { selectEditorObjects } from "../selectors/selectEditorObjects";
+import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import {
   EditorSelectionName,
   EditorSelectionObjects,
@@ -28,7 +28,7 @@ export const reactToDeleteReducer = <K extends EditorSelectionName>(
   currentState: EditorState,
   { previousState, objectName, didDelete }: ReactToDeletePayload<K>
 ) => {
-  const selected = selectEditorObjects(previousState);
+  const selected = selectSelectedObjects(previousState);
   if (didDelete(selected[objectName])) {
     return resetSelectionReducer(currentState, objectName);
   }

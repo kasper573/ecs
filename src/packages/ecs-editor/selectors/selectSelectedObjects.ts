@@ -6,7 +6,7 @@ import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 /**
  * Gets the EditorSelectionObjects for the current EditorSelection of the specified EditorState
  */
-export const selectEditorObjects = ({ systems, selection }: EditorState) => {
+export const selectSelectedObjects = ({ systems, selection }: EditorState) => {
   // Resolve EditorSelectionValues into EditorSelectionObjects
   const system = findBy(systems, "id", selection.system);
   const scene = findBy(system?.scenes, "id", selection.scene);

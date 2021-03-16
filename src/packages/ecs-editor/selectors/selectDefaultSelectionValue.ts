@@ -3,7 +3,7 @@ import {
   EditorSelectionName,
   EditorSelectionValues,
 } from "../types/EditorSelection";
-import { selectEditorObjects } from "./selectEditorObjects";
+import { selectSelectedObjects } from "./selectSelectedObjects";
 
 export function selectDefaultSelectionValue<
   ObjectName extends EditorSelectionName
@@ -25,7 +25,7 @@ export function selectDefaultSelectionValue(
       const firstSystem = state.systems[0];
       return firstSystem?.id;
     case "scene":
-      const selected = selectEditorObjects(state);
+      const selected = selectSelectedObjects(state);
       const scene = selected.system?.scenes[0];
       return scene && scene.id;
     case "inspected":

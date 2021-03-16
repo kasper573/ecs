@@ -9,7 +9,7 @@ import { createSceneDefinition } from "../../ecs-serializable/factories/createSc
 import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
 import { rootReducer } from "../reducers/rootReducer";
 import { EditorState } from "../types/EditorState";
-import { selectEditorObjects } from "../selectors/selectEditorObjects";
+import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
@@ -61,7 +61,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     ...defaultState,
   });
 
-  const selected = selectEditorObjects(state);
+  const selected = selectSelectedObjects(state);
   const [system, resetSystem] = useSystemInitializer(
     selected,
     state.nativeComponents

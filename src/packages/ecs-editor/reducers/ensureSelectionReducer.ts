@@ -1,6 +1,6 @@
 import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectEditorObjects } from "../selectors/selectEditorObjects";
+import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import {
   EditorSelectionName,
   editorSelectionOrder,
@@ -12,7 +12,7 @@ import {
  */
 export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   const newSelection = { ...state.selection };
-  const selected = selectEditorObjects(state);
+  const selected = selectSelectedObjects(state);
   let didChange = false;
   editorSelectionOrder.forEach(
     <ObjectName extends EditorSelectionName>(objectName: ObjectName) => {
