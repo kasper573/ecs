@@ -22,7 +22,7 @@ function render() {
       <App>
         <Editor
           nativeComponents={nativeComponents}
-          defaultState={{ systems: systemDefinitions }}
+          defaultState={{ systems: systemDefinitions, selection: {} }}
         />
       </App>
     </React.StrictMode>,

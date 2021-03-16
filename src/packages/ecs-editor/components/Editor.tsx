@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
@@ -7,14 +7,12 @@ import { EntityInitializer } from "../../ecs-serializable/types/EntityInitialize
 import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
 import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
 import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
-import { rootReducer } from "../reducers/rootReducer";
 import { EditorState } from "../types/EditorState";
 import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
-import { useEnsureSelection } from "../hooks/useEnsureSelection";
 import {
   LibraryEntityNode,
   LibraryNode,
@@ -25,7 +23,7 @@ import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import { omit } from "../functions/omit";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
-import { useEnsureNativeComponents } from "../hooks/useEnsureNativeComponents";
+import { useEditorState } from "../hooks/useEditorState";
 import {
   DeleteIcon,
   EditIcon,
@@ -51,7 +49,7 @@ import { CreateEntityInitializerButton } from "./CreateEntityInitializerButton";
 import { SimpleDialog } from "./SimpleDialog";
 
 export type EditorProps = {
-  defaultState?: Partial<EditorState>;
+  defaultState: EditorState;
   nativeComponents: NativeComponents;
 };
 
@@ -59,10 +57,7 @@ export type EditorProps = {
  * Renders controls to CRUD systems, scenes, entities, components and properties.
  */
 export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
-  const [state, dispatch] = useReducer(rootReducer, {
-    ...createDefaultState(),
-    ...defaultState,
-  });
+  const [state, dispatch] = useEditorState(nativeComponents, defaultState);
 
   const selected = selectSelectedObjects(state);
   const [system, resetSystem] = useSystemInitializer(
@@ -70,8 +65,6 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     nativeComponents
   );
   useSceneSync(system, selected, dispatch);
-  useEnsureSelection(state, dispatch);
-  useEnsureNativeComponents(state, dispatch, nativeComponents);
 
   const [showSaveDialog, saveDialog] = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
@@ -332,8 +325,3 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     </AppBarAndDrawer>
   );
 };
-
-const createDefaultState = (): EditorState => ({
-  systems: [],
-  selection: {},
-});

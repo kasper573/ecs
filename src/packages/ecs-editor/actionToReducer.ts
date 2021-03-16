@@ -14,7 +14,6 @@ import { createLibraryNodeReducer } from "./reducers/createLibraryNodeReducer";
 import { updateLibraryNodeReducer } from "./reducers/updateLibraryNodeReducer";
 import { deleteLibraryNodeReducer } from "./reducers/deleteLibraryNodeReducer";
 import { selectLibraryNodeReducer } from "./reducers/selectLibraryNodeReducer";
-import { updateStateReducer } from "./reducers/updateStateReducer";
 
 /**
  * All reducers specified here will be available as actions that can
@@ -25,7 +24,6 @@ import { updateStateReducer } from "./reducers/updateStateReducer";
  * const updateSystem = () => dispatch({type: UPDATE_SYSTEM: payload: {...}})
  */
 export const actionToReducer = {
-  UPDATE_STATE: updateStateReducer,
   CREATE_SYSTEM: createSystemReducer,
   UPDATE_SYSTEM: updateSystemReducer,
   DELETE_SYSTEM: deleteSystemReducer,
