@@ -1,7 +1,7 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
 import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
@@ -10,7 +10,7 @@ export const deleteLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
   targetNode
 ) => {
   const deletedState = updateLibraryReducer(state, {
-    system: selectSelectedObjects(state).system,
+    system: selectSelectedSystem(state),
     change: (library) => without(library, targetNode),
   });
   return reactToDeleteReducer(deletedState, {

@@ -1,6 +1,6 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
 export const createLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
@@ -8,6 +8,6 @@ export const createLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
   newNode
 ) =>
   updateLibraryReducer(state, {
-    system: selectSelectedObjects(state).system,
+    system: selectSelectedSystem(state),
     change: (library) => [...library, newNode],
   });

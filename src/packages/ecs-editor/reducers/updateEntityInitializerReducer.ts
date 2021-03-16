@@ -1,13 +1,13 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
+import { selectSelectedScene } from "../selectors/selectSelectedScene";
 import { updateSceneReducer } from "./updateSceneReducer";
 
 export const updateEntityInitializerReducer: EditorStateReducer<{
   entityInitializer: EntityInitializer;
   update: Partial<EntityInitializer>;
 }> = (state, { entityInitializer, update }) => {
-  const { scene } = selectSelectedObjects(state);
+  const scene = selectSelectedScene(state);
   if (!scene) {
     return state;
   }

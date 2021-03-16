@@ -1,7 +1,7 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
 export const updateLibraryNodeReducer: EditorStateReducer<{
@@ -9,6 +9,6 @@ export const updateLibraryNodeReducer: EditorStateReducer<{
   replacement: LibraryNode;
 }> = (state, { target, replacement }) =>
   updateLibraryReducer(state, {
-    system: selectSelectedObjects(state).system,
+    system: selectSelectedSystem(state),
     change: (library) => [...without(library, target), replacement],
   });
