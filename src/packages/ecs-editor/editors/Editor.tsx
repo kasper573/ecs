@@ -32,21 +32,22 @@ import {
   SaveIcon,
   SceneIcon,
   SystemIcon,
-} from "./icons";
-import { EditorPanelContainer } from "./EditorPanelContainer";
-import { CrudList } from "./CrudList";
-import { AppBarAndDrawer } from "./AppBarAndDrawer";
-import { EditorTitle } from "./EditorTitle";
-import { EditorPanel } from "./EditorPanel";
-import { EditorPanelName } from "./EditorPanelName";
-import { EditorFlatPanel } from "./EditorFlatPanel";
+} from "../components/icons";
+import { EditorPanelContainer } from "../components/EditorPanelContainer";
+import { CrudList } from "../components/CrudList";
+import { AppBarAndDrawer } from "../components/AppBarAndDrawer";
+import { EditorTitle } from "../components/EditorTitle";
+import { EditorPanel } from "../components/EditorPanel";
+import { EditorPanelName } from "../components/EditorPanelName";
+import { EditorFlatPanel } from "../components/EditorFlatPanel";
 import {
   EditorPanelHeader,
   EditorPanelHeaderLayout,
-} from "./EditorPanelHeader";
-import { EditorLibraryTree } from "./EditorLibraryTree";
-import { CreateEntityInitializerButton } from "./CreateEntityInitializerButton";
-import { SimpleDialog } from "./SimpleDialog";
+} from "../components/EditorPanelHeader";
+import { EditorLibraryTree } from "../components/EditorLibraryTree";
+import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
+import { SimpleDialog } from "../components/SimpleDialog";
+import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
   defaultState: EditorState;
@@ -316,8 +317,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             </EditorPanel>
             <EditorPanel name={EditorPanelName.Inspector}>
               <EditorPanelHeader title="Inspector" />
-              <pre>{JSON.stringify(state.selection.inspected, null, 2)}</pre>
-              <pre>{JSON.stringify(selected.inspected, null, 2)}</pre>
+              <InspectedObjectEditor value={selected.inspected} />
             </EditorPanel>
           </>
         )}
