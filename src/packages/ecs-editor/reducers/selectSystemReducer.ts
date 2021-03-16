@@ -8,5 +8,5 @@ export const selectSystemReducer: EditorStateReducer<SystemDefinition> = (
 ) =>
   selectObjectReducer(state, {
     objectName: "system",
-    selectedObject: system,
+    selectedValue: system.id,
   });

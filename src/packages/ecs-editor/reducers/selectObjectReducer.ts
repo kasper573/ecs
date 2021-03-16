@@ -1,24 +1,18 @@
 import { EditorState } from "../types/EditorState";
-import {
-  EditorSelection,
-  getEditorSelectionProperty,
-} from "../types/EditorSelection";
-import { EditorObjects } from "../types/EditorObjects";
+import { EditorSelectionValues } from "../types/EditorSelection";
 import { resetSelectionReducer } from "./resetSelectionReducer";
 
 /**
  * Updates the selection for the specified object type
  */
-export const selectObjectReducer = <K extends keyof EditorSelection>(
+export const selectObjectReducer = <K extends keyof EditorSelectionValues>(
   state: EditorState,
   payload: {
     objectName: K;
-    selectedObject: EditorObjects[K];
+    selectedValue: EditorSelectionValues[K];
   }
 ): EditorState => {
-  const { objectName, selectedObject } = payload;
-  const selectedProp = getEditorSelectionProperty(objectName);
-  const selectedValue = selectedObject[selectedProp];
+  const { objectName, selectedValue } = payload;
   if (selectedValue === undefined) {
     return state;
   }

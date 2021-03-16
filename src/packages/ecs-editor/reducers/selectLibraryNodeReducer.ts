@@ -7,6 +7,6 @@ export const selectLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
   node
 ) =>
   selectObjectReducer(state, {
-    objectName: "libraryNode",
-    selectedObject: node,
+    objectName: "inspected",
+    selectedValue: { type: "libraryNode", id: node.id },
   });

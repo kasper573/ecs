@@ -1,22 +1,29 @@
 import { EditorState } from "../types/EditorState";
-import { EditorSelection } from "../types/EditorSelection";
-import { EditorObjectName, editorObjectsOrder } from "../types/EditorObjects";
+import {
+  EditorSelectionName,
+  editorSelectionOrder,
+  EditorSelectionValues,
+} from "../types/EditorSelection";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
 
 /**
  * Reset to the default selection for the specified object and all child objects
  */
-export const resetSelectionReducer = <ObjectName extends keyof EditorSelection>(
+export const resetSelectionReducer = <
+  ObjectName extends keyof EditorSelectionValues
+>(
   state: EditorState,
   fromObjectName: ObjectName
 ): EditorState => {
   const newSelection = { ...state.selection };
-  const startIndex = editorObjectsOrder.indexOf(fromObjectName);
-  editorObjectsOrder
+  const startIndex = editorSelectionOrder.indexOf(fromObjectName);
+  editorSelectionOrder
     .slice(startIndex)
-    .forEach(<ObjectName extends EditorObjectName>(objectName: ObjectName) => {
-      newSelection[objectName] = getEditorSelectionDefault(state, objectName);
-    });
+    .forEach(
+      <ObjectName extends EditorSelectionName>(objectName: ObjectName) => {
+        newSelection[objectName] = getEditorSelectionDefault(state, objectName);
+      }
+    );
 
   return {
     ...state,

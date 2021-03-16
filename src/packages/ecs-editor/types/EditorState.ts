@@ -1,6 +1,6 @@
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
-import { EditorSelection } from "./EditorSelection";
+import { EditorSelectionValues } from "./EditorSelection";
 
 /**
  * Immutable state representing the current state of the editor.
@@ -20,5 +20,5 @@ export type EditorState = {
   /**
    * The current selection in the UI
    */
-  selection: EditorSelection;
+  selection: EditorSelectionValues;
 };

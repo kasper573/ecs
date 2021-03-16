@@ -326,8 +326,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
             </EditorPanel>
             <EditorPanel name={EditorPanelName.Inspector}>
               <EditorPanelHeader title="Inspector" />
-              {selected.libraryNode &&
-                getLibraryNodeLabel(selected.libraryNode)}
+              <pre>{JSON.stringify(state.selection.inspected, null, 2)}</pre>
             </EditorPanel>
           </>
         )}

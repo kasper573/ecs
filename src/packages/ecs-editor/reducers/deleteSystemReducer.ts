@@ -14,6 +14,6 @@ export const deleteSystemReducer: EditorStateReducer<SystemDefinition> = (
   return reactToDeleteReducer(deletedState, {
     previousState: state,
     objectName: "system",
-    deletedObject: system,
+    didDelete: (selectedSystem) => selectedSystem === system,
   });
 };

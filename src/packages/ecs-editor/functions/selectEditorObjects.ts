@@ -1,40 +1,47 @@
-import { EditorObjects } from "../types/EditorObjects";
 import { EditorState } from "../types/EditorState";
-import { getEditorSelectionProperty } from "../types/EditorSelection";
+import { InspectedObject, InspectedObjectId } from "../types/EditorSelection";
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 
 /**
  * Gets the EditorSelectionObjects for the current EditorSelection of the specified EditorState
  */
-export const selectEditorObjects = ({
-  systems,
-  selection,
-}: EditorState): Partial<EditorObjects> => {
-  const system = findBy(
-    systems,
-    getEditorSelectionProperty("system"),
-    selection.system
-  );
-  const scene = findBy(
-    system?.scenes,
-    getEditorSelectionProperty("scene"),
-    selection.scene
-  );
-  const entityInitializer = findBy(
-    scene?.entities,
-    getEditorSelectionProperty("entityInitializer"),
-    selection.entityInitializer
-  );
-  const libraryNode = findBy(
-    system?.library,
-    getEditorSelectionProperty("libraryNode"),
-    selection.libraryNode
-  );
+export const selectEditorObjects = ({ systems, selection }: EditorState) => {
+  // Resolve EditorSelectionValues into EditorSelectionObjects
+  const system = findBy(systems, "id", selection.system);
+  const scene = findBy(system?.scenes, "id", selection.scene);
+  const inspected = inspect(selection.inspected, system, scene);
+  // Unpack InspectedObject into named properties for convenience
+  const libraryNode =
+    inspected?.type === "libraryNode" ? inspected.object : undefined;
+  const entityInitializer =
+    inspected?.type === "entityInitializer" ? inspected.object : undefined;
   return {
     system,
     scene,
-    entityInitializer,
+    inspected,
     libraryNode,
+    entityInitializer,
   };
+};
+
+const inspect = (
+  inspection?: InspectedObjectId,
+  system?: SystemDefinition,
+  scene?: SceneDefinition
+): InspectedObject | undefined => {
+  if (inspection?.type === "entityInitializer") {
+    const object = findBy(scene?.entities, "id", inspection.id);
+    if (object) {
+      return { type: "entityInitializer", object };
+    }
+  }
+  if (inspection?.type === "libraryNode") {
+    const object = findBy(system?.library, "id", inspection.id);
+    if (object) {
+      return { type: "libraryNode", object };
+    }
+  }
 };
 
 const findBy = <T, P extends keyof T>(

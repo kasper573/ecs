@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { System } from "../../ecs/System";
 import { createSystem } from "../../ecs-serializable/factories/createSystem";
-import { EditorObjects } from "../types/EditorObjects";
 import { useAsRef } from "../../use-as-ref/useAsRef";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
+import { EditorSelectionObjects } from "../types/EditorSelection";
 
 /**
  * Automates system initialization (Initializes a System using a SystemDefinition).
@@ -13,7 +13,7 @@ import { NativeComponents } from "../../ecs-serializable/types/NativeComponents"
  * Returns the most recent System instance and a function to trigger the system reinitialization manually.
  */
 export const useSystemInitializer = (
-  selected: Partial<EditorObjects>,
+  selected: Partial<EditorSelectionObjects>,
   nativeComponents: NativeComponents
 ) => {
   const [system, setSystem] = useState<System>();

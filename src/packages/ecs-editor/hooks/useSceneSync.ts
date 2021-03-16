@@ -1,9 +1,9 @@
 import { Dispatch, useEffect, useReducer } from "react";
 import { System } from "../../ecs/System";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { EditorObjects } from "../types/EditorObjects";
 import { EditorActions } from "../types/EditorActions";
 import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
+import { EditorSelectionObjects } from "../types/EditorSelection";
 
 /**
  * Synchronizes scene selection in Editor and System state.
@@ -11,7 +11,7 @@ import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
  */
 export const useSceneSync = (
   system: System | undefined,
-  selected: Partial<EditorObjects>,
+  selected: Partial<EditorSelectionObjects>,
   dispatch: Dispatch<EditorActions>
 ) => {
   const [, refresh] = useReducer((n) => n + 1, 0);

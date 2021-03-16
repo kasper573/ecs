@@ -2,37 +2,72 @@ import { EntityInitializer } from "../../ecs-serializable/types/EntityInitialize
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { EditorObjects } from "./EditorObjects";
 
 /**
- * Selection identifiers of all editor objects.
- * Each object has its own selection identifier (ie. some use the object name, while some use an id)
+ * Serializable values that represent the current selection state of the UI
  */
-export type EditorSelection = Partial<{
-  system: SystemDefinition[EditorSelectionProperties["system"]];
-  scene: SceneDefinition[EditorSelectionProperties["scene"]];
-  entityInitializer: EntityInitializer[EditorSelectionProperties["entityInitializer"]];
-  libraryNode: LibraryNode[EditorSelectionProperties["libraryNode"]];
+export type EditorSelectionValues = Partial<{
+  system: SystemDefinition["id"];
+  scene: SceneDefinition["id"];
+  inspected: InspectedObjectId;
 }>;
 
-type EditorSelectionProperties = typeof editorSelectionProperties;
-
-const editorSelectionProperties = {
-  system: "id" as const,
-  scene: "id" as const,
-  entityInitializer: "id" as const,
-  libraryNode: "id" as const,
+/**
+ * Selection objects resolved using the corresponding selection values.
+ * (EditorSelectionValues resolves into EditorSelectionObjects)
+ */
+export type EditorSelectionObjects = {
+  // Makes sure we use the same keys as EditorSelection
+  [K in keyof EditorSelectionValues]: {
+    system: SystemDefinition;
+    scene: SceneDefinition;
+    inspected: InspectedObject;
+  }[K];
 };
 
 /**
- * Gets the property name that represents the identifier
- * used for selection for the specified object
+ * Names of all known objects in the editor
  */
-export const getEditorSelectionProperty = <
-  ObjectName extends keyof typeof editorSelectionProperties
->(
-  objectName: ObjectName
-) =>
-  (editorSelectionProperties[
-    objectName
-  ] as unknown) as keyof EditorObjects[ObjectName];
+export type EditorSelectionName = keyof EditorSelectionValues;
+
+/**
+ * The selection value that represents what should be displayed in the inspector panel
+ */
+export type InspectedObjectId =
+  | InspectedLibraryNodeId
+  | InspectedEntityInitializerId;
+
+type InspectedLibraryNodeId = {
+  type: "libraryNode";
+  id: LibraryNode["id"];
+};
+
+type InspectedEntityInitializerId = {
+  type: "entityInitializer";
+  id: EntityInitializer["id"];
+};
+
+/**
+ * The selection object that InspectedObjectId resolves into.
+ */
+export type InspectedObject = InspectedEntityInitializer | InspectedLibraryNode;
+
+type InspectedLibraryNode = {
+  type: "libraryNode";
+  object: LibraryNode;
+};
+
+type InspectedEntityInitializer = {
+  type: "entityInitializer";
+  object: EntityInitializer;
+};
+
+/**
+ * The hierarchical order of all selections.
+ * Selecting any of these objects will reset selection for all descendants.
+ */
+export const editorSelectionOrder: EditorSelectionName[] = [
+  "system",
+  "scene",
+  "inspected",
+];

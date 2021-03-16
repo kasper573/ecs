@@ -1,7 +1,10 @@
-import { EditorObjectName, editorObjectsOrder } from "../types/EditorObjects";
 import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
+import {
+  EditorSelectionName,
+  editorSelectionOrder,
+} from "../types/EditorSelection";
 
 /**
  * Ensures selection for objects that has a default available.
@@ -11,8 +14,8 @@ export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
   const newSelection = { ...state.selection };
   const selected = selectEditorObjects(state);
   let didChange = false;
-  editorObjectsOrder.forEach(
-    <ObjectName extends EditorObjectName>(objectName: ObjectName) => {
+  editorSelectionOrder.forEach(
+    <ObjectName extends EditorSelectionName>(objectName: ObjectName) => {
       const objectForSelection = selected[objectName];
       if (objectForSelection) {
         return; // Current selection is valid, resolves to an object

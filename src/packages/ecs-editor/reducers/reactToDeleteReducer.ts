@@ -1,9 +1,12 @@
-import { EditorObjectName, EditorObjects } from "../types/EditorObjects";
 import { EditorState } from "../types/EditorState";
 import { selectEditorObjects } from "../functions/selectEditorObjects";
+import {
+  EditorSelectionName,
+  EditorSelectionObjects,
+} from "../types/EditorSelection";
 import { resetSelectionReducer } from "./resetSelectionReducer";
 
-export type ReactToDeletePayload<K extends EditorObjectName> = {
+export type ReactToDeletePayload<K extends EditorSelectionName> = {
   /**
    * The state prior to deletion
    */
@@ -13,20 +16,20 @@ export type ReactToDeletePayload<K extends EditorObjectName> = {
    */
   objectName: K;
   /**
-   * The object that was deleted
+   * Should return true when the selected object for the given object type was deleted
    */
-  deletedObject: EditorObjects[K];
+  didDelete: (selectedObject: EditorSelectionObjects[K]) => boolean;
 };
 
 /**
  * Resets selection at the level a delete happens if the deleted object was previously selected
  */
-export const reactToDeleteReducer = <K extends EditorObjectName>(
+export const reactToDeleteReducer = <K extends EditorSelectionName>(
   currentState: EditorState,
-  { previousState, objectName, deletedObject }: ReactToDeletePayload<K>
+  { previousState, objectName, didDelete }: ReactToDeletePayload<K>
 ) => {
   const selected = selectEditorObjects(previousState);
-  if (selected[objectName] === deletedObject) {
+  if (didDelete(selected[objectName])) {
     return resetSelectionReducer(currentState, objectName);
   }
   return currentState;

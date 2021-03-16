@@ -20,7 +20,7 @@ export const deleteSceneReducer: EditorStateReducer<SceneDefinition> = (
     return reactToDeleteReducer(deletedState, {
       previousState: state,
       objectName: "scene",
-      deletedObject: scene,
+      didDelete: (selectedScene) => selectedScene === scene,
     });
   }
   return state;

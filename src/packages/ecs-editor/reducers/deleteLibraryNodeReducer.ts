@@ -15,7 +15,7 @@ export const deleteLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
   });
   return reactToDeleteReducer(deletedState, {
     previousState: state,
-    objectName: "libraryNode",
-    deletedObject: targetNode,
+    objectName: "inspected",
+    didDelete: (selected) => selected?.object === targetNode,
   });
 };

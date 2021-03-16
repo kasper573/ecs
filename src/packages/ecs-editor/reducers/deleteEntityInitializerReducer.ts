@@ -19,8 +19,8 @@ export const deleteEntityInitializerReducer: EditorStateReducer<EntityInitialize
     });
     return reactToDeleteReducer(deletedState, {
       previousState: state,
-      objectName: "entityInitializer",
-      deletedObject: entityInitializer,
+      objectName: "inspected",
+      didDelete: (selected) => selected?.object === entityInitializer,
     });
   }
   return state;

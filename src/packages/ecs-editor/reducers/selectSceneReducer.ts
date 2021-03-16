@@ -5,4 +5,5 @@ import { selectObjectReducer } from "./selectObjectReducer";
 export const selectSceneReducer: EditorStateReducer<SceneDefinition> = (
   state,
   scene
-) => selectObjectReducer(state, { objectName: "scene", selectedObject: scene });
+) =>
+  selectObjectReducer(state, { objectName: "scene", selectedValue: scene.id });

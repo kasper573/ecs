@@ -7,6 +7,6 @@ export const selectEntityInitializerReducer: EditorStateReducer<EntityInitialize
   entityInitializer
 ) =>
   selectObjectReducer(state, {
-    objectName: "entityInitializer",
-    selectedObject: entityInitializer,
+    objectName: "inspected",
+    selectedValue: { type: "entityInitializer", id: entityInitializer.id },
   });
