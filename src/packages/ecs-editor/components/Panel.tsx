@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Paper, PaperProps } from "@material-ui/core";
-import { EditorPanelName } from "./EditorPanelName";
+import { PanelName } from "./PanelName";
 
-export type EditorPanelProps = PaperProps & {
-  name?: EditorPanelName;
+export type PanelProps = PaperProps & {
+  name?: PanelName;
 };
 
 /**
@@ -11,8 +11,8 @@ export type EditorPanelProps = PaperProps & {
  * Panel name will be used to specify a gridArea.
  * (Should be a child of EditorPanelContainer for layout to work properly)
  */
-export const EditorPanel = styled(
-  ({ children, name, style, ...paperProps }: EditorPanelProps) => (
+export const Panel = styled(
+  ({ children, name, style, ...paperProps }: PanelProps) => (
     <Paper {...paperProps} style={{ ...style, gridArea: name }}>
       {children}
     </Paper>

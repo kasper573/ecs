@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Theme } from "@material-ui/core/styles";
-import { EditorPanelName as panels } from "./EditorPanelName";
+import { PanelName as panels } from "./PanelName";
 
 const panelSpacing = ({ theme }: { theme: Theme }) => theme.spacing(1);
 
@@ -10,7 +10,7 @@ const panelSpacing = ({ theme }: { theme: Theme }) => theme.spacing(1);
  * - Displays all panels vertically on mobile.
  * (Expects EditorPanels as children)
  */
-export const EditorPanelContainer = styled.div`
+export const PanelContainer = styled.div`
   display: grid;
   flex: 1;
   overflow: hidden;

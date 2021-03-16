@@ -7,7 +7,7 @@ import React, { PropsWithChildren } from "react";
 import { AddIcon } from "./icons";
 import { OpaqueListSubheader } from "./OpaqueListSubheader";
 
-export type EditorPanelHeaderProps = {
+export type PanelHeaderProps = {
   /**
    * The title of the header
    */
@@ -26,11 +26,11 @@ export type EditorPanelHeaderProps = {
 /**
  * An opaque box with title and a create button.
  */
-export const EditorPanelHeader = ({
+export const PanelHeader = ({
   title,
   noun = "",
   onCreate,
-}: EditorPanelHeaderProps) => (
+}: PanelHeaderProps) => (
   <EditorPanelHeaderLayout title={title}>
     <Tooltip title={`Add ${noun}`.trim()}>
       <IconButton edge="end" aria-label="delete" onClick={onCreate}>

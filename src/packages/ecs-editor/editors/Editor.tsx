@@ -33,18 +33,18 @@ import {
   SceneIcon,
   SystemIcon,
 } from "../components/icons";
-import { EditorPanelContainer } from "../components/EditorPanelContainer";
+import { PanelContainer } from "../components/PanelContainer";
 import { CrudList } from "../components/CrudList";
 import { AppBarAndDrawer } from "../components/AppBarAndDrawer";
 import { EditorTitle } from "../components/EditorTitle";
-import { EditorPanel } from "../components/EditorPanel";
-import { EditorPanelName } from "../components/EditorPanelName";
-import { EditorFlatPanel } from "../components/EditorFlatPanel";
+import { Panel } from "../components/Panel";
+import { PanelName } from "../components/PanelName";
+import { FlatPanel } from "../components/FlatPanel";
 import {
-  EditorPanelHeader,
+  PanelHeader,
   EditorPanelHeaderLayout,
-} from "../components/EditorPanelHeader";
-import { EditorLibraryTree } from "../components/EditorLibraryTree";
+} from "../components/PanelHeader";
+import { LibraryTree } from "../components/LibraryTree";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { SimpleDialog } from "../components/SimpleDialog";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
@@ -193,7 +193,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
 
   const drawer = (
     <>
-      <EditorPanelHeader title="Systems" onCreate={systemEvents.onCreateItem} />
+      <PanelHeader title="Systems" onCreate={systemEvents.onCreateItem} />
       <CrudList
         active={selected.system}
         items={state.systems}
@@ -222,13 +222,13 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         drawer={drawer}
       >
         {dialogs}
-        <EditorFlatPanel>
+        <FlatPanel>
           <Typography>
             {state.systems.length > 0
               ? "Please select a system"
               : "Please create a system"}
           </Typography>
-        </EditorFlatPanel>
+        </FlatPanel>
       </AppBarAndDrawer>
     );
   }
@@ -237,8 +237,8 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
   return (
     <AppBarAndDrawer appBar={appBar} drawer={drawer}>
       {dialogs}
-      <EditorPanelContainer>
-        <EditorFlatPanel>
+      <PanelContainer>
+        <FlatPanel>
           {selected.scene ? (
             system && <TextSystem system={system} />
           ) : (
@@ -248,14 +248,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                 : "Please create a scene"}
             </Typography>
           )}
-        </EditorFlatPanel>
-        <EditorPanel name={EditorPanelName.Scenes}>
-          <EditorPanelHeader
-            title={EditorPanelName.Scenes}
+        </FlatPanel>
+        <Panel name={PanelName.Scenes}>
+          <PanelHeader
+            title={PanelName.Scenes}
             onCreate={sceneEvents.onCreateItem}
           />
           <CrudList
-            title={EditorPanelName.Scenes}
+            title={PanelName.Scenes}
             active={selected.scene}
             items={selected.system?.scenes ?? []}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
@@ -264,11 +264,11 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             }
             {...omit(sceneEvents, "onCreateItem")}
           />
-        </EditorPanel>
+        </Panel>
         {selected.scene && (
           <>
-            <EditorPanel name={EditorPanelName.Instances}>
-              <EditorPanelHeaderLayout title={EditorPanelName.Instances}>
+            <Panel name={PanelName.Instances}>
+              <EditorPanelHeaderLayout title={PanelName.Instances}>
                 <CreateEntityInitializerButton
                   entityDefinitions={
                     getDefinitionsInLibrary(selected.system?.library ?? [])
@@ -297,14 +297,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                 }
                 {...omit(entityInitializerEvents, "onCreateItem")}
               />
-            </EditorPanel>
-            <EditorPanel name={EditorPanelName.Library}>
-              <EditorPanelHeader
+            </Panel>
+            <Panel name={PanelName.Library}>
+              <PanelHeader
                 title="Library"
                 noun="entity"
                 onCreate={libraryEntityNodeEvents.onCreateItem}
               />
-              <EditorLibraryTree
+              <LibraryTree
                 library={selected.system.library}
                 selected={selected.libraryNode}
                 onSelectedChange={(nodeId) =>
@@ -314,14 +314,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                   })
                 }
               />
-            </EditorPanel>
-            <EditorPanel name={EditorPanelName.Inspector}>
-              <EditorPanelHeader title="Inspector" />
+            </Panel>
+            <Panel name={PanelName.Inspector}>
+              <PanelHeader title="Inspector" />
               <InspectedObjectEditor value={selected.inspected} />
-            </EditorPanel>
+            </Panel>
           </>
         )}
-      </EditorPanelContainer>
+      </PanelContainer>
     </AppBarAndDrawer>
   );
 };

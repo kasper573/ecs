@@ -1,7 +1,7 @@
 /**
  * All known editor panels.
  */
-export enum EditorPanelName {
+export enum PanelName {
   Scene = "Scene",
   Instances = "Instances",
   Inspector = "Inspector",

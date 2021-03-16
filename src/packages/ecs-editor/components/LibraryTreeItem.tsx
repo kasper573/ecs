@@ -8,11 +8,11 @@ import {
   FolderIcon,
   FolderOpenIcon,
 } from "./icons";
-import { EditorLibraryTreeItems } from "./EditorLibraryTreeItems";
+import { LibraryTreeItems } from "./LibraryTreeItems";
 
-export type EditorLibraryTreeItemProps = { node: LibraryTreeNode };
+export type LibraryTreeItemProps = { node: LibraryTreeNode };
 
-export const EditorLibraryTreeItem = ({ node }: EditorLibraryTreeItemProps) => {
+export const LibraryTreeItem = ({ node }: LibraryTreeItemProps) => {
   const isFolder = node.value.type === "folder";
   const LabelIcon = labelIcons[node.value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
@@ -25,7 +25,7 @@ export const EditorLibraryTreeItem = ({ node }: EditorLibraryTreeItemProps) => {
       collapseIcon={collapseIcon}
       expandIcon={expandIcon}
     >
-      <EditorLibraryTreeItems nodes={node.children} />
+      <LibraryTreeItems nodes={node.children} />
     </TreeItemWithoutFocusColor>
   );
 };
