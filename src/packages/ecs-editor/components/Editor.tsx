@@ -24,6 +24,8 @@ import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDef
 import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import { omit } from "../functions/omit";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
+import { useEnsureNativeComponents } from "../hooks/useEnsureNativeComponents";
 import {
   DeleteIcon,
   EditIcon,
@@ -50,12 +52,13 @@ import { SimpleDialog } from "./SimpleDialog";
 
 export type EditorProps = {
   defaultState?: Partial<EditorState>;
+  nativeComponents: NativeComponents;
 };
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
  */
-export const Editor = ({ defaultState }: EditorProps) => {
+export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
   const [state, dispatch] = useReducer(rootReducer, {
     ...createDefaultState(),
     ...defaultState,
@@ -64,10 +67,11 @@ export const Editor = ({ defaultState }: EditorProps) => {
   const selected = selectSelectedObjects(state);
   const [system, resetSystem] = useSystemInitializer(
     selected,
-    state.nativeComponents
+    nativeComponents
   );
   useSceneSync(system, selected, dispatch);
   useEnsureSelection(state, dispatch);
+  useEnsureNativeComponents(state, dispatch, nativeComponents);
 
   const [showSaveDialog, saveDialog] = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
@@ -81,10 +85,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SYSTEM",
-        payload: createSystemDefinition(
-          { id: uuid(), name },
-          state.nativeComponents
-        ),
+        payload: createSystemDefinition({ id: uuid(), name }),
       }),
     onRenameItem: (system, name) =>
       dispatch({
@@ -333,7 +334,6 @@ export const Editor = ({ defaultState }: EditorProps) => {
 };
 
 const createDefaultState = (): EditorState => ({
-  nativeComponents: {},
   systems: [],
   selection: {},
 });

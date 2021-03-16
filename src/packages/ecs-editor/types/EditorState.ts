@@ -1,5 +1,4 @@
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { EditorSelectionValues } from "./EditorSelection";
 
 /**
@@ -8,11 +7,6 @@ import { EditorSelectionValues } from "./EditorSelection";
  * preferably via the main reducer `mutations/updateState.ts`.
  */
 export type EditorState = {
-  /**
-   * The native components needed by the
-   * ComponentDefinitions in the system libraries
-   */
-  nativeComponents: NativeComponents;
   /**
    * ECS definitions
    */

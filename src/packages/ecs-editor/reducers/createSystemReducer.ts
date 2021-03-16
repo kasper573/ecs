@@ -7,8 +7,5 @@ export const createSystemReducer: EditorStateReducer<SystemDefinition> = (
   system
 ) => ({
   ...state,
-  systems: [
-    ...state.systems,
-    createSystemDefinition(system, state.nativeComponents),
-  ],
+  systems: [...state.systems, createSystemDefinition(system)],
 });

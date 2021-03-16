@@ -116,26 +116,23 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("throws error when referencing entity definition that doesn't exist", () => {
-    const definition = createSystemDefinition(
-      {
-        id: "systemA" as SystemDefinitionId,
-        name: "System A",
-        library: [],
-        scenes: [
-          createSceneDefinition({
-            id: "scene1" as SceneDefinitionId,
-            name: "Scene A",
-            entities: [
-              createEntityInitializer({
-                id: "1" as EntityInitializerId,
-                definitionId: "bogus" as EntityDefinitionId,
-              }),
-            ],
-          }),
-        ],
-      },
-      nativeComponents
-    );
+    const definition = createSystemDefinition({
+      id: "systemA" as SystemDefinitionId,
+      name: "System A",
+      library: [],
+      scenes: [
+        createSceneDefinition({
+          id: "scene1" as SceneDefinitionId,
+          name: "Scene A",
+          entities: [
+            createEntityInitializer({
+              id: "1" as EntityInitializerId,
+              definitionId: "bogus" as EntityDefinitionId,
+            }),
+          ],
+        }),
+      ],
+    });
 
     expect(() => createSystem(definition, nativeComponents)).toThrow();
   });
@@ -205,40 +202,37 @@ export const mockSystem = (
   components: ComponentDefinition[] = []
 ) =>
   createSystem(
-    createSystemDefinition(
-      {
-        id: "systemA" as SystemDefinitionId,
-        name: "System A",
-        library: [
-          ...components.map(
-            (component): LibraryNode => ({
-              id: (component.id as string) as LibraryNodeId,
-              type: "component",
-              component,
+    createSystemDefinition({
+      id: "systemA" as SystemDefinitionId,
+      name: "System A",
+      library: [
+        ...components.map(
+          (component): LibraryNode => ({
+            id: (component.id as string) as LibraryNodeId,
+            type: "component",
+            component,
+          })
+        ),
+        ...entities.map(
+          (entity): LibraryNode => ({
+            id: (entity.id as string) as LibraryNodeId,
+            type: "entity",
+            entity,
+          })
+        ),
+      ],
+      scenes: [
+        createSceneDefinition({
+          id: "scene1" as SceneDefinitionId,
+          name: "Scene A",
+          entities: entities.map(({ id }, index) =>
+            createEntityInitializer({
+              id: `initializer${index}` as EntityInitializerId,
+              definitionId: id,
             })
           ),
-          ...entities.map(
-            (entity): LibraryNode => ({
-              id: (entity.id as string) as LibraryNodeId,
-              type: "entity",
-              entity,
-            })
-          ),
-        ],
-        scenes: [
-          createSceneDefinition({
-            id: "scene1" as SceneDefinitionId,
-            name: "Scene A",
-            entities: entities.map(({ id }, index) =>
-              createEntityInitializer({
-                id: `initializer${index}` as EntityInitializerId,
-                definitionId: id,
-              })
-            ),
-          }),
-        ],
-      },
-      nativeComponents
-    ),
+        }),
+      ],
+    }),
     nativeComponents
   );

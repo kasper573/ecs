@@ -21,10 +21,8 @@ function render() {
     <React.StrictMode>
       <App>
         <Editor
-          defaultState={{
-            nativeComponents,
-            systems: systemDefinitions,
-          }}
+          nativeComponents={nativeComponents}
+          defaultState={{ systems: systemDefinitions }}
         />
       </App>
     </React.StrictMode>,
