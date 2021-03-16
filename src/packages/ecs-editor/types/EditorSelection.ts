@@ -1,7 +1,7 @@
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { InspectedSelectionValue } from "./InspectedSelectionValue";
+import { InspectedSelectionObject } from "./InspectedSelectionObject";
 
 /**
  * Serializable values that represent the current selection state of the UI
@@ -9,7 +9,7 @@ import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 export type EditorSelectionValues = Partial<{
   system: SystemDefinition["id"];
   scene: SceneDefinition["id"];
-  inspected: InspectedObjectId;
+  inspected: InspectedSelectionValue;
 }>;
 
 /**
@@ -21,7 +21,7 @@ export type EditorSelectionObjects = {
   [K in keyof EditorSelectionValues]: {
     system: SystemDefinition;
     scene: SceneDefinition;
-    inspected: InspectedObject;
+    inspected: InspectedSelectionObject;
   }[K];
 };
 
@@ -29,38 +29,6 @@ export type EditorSelectionObjects = {
  * Names of all known objects in the editor
  */
 export type EditorSelectionName = keyof EditorSelectionValues;
-
-/**
- * The selection value that represents what should be displayed in the inspector panel
- */
-export type InspectedObjectId =
-  | InspectedLibraryNodeId
-  | InspectedEntityInitializerId;
-
-type InspectedLibraryNodeId = {
-  type: "libraryNode";
-  id: LibraryNode["id"];
-};
-
-type InspectedEntityInitializerId = {
-  type: "entityInitializer";
-  id: EntityInitializer["id"];
-};
-
-/**
- * The selection object that InspectedObjectId resolves into.
- */
-export type InspectedObject = InspectedEntityInitializer | InspectedLibraryNode;
-
-type InspectedLibraryNode = {
-  type: "libraryNode";
-  object: LibraryNode;
-};
-
-type InspectedEntityInitializer = {
-  type: "entityInitializer";
-  object: EntityInitializer;
-};
 
 /**
  * The hierarchical order of all selections.
