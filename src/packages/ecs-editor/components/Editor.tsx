@@ -9,7 +9,7 @@ import { createSceneDefinition } from "../../ecs-serializable/factories/createSc
 import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
 import { rootReducer } from "../reducers/rootReducer";
 import { EditorState } from "../types/EditorState";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
@@ -19,7 +19,7 @@ import {
   LibraryEntityNode,
   LibraryNode,
 } from "../../ecs-serializable/types/LibraryNode";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
+import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
@@ -113,7 +113,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
     LibraryEntityNodeDialogs,
   ] = useCrudDialogs<LibraryEntityNode>({
     createDialogTitle: "Add entity",
-    getItemName: getLibraryNodeLabel,
+    getItemName: selectLibraryNodeLabel,
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_LIBRARY_NODE",

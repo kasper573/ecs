@@ -4,7 +4,7 @@ import {
   editorSelectionOrder,
   EditorSelectionValues,
 } from "../types/EditorSelection";
-import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
+import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
 
 /**
  * Reset to the default selection for the specified object and all child objects
@@ -21,7 +21,10 @@ export const resetSelectionReducer = <
     .slice(startIndex)
     .forEach(
       <ObjectName extends EditorSelectionName>(objectName: ObjectName) => {
-        newSelection[objectName] = getEditorSelectionDefault(state, objectName);
+        newSelection[objectName] = selectDefaultSelectionValue(
+          state,
+          objectName
+        );
       }
     );
 

@@ -1,6 +1,6 @@
-import { getEditorSelectionDefault } from "../functions/getEditorSelectionDefault";
+import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import {
   EditorSelectionName,
   editorSelectionOrder,
@@ -20,7 +20,7 @@ export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
       if (objectForSelection) {
         return; // Current selection is valid, resolves to an object
       }
-      const defaultSelection = getEditorSelectionDefault(state, objectName);
+      const defaultSelection = selectDefaultSelectionValue(state, objectName);
       const currentSelection = newSelection[objectName];
       if (currentSelection === defaultSelection) {
         // Current selection is already the default value,

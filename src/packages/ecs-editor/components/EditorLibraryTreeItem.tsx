@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { TreeItem } from "@material-ui/lab";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
+import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import {
   ComponentIcon,
   EntityDefinitionIcon,
@@ -21,7 +21,7 @@ export const EditorLibraryTreeItem = ({ node }: EditorLibraryTreeItemProps) => {
     <TreeItemWithoutFocusColor
       key={node.value.id}
       nodeId={node.value.id}
-      label={getLibraryNodeLabel(node.value)}
+      label={selectLibraryNodeLabel(node.value)}
       collapseIcon={collapseIcon}
       expandIcon={expandIcon}
     >

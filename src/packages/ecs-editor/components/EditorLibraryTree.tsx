@@ -7,7 +7,7 @@ import {
 import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
 import { createLibraryTree } from "../functions/createLibraryTree";
 import { createLibraryMap } from "../functions/createLibraryMap";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
+import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import { TreeNode } from "../types/TreeNode";
 import { EditorLibraryTreeItems } from "./EditorLibraryTreeItems";
 
@@ -62,7 +62,7 @@ const compareLibraryTreeNodes = (
   a: TreeNode<LibraryNode>,
   b: TreeNode<LibraryNode>
 ) => {
-  const aLabel = getLibraryNodeLabel(a.value);
-  const bLabel = getLibraryNodeLabel(b.value);
+  const aLabel = selectLibraryNodeLabel(a.value);
+  const bLabel = selectLibraryNodeLabel(b.value);
   return aLabel.localeCompare(bLabel);
 };

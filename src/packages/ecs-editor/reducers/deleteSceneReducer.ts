@@ -1,6 +1,6 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateSystemReducer } from "./updateSystemReducer";

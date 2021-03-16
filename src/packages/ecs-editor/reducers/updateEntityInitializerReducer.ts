@@ -1,6 +1,6 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import { updateSceneReducer } from "./updateSceneReducer";
 
 export const updateEntityInitializerReducer: EditorStateReducer<{

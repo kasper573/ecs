@@ -1,5 +1,5 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { updateSceneReducer } from "./updateSceneReducer";
 

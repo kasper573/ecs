@@ -5,7 +5,7 @@ import {
 } from "../types/EditorSelection";
 import { selectEditorObjects } from "./selectEditorObjects";
 
-export function getEditorSelectionDefault<
+export function selectDefaultSelectionValue<
   ObjectName extends EditorSelectionName
 >(
   state: EditorState,
@@ -16,7 +16,7 @@ export function getEditorSelectionDefault<
  * Returns the selection for the first object in the list for the specified object.
  * (Returns undefined if the list for the specified object is empty)
  */
-export function getEditorSelectionDefault(
+export function selectDefaultSelectionValue(
   state: EditorState,
   objectName: EditorSelectionName
 ): EditorSelectionValues[EditorSelectionName] {

@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { selectEditorObjects } from "../functions/selectEditorObjects";
+import { selectEditorObjects } from "../selectors/selectEditorObjects";
 import {
   EditorSelectionName,
   EditorSelectionObjects,
