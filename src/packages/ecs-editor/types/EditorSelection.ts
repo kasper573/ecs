@@ -1,7 +1,7 @@
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { InspectedSelectionValue } from "./InspectedSelectionValue";
-import { InspectedSelectionObject } from "./InspectedSelectionObject";
+import { InspectedValue } from "./InspectedValue";
+import { InspectedObject } from "./InspectedObject";
 
 /**
  * Serializable values that represent the current selection state of the UI
@@ -9,7 +9,7 @@ import { InspectedSelectionObject } from "./InspectedSelectionObject";
 export type EditorSelectionValues = Partial<{
   system: SystemDefinition["id"];
   scene: SceneDefinition["id"];
-  inspected: InspectedSelectionValue;
+  inspected: InspectedValue;
 }>;
 
 /**
@@ -21,7 +21,7 @@ export type EditorSelectionObjects = {
   [K in keyof EditorSelectionValues]: {
     system: SystemDefinition;
     scene: SceneDefinition;
-    inspected: InspectedSelectionObject;
+    inspected: InspectedObject;
   }[K];
 };
 

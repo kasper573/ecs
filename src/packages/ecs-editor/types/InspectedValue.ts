@@ -2,9 +2,9 @@ import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 
 /**
- * The selection value that represents what should be displayed in the inspector panel
+ * An EditorSelection value that represents what should be displayed in the inspector panel
  */
-export type InspectedSelectionValue =
+export type InspectedValue =
   | InspectedLibraryNodeId
   | InspectedEntityInitializerId;
 

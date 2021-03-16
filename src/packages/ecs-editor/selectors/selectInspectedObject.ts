@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { InspectedSelectionObject } from "../types/InspectedSelectionObject";
+import { InspectedObject } from "../types/InspectedObject";
 import { selectSelectedSystem } from "./selectSelectedSystem";
 import { selectSelectedScene } from "./selectSelectedScene";
 
@@ -7,7 +7,7 @@ export const selectInspectedObject = (
   state: EditorState,
   selectedSystem = selectSelectedSystem(state),
   selectedScene = selectSelectedScene(state, selectedSystem)
-): InspectedSelectionObject | undefined => {
+): InspectedObject | undefined => {
   const { inspected } = state.selection;
   if (inspected?.type === "entityInitializer") {
     const object = selectedScene?.entities.find(

@@ -2,11 +2,9 @@ import { EntityInitializer } from "../../ecs-serializable/types/EntityInitialize
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 
 /**
- * The selection object that InspectedObjectId resolves into.
+ * The object that InspectedValue resolves into.
  */
-export type InspectedSelectionObject =
-  | InspectedEntityInitializer
-  | InspectedLibraryNode;
+export type InspectedObject = InspectedEntityInitializer | InspectedLibraryNode;
 
 type InspectedLibraryNode = {
   type: "libraryNode";
