@@ -327,6 +327,7 @@ export const Editor = ({ defaultState }: EditorProps) => {
             <EditorPanel name={EditorPanelName.Inspector}>
               <EditorPanelHeader title="Inspector" />
               <pre>{JSON.stringify(state.selection.inspected, null, 2)}</pre>
+              <pre>{JSON.stringify(selected.inspected, null, 2)}</pre>
             </EditorPanel>
           </>
         )}
