@@ -19,6 +19,7 @@ export const Panel = styled(
   )
 )`
   position: relative; // Ensure children with position absolute gets docked in the panel
+  overflow-x: hidden;
   ${({ theme }) => theme.breakpoints.up("sm")} {
     overflow-y: auto;
   }
