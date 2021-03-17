@@ -10,6 +10,7 @@ import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
+import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -22,16 +23,18 @@ export const EntityDefinitionEditor = ({
   componentDefinitions,
   onChange,
 }: EntityDefinitionEditorProps) => {
-  const addComponent = (definition: ComponentDefinition) => {
+  const addComponent = (definition: ComponentDefinition) =>
+    updateComponents([
+      ...value.components,
+      createComponentInitializer({
+        id: uuid(),
+        definitionId: definition.id,
+      }),
+    ]);
+  const updateComponents = (components: ComponentInitializer[]) => {
     onChange({
       ...value,
-      components: [
-        ...value.components,
-        createComponentInitializer({
-          id: uuid(),
-          definitionId: definition.id,
-        }),
-      ],
+      components,
     });
   };
   return (
@@ -46,6 +49,7 @@ export const EntityDefinitionEditor = ({
       <ComponentInitializerList
         items={value.components}
         definitions={componentDefinitions}
+        onChange={updateComponents}
         elevation={0}
       />
     </>
