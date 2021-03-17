@@ -10,7 +10,7 @@ export const CommonPopper = ({
   toggle: Toggle,
   children,
 }: CommonPopperProps) => (
-  <PopupState variant="popper" popupId="demo-popup-popper">
+  <PopupState variant="popper">
     {(popupState) => (
       <div>
         <Toggle {...bindToggle(popupState)} />
