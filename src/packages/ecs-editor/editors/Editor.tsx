@@ -363,7 +363,6 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
               />
             </Panel>
             <Panel name={PanelName.Inspector}>
-              <PanelHeader title="Inspector" />
               {selected.inspected && (
                 <InspectedObjectEditor
                   value={selected.inspected}

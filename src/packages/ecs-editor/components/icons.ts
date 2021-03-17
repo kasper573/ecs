@@ -7,7 +7,7 @@ export {
   Receipt as EntityDefinitionIcon,
   Receipt as EntityInitializerIcon,
   Room as SceneIcon,
-  Settings as ComponentIcon,
+  Settings as ComponentDefinitionIcon,
   Delete as DeleteIcon,
   Edit as EditIcon,
   Add as AddIcon,

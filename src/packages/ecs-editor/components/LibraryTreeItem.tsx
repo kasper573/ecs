@@ -3,7 +3,7 @@ import { TreeItem } from "@material-ui/lab";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import {
-  ComponentIcon,
+  ComponentDefinitionIcon,
   EntityDefinitionIcon,
   FolderIcon,
   FolderOpenIcon,
@@ -41,5 +41,5 @@ const TreeItemWithoutFocusColor = styled(TreeItem)`
 const labelIcons = {
   folder: FolderIcon,
   entity: EntityDefinitionIcon,
-  component: ComponentIcon,
+  component: ComponentDefinitionIcon,
 };
