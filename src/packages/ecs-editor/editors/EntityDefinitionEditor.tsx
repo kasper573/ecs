@@ -1,4 +1,3 @@
-import { List, ListItem, ListItemText } from "@material-ui/core";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import {
   SelectComponentDefinitionButton,
@@ -11,6 +10,7 @@ import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
+import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
   value: EntityDefinition;
@@ -43,20 +43,11 @@ export const EntityDefinitionEditor = ({
         />
       </PanelHeader>
       <InspectedObjectInfo icon={<EntityDefinitionIcon />} name={value.name} />
-      {value.components.length > 0 && (
-        <List>
-          {value.components.map((init) => {
-            const definition = componentDefinitions.find(
-              (d) => d.id === init.definitionId
-            )!;
-            return (
-              <ListItem key={init.id}>
-                <ListItemText primary={definition.name} />
-              </ListItem>
-            );
-          })}
-        </List>
-      )}
+      <ComponentInitializerList
+        items={value.components}
+        definitions={componentDefinitions}
+        elevation={0}
+      />
     </>
   );
 };
