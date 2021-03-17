@@ -47,6 +47,7 @@ import {
 import { LibraryTree } from "../components/LibraryTree";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { SimpleDialog } from "../components/SimpleDialog";
+import { InspectedObject } from "../types/InspectedObject";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
@@ -61,11 +62,39 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
   const [state, dispatch] = useEditorState(nativeComponents, defaultState);
 
   const selected = selectSelectedObjects(state);
+  const libraryDefinitions = getDefinitionsInLibrary(
+    selected.system?.library ?? []
+  );
   const [system, resetSystem] = useSystemInitializer(
     selected,
     nativeComponents
   );
   useSceneSync(system, selected, dispatch);
+
+  const saveInspectorChange = (
+    updated: InspectedObject,
+    current: InspectedObject
+  ) => {
+    switch (updated.type) {
+      case "entityInitializer":
+        dispatch({
+          type: "UPDATE_ENTITY_INITIALIZER",
+          payload: {
+            entityInitializer: current.object as EntityInitializer,
+            update: updated.object,
+          },
+        });
+        break;
+      case "libraryNode":
+        dispatch({
+          type: "UPDATE_LIBRARY_NODE",
+          payload: {
+            target: current.object as LibraryNode,
+            replacement: updated.object,
+          },
+        });
+    }
+  };
 
   const [showSaveDialog, saveDialog] = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
@@ -270,10 +299,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             <Panel name={PanelName.Instances}>
               <EditorPanelHeaderLayout title={PanelName.Instances}>
                 <CreateEntityInitializerButton
-                  entityDefinitions={
-                    getDefinitionsInLibrary(selected.system?.library ?? [])
-                      .entities
-                  }
+                  entityDefinitions={libraryDefinitions.entities}
                   onCreate={(entityInitializer) =>
                     dispatch({
                       type: "CREATE_ENTITY_INITIALIZER",
@@ -317,7 +343,13 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             </Panel>
             <Panel name={PanelName.Inspector}>
               <PanelHeader title="Inspector" />
-              <InspectedObjectEditor value={selected.inspected} />
+              {selected.inspected && (
+                <InspectedObjectEditor
+                  value={selected.inspected}
+                  componentDefinitions={libraryDefinitions.components}
+                  onChange={saveInspectorChange}
+                />
+              )}
             </Panel>
           </>
         )}
