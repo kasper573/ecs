@@ -25,6 +25,7 @@ import { omit } from "../functions/omit";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { useEditorState } from "../hooks/useEditorState";
 import {
+  AddIcon,
   DeleteIcon,
   EditIcon,
   EntityInitializerIcon,
@@ -40,10 +41,7 @@ import { EditorTitle } from "../components/EditorTitle";
 import { Panel } from "../components/Panel";
 import { PanelName } from "../components/PanelName";
 import { FlatPanel } from "../components/FlatPanel";
-import {
-  PanelHeader,
-  EditorPanelHeaderLayout,
-} from "../components/PanelHeader";
+import { PanelHeader } from "../components/PanelHeader";
 import { LibraryTree } from "../components/LibraryTree";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { SimpleDialog } from "../components/SimpleDialog";
@@ -222,7 +220,17 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
 
   const drawer = (
     <>
-      <PanelHeader title="Systems" onCreate={systemEvents.onCreateItem} />
+      <PanelHeader title="Systems">
+        <Tooltip title="Add system">
+          <IconButton
+            edge="end"
+            aria-label="add system"
+            onClick={systemEvents.onCreateItem}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      </PanelHeader>
       <CrudList
         active={selected.system}
         items={state.systems}
@@ -279,10 +287,17 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
           )}
         </FlatPanel>
         <Panel name={PanelName.Scenes}>
-          <PanelHeader
-            title={PanelName.Scenes}
-            onCreate={sceneEvents.onCreateItem}
-          />
+          <PanelHeader title={PanelName.Scenes}>
+            <Tooltip title="Add scene">
+              <IconButton
+                edge="end"
+                aria-label="add scene"
+                onClick={sceneEvents.onCreateItem}
+              >
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          </PanelHeader>
           <CrudList
             title={PanelName.Scenes}
             active={selected.scene}
@@ -297,7 +312,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         {selected.scene && (
           <>
             <Panel name={PanelName.Instances}>
-              <EditorPanelHeaderLayout title={PanelName.Instances}>
+              <PanelHeader title={PanelName.Instances}>
                 <CreateEntityInitializerButton
                   entityDefinitions={libraryDefinitions.entities}
                   onCreate={(entityInitializer) =>
@@ -307,7 +322,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                     })
                   }
                 />
-              </EditorPanelHeaderLayout>
+              </PanelHeader>
               <CrudList
                 active={selected.entityInitializer}
                 items={selected.scene?.entities ?? []}
@@ -325,11 +340,17 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
               />
             </Panel>
             <Panel name={PanelName.Library}>
-              <PanelHeader
-                title="Library"
-                noun="entity"
-                onCreate={libraryEntityNodeEvents.onCreateItem}
-              />
+              <PanelHeader title="Library">
+                <Tooltip title="Create entity">
+                  <IconButton
+                    edge="end"
+                    aria-label="create entity"
+                    onClick={libraryEntityNodeEvents.onCreateItem}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+              </PanelHeader>
               <LibraryTree
                 library={selected.system.library}
                 selected={selected.libraryNode}
