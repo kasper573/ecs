@@ -4,6 +4,7 @@ import { System } from "../ecs/System";
 import { StatefulEntity } from "../ecs/StatefulEntity";
 import { Describable } from "../ecs-describable/Describable";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
+import { describeSystem } from "../ecs-describable/describeSystem";
 import { Inventory } from "./Inventory";
 import { Collectable, CollectableState } from "./Collectable";
 
@@ -25,9 +26,9 @@ test("Collectable entities in the scene are described", () => {
 });
 
 it("Collectable entities in the inventory are not described", () => {
-  const { entity, pickUp } = setup();
+  const { system, pickUp } = setup();
   pickUp.perform();
-  expect(describeEntity(entity)).not.toContain("A visible entity");
+  expect(describeSystem(system)).not.toContain("A visible entity");
 });
 
 const setup = () => {

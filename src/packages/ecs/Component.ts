@@ -11,12 +11,11 @@ export class Component<
   public options: Partial<Options> = {};
 
   constructor(options: Partial<Options> = {}) {
-    this.options.isActiveDefault = true;
     this.options = { ...this.options, ...options };
   }
 
   get isActive() {
-    return resolve(this.options.isActive) ?? this.options.isActiveDefault;
+    return resolve(this.options.isActive) ?? true;
   }
 
   update() {
@@ -27,7 +26,6 @@ export class Component<
 }
 
 export type ComponentOptions = {
-  isActiveDefault: boolean;
   isActive: Resolvable<boolean>;
   update: () => void | undefined;
 };

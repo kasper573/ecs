@@ -1,6 +1,5 @@
 import { Interactive } from "../ecs-interactive/Interactive";
 import { StatefulEntity } from "../ecs/StatefulEntity";
-import { Describable } from "../ecs-describable/Describable";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { Inventory } from "./Inventory";
 
@@ -29,12 +28,6 @@ export class Collectable<
           scene.remove(this.entity);
         }
         return `Picked up ${this.entity.state.name}.`;
-      },
-      update: () => {
-        const { isCollected, entity } = this;
-        for (const desc of entity.components.filterType(Describable)) {
-          desc.options.isActiveDefault = !isCollected;
-        }
       },
     });
   }
