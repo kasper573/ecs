@@ -46,6 +46,7 @@ import { LibraryTree } from "../components/LibraryTree";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { SimpleDialog } from "../components/SimpleDialog";
 import { InspectedObject } from "../types/InspectedObject";
+import { ComponentsContext } from "../ComponentsContext";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
@@ -364,11 +365,17 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             </Panel>
             <Panel name={PanelName.Inspector}>
               {selected.inspected && (
-                <InspectedObjectEditor
-                  value={selected.inspected}
-                  componentDefinitions={libraryDefinitions.components}
-                  onChange={saveInspectorChange}
-                />
+                <ComponentsContext.Provider
+                  value={{
+                    nativeComponents,
+                    componentDefinitions: libraryDefinitions.components,
+                  }}
+                >
+                  <InspectedObjectEditor
+                    value={selected.inspected}
+                    onChange={saveInspectorChange}
+                  />
+                </ComponentsContext.Provider>
               )}
             </Panel>
           </>

@@ -3,7 +3,9 @@ import {
   AccordionDetails,
   AccordionProps,
   AccordionSummary,
+  Typography,
 } from "@material-ui/core";
+import styled from "styled-components";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { ExpandAccordionIcon } from "../components/icons";
@@ -33,9 +35,9 @@ export const ComponentInitializerList = ({
       return (
         <Accordion key={initializer.id} {...accordionProps}>
           <AccordionSummary expandIcon={<ExpandAccordionIcon />}>
-            {definition.name}
+            <Typography>{definition.name}</Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetailsColumn>
             <ComponentInitializerEditor
               initializer={initializer}
               definition={definition}
@@ -43,9 +45,14 @@ export const ComponentInitializerList = ({
                 onChange(replaceItem(items, initializer, updated))
               }
             />
-          </AccordionDetails>
+          </AccordionDetailsColumn>
         </Accordion>
       );
     })}
   </>
 );
+
+const AccordionDetailsColumn = styled(AccordionDetails)`
+  flex-direction: column;
+  padding: 0;
+`;

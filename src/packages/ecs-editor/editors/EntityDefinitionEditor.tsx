@@ -1,8 +1,6 @@
+import { useContext } from "react";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import {
-  SelectComponentDefinitionButton,
-  SelectComponentDefinitionButtonProps,
-} from "../components/SelectComponentDefinitionButton";
+import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
@@ -11,24 +9,27 @@ import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { createComponentOptionsDefinition } from "../../ecs-serializable/factories/createComponentOptionsDefinition";
+import { ComponentsContext } from "../ComponentsContext";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
   value: EntityDefinition;
   onChange: (updated: EntityDefinition) => void;
-} & Pick<SelectComponentDefinitionButtonProps, "componentDefinitions">;
+};
 
 export const EntityDefinitionEditor = ({
   value,
-  componentDefinitions,
   onChange,
 }: EntityDefinitionEditorProps) => {
+  const { componentDefinitions } = useContext(ComponentsContext);
   const addComponent = (definition: ComponentDefinition) =>
     updateComponents([
       ...value.components,
       createComponentInitializer({
         id: uuid(),
         definitionId: definition.id,
+        options: createComponentOptionsDefinition("{}"),
       }),
     ]);
   const updateComponents = (components: ComponentInitializer[]) => {

@@ -9,5 +9,5 @@ export type ComponentInitializer = {
    */
   id: ComponentInitializerId;
   definitionId: ComponentDefinitionId;
-  options?: ComponentOptionsDefinition;
+  options: ComponentOptionsDefinition;
 };

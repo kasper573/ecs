@@ -1,8 +1,5 @@
-import { ComponentConstructor } from "./ComponentConstructorMap";
+import { NativeComponent } from "./NativeComponent";
 
 export type NativeComponentName = string;
 
-export type NativeComponents = Record<
-  NativeComponentName,
-  ComponentConstructor
->;
+export type NativeComponents = Record<NativeComponentName, NativeComponent>;
