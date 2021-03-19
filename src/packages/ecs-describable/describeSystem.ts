@@ -1,12 +1,14 @@
+import { without } from "lodash";
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
+import { Inventory } from "../ecs-collectable/Inventory";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
 export const describeSystem = (
   system: System,
-  customDescribers: Describers = {}
+  customDescribers: SystemDescribers = {}
 ) => {
   const { describeAction, describeEntities } = {
     ...defaultDescribers,
@@ -18,7 +20,7 @@ export const describeSystem = (
   if (lastResult) {
     parts.push(lastResult);
   }
-  const entitiesDescribed = describeEntities(system.entities);
+  const entitiesDescribed = describeEntities(getVisibleEntities(system));
   if (entitiesDescribed) {
     parts.push(entitiesDescribed);
   }
@@ -30,6 +32,11 @@ export const describeSystem = (
   return parts.join("\n");
 };
 
+const getVisibleEntities = (system: System) => {
+  const inventory = system.modules.findType(Inventory);
+  return inventory ? without(system.entities, ...inventory) : system.entities;
+};
+
 const defaultDescribers = { describeAction, describeEntities };
 
-type Describers = Partial<typeof defaultDescribers>;
+export type SystemDescribers = Partial<typeof defaultDescribers>;

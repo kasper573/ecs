@@ -27,4 +27,4 @@ export class Container<T> extends ObservableArray<T> {
   }
 }
 
-export type Class<T> = new (...args: any[]) => T;
+type Class<T> = new (...args: any[]) => T;

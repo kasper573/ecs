@@ -1,0 +1,68 @@
+[
+  {
+    "scenes": [
+      {
+        "entities": [
+          {
+            "name": "Campfire",
+            "id": "43011129-4f78-4c22-ad74-32930c0ac076",
+            "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c"
+          }
+        ],
+        "id": "1672cc2a-5132-4235-a3ca-e87164441ecb",
+        "name": "Room"
+      }
+    ],
+    "library": [
+      {
+        "id": "describable",
+        "type": "component",
+        "component": {
+          "name": "describable",
+          "nativeComponent": "describable",
+          "id": "describable"
+        }
+      },
+      {
+        "id": "collectable",
+        "type": "component",
+        "component": {
+          "name": "collectable",
+          "nativeComponent": "collectable",
+          "id": "collectable"
+        }
+      },
+      {
+        "id": "interactive",
+        "type": "component",
+        "component": {
+          "name": "interactive",
+          "nativeComponent": "interactive",
+          "id": "interactive"
+        }
+      },
+      {
+        "id": "ceb6b977-df67-4754-9d00-ab7ce1ddb3a7",
+        "type": "entity",
+        "entity": {
+          "components": [
+            {
+              "id": "110cb4da-6a6e-414c-be95-b4ea53c9bb04",
+              "definitionId": "describable",
+              "properties": "{\"description\":\"You see a sparkling campfire\"}"
+            },
+            {
+              "id": "44a2942d-e511-4ad7-8dfb-5776cf285db2",
+              "definitionId": "interactive",
+              "properties": "{\"action\":\"Sit down\",\"perform\":() =\u003E \"You feel warm\"}"
+            }
+          ],
+          "id": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c",
+          "name": "Campfire"
+        }
+      }
+    ],
+    "id": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
+    "name": "Game"
+  }
+]

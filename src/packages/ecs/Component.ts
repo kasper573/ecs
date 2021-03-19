@@ -1,29 +1,29 @@
+import * as zod from "zod";
+import { createPropertyBag } from "../property-bag/createPropertyBag";
+import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { Entity } from "./Entity";
-import { Resolvable, resolve } from "./Resolvable";
 import { trustedUndefined } from "./trustedUndefined";
 
-export class Component<
-  TEntity,
-  Options extends ComponentOptions = ComponentOptions
-> {
-  entity: TEntity extends Entity ? TEntity : never = trustedUndefined();
+// We need to define this separately because we have a recursive
+// relationship between Component and Entity and zod can't statically infer those.
+const entitySchema: zod.ZodSchema<Entity> = zod.lazy(() =>
+  zod.instanceof(Entity)
+);
 
-  isActiveDefault: boolean = true;
+export const Component = createPropertyBag({
+  entity: {
+    type: entitySchema,
+    defaultValue: trustedUndefined<Entity>(),
+  },
+  isActive: { type: zod.boolean(), defaultValue: true },
+  update: {
+    type: zod.function(zod.tuple([]), zod.union([zod.void(), zod.undefined()])),
+    defaultValue: () => {},
+    hidden: true,
+  },
+});
 
-  constructor(protected options: Partial<Options> = {}) {}
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export type Component = typeof Component;
 
-  get isActive() {
-    return resolve(this.options.isActive) ?? this.isActiveDefault;
-  }
-
-  update() {
-    if (this.options.update) {
-      this.options.update();
-    }
-  }
-}
-
-export type ComponentOptions = {
-  isActive: Resolvable<boolean>;
-  update: () => void | undefined;
-};
+export type ComponentInstance = InstanceOf<typeof Component>;

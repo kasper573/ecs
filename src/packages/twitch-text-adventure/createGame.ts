@@ -8,11 +8,12 @@ import { Ladder } from "./entities/Ladder";
 import { WinMessage } from "./entities/WinMessage";
 import { Lighter } from "./entities/Lighter";
 import { TextAdventureSM } from "./TextAdventureSM";
+import { PunchingBag } from "./entities/PunchingBag";
 
 export const createGame = () => {
   const bridge = new Bridge();
   const sceneManager = new TextAdventureSM("cliff", {
-    cliff: [bridge, new BridgeRepairEquipment()],
+    cliff: [bridge, new BridgeRepairEquipment(), new PunchingBag()],
     bridge: [bridge],
     pit: [new Darkness(), new Ladder()],
     otherSide: [new WinMessage()],

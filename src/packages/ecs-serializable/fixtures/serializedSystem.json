@@ -1,0 +1,40 @@
+{
+  "scenes": [
+    {
+      "entities": [
+        {
+          "id": "foo",
+          "definitionId": "uuid1"
+        }
+      ],
+      "name": "Scene A"
+    }
+  ],
+  "library": [
+    {
+      "id": "uuid0",
+      "type": "component",
+      "component": {
+        "id": "uuid0",
+        "properties": [],
+        "name": "Foo",
+        "nativeComponent": "foo"
+      }
+    },
+    {
+      "id": "uuid0",
+      "type": "entity",
+      "entity": {
+        "id": "uuid1",
+        "components": [
+          {
+            "definitionId": "uuid0",
+            "properties": "{\"fn\":() => 2}"
+          }
+        ],
+        "name": "Entity A"
+      }
+    }
+  ],
+  "name": "System A"
+}
