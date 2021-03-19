@@ -1,15 +1,12 @@
-import {
-  Collectable,
-  CollectableState,
-} from "../../ecs-collectable/Collectable";
+import { Collectable } from "../../ecs-collectable/Collectable";
 import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { TextAdventureSM } from "../TextAdventureSM";
 import { Inventory } from "../../ecs-collectable/Inventory";
+import { Entity } from "../../ecs/Entity";
 import { Bridge } from "./Bridge";
 
-export class BridgeRepairEquipment extends StatefulEntity<CollectableState> {
+export class BridgeRepairEquipment extends Entity {
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
   }
@@ -21,12 +18,13 @@ export class BridgeRepairEquipment extends StatefulEntity<CollectableState> {
   }
 
   constructor() {
-    super({ name: "repair kit" });
+    super();
+    const name = "repair kit";
     this.components.push(
-      new Collectable(),
+      new Collectable().configure({ name }),
       new Describable({
         description: () =>
-          `There's a ${this.state.name} conveniently laying on the ground.`,
+          `There's a ${name} conveniently laying on the ground.`,
       }),
       new Interactive({
         action: "Repair bridge",

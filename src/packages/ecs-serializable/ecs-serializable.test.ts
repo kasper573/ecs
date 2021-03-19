@@ -1,7 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
+import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
-import { Component, ComponentOptions } from "../ecs/Component";
+import { Component } from "../ecs/Component";
 import { createSystem } from "./factories/createSystem";
 import { EntityInitializerId } from "./types/EntityInitializer";
 import {
@@ -15,16 +16,18 @@ import { createSceneDefinition } from "./factories/createSceneDefinition";
 import { createEntityInitializer } from "./factories/createEntityInitializer";
 import { createEntityDefinition } from "./factories/createEntityDefinition";
 import { createComponentDefinition } from "./factories/createComponentDefinition";
-import { createComponentOptionsDefinition } from "./factories/createComponentOptionsDefinition";
+import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
 import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
 import { SceneDefinitionId } from "./types/SceneDefinition";
 
-type FooOptions = ComponentOptions & { multiplier: number; fn: () => number };
-
-class Foo extends Component<Entity, FooOptions> {
+class Foo extends Component.extend({
+  fn: {
+    type: zod.function(zod.tuple([]), zod.number()).optional(),
+    defaultValue: undefined,
+  },
+}) {
   calculate(x: number) {
-    const fn = this.options.fn;
-    return fn ? fn() * x : 0;
+    return this.fn ? this.fn() * x : 0;
   }
 }
 
@@ -57,7 +60,13 @@ describe("instantiating a System using SystemDefinition", () => {
     const entity = createEntityDefinition({
       id: "1" as EntityDefinitionId,
       name: "Entity A",
-      components: [{ id: uid(), definitionId: component.id }],
+      components: [
+        {
+          id: uid(),
+          definitionId: component.id,
+          properties: createComponentPropertiesDefinition({}),
+        },
+      ],
     });
     const system = mockSystem([entity], [component]);
     expect(system.entities[0].components[0]).toBeInstanceOf(Foo);
@@ -76,7 +85,7 @@ describe("instantiating a System using SystemDefinition", () => {
         {
           id: uid(),
           definitionId: component.id,
-          options: createComponentOptionsDefinition({ fn: () => 2 }),
+          properties: createComponentPropertiesDefinition({ fn: () => 2 }),
         },
       ],
     });
@@ -152,8 +161,16 @@ describe("instantiating a System using SystemDefinition", () => {
       id: "1" as EntityDefinitionId,
       name: "Entity A",
       components: [
-        { id: uid(), definitionId: component1.id },
-        { id: uid(), definitionId: component2.id },
+        {
+          id: uid(),
+          definitionId: component1.id,
+          properties: createComponentPropertiesDefinition({}),
+        },
+        {
+          id: uid(),
+          definitionId: component2.id,
+          properties: createComponentPropertiesDefinition({}),
+        },
       ],
     });
     const system = mockSystem([entity], [component1, component2]);
@@ -175,8 +192,16 @@ describe("instantiating a System using SystemDefinition", () => {
       id: "1" as EntityDefinitionId,
       name: "Entity A",
       components: [
-        { id: uid(), definitionId: component1.id },
-        { id: uid(), definitionId: component2.id },
+        {
+          id: uid(),
+          definitionId: component1.id,
+          properties: createComponentPropertiesDefinition({}),
+        },
+        {
+          id: uid(),
+          definitionId: component2.id,
+          properties: createComponentPropertiesDefinition({}),
+        },
       ],
     });
     expect(() => mockSystem([entity], [component1, component2])).toThrow();
@@ -187,7 +212,11 @@ describe("instantiating a System using SystemDefinition", () => {
       id: "1" as EntityDefinitionId,
       name: "Entity A",
       components: [
-        { id: uid(), definitionId: "bogus" as ComponentDefinitionId },
+        {
+          id: uid(),
+          definitionId: "bogus" as ComponentDefinitionId,
+          properties: createComponentPropertiesDefinition({}),
+        },
       ],
     });
     expect(() => mockSystem([entity], [])).toThrow();

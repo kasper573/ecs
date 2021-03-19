@@ -1,5 +1,5 @@
-import { NativeComponent } from "./NativeComponent";
+import { Component } from "../../ecs/Component";
 
 export type NativeComponentName = string;
 
-export type NativeComponents = Record<NativeComponentName, NativeComponent>;
+export type NativeComponents = Record<NativeComponentName, Component>;

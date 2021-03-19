@@ -1,11 +1,11 @@
+import * as zod from "zod";
 import { Interactive } from "../ecs-interactive/Interactive";
-import { StatefulEntity } from "../ecs/StatefulEntity";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { Inventory } from "./Inventory";
 
-export class Collectable<
-  Entity extends StatefulEntity<CollectableState>
-> extends Interactive<Entity> {
+export class Collectable extends Interactive.extend({
+  name: { type: zod.string(), defaultValue: "" },
+}) {
   get sceneManager() {
     return this.entity.system.modules.resolveType(SceneManager);
   }
@@ -21,18 +21,14 @@ export class Collectable<
   constructor() {
     super({
       isActive: () => !this.isCollected,
-      action: () => `Pick up ${this.entity.state.name}`,
+      action: () => `Pick up ${this.name}`,
       perform: () => {
         this.inventory.push(this.entity);
         for (const scene of Object.values(this.sceneManager.scenes)) {
           scene.remove(this.entity);
         }
-        return `Picked up ${this.entity.state.name}.`;
+        return `Picked up ${this.name}.`;
       },
     });
   }
 }
-
-export type CollectableState = {
-  name: string;
-};

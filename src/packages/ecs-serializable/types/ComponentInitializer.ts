@@ -1,5 +1,5 @@
 import { ComponentDefinitionId } from "./ComponentDefinition";
-import { ComponentOptionsDefinition } from "./ComponentOptionsDefinition";
+import { ComponentPropertiesDefinition } from "./ComponentPropertiesDefinition";
 
 export type ComponentInitializerId = Nominal<string, "ComponentInitializerId">;
 
@@ -9,5 +9,5 @@ export type ComponentInitializer = {
    */
   id: ComponentInitializerId;
   definitionId: ComponentDefinitionId;
-  options: ComponentOptionsDefinition;
+  properties: ComponentPropertiesDefinition;
 };

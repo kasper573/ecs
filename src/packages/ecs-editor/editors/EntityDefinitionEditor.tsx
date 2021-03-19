@@ -9,7 +9,7 @@ import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { createComponentOptionsDefinition } from "../../ecs-serializable/factories/createComponentOptionsDefinition";
+import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { ComponentsContext } from "../ComponentsContext";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
@@ -29,7 +29,7 @@ export const EntityDefinitionEditor = ({
       createComponentInitializer({
         id: uuid(),
         definitionId: definition.id,
-        options: createComponentOptionsDefinition("{}"),
+        properties: createComponentPropertiesDefinition({}),
       }),
     ]);
   const updateComponents = (components: ComponentInitializer[]) => {

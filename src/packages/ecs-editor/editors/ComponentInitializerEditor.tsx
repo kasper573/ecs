@@ -8,14 +8,13 @@ import {
 import { useContext, useMemo } from "react";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { createComponentOptions } from "../../ecs-serializable/factories/createComponentOptions";
-import { ComponentOptions } from "../../ecs/Component";
-import { updateComponentOptionsDefinition } from "../../ecs-serializable/factories/updateComponentOptionsDefinition";
+import { createComponentProperties } from "../../ecs-serializable/factories/createComponentProperties";
+import { updateComponentPropertiesDefinition } from "../../ecs-serializable/factories/updateComponentPropertiesDefinition";
 import { typedKeys } from "../functions/typedKeys";
-import { resolve } from "../../ecs/Resolvable";
-import { PrimitiveType } from "../../ecs-serializable/types/PrimitiveTypes";
 import { ComponentsContext } from "../ComponentsContext";
-import { PrimitiveEditor } from "./PrimitiveEditor";
+import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
+import { getPropertyValue } from "../../property-bag/getPropertyValue";
+import { renderPrimitiveEditor } from "./PrimitiveEditor";
 
 export type ComponentInitializerEditorProps = {
   initializer: ComponentInitializer;
@@ -31,47 +30,52 @@ export const ComponentInitializerEditor = ({
   const { nativeComponents } = useContext(ComponentsContext);
 
   const initializerOptions = useMemo(
-    () => createComponentOptions(initializer.options),
-    [initializer.options]
+    () => createComponentProperties(initializer.properties),
+    [initializer.properties]
   );
 
-  const updateOption = (optionName: string, optionValue: PrimitiveType) => {
+  const updateOption = (optionName: string, optionValue: unknown) => {
     onChange({
       ...initializer,
-      options: updateComponentOptionsDefinition(
-        initializer.options,
-        optionName as keyof ComponentOptions,
-        optionValue as ComponentOptions[keyof ComponentOptions]
+      properties: updateComponentPropertiesDefinition(
+        initializer.properties,
+        optionName,
+        optionValue
       ),
     });
   };
 
   const nativeComponent = nativeComponents[definition.nativeComponent];
-  const optionNames = typedKeys(nativeComponent.options);
+  const propertyNames = typedKeys(nativeComponent.propertyInfos);
   return (
     <Table size="small">
       <TableBody>
-        {optionNames.map((optionName) => {
-          const optionType = nativeComponent.options[optionName];
-          if (!optionType) {
+        {propertyNames.map((propertyName) => {
+          const info: PropertyInfo<unknown> =
+            nativeComponent.propertyInfos[propertyName];
+          if (info.hidden) {
+            // This property has opted out of being editable
+            return null;
+          }
+          const editor = renderPrimitiveEditor({
+            type: info.type,
+            value: getPropertyValue(
+              nativeComponent.propertyInfos,
+              initializerOptions,
+              propertyName
+            ),
+            onChange: (updated) => updateOption(propertyName, updated),
+          });
+          if (!editor) {
+            // No editor available for this type
             return null;
           }
           return (
-            <TableRow key={optionName}>
+            <TableRow key={propertyName}>
               <TableCell>
-                <Typography variant="caption">{optionName}</Typography>
+                <Typography variant="caption">{propertyName}</Typography>
               </TableCell>
-              <TableCell>
-                <PrimitiveEditor
-                  type={optionType}
-                  value={
-                    optionType === "function"
-                      ? initializerOptions[optionName]
-                      : resolve(initializerOptions[optionName])
-                  }
-                  onChange={(updated) => updateOption(optionName, updated)}
-                />
-              </TableCell>
+              <TableCell>{editor}</TableCell>
             </TableRow>
           );
         })}

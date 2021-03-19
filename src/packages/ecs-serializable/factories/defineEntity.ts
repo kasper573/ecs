@@ -1,14 +1,14 @@
 import { EntityDefinition } from "../types/EntityDefinition";
-import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
-import { StatefulEntity } from "../../ecs/StatefulEntity";
-import { createComponentOptions } from "./createComponentOptions";
+import { ComponentMap } from "../types/ComponentMap";
+import { Entity } from "../../ecs/Entity";
+import { createComponentProperties } from "./createComponentProperties";
 
 /**
  * Returns a Entity class representing the specified EntityDefinition.
  */
 export const defineEntity = (
   definition: EntityDefinition,
-  componentConstructors: ComponentConstructorMap
+  componentConstructors: ComponentMap
 ) => {
   const selectedComponents = definition.components.map((initializer) => {
     const constructor = componentConstructors.get(initializer.definitionId);
@@ -17,16 +17,15 @@ export const defineEntity = (
         `No Component with definitionId "${initializer.definitionId}" exists`
       );
     }
-    return [constructor, initializer.options] as const;
+    return [constructor, initializer.properties] as const;
   });
-  class DefinedEntity extends StatefulEntity<any> {
+  class DefinedEntity extends Entity {
     constructor() {
       super(
-        {},
-        selectedComponents.map(([Component, options]) => {
+        selectedComponents.map(([Component, props]) => {
           const component = new Component();
-          if (options) {
-            component.options = createComponentOptions(options);
+          if (props) {
+            component.configure(createComponentProperties(props));
           }
           return component;
         })

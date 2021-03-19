@@ -1,6 +1,6 @@
 import { ComponentDefinition } from "../types/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
-import { ComponentConstructor } from "../types/ComponentConstructorMap";
+import { Component } from "../../ecs/Component";
 
 /**
  * Returns a Component class representing the specified ComponentDefinition.
@@ -8,7 +8,7 @@ import { ComponentConstructor } from "../types/ComponentConstructorMap";
 export const defineComponent = (
   definition: ComponentDefinition,
   nativeComponents: NativeComponents
-): ComponentConstructor => {
+): Component => {
   const constructor = nativeComponents[definition.nativeComponent];
   if (!constructor) {
     throw new Error(

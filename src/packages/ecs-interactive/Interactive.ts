@@ -1,20 +1,13 @@
-import { Component, ComponentOptions } from "../ecs/Component";
-import { Resolvable, resolve } from "../ecs/Resolvable";
-import { InteractionResult } from "./InteractionResult";
+import * as zod from "zod";
+import { Component } from "../ecs/Component";
 
-export class Interactive<Entity> extends Component<Entity, InteractiveOptions> {
-  get action() {
-    return resolve(this.options.action) ?? "";
-  }
-
-  perform() {
-    if (this.options.perform) {
-      return this.options.perform();
-    }
-  }
-}
-
-export type InteractiveOptions = ComponentOptions & {
-  action: Resolvable<string>;
-  perform: () => InteractionResult | undefined | void;
-};
+export const Interactive = Component.extend({
+  action: { type: zod.string().optional(), defaultValue: undefined },
+  perform: {
+    type: zod.function(
+      zod.tuple([]),
+      zod.union([zod.string().optional(), zod.void()])
+    ),
+    defaultValue: () => {},
+  },
+});

@@ -1,20 +1,22 @@
 import { InteractionResult } from "../../ecs-interactive/InteractionResult";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Describable } from "../../ecs-describable/Describable";
-import { StatefulEntity } from "../../ecs/StatefulEntity";
 import { TextAdventureSM } from "../TextAdventureSM";
+import { Entity } from "../../ecs/Entity";
 
 const fallDown: InteractionResult =
   "The bridge collapses under your weight. You fall down a pit.";
 
 export type BridgeState = "fragile" | "broken" | "sturdy";
 
-export class Bridge extends StatefulEntity<BridgeState> {
+export class Bridge extends Entity {
+  state: BridgeState = "fragile";
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
   }
   constructor() {
-    super("fragile");
+    super();
+
     this.components.push(
       new Interactive({
         action: "Cross the bridge",

@@ -9,29 +9,10 @@ import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefin
 import { Interactive } from "../packages/ecs-interactive/Interactive";
 import systemDefinitionsJson from "./defaultEditorSystems.json";
 
-const commonOptions = {
-  isActive: "boolean",
-} as const;
-
 export const nativeComponents = {
-  describable: class DescribableWithOptions extends Describable<any> {
-    static options = {
-      description: "string",
-      ...commonOptions,
-    } as const;
-  },
-  collectable: class CollectableWithOptions extends Collectable<any> {
-    static options = {
-      ...commonOptions,
-    } as const;
-  },
-  interactive: class InteractiveWithOptions extends Interactive<any> {
-    static options = {
-      action: "string",
-      perform: "function",
-      ...commonOptions,
-    } as const;
-  },
+  describable: Describable,
+  collectable: Collectable,
+  interactive: Interactive,
 };
 
 const systemDefinitions = (systemDefinitionsJson as object) as SystemDefinition[];

@@ -29,7 +29,7 @@
         "components": [
           {
             "definitionId": "uuid0",
-            "options": "{\"fn\":() => 2}"
+            "properties": "{\"fn\":() => 2}"
           }
         ],
         "name": "Entity A"

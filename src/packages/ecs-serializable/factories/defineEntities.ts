@@ -1,5 +1,5 @@
 import { EntityConstructorMap } from "../types/EntityConstructorMap";
-import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
+import { ComponentMap } from "../types/ComponentMap";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { defineEntity } from "./defineEntity";
 
@@ -9,7 +9,7 @@ import { defineEntity } from "./defineEntity";
  */
 export const defineEntities = (
   definitions: EntityDefinition[],
-  componentConstructors: ComponentConstructorMap
+  componentConstructors: ComponentMap
 ) =>
   definitions.reduce((map: EntityConstructorMap, definition) => {
     if (map.has(definition.id)) {

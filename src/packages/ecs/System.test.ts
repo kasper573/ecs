@@ -1,7 +1,6 @@
 import { Entity } from "./Entity";
 import { System } from "./System";
 import { Component } from "./Component";
-import { SystemModule } from "./SystemModule";
 
 describe("system entries can be configured", () => {
   test("by an array of entities", () => {

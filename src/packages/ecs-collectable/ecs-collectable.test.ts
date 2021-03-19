@@ -1,12 +1,12 @@
 import { createActions } from "../ecs-interactive/createActions";
 import { describeEntity } from "../ecs-describable/describeEntities";
 import { System } from "../ecs/System";
-import { StatefulEntity } from "../ecs/StatefulEntity";
 import { Describable } from "../ecs-describable/Describable";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { describeSystem } from "../ecs-describable/describeSystem";
+import { Entity } from "../ecs/Entity";
 import { Inventory } from "./Inventory";
-import { Collectable, CollectableState } from "./Collectable";
+import { Collectable } from "./Collectable";
 
 test("Picking up a Collectable entity removes it from the scene", () => {
   const { entity, pickUp, sceneManager } = setup();
@@ -25,14 +25,14 @@ test("Collectable entities in the scene are described", () => {
   expect(describeEntity(entity)).toContain("A visible entity");
 });
 
-it("Collectable entities in the inventory are not described", () => {
+test("Collectable entities in the inventory are not described", () => {
   const { system, pickUp } = setup();
   pickUp.perform();
   expect(describeSystem(system)).not.toContain("A visible entity");
 });
 
 const setup = () => {
-  const entity = new StatefulEntity<CollectableState>({ name: "entity" }, [
+  const entity = new Entity([
     new Describable({ description: "A visible entity" }),
     new Collectable(),
   ]);

@@ -1,51 +1,50 @@
 import { Switch, TextField } from "@material-ui/core";
-import {
-  PrimitiveName,
-  PrimitiveTypes,
-} from "../../ecs-serializable/types/PrimitiveTypes";
+import { ZodType, ZodTypes } from "zod";
+import { isType } from "../../property-bag/isType";
 import { FunctionEditor } from "./FunctionEditor";
 
 export type PrimitiveEditorProps = {
-  value?: PrimitiveTypes[PrimitiveName] | void;
-  type: PrimitiveName;
-  onChange: (updated: PrimitiveTypes[PrimitiveName]) => void;
+  value: unknown;
+  type: ZodType<unknown>;
+  onChange: (updated: unknown) => void;
 };
 
-export const PrimitiveEditor = ({
+export const renderPrimitiveEditor = ({
   value,
   type,
   onChange,
 }: PrimitiveEditorProps) => {
-  switch (type) {
-    case "boolean":
-      return (
-        <Switch
-          value={value ?? false}
-          onChange={(e) => onChange(e.currentTarget.checked)}
-        />
-      );
-    case "number":
-      return (
-        <TextField
-          value={value ?? 0}
-          type="number"
-          onChange={(e) => onChange(parseFloat(e.currentTarget.value))}
-        />
-      );
-    case "function":
-      return (
-        <FunctionEditor
-          value={(value as Function) ?? (() => {})}
-          onChange={onChange}
-        />
-      );
-    case "string":
-      return (
-        <TextField
-          value={value ?? ""}
-          onChange={(e) => onChange(e.currentTarget.value)}
-        />
-      );
+  if (isType(type, ZodTypes.boolean)) {
+    return (
+      <Switch
+        checked={value as boolean}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+    );
   }
-  return null;
+  if (isType(type, ZodTypes.number)) {
+    return (
+      <TextField
+        value={value ?? 0}
+        type="number"
+        onChange={(e) => onChange(parseFloat(e.currentTarget.value))}
+      />
+    );
+  }
+  if (isType(type, ZodTypes.function)) {
+    return (
+      <FunctionEditor
+        value={(value as Function) ?? (() => {})}
+        onChange={onChange}
+      />
+    );
+  }
+  if (isType(type, ZodTypes.string)) {
+    return (
+      <TextField
+        value={value ?? ""}
+        onChange={(e) => onChange(e.currentTarget.value)}
+      />
+    );
+  }
 };

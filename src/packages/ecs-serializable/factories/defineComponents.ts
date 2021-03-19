@@ -1,4 +1,4 @@
-import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
+import { ComponentMap } from "../types/ComponentMap";
 import { ComponentDefinition } from "../types/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
 import { defineComponent } from "./defineComponent";
@@ -11,7 +11,7 @@ export const defineComponents = (
   definitions: ComponentDefinition[],
   nativeComponents: NativeComponents
 ) =>
-  definitions.reduce((map: ComponentConstructorMap, definition) => {
+  definitions.reduce((map: ComponentMap, definition) => {
     if (map.has(definition.id)) {
       throw new Error(
         `Component constructor with id "${definition.id}" already exists`

@@ -1,15 +1,6 @@
-import { Component, ComponentOptions } from "../ecs/Component";
-import { Resolvable, resolve } from "../ecs/Resolvable";
+import * as zod from "zod";
+import { Component } from "../ecs/Component";
 
-export class Describable<Entity> extends Component<
-  Entity,
-  DescribableComponentOptions
-> {
-  get description() {
-    return resolve(this.options.description) ?? "";
-  }
-}
-
-export type DescribableComponentOptions = ComponentOptions & {
-  description: Resolvable<string>;
-};
+export const Describable = Component.extend({
+  description: { type: zod.string(), defaultValue: "" },
+});
