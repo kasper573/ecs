@@ -1,10 +1,17 @@
 import * as zod from "zod";
-import { Interactive } from "../ecs-interactive/Interactive";
+import {
+  Interactive,
+  interactiveProperties,
+} from "../ecs-interactive/Interactive";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
+import { componentProperties } from "../ecs/Component";
 import { Inventory } from "./Inventory";
 
 export class Collectable extends Interactive.extend({
   name: { type: zod.string(), defaultValue: "" },
+  isActive: { ...componentProperties.isActive, hidden: true },
+  action: { ...interactiveProperties.action, hidden: true },
+  perform: { ...interactiveProperties.perform, hidden: true },
 }) {
   get sceneManager() {
     return this.entity.system.modules.resolveType(SceneManager);

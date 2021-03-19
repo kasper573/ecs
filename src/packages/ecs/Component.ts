@@ -10,10 +10,11 @@ const entitySchema: zod.ZodSchema<Entity> = zod.lazy(() =>
   zod.instanceof(Entity)
 );
 
-export const Component = createPropertyBag({
+export const componentProperties = {
   entity: {
     type: entitySchema,
     defaultValue: trustedUndefined<Entity>(),
+    hidden: true,
   },
   isActive: { type: zod.boolean(), defaultValue: true },
   update: {
@@ -21,7 +22,9 @@ export const Component = createPropertyBag({
     defaultValue: () => {},
     hidden: true,
   },
-});
+};
+
+export const Component = createPropertyBag(componentProperties);
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Component = typeof Component;

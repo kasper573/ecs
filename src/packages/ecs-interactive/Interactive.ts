@@ -1,7 +1,7 @@
 import * as zod from "zod";
 import { Component } from "../ecs/Component";
 
-export const Interactive = Component.extend({
+export const interactiveProperties = {
   action: { type: zod.string().optional(), defaultValue: undefined },
   perform: {
     type: zod.function(
@@ -10,4 +10,6 @@ export const Interactive = Component.extend({
     ),
     defaultValue: () => {},
   },
-});
+};
+
+export const Interactive = Component.extend(interactiveProperties);

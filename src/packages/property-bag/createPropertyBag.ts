@@ -34,7 +34,7 @@ export const createPropertyBag = <
       super();
       Object.keys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
-          configurable: false,
+          configurable: true,
           get: () => getPropertyValue(propertyInfos, this.propertyValues, name),
         });
       });
