@@ -1,5 +1,5 @@
 import {
-  Accordion,
+  Accordion as MuiAccordion,
   AccordionDetails,
   AccordionProps,
   AccordionSummary,
@@ -37,7 +37,7 @@ export const ComponentInitializerList = ({
           <AccordionSummary expandIcon={<ExpandAccordionIcon />}>
             <Typography>{definition.name}</Typography>
           </AccordionSummary>
-          <AccordionDetailsColumn>
+          <AccordionDetails>
             <ComponentInitializerEditor
               initializer={initializer}
               definition={definition}
@@ -45,14 +45,38 @@ export const ComponentInitializerList = ({
                 onChange(replaceItem(items, initializer, updated))
               }
             />
-          </AccordionDetailsColumn>
+          </AccordionDetails>
         </Accordion>
       );
     })}
   </>
 );
 
-const AccordionDetailsColumn = styled(AccordionDetails)`
-  flex-direction: column;
-  padding: 0;
+/**
+ * Accordion that doesn't change margin or size when expanding.
+ * Also sets content to be displayed as a column without padding.
+ */
+const Accordion = styled(MuiAccordion)`
+  &:not(.Mui-expanded) + & {
+    border-top: 1px solid ${({ theme }) => theme.palette.divider};
+  }
+  &:before {
+    display: none;
+  }
+  &.Mui-expanded {
+    margin: 0;
+  }
+  .MuiAccordionSummary-root {
+    background-color: rgba(255, 255, 255, 0.05);
+    &.Mui-expanded {
+      min-height: 48px;
+    }
+  }
+  .MuiAccordionSummary-content.Mui-expanded {
+    margin: 12px 0;
+  }
+  .MuiAccordionDetails-root {
+    flex-direction: column;
+    padding: 0;
+  }
 `;
