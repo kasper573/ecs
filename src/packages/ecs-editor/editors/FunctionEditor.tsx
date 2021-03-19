@@ -13,17 +13,18 @@ export const FunctionEditor = ({
   value: Function;
   onChange: (updated: Function) => void;
 }) => {
-  const [text, setText] = useState<string>(() => serializeJS(value));
+  const defaultText = useMemo(() => serializeJS(value), [value]);
+  const [text, setText] = useState<string>(defaultText);
   const textAsFunction = useMemo(() => tryParseFunction(text), [text]);
   const isValid = !!textAsFunction;
   const onChangeRef = useAsRef(onChange);
 
-  // Emit a change every time we get new valid options
+  // Emit a change every time we get new valid function
   useEffect(() => {
-    if (isValid) {
+    if (isValid && text !== defaultText) {
       onChangeRef.current(textAsFunction);
     }
-  }, [textAsFunction, isValid, onChangeRef]);
+  }, [textAsFunction, text, defaultText, isValid, onChangeRef]);
 
   return (
     <TextField
