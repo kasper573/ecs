@@ -18,9 +18,10 @@ export const CreateEntityInitializerButton = ({
   onCreate,
 }: CreateEntityInitializerButtonProps) => (
   <CommonPopper
+    popupId="instantiate-entity"
     toggle={(props) => (
       <Tooltip title="Instantiate entity">
-        <IconButton edge="end" aria-label="delete" {...props}>
+        <IconButton edge="end" aria-label="Instantiate entity" {...props}>
           <AddIcon />
         </IconButton>
       </Tooltip>

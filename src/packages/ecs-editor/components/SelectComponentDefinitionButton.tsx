@@ -15,9 +15,10 @@ export const SelectComponentDefinitionButton = ({
   onSelected,
 }: SelectComponentDefinitionButtonProps) => (
   <CommonPopper
+    popupId="add-component"
     toggle={(props) => (
       <Tooltip title="Add component">
-        <IconButton edge="end" aria-label="delete" {...props}>
+        <IconButton edge="end" aria-label="Add component" {...props}>
           <AddIcon />
         </IconButton>
       </Tooltip>
