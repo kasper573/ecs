@@ -13,7 +13,12 @@ export const InspectedObjectEditor = ({
 }: InspectedObjectEditorProps) => {
   switch (value?.type) {
     case "entityInitializer":
-      return <EntityInitializerEditor value={value.object} />;
+      return (
+        <EntityInitializerEditor
+          value={value.object}
+          onChange={(object) => onChange({ ...value, object }, value)}
+        />
+      );
     case "libraryNode":
       return (
         <LibraryNodeEditor

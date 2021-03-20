@@ -10,7 +10,7 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { ComponentsContext } from "../ComponentsContext";
+import { EditorStateContext } from "../EditorStateContext";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -22,7 +22,7 @@ export const EntityDefinitionEditor = ({
   value,
   onChange,
 }: EntityDefinitionEditorProps) => {
-  const { componentDefinitions } = useContext(ComponentsContext);
+  const { libraryDefinitions } = useContext(EditorStateContext);
   const addComponent = (definition: ComponentDefinition) =>
     updateComponents([
       ...value.components,
@@ -42,14 +42,14 @@ export const EntityDefinitionEditor = ({
     <>
       <PanelHeader title={PanelName.Inspector}>
         <SelectComponentDefinitionButton
-          componentDefinitions={componentDefinitions}
+          componentDefinitions={libraryDefinitions.components}
           onSelected={addComponent}
         />
       </PanelHeader>
       <InspectedObjectInfo icon={<EntityDefinitionIcon />} name={value.name} />
       <ComponentInitializerList
         items={value.components}
-        definitions={componentDefinitions}
+        definitions={libraryDefinitions.components}
         onChange={updateComponents}
         elevation={0}
       />

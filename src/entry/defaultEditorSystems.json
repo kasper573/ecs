@@ -6,7 +6,8 @@
           {
             "name": "Campfire",
             "id": "43011129-4f78-4c22-ad74-32930c0ac076",
-            "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c"
+            "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c",
+            "components": []
           }
         ],
         "id": "1672cc2a-5132-4235-a3ca-e87164441ecb",

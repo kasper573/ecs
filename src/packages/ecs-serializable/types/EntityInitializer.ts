@@ -1,4 +1,5 @@
 import { EntityDefinitionId } from "./EntityDefinition";
+import { ComponentInitializer } from "./ComponentInitializer";
 
 export type EntityInitializerId = Nominal<string, "EntityInitializerId">;
 
@@ -12,4 +13,5 @@ export type EntityInitializer = {
    */
   name: string;
   definitionId: EntityDefinitionId;
+  components: ComponentInitializer[];
 };
