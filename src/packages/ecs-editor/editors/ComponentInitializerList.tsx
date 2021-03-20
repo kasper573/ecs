@@ -10,45 +10,60 @@ import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInit
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { ExpandAccordionIcon } from "../components/icons";
 import { replaceItem } from "../functions/replaceItem";
+import { pairComponentInitializers } from "../functions/pairComponentInitializers";
 import { ComponentInitializerEditor } from "./ComponentInitializerEditor";
 
 export type ComponentInitializerListProps = Omit<
   AccordionProps,
   "children" | "onChange"
 > & {
-  items: ComponentInitializer[];
+  baseItems?: ComponentInitializer[];
+  primaryItems: ComponentInitializer[];
   definitions: ComponentDefinition[];
   onChange: (updated: ComponentInitializer[]) => void;
 };
 
 export const ComponentInitializerList = ({
-  items,
+  baseItems = [],
+  primaryItems,
   definitions,
   onChange,
   ...accordionProps
 }: ComponentInitializerListProps) => (
   <>
-    {items.map((initializer) => {
-      const definition = definitions.find(
-        (d) => d.id === initializer.definitionId
-      )!;
-      return (
-        <Accordion key={initializer.id} {...accordionProps}>
-          <AccordionSummary expandIcon={<ExpandAccordionIcon />}>
-            <Typography>{definition.name}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <ComponentInitializerEditor
-              initializer={initializer}
-              definition={definition}
-              onChange={(updated) =>
-                onChange(replaceItem(items, initializer, updated))
-              }
-            />
-          </AccordionDetails>
-        </Accordion>
-      );
-    })}
+    {pairComponentInitializers(baseItems, primaryItems).map(
+      ({ base, primary }) => {
+        const instance = (base ?? primary)!; // We trust the pair function to always return at least one
+        const definition = definitions.find(
+          (d) => d.id === instance.definitionId
+        )!;
+        const isRemoved = !primary;
+        return (
+          <Accordion disabled={isRemoved} key={instance.id} {...accordionProps}>
+            <AccordionSummary expandIcon={<ExpandAccordionIcon />}>
+              <Typography>
+                {definition.name}
+                {isRemoved && " (Removed)"}
+              </Typography>
+            </AccordionSummary>
+            {primary && (
+              <AccordionDetails>
+                <ComponentInitializerEditor
+                  base={base}
+                  primary={primary}
+                  definition={definition}
+                  onChange={(updated) => {
+                    if (primary) {
+                      onChange(replaceItem(primaryItems, primary, updated));
+                    }
+                  }}
+                />
+              </AccordionDetails>
+            )}
+          </Accordion>
+        );
+      }
+    )}
   </>
 );
 

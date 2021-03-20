@@ -48,7 +48,7 @@ export const EntityDefinitionEditor = ({
       </PanelHeader>
       <InspectedObjectInfo icon={<EntityDefinitionIcon />} name={value.name} />
       <ComponentInitializerList
-        items={value.components}
+        primaryItems={value.components}
         definitions={libraryDefinitions.components}
         onChange={updateComponents}
         elevation={0}

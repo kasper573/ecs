@@ -41,10 +41,6 @@ export const EntityInitializerEditor = ({
       components,
     });
   };
-  const mergedComponents = mergeComponentInitializers(
-    entityDefinition.components,
-    entityInitializer.components
-  );
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
@@ -58,7 +54,8 @@ export const EntityInitializerEditor = ({
         name={entityInitializer.name}
       />
       <ComponentInitializerList
-        items={mergedComponents}
+        baseItems={entityDefinition.components}
+        primaryItems={entityInitializer.components}
         definitions={libraryDefinitions.components}
         onChange={updateComponents}
         elevation={0}
@@ -66,8 +63,3 @@ export const EntityInitializerEditor = ({
     </>
   );
 };
-
-const mergeComponentInitializers = (
-  a: ComponentInitializer[],
-  b: ComponentInitializer[]
-) => b;

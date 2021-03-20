@@ -1,6 +1,9 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedScene } from "../selectors/selectSelectedScene";
+import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import { getEntityDefinitionInLibrary } from "../../ecs-serializable/functions/getEntityDefinitionInLibrary";
+import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
 import { updateSceneReducer } from "./updateSceneReducer";
 
 export const createEntityInitializerReducer: EditorStateReducer<EntityInitializer> = (
@@ -8,13 +11,32 @@ export const createEntityInitializerReducer: EditorStateReducer<EntityInitialize
   entityInitializer
 ) => {
   const scene = selectSelectedScene(state);
-  if (scene) {
-    return updateSceneReducer(state, {
-      scene,
-      update: {
-        entities: [...scene.entities, entityInitializer],
-      },
-    });
+  const system = selectSelectedSystem(state);
+  if (!scene || !system) {
+    console.warn(
+      "Cannot create entity initializer without a scene and system selected"
+    );
+    return state;
   }
-  return state;
+
+  const entityDefinition = getEntityDefinitionInLibrary(
+    system.library,
+    entityInitializer.definitionId
+  );
+  if (!entityDefinition) {
+    console.warn(
+      `Cannot create entity initializer: Could not find entity definition by id "${entityInitializer.definitionId}"`
+    );
+    return state;
+  }
+
+  return updateSceneReducer(state, {
+    scene,
+    update: {
+      entities: [
+        ...scene.entities,
+        inheritEntityDefinitionComponents(entityInitializer, entityDefinition),
+      ],
+    },
+  });
 };

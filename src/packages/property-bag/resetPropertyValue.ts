@@ -5,9 +5,9 @@ export const resetPropertyValue = <
   Properties extends PropertyInfoRecord<any, any>,
   Name extends keyof Properties
 >(
-  infos: Properties,
   values: Partial<ResolvablePropertyValuesFor<Properties>>,
+  info: Properties[Name],
   name: Name
 ) => {
-  values[name] = infos[name].defaultValue;
+  delete values[name];
 };

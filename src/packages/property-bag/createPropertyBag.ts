@@ -1,3 +1,4 @@
+import { typedKeys } from "../ecs-editor/functions/typedKeys";
 import { PropertyBagMethods } from "./types/PropertyBagMethods";
 import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";
@@ -32,10 +33,11 @@ export const createPropertyBag = <
 
     constructor(values: Partial<ResolvablePropertyValuesFor<Properties>> = {}) {
       super();
-      Object.keys(directProperties).forEach((name) => {
+      typedKeys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
           configurable: true,
-          get: () => getPropertyValue(propertyInfos, this.propertyValues, name),
+          get: () =>
+            getPropertyValue(this.propertyValues, propertyInfos[name], name),
         });
       });
       this.configure(values);
@@ -47,7 +49,7 @@ export const createPropertyBag = <
     }
 
     reset<Name extends keyof Properties>(name: Name) {
-      resetPropertyValue(propertyInfos, this.propertyValues, name);
+      resetPropertyValue(this.propertyValues, propertyInfos[name], name);
     }
 
     static extend<ExtensionProperties extends PropertyInfoRecord<any, any>>(

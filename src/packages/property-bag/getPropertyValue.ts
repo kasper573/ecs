@@ -9,13 +9,13 @@ export const getPropertyValue = <
   Name extends keyof Properties,
   Types
 >(
-  infos: Properties,
   values: Partial<ResolvablePropertyValuesFor<Properties>>,
-  name: Name
+  info: Properties[Name],
+  name: Name,
+  defaultValue = info.defaultValue
 ): PropertyValueFor<Properties, Name> => {
-  const info = infos[name];
-  const value = values[name] ?? info.defaultValue;
+  const value = values.hasOwnProperty(name) ? values[name] : defaultValue;
   return !isType(info.type, ZodTypes.function) && typeof value === "function"
-    ? value() // Should resolve
+    ? (value as Function)() // Should resolve
     : value;
 };
