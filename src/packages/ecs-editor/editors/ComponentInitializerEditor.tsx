@@ -58,6 +58,7 @@ export const ComponentInitializerEditor = ({
       <TableBody>
         {propertyNames.map((propertyName) => (
           <ComponentPropertyEditor
+            key={propertyName}
             baseProperties={baseProperties}
             primaryProperties={primaryProperties}
             propertyName={propertyName}
