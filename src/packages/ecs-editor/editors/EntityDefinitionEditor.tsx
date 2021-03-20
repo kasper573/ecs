@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
+import { without } from "lodash";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
@@ -11,6 +12,7 @@ import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EditorStateContext } from "../EditorStateContext";
+import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -23,7 +25,12 @@ export const EntityDefinitionEditor = ({
   onChange,
 }: EntityDefinitionEditorProps) => {
   const { libraryDefinitions } = useContext(EditorStateContext);
-  const addComponent = (definition: ComponentDefinition) =>
+  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
+    removeComponent,
+    libraryDefinitions.components
+  );
+
+  function addComponent(definition: ComponentDefinition) {
     updateComponents([
       ...value.components,
       createComponentInitializer({
@@ -32,12 +39,19 @@ export const EntityDefinitionEditor = ({
         properties: createComponentPropertiesDefinition({}),
       }),
     ]);
-  const updateComponents = (components: ComponentInitializer[]) => {
+  }
+
+  function updateComponents(components: ComponentInitializer[]) {
     onChange({
       ...value,
       components,
     });
-  };
+  }
+
+  function removeComponent(component: ComponentInitializer) {
+    updateComponents(without(value.components, component));
+  }
+
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
@@ -51,8 +65,10 @@ export const EntityDefinitionEditor = ({
         primaryItems={value.components}
         definitions={libraryDefinitions.components}
         onChange={updateComponents}
+        onRemoveItem={askToDeleteComponent}
         elevation={0}
       />
+      {deleteDialog}
     </>
   );
 };

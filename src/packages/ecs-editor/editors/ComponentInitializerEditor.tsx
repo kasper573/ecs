@@ -51,6 +51,7 @@ export const ComponentInitializerEditor = ({
       properties: createComponentPropertiesDefinition(updatedProperties),
     });
 
+  const hasBase = !!base;
   const nativeComponent = nativeComponents[definition.nativeComponent];
   const propertyNames = typedKeys(nativeComponent.propertyInfos);
   return (
@@ -59,6 +60,7 @@ export const ComponentInitializerEditor = ({
         {propertyNames.map((propertyName) => (
           <ComponentPropertyEditor
             key={propertyName}
+            hasBase={hasBase}
             baseProperties={baseProperties}
             primaryProperties={primaryProperties}
             propertyName={propertyName}

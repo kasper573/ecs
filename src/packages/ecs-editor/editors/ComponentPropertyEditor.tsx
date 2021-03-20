@@ -6,6 +6,7 @@ import { resetPropertyValue } from "../../property-bag/resetPropertyValue";
 import { renderPrimitiveEditor } from "./PrimitiveEditor";
 
 export type ComponentPropertyEditorProps = {
+  hasBase: boolean;
   baseProperties: Record<string, unknown>;
   primaryProperties: Record<string, unknown>;
   propertyName: string;
@@ -15,6 +16,7 @@ export type ComponentPropertyEditorProps = {
 };
 
 export const ComponentPropertyEditor = ({
+  hasBase,
   baseProperties,
   primaryProperties,
   propertyName,
@@ -57,9 +59,7 @@ export const ComponentPropertyEditor = ({
     onReset(updatedProperties);
   };
 
-  const hasBaseDiff =
-    baseProperties.hasOwnProperty(propertyName) &&
-    primaryProperties.hasOwnProperty(propertyName);
+  const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
 
   return (
     <TableRow key={propertyName}>
