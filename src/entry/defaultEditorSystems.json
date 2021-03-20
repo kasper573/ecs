@@ -5,9 +5,20 @@
         "entities": [
           {
             "name": "Campfire",
-            "id": "43011129-4f78-4c22-ad74-32930c0ac076",
-            "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c",
-            "components": []
+            "components": [
+              {
+                "id": "110cb4da-6a6e-414c-be95-b4ea53c9bb04",
+                "definitionId": "describable",
+                "properties": "{}"
+              },
+              {
+                "id": "44a2942d-e511-4ad7-8dfb-5776cf285db2",
+                "definitionId": "interactive",
+                "properties": "{}"
+              }
+            ],
+            "id": "6a64a11e-b6a7-4386-bc25-a2108db0e50e",
+            "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c"
           }
         ],
         "id": "1672cc2a-5132-4235-a3ca-e87164441ecb",
