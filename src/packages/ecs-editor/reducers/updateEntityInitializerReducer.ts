@@ -21,25 +21,12 @@ export const updateEntityInitializerReducer: EditorStateReducer<{
   }
 ) => {
   if (!system || !scene) {
-    console.warn(
-      `Could not update entity initializer: System and scene must be specified`,
-      {
-        system,
-        scene,
-        entityInitializer,
-      }
-    );
-    return state;
+    throw new Error(`System and scene must be specified`);
   }
   const updatedInstances = scene.entities.slice();
   const index = updatedInstances.indexOf(entityInitializer);
   if (index === -1) {
-    console.warn(`Could not update entity initializer: Not found in scene`, {
-      scene,
-      system,
-      entityInitializer,
-    });
-    return state;
+    throw new Error(`Entity initializer not found in scene`);
   }
   updatedInstances[index] = { ...entityInitializer, ...update };
   return updateSceneReducer(state, {

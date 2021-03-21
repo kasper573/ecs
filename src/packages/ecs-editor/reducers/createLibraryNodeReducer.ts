@@ -9,11 +9,7 @@ export const createLibraryNodeReducer: EditorStateReducer<{
   node: LibraryNode;
 }> = (state, { system = selectSelectedSystem(state), node }) => {
   if (!system) {
-    console.warn(`Could not create library node: System must be specified`, {
-      system,
-      node,
-    });
-    return state;
+    throw new Error(`System must be specified`);
   }
   return updateLibraryReducer(state, {
     system,

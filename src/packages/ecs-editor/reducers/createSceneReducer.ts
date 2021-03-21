@@ -10,11 +10,7 @@ export const createSceneReducer: EditorStateReducer<{
   scene: SceneDefinition;
 }> = (state, { system = selectSelectedSystem(state), scene }) => {
   if (!system) {
-    console.warn(`Could not create create scene: System must be specified`, {
-      system,
-      scene,
-    });
-    return state;
+    throw new Error(`System must be specified`);
   }
   return updateSystemReducer(state, {
     system,

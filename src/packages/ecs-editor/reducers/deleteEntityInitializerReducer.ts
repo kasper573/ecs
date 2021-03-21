@@ -21,15 +21,7 @@ export const deleteEntityInitializerReducer: EditorStateReducer<{
   }
 ) => {
   if (!system || !scene) {
-    console.warn(
-      `Could not delete entity initializer: System and scene must be specified`,
-      {
-        scene,
-        system,
-        entityInitializer,
-      }
-    );
-    return state;
+    throw new Error(`System and scene must be specified`);
   }
   const deletedState = updateSceneReducer(state, {
     system,

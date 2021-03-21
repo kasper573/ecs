@@ -21,25 +21,14 @@ export const createEntityInitializerReducer: EditorStateReducer<{
   }
 ) => {
   if (!system || !scene) {
-    console.warn(
-      `Could not create entity initializer: System and scene must be specified`,
-      {
-        scene,
-        system,
-        entityInitializer,
-      }
-    );
-    return state;
+    throw new Error(`System and scene must be specified`);
   }
   const entityDefinition = getEntityDefinitionInLibrary(
     system.library,
     entityInitializer.definitionId
   );
   if (!entityDefinition) {
-    console.warn(
-      `Cannot create entity initializer: Could not find entity definition by id "${entityInitializer.definitionId}"`
-    );
-    return state;
+    throw new Error(`Referenced entity definition not found`);
   }
 
   return updateSceneReducer(state, {

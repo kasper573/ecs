@@ -11,12 +11,7 @@ export const updateLibraryNodeReducer: EditorStateReducer<{
   replacement: LibraryNode;
 }> = (state, { system = selectSelectedSystem(state), target, replacement }) => {
   if (!system) {
-    console.warn(`Could not update library node: System must be specified`, {
-      system,
-      target,
-      replacement,
-    });
-    return state;
+    throw new Error(`System must be specified`);
   }
   return updateLibraryReducer(state, {
     system,

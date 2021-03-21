@@ -10,20 +10,12 @@ export const updateSceneReducer: EditorStateReducer<{
   update: Partial<SceneDefinition>;
 }> = (state, { system = selectSelectedSystem(state), scene, update }) => {
   if (!system) {
-    console.warn(`Could not update scene: System must be specified`, {
-      system,
-      scene,
-    });
-    return state;
+    throw new Error(`System must be specified`);
   }
   const updatedScenes = system.scenes.slice();
   const index = updatedScenes.indexOf(scene);
   if (index === -1) {
-    console.warn(`Could not update scene: Scene not found in system`, {
-      scene,
-      system,
-    });
-    return state;
+    throw new Error(`Scene not found in system`);
   }
   updatedScenes[index] = { ...scene, ...update };
   return updateSystemReducer(state, {

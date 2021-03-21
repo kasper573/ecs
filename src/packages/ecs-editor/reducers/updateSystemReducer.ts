@@ -7,11 +7,7 @@ export const updateSystemReducer: EditorStateReducer<{
 }> = (state, { system, update }) => {
   const index = state.systems.indexOf(system);
   if (index === -1) {
-    console.warn(`Could not update system: System not found in state`, {
-      state,
-      system,
-    });
-    return state;
+    throw new Error(`System not found in state`);
   }
   const updatedSystems = state.systems.slice();
   updatedSystems[index] = { ...system, ...update };
