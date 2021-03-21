@@ -1,24 +1,36 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { selectSelectedScene } from "../selectors/selectSelectedScene";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
 import { getEntityDefinitionInLibrary } from "../../ecs-serializable/functions/getEntityDefinitionInLibrary";
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
+import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
+import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import { selectSelectedScene } from "../selectors/selectSelectedScene";
 import { updateSceneReducer } from "./updateSceneReducer";
 
-export const createEntityInitializerReducer: EditorStateReducer<EntityInitializer> = (
+export const createEntityInitializerReducer: EditorStateReducer<{
+  system?: SystemDefinition;
+  scene?: SceneDefinition;
+  entityInitializer: EntityInitializer;
+}> = (
   state,
-  entityInitializer
+  {
+    system = selectSelectedSystem(state),
+    scene = selectSelectedScene(state, system),
+    entityInitializer,
+  }
 ) => {
-  const scene = selectSelectedScene(state);
-  const system = selectSelectedSystem(state);
-  if (!scene || !system) {
+  if (!system || !scene) {
     console.warn(
-      "Cannot create entity initializer without a scene and system selected"
+      `Could not create entity initializer: System and scene must be specified`,
+      {
+        scene,
+        system,
+        entityInitializer,
+      }
     );
     return state;
   }
-
   const entityDefinition = getEntityDefinitionInLibrary(
     system.library,
     entityInitializer.definitionId
@@ -31,6 +43,7 @@ export const createEntityInitializerReducer: EditorStateReducer<EntityInitialize
   }
 
   return updateSceneReducer(state, {
+    system,
     scene,
     update: {
       entities: [

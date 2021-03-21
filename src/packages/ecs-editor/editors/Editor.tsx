@@ -122,11 +122,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch({
         type: "CREATE_SCENE",
-        payload: createSceneDefinition({ id: uuid(), name }),
+        payload: {
+          scene: createSceneDefinition({ id: uuid(), name }),
+        },
       }),
     onRenameItem: (scene, name) =>
       dispatch({ type: "UPDATE_SCENE", payload: { scene, update: { name } } }),
-    onDeleteItem: (scene) => dispatch({ type: "DELETE_SCENE", payload: scene }),
+    onDeleteItem: (scene) =>
+      dispatch({ type: "DELETE_SCENE", payload: { scene } }),
   });
 
   const [
@@ -139,9 +142,11 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       dispatch({
         type: "CREATE_LIBRARY_NODE",
         payload: {
-          id: uuid(),
-          type: "entity",
-          entity: createEntityDefinition({ id: uuid(), name }),
+          node: {
+            id: uuid(),
+            type: "entity",
+            entity: createEntityDefinition({ id: uuid(), name }),
+          },
         },
       }),
     onRenameItem: (target, name) =>
@@ -156,10 +161,10 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
           },
         },
       }),
-    onDeleteItem: (libraryNode) =>
+    onDeleteItem: (node) =>
       dispatch({
         type: "DELETE_LIBRARY_NODE",
-        payload: libraryNode as LibraryNode,
+        payload: { node },
       }),
   });
 
@@ -181,7 +186,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     onDeleteItem: (entityInitializer) =>
       dispatch({
         type: "DELETE_ENTITY_INITIALIZER",
-        payload: entityInitializer,
+        payload: { entityInitializer },
       }),
   });
 
@@ -302,7 +307,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                   onCreate={(entityInitializer) =>
                     dispatch({
                       type: "CREATE_ENTITY_INITIALIZER",
-                      payload: entityInitializer,
+                      payload: { entityInitializer },
                     })
                   }
                 />
