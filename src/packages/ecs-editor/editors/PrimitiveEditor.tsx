@@ -34,7 +34,7 @@ export const renderPrimitiveEditor = ({
   if (isType(type, ZodTypes.function)) {
     return (
       <FunctionEditor
-        value={(value as Function) ?? (() => {})}
+        value={(value as Function) ?? empty}
         onChange={onChange}
       />
     );
@@ -48,3 +48,5 @@ export const renderPrimitiveEditor = ({
     );
   }
 };
+
+const empty = () => {};
