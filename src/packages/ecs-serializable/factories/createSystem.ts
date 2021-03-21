@@ -7,7 +7,7 @@ import { NativeComponents } from "../types/NativeComponents";
 import { getDefinitionsInLibrary } from "../functions/getDefinitionsInLibrary";
 import { defineEntities } from "./defineEntities";
 import { defineComponents } from "./defineComponents";
-import { createEntityInstancesByScene } from "./createEntityInstancesByScene";
+import { initializeEntitiesByScene } from "./initializeEntitiesByScene";
 
 /**
  * Creates a System instance for the specified SystemDefinition
@@ -22,16 +22,18 @@ export const createSystem = (
   );
   const componentConstructors = defineComponents(components, nativeComponents);
   const entityConstructors = defineEntities(entities, componentConstructors);
-  const entriesByScene = createEntityInstancesByScene(
+  const entitiesByScene = initializeEntitiesByScene(
     systemDefinition.scenes,
-    entityConstructors
+    entities,
+    entityConstructors,
+    componentConstructors
   );
-  const availableSceneIds = Object.keys(entriesByScene);
+  const availableSceneIds = Object.keys(entitiesByScene);
   const initialSceneId =
     preferredSceneId && availableSceneIds.includes(preferredSceneId)
       ? preferredSceneId
       : availableSceneIds[0];
-  const sceneManager = new SceneManager(initialSceneId, entriesByScene);
+  const sceneManager = new SceneManager(initialSceneId, entitiesByScene);
   const inventory = new Inventory();
   return new System({
     modules: [sceneManager, inventory, new InteractionMemory()],

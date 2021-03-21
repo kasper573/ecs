@@ -11,6 +11,14 @@ const entitySchema: zod.ZodSchema<Entity> = zod.lazy(() =>
 );
 
 export const componentProperties = {
+  id: {
+    // (Used only by ecs-serializable)
+    // Instance id, used as relationship between components
+    // in entity definitions and entity initializers
+    type: zod.string().optional(),
+    defaultValue: undefined,
+    hidden: true,
+  },
   entity: {
     type: entitySchema,
     defaultValue: trustedUndefined<Entity>(),

@@ -19,6 +19,7 @@ import { createComponentDefinition } from "./factories/createComponentDefinition
 import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
 import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
 import { SceneDefinitionId } from "./types/SceneDefinition";
+import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
 
 class Foo extends Component.extend({
   fn: {
@@ -254,10 +255,11 @@ export const mockSystem = (
         createSceneDefinition({
           id: "scene1" as SceneDefinitionId,
           name: "Scene A",
-          entities: entities.map(({ id }, index) =>
+          entities: entities.map(({ id, components }, index) =>
             createEntityInitializer({
               id: `initializer${index}` as EntityInitializerId,
               definitionId: id,
+              components: components.map(inheritComponentInitializer),
             })
           ),
         }),

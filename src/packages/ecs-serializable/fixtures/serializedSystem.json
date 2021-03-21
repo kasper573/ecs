@@ -4,7 +4,15 @@
       "entities": [
         {
           "id": "foo",
-          "definitionId": "uuid1"
+          "definitionId": "uuid1",
+          "name": "foo",
+          "components": [
+            {
+              "id": "uuid2",
+              "definitionId": "uuid0",
+              "properties": "{}"
+            }
+          ]
         }
       ],
       "name": "Scene A"
@@ -28,6 +36,7 @@
         "id": "uuid1",
         "components": [
           {
+            "id": "uuid2",
             "definitionId": "uuid0",
             "properties": "{\"fn\":() => 2}"
           }
