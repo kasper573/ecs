@@ -26,8 +26,6 @@ import { NativeComponents } from "../../ecs-serializable/types/NativeComponents"
 import { useEditorState } from "../hooks/useEditorState";
 import {
   AddIcon,
-  DeleteIcon,
-  EditIcon,
   EntityInitializerIcon,
   ResetIcon,
   SaveIcon,
@@ -195,22 +193,6 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
           <ResetIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip title={`Edit ${selected.system?.name}`}>
-        <IconButton
-          aria-label="edit"
-          onClick={() => systemEvents.onUpdateItem(selected.system!)}
-        >
-          <EditIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip
-        title={`Delete ${selected.system?.name}`}
-        onClick={() => systemEvents.onDeleteItem(selected.system!)}
-      >
-        <IconButton edge="end" aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
       <Tooltip title="Save" onClick={showSaveDialog}>
         <IconButton edge="end" aria-label="save">
           <SaveIcon />
@@ -235,6 +217,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       <CrudList
         active={selected.system}
         items={state.systems}
+        {...systemEvents}
         onSelectItem={(system) =>
           dispatch({ type: "SELECT_SYSTEM", payload: system })
         }
