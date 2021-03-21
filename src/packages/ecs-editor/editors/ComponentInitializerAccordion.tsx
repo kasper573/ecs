@@ -40,8 +40,8 @@ export const ComponentInitializerAccordion = ({
     ),
   ]);
   return (
-    <Accordion {...toggleProps} elevation={0}>
-      <AccordionSummary expandIcon={<ExpandAccordionIcon />}>
+    <Accordion elevation={0}>
+      <AccordionSummary {...toggleProps} expandIcon={<ExpandAccordionIcon />}>
         <Typography>
           {definition.name}
           {!primary && " (Removed)"}
