@@ -1,16 +1,14 @@
 import {
   Avatar,
-  IconButton,
   ListItem,
   ListItemAvatar,
   ListItemProps,
-  ListItemSecondaryAction,
   ListItemText,
-  Tooltip,
+  MenuItem,
 } from "@material-ui/core";
 import React, { ComponentType } from "react";
 import styled from "styled-components";
-import { DeleteIcon, EditIcon } from "./icons";
+import { useContextMenu } from "../hooks/useContextMenu";
 
 export type CrudListItemProps<
   D extends React.ElementType = "li",
@@ -39,34 +37,26 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   onDelete,
   icon: Icon,
   ...listItemProps
-}: CrudListItemProps<D, P>) => (
-  <ListItem {...listItemProps}>
-    {Icon && (
-      <ListItemAvatar>
-        <Avatar>
-          <Icon />
-        </Avatar>
-      </ListItemAvatar>
-    )}
-    <CrudListItemText primary={name} />
-    <ListItemSecondaryAction>
-      {onEdit && (
-        <Tooltip title={`Edit ${name}`}>
-          <IconButton aria-label="edit" onClick={onEdit}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+}: CrudListItemProps<D, P>) => {
+  const [triggerProps, menu] = useContextMenu([
+    onEdit && <MenuItem onClick={onEdit}>Edit</MenuItem>,
+    onDelete && <MenuItem onClick={onDelete}>Delete</MenuItem>,
+  ]);
+
+  return (
+    <ListItem {...triggerProps} {...listItemProps}>
+      {menu}
+      {Icon && (
+        <ListItemAvatar>
+          <Avatar>
+            <Icon />
+          </Avatar>
+        </ListItemAvatar>
       )}
-      {onDelete && (
-        <Tooltip title={`Delete ${name}`} onClick={onDelete}>
-          <IconButton edge="end" aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </ListItemSecondaryAction>
-  </ListItem>
-);
+      <CrudListItemText primary={name} />
+    </ListItem>
+  );
+};
 
 const CrudListItemText = styled(ListItemText)`
   white-space: nowrap;

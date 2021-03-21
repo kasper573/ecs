@@ -80,9 +80,8 @@ export const EntityInitializerEditor = ({
         primaryItems={entityInitializer.components}
         definitions={libraryDefinitions.components}
         onChange={updateComponents}
-        onRemoveItem={askToDeleteComponent}
-        onRestoreItem={restoreComponent}
-        elevation={0}
+        onRemove={askToDeleteComponent}
+        onRestore={restoreComponent}
       />
       {deleteDialog}
     </>

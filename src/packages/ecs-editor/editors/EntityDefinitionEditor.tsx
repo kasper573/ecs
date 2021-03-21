@@ -65,8 +65,7 @@ export const EntityDefinitionEditor = ({
         primaryItems={value.components}
         definitions={libraryDefinitions.components}
         onChange={updateComponents}
-        onRemoveItem={askToDeleteComponent}
-        elevation={0}
+        onRemove={askToDeleteComponent}
       />
       {deleteDialog}
     </>
