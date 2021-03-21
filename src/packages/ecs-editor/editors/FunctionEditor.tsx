@@ -7,31 +7,41 @@ import {
 import { useAsRef } from "../../use-as-ref/useAsRef";
 
 export const FunctionEditor = ({
-  value,
+  value: inputFunction,
   onChange,
 }: {
   value: Function;
   onChange: (updated: Function) => void;
 }) => {
-  const defaultText = useMemo(() => serializeJS(value), [value]);
-  const [text, setText] = useState<string>(defaultText);
-  const textAsFunction = useMemo(() => tryParseFunction(text), [text]);
-  const isValid = !!textAsFunction;
-  const onChangeRef = useAsRef(onChange);
+  const inputJs = useMemo(() => serializeJS(inputFunction), [inputFunction]);
+  const [dirtyJs, setDirtyJs] = useState(inputJs);
+  const parsedFunction = useMemo(() => tryParseFunction(dirtyJs), [dirtyJs]);
+  const isValid = !!parsedFunction;
 
-  // Emit a change every time we get new valid function
+  // Update dirty js whenever the input js changes
+  useEffect(() => setDirtyJs(inputJs), [inputJs]);
+
+  // Data required by but shouldn't trigger the next the effect
+  const ref = useAsRef({
+    onChange,
+    inputJs,
+    parsedFunction,
+  });
+
+  // Emit a change whenever a new valid function is available
   useEffect(() => {
-    if (isValid && text !== defaultText) {
-      onChangeRef.current(textAsFunction);
+    const { inputJs, onChange, parsedFunction } = ref.current;
+    if (isValid && dirtyJs !== inputJs) {
+      onChange(parsedFunction);
     }
-  }, [textAsFunction, text, defaultText, isValid, onChangeRef]);
+  }, [dirtyJs, isValid, ref]);
 
   return (
     <TextField
       multiline
       error={!isValid}
-      value={text}
-      onChange={(e) => setText(e.currentTarget.value)}
+      value={dirtyJs}
+      onChange={(e) => setDirtyJs(e.currentTarget.value)}
     />
   );
 };
