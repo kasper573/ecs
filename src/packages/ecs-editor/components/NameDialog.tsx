@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from "@material-ui/core";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 
 export type NameDialogProps = Pick<DialogProps, "open" | "onClose"> & {
   /**
@@ -38,13 +38,24 @@ export const NameDialog = ({
   ...dialogProps
 }: NameDialogProps) => {
   const [value, setValue] = useState(defaultValue);
+  const [error, setError] = useState("");
 
   const manualClose = () => onClose({}, "backdropClick");
 
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.currentTarget.value);
 
+  const handleKeyUp = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      saveAndClose();
+    }
+  };
+
   const saveAndClose = () => {
+    if (!value.trim()) {
+      setError("You must enter a name");
+      return;
+    }
     onSave(value);
     manualClose();
   };
@@ -67,7 +78,10 @@ export const NameDialog = ({
       <DialogContent>
         <TextField
           value={value}
+          error={!!error}
+          helperText={error}
           onChange={handleValueChange}
+          onKeyUp={handleKeyUp}
           autoFocus
           margin="dense"
           id="name"

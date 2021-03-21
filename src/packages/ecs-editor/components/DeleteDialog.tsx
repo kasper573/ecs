@@ -54,7 +54,7 @@ export const DeleteDialog = ({
         <Button onClick={onClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={closeAndDelete} color="primary">
+        <Button onClick={closeAndDelete} autoFocus color="primary">
           Delete
         </Button>
       </DialogActions>
