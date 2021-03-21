@@ -217,7 +217,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       <CrudList
         active={selected.system}
         items={state.systems}
-        {...systemEvents}
+        {...omit(systemEvents, "onCreateItem")}
         onSelectItem={(system) =>
           dispatch({ type: "SELECT_SYSTEM", payload: system })
         }
