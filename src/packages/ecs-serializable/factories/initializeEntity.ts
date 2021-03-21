@@ -24,6 +24,7 @@ export const initializeEntity = (
 
   // Instantiate entity
   const entity = new DefinedEntity();
+  entity.name = initializer.name;
 
   // Determine component difference between initializer and definition
   const initializerIds = initializer.components.map(({ id }) => id);

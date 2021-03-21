@@ -6,6 +6,7 @@ import { connectObservableArray } from "./connectObservableArray";
 
 export class Entity {
   system: System = trustedUndefined();
+  name: string = "";
 
   readonly components = new Container<ComponentInstance>();
 
