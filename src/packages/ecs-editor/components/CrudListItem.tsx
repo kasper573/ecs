@@ -39,7 +39,7 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   ...listItemProps
 }: CrudListItemProps<D, P>) => {
   const [triggerProps, menu] = useContextMenu([
-    onEdit && <MenuItem onClick={onEdit}>Edit</MenuItem>,
+    onEdit && <MenuItem onClick={onEdit}>Rename</MenuItem>,
     onDelete && <MenuItem onClick={onDelete}>Delete</MenuItem>,
   ]);
 
