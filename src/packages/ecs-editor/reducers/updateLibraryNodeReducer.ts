@@ -10,8 +10,8 @@ export const updateLibraryNodeReducer: EditorStateReducer<{
   systemId: SystemDefinitionId;
   nodeId: LibraryNodeId;
   replacement: LibraryNode;
-}> = (state, { systemId, nodeId, replacement }) => {
-  return updateLibraryReducer(state, {
+}> = (state, { systemId, nodeId, replacement }) =>
+  updateLibraryReducer(state, {
     systemId,
     change: (library) => {
       const updated = library.slice();
@@ -23,4 +23,3 @@ export const updateLibraryNodeReducer: EditorStateReducer<{
       return updated;
     },
   });
-};
