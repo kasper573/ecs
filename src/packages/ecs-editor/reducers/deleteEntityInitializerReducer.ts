@@ -4,7 +4,6 @@ import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitiali
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { requireScene } from "../selectors/requireScene";
-import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateSceneReducer } from "./updateSceneReducer";
 
 export const deleteEntityInitializerReducer: EditorStateReducer<{
@@ -17,16 +16,11 @@ export const deleteEntityInitializerReducer: EditorStateReducer<{
   if (!entity) {
     throw new Error("Could not find entity");
   }
-  const deletedState = updateSceneReducer(state, {
+  return updateSceneReducer(state, {
     systemId,
     sceneId,
     update: {
       entities: without(entities, entity),
     },
-  });
-  return reactToDeleteReducer(deletedState, {
-    previousState: state,
-    objectName: "inspected",
-    didDelete: (selected) => selected?.object.id === entityId,
   });
 };

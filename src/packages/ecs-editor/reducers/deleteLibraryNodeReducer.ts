@@ -3,7 +3,6 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { requireSystem } from "../selectors/requireSystem";
-import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
 export const deleteLibraryNodeReducer: EditorStateReducer<{
@@ -15,13 +14,8 @@ export const deleteLibraryNodeReducer: EditorStateReducer<{
   if (!node) {
     throw new Error("Could not find library node");
   }
-  const deletedState = updateLibraryReducer(state, {
+  return updateLibraryReducer(state, {
     systemId,
     change: (library) => without(library, node),
-  });
-  return reactToDeleteReducer(deletedState, {
-    previousState: state,
-    objectName: "inspected",
-    didDelete: (selected) => selected?.object.id === nodeId,
   });
 };
