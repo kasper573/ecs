@@ -85,8 +85,8 @@ test("creating an entity initializer copies all components from definition (with
 
   // Perform test
   const updatedState = createEntityInitializerReducer(initialState, {
-    system,
-    scene,
+    systemId: system.id,
+    sceneId: scene.id,
     entityInitializer,
   });
   const updatedComponents =
