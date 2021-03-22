@@ -10,12 +10,13 @@ import { createLibraryMap } from "../functions/createLibraryMap";
 import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import { TreeNode } from "../types/TreeNode";
 import { LibraryTreeItems } from "./LibraryTreeItems";
+import { LibraryTreeItemProps } from "./LibraryTreeItem";
 
 export type LibraryTreeProps = {
   selected?: LibraryNode;
   onSelectedChange: (newSelected: LibraryNode) => void;
   library: LibraryDefinition;
-};
+} & Pick<LibraryTreeItemProps, "onEdit" | "onDelete">;
 
 /**
  * Displays a LibraryDefinition as a MUI TreeView.
@@ -24,6 +25,8 @@ export const LibraryTree = ({
   library,
   selected,
   onSelectedChange,
+  onEdit,
+  onDelete,
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
@@ -53,7 +56,7 @@ export const LibraryTree = ({
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
-      <LibraryTreeItems nodes={treeRoots} />
+      <LibraryTreeItems nodes={treeRoots} itemProps={{ onEdit, onDelete }} />
     </TreeView>
   );
 };

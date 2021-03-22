@@ -13,7 +13,7 @@ import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
-import { LibraryEntityNode } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
@@ -46,6 +46,7 @@ import {
   EditorSelectionName,
   EditorSelectionValuesDefined,
 } from "../types/EditorSelection";
+import { renameLibraryNode } from "../functions/renameLibraryNode";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
@@ -159,10 +160,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       }),
   });
 
-  const [
-    libraryEntityNodeEvents,
-    LibraryEntityNodeDialogs,
-  ] = useCrudDialogs<LibraryEntityNode>({
+  const [libraryNodeEvents, LibraryNodeDialogs] = useCrudDialogs<LibraryNode>({
     createDialogTitle: "Add entity",
     getItemName: selectLibraryNodeLabel,
     onCreateItem: (name) =>
@@ -183,11 +181,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         payload: {
           systemId: requireSelection("system"),
           nodeId: target.id,
-          replacement: {
-            id: target.id,
-            type: "entity",
-            entity: createEntityDefinition({ id: target.entity.id, name }),
-          },
+          replacement: renameLibraryNode(target, name),
         },
       }),
     onDeleteItem: (node) =>
@@ -270,7 +264,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     <>
       <SystemDialogs />
       <SceneDialogs />
-      <LibraryEntityNodeDialogs />
+      <LibraryNodeDialogs />
       <EntityInitializerDialogs />
       {saveDialog}
     </>
@@ -373,7 +367,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                   <IconButton
                     edge="end"
                     aria-label="create entity"
-                    onClick={libraryEntityNodeEvents.onCreateItem}
+                    onClick={libraryNodeEvents.onCreateItem}
                   >
                     <AddIcon />
                   </IconButton>
@@ -382,6 +376,8 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
               <LibraryTree
                 library={selected.system.library}
                 selected={selected.libraryNode}
+                onEdit={libraryNodeEvents.onUpdateItem}
+                onDelete={libraryNodeEvents.onDeleteItem}
                 onSelectedChange={(node) =>
                   dispatch({
                     type: "SELECT_LIBRARY_NODE",

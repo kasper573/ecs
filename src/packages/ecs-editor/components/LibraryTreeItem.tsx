@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { TreeItem } from "@material-ui/lab";
+import { MenuItem } from "@material-ui/core";
+import React from "react";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
+import { useContextMenu } from "../hooks/useContextMenu";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -10,9 +14,24 @@ import {
 } from "./icons";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 
-export type LibraryTreeItemProps = { node: LibraryTreeNode };
+export type LibraryTreeItemProps = {
+  node: LibraryTreeNode;
+  onEdit?: (node: LibraryNode) => void;
+  onDelete?: (node: LibraryNode) => void;
+};
 
-export const LibraryTreeItem = ({ node }: LibraryTreeItemProps) => {
+export const LibraryTreeItem = ({
+  node,
+  onEdit,
+  onDelete,
+}: LibraryTreeItemProps) => {
+  const [triggerProps, menu] = useContextMenu([
+    onEdit && <MenuItem onClick={() => onEdit(node.value)}>Rename</MenuItem>,
+    onDelete && (
+      <MenuItem onClick={() => onDelete(node.value)}>Delete</MenuItem>
+    ),
+  ]);
+
   const isFolder = node.value.type === "folder";
   const LabelIcon = labelIcons[node.value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
@@ -24,8 +43,13 @@ export const LibraryTreeItem = ({ node }: LibraryTreeItemProps) => {
       label={selectLibraryNodeLabel(node.value)}
       collapseIcon={collapseIcon}
       expandIcon={expandIcon}
+      {...triggerProps}
     >
-      <LibraryTreeItems nodes={node.children} />
+      <LibraryTreeItems
+        nodes={node.children}
+        itemProps={{ onEdit, onDelete }}
+      />
+      {menu}
     </TreeItemWithoutFocusColor>
   );
 };
