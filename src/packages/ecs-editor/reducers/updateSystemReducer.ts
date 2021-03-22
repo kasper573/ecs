@@ -1,15 +1,17 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import {
+  SystemDefinition,
+  SystemDefinitionId,
+} from "../../ecs-serializable/types/SystemDefinition";
+import { requireSystem } from "../selectors/requireSystem";
 
 export const updateSystemReducer: EditorStateReducer<{
-  system: SystemDefinition;
+  systemId: SystemDefinitionId;
   update: Partial<SystemDefinition>;
-}> = (state, { system, update }) => {
-  const index = state.systems.indexOf(system);
-  if (index === -1) {
-    throw new Error(`System not found in state`);
-  }
+}> = (state, { systemId, update }) => {
+  const system = requireSystem(state, systemId);
   const updatedSystems = state.systems.slice();
+  const index = state.systems.indexOf(system);
   updatedSystems[index] = { ...system, ...update };
   return {
     ...state,

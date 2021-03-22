@@ -1,20 +1,26 @@
-import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import {
+  LibraryNode,
+  LibraryNodeId,
+} from "../../ecs-serializable/types/LibraryNode";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
 export const updateLibraryNodeReducer: EditorStateReducer<{
-  system?: SystemDefinition;
-  target: LibraryNode;
+  systemId: SystemDefinitionId;
+  nodeId: LibraryNodeId;
   replacement: LibraryNode;
-}> = (state, { system = selectSelectedSystem(state), target, replacement }) => {
-  if (!system) {
-    throw new Error(`System must be specified`);
-  }
+}> = (state, { systemId, nodeId, replacement }) => {
   return updateLibraryReducer(state, {
-    system,
-    change: (library) => [...without(library, target), replacement],
+    systemId,
+    change: (library) => {
+      const updated = library.slice();
+      const index = updated.findIndex((node) => node.id === nodeId);
+      if (index === -1) {
+        throw new Error("Can't find library node");
+      }
+      updated[index] = replacement;
+      return updated;
+    },
   });
 };

@@ -2,27 +2,18 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { getEntityDefinitionInLibrary } from "../../ecs-serializable/functions/getEntityDefinitionInLibrary";
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
-import { selectSelectedScene } from "../selectors/selectSelectedScene";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
+import { requireSystem } from "../selectors/requireSystem";
+import { requireScene } from "../selectors/requireScene";
 import { updateSceneReducer } from "./updateSceneReducer";
 
 export const createEntityInitializerReducer: EditorStateReducer<{
-  system?: SystemDefinition;
-  scene?: SceneDefinition;
+  systemId: SystemDefinitionId;
+  sceneId: SceneDefinitionId;
   entityInitializer: EntityInitializer;
-}> = (
-  state,
-  {
-    system = selectSelectedSystem(state),
-    scene = selectSelectedScene(state, system),
-    entityInitializer,
-  }
-) => {
-  if (!system || !scene) {
-    throw new Error(`System and scene must be specified`);
-  }
+}> = (state, { systemId, sceneId, entityInitializer }) => {
+  const system = requireSystem(state, systemId);
   const entityDefinition = getEntityDefinitionInLibrary(
     system.library,
     entityInitializer.definitionId
@@ -31,12 +22,13 @@ export const createEntityInitializerReducer: EditorStateReducer<{
     throw new Error(`Referenced entity definition not found`);
   }
 
+  const entities = requireScene(state, systemId, sceneId).entities;
   return updateSceneReducer(state, {
-    system,
-    scene,
+    systemId,
+    sceneId,
     update: {
       entities: [
-        ...scene.entities,
+        ...entities,
         inheritEntityDefinitionComponents(entityInitializer, entityDefinition),
       ],
     },

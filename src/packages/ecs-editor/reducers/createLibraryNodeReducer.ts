@@ -1,18 +1,14 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { updateLibraryReducer } from "./updateLibraryReducer";
 
 export const createLibraryNodeReducer: EditorStateReducer<{
-  system?: SystemDefinition;
+  systemId: SystemDefinitionId;
   node: LibraryNode;
-}> = (state, { system = selectSelectedSystem(state), node }) => {
-  if (!system) {
-    throw new Error(`System must be specified`);
-  }
+}> = (state, { systemId, node }) => {
   return updateLibraryReducer(state, {
-    system,
+    systemId,
     change: (library) => [...library, node],
   });
 };

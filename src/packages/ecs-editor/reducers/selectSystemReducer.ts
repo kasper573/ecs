@@ -1,12 +1,12 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { selectObjectReducer } from "./selectObjectReducer";
 
-export const selectSystemReducer: EditorStateReducer<SystemDefinition> = (
+export const selectSystemReducer: EditorStateReducer<SystemDefinitionId> = (
   state,
-  system
+  systemId
 ) =>
   selectObjectReducer(state, {
     objectName: "system",
-    selectedValue: system.id,
+    selectedValue: systemId,
   });

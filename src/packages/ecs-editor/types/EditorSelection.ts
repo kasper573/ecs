@@ -6,11 +6,13 @@ import { InspectedObject } from "./InspectedObject";
 /**
  * Serializable values that represent the current selection state of the UI
  */
-export type EditorSelectionValues = Partial<{
+export type EditorSelectionValues = Partial<EditorSelectionValuesDefined>;
+
+export type EditorSelectionValuesDefined = {
   system: SystemDefinition["id"];
   scene: SceneDefinition["id"];
   inspected: InspectedValue;
-}>;
+};
 
 /**
  * Selection objects resolved using the corresponding selection values.

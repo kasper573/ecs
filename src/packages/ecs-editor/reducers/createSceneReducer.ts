@@ -1,21 +1,19 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { requireSystem } from "../selectors/requireSystem";
 import { updateSystemReducer } from "./updateSystemReducer";
 
 export const createSceneReducer: EditorStateReducer<{
-  system?: SystemDefinition;
+  systemId: SystemDefinitionId;
   scene: SceneDefinition;
-}> = (state, { system = selectSelectedSystem(state), scene }) => {
-  if (!system) {
-    throw new Error(`System must be specified`);
-  }
+}> = (state, { systemId, scene }) => {
+  const scenes = requireSystem(state, systemId).scenes;
   return updateSystemReducer(state, {
-    system,
+    systemId,
     update: {
-      scenes: [...system.scenes, createSceneDefinition(scene)],
+      scenes: [...scenes, createSceneDefinition(scene)],
     },
   });
 };

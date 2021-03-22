@@ -1,27 +1,27 @@
 import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { selectSelectedSystem } from "../selectors/selectSelectedSystem";
+import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { requireSystem } from "../selectors/requireSystem";
+import { requireScene } from "../selectors/requireScene";
 import { reactToDeleteReducer } from "./reactToDeleteReducer";
 import { updateSystemReducer } from "./updateSystemReducer";
 
 export const deleteSceneReducer: EditorStateReducer<{
-  system?: SystemDefinition;
-  scene: SceneDefinition;
-}> = (state, { system = selectSelectedSystem(state), scene }) => {
-  if (!system) {
-    throw new Error(`System must be specified`);
-  }
+  systemId: SystemDefinitionId;
+  sceneId: SceneDefinitionId;
+}> = (state, { systemId, sceneId }) => {
+  const scenes = requireSystem(state, systemId).scenes;
+  const scene = requireScene(state, systemId, sceneId);
   const deletedState = updateSystemReducer(state, {
-    system,
+    systemId,
     update: {
-      scenes: without(system.scenes, scene),
+      scenes: without(scenes, scene),
     },
   });
   return reactToDeleteReducer(deletedState, {
     previousState: state,
     objectName: "scene",
-    didDelete: (selectedScene) => selectedScene === scene,
+    didDelete: (selectedScene) => selectedScene?.id === sceneId,
   });
 };

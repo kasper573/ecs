@@ -13,10 +13,7 @@ import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
-import {
-  LibraryEntityNode,
-  LibraryNode,
-} from "../../ecs-serializable/types/LibraryNode";
+import { LibraryEntityNode } from "../../ecs-serializable/types/LibraryNode";
 import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
@@ -45,6 +42,10 @@ import { CreateEntityInitializerButton } from "../components/CreateEntityInitial
 import { SimpleDialog } from "../components/SimpleDialog";
 import { InspectedObject } from "../types/InspectedObject";
 import { EditorStateContext } from "../EditorStateContext";
+import {
+  EditorSelectionName,
+  EditorSelectionValuesDefined,
+} from "../types/EditorSelection";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
@@ -68,6 +69,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
   );
   useSceneSync(system, selected, dispatch);
 
+  const requireSelection = <K extends EditorSelectionName>(name: K) => {
+    const value = state.selection[name];
+    if (value !== undefined) {
+      return value as EditorSelectionValuesDefined[K];
+    }
+    throw new Error("Can't proceed without selection: " + name);
+  };
+
   const saveInspectorChange = (
     updated: InspectedObject,
     current: InspectedObject
@@ -77,16 +86,20 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         dispatch({
           type: "UPDATE_ENTITY_INITIALIZER",
           payload: {
-            entityInitializer: current.object as EntityInitializer,
+            systemId: requireSelection("system"),
+            sceneId: requireSelection("scene"),
+            entityId: updated.object.id,
             update: updated.object,
           },
         });
+
         break;
       case "libraryNode":
         dispatch({
           type: "UPDATE_LIBRARY_NODE",
           payload: {
-            target: current.object as LibraryNode,
+            systemId: requireSelection("system"),
+            nodeId: updated.object.id,
             replacement: updated.object,
           },
         });
@@ -110,10 +123,10 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     onRenameItem: (system, name) =>
       dispatch({
         type: "UPDATE_SYSTEM",
-        payload: { system, update: { name } },
+        payload: { systemId: system.id, update: { name } },
       }),
     onDeleteItem: (system) =>
-      dispatch({ type: "DELETE_SYSTEM", payload: system }),
+      dispatch({ type: "DELETE_SYSTEM", payload: system.id }),
   });
 
   const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
@@ -123,13 +136,27 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       dispatch({
         type: "CREATE_SCENE",
         payload: {
+          systemId: requireSelection("system"),
           scene: createSceneDefinition({ id: uuid(), name }),
         },
       }),
     onRenameItem: (scene, name) =>
-      dispatch({ type: "UPDATE_SCENE", payload: { scene, update: { name } } }),
+      dispatch({
+        type: "UPDATE_SCENE",
+        payload: {
+          systemId: requireSelection("system"),
+          sceneId: scene.id,
+          update: { name },
+        },
+      }),
     onDeleteItem: (scene) =>
-      dispatch({ type: "DELETE_SCENE", payload: { scene } }),
+      dispatch({
+        type: "DELETE_SCENE",
+        payload: {
+          systemId: requireSelection("system"),
+          sceneId: scene.id,
+        },
+      }),
   });
 
   const [
@@ -142,6 +169,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       dispatch({
         type: "CREATE_LIBRARY_NODE",
         payload: {
+          systemId: requireSelection("system"),
           node: {
             id: uuid(),
             type: "entity",
@@ -153,7 +181,8 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       dispatch({
         type: "UPDATE_LIBRARY_NODE",
         payload: {
-          target,
+          systemId: requireSelection("system"),
+          nodeId: target.id,
           replacement: {
             id: target.id,
             type: "entity",
@@ -164,7 +193,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     onDeleteItem: (node) =>
       dispatch({
         type: "DELETE_LIBRARY_NODE",
-        payload: { node },
+        payload: { systemId: requireSelection("system"), nodeId: node.id },
       }),
   });
 
@@ -175,18 +204,24 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     createDialogTitle: "Initialize entity",
     getItemName: (item) => item.name,
     onCreateItem: () => {},
-    onRenameItem: (entityInitializer, name) =>
+    onRenameItem: (entity, name) =>
       dispatch({
         type: "UPDATE_ENTITY_INITIALIZER",
         payload: {
-          entityInitializer,
+          systemId: requireSelection("system"),
+          sceneId: requireSelection("scene"),
+          entityId: entity.id,
           update: { name },
         },
       }),
-    onDeleteItem: (entityInitializer) =>
+    onDeleteItem: (entity) =>
       dispatch({
         type: "DELETE_ENTITY_INITIALIZER",
-        payload: { entityInitializer },
+        payload: {
+          systemId: requireSelection("system"),
+          sceneId: requireSelection("scene"),
+          entityId: entity.id,
+        },
       }),
   });
 
@@ -224,7 +259,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         items={state.systems}
         {...omit(systemEvents, "onCreateItem")}
         onSelectItem={(system) =>
-          dispatch({ type: "SELECT_SYSTEM", payload: system })
+          dispatch({ type: "SELECT_SYSTEM", payload: system.id })
         }
         getItemProps={({ name }) => ({ name, icon: SystemIcon })}
       />
@@ -293,7 +328,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             items={selected.system?.scenes ?? []}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
             onSelectItem={(scene) =>
-              dispatch({ type: "SELECT_SCENE", payload: scene })
+              dispatch({ type: "SELECT_SCENE", payload: scene.id })
             }
             {...omit(sceneEvents, "onCreateItem")}
           />
@@ -307,7 +342,11 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                   onCreate={(entityInitializer) =>
                     dispatch({
                       type: "CREATE_ENTITY_INITIALIZER",
-                      payload: { entityInitializer },
+                      payload: {
+                        systemId: requireSelection("system"),
+                        sceneId: requireSelection("scene"),
+                        entityInitializer,
+                      },
                     })
                   }
                 />
@@ -322,7 +361,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                 onSelectItem={(entityInitializer) =>
                   dispatch({
                     type: "SELECT_ENTITY_INITIALIZER",
-                    payload: entityInitializer,
+                    payload: entityInitializer.id,
                   })
                 }
                 {...omit(entityInitializerEvents, "onCreateItem")}
@@ -343,10 +382,10 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
               <LibraryTree
                 library={selected.system.library}
                 selected={selected.libraryNode}
-                onSelectedChange={(nodeId) =>
+                onSelectedChange={(node) =>
                   dispatch({
                     type: "SELECT_LIBRARY_NODE",
-                    payload: nodeId,
+                    payload: node.id,
                   })
                 }
               />

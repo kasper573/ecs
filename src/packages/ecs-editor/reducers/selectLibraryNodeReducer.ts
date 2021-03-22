@@ -1,12 +1,12 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { selectObjectReducer } from "./selectObjectReducer";
 
-export const selectLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
+export const selectLibraryNodeReducer: EditorStateReducer<LibraryNodeId> = (
   state,
-  node
+  nodeId
 ) =>
   selectObjectReducer(state, {
     objectName: "inspected",
-    selectedValue: { type: "libraryNode", id: node.id },
+    selectedValue: { type: "libraryNode", id: nodeId },
   });
