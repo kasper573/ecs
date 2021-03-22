@@ -45,7 +45,6 @@ export const useContextMenu = (
 
   const menu = (
     <Menu
-      keepMounted
       open={!!position}
       onClose={handleClose}
       anchorReference="anchorPosition"
