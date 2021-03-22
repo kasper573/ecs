@@ -15,7 +15,7 @@ export const CommonPopper = ({
 }: CommonPopperProps) => {
   const popupState = usePopupState({ variant: "popper", popupId });
   return (
-    <div>
+    <>
       <Toggle {...bindToggle(popupState)} />
       <Popper {...bindPopper(popupState)} placement="bottom-end" transition>
         {({ TransitionProps }) => (
@@ -28,6 +28,6 @@ export const CommonPopper = ({
           </Fade>
         )}
       </Popper>
-    </div>
+    </>
   );
 };
