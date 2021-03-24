@@ -4,7 +4,7 @@ import { selectObjectReducer } from "./selectObjectReducer";
 
 export const selectSystemReducer: EditorStateReducer<SystemDefinitionId> = (
   state,
-  systemId
+  { payload: systemId }
 ) =>
   selectObjectReducer(state, {
     objectName: "system",

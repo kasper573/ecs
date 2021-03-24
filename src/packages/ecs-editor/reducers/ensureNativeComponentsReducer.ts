@@ -1,58 +1,53 @@
-import { createComponentDefinitions } from "../../ecs-serializable/factories/createComponentDefinitions";
-import {
-  LibraryNode,
-  LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
-import { EditorStateReducer } from "../types/EditorStateReducer";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { set, values } from "../../nominal";
+import { uuid } from "../functions/uuid";
+import { createComponentDefinition } from "../../ecs-serializable/factories/createComponentDefinition";
+import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { createEditorState } from "../functions/createEditorState";
+import { EditorState } from "../types/EditorState";
 
-export const ensureNativeComponentsReducer: EditorStateReducer<NativeComponents> = (
-  state,
-  nativeComponents
-) => {
-  const nativeNodes = createComponentDefinitions(nativeComponents).map(
-    (definition): LibraryNode => ({
-      id: (definition.id as string) as LibraryNodeId,
-      type: "component",
-      component: definition,
-    })
-  );
-  let didUpdate = false;
-  const newSystems = state.systems.map((system) => {
-    const newSystem = ensureNodesInSystemLibrary(system, nativeNodes);
-    if (newSystem !== system) {
-      didUpdate = true;
-    }
-    return newSystem;
-  });
-  if (!didUpdate) {
-    return state;
-  }
-  return {
-    ...state,
-    systems: newSystems,
-  };
-};
+export const ensureNativeComponentsAction = createAction<
+  NativeComponents,
+  "ensureNativeComponents"
+>("ensureNativeComponents");
 
-const ensureNodesInSystemLibrary = (
-  system: SystemDefinition,
-  requiredNodes: LibraryNode[]
-): SystemDefinition => {
-  const newLibrary = [...system.library];
-  let didUpdate = false;
-  for (const requiredNode of requiredNodes) {
-    const hasNode = !!newLibrary.find((node) => node.id === requiredNode.id);
-    if (!hasNode) {
-      newLibrary.push(requiredNode);
-      didUpdate = true;
-    }
-  }
-  if (!didUpdate) {
-    return system;
-  }
-  return {
-    ...system,
-    library: newLibrary,
-  };
-};
+export const ensureNativeComponentsReducer = createReducer(
+  createEditorState(),
+  (builder) =>
+    builder.addCase(
+      ensureNativeComponentsAction,
+      (state, { payload: nativeComponents }) => {
+        const {
+          ecs: { library, systems },
+        } = state as EditorState;
+
+        const libraryNodeList = values(library);
+
+        for (const system of values(systems)) {
+          for (const nativeComponentName of Object.keys(nativeComponents)) {
+            const hasComponent = libraryNodeList.find(
+              (node) =>
+                node.systemId === system.id &&
+                node.type === "component" &&
+                node.component.nativeComponent === nativeComponentName
+            );
+            if (hasComponent) {
+              continue;
+            }
+            const node: LibraryNode = {
+              id: uuid(),
+              type: "component",
+              systemId: system.id,
+              component: createComponentDefinition({
+                name: nativeComponentName,
+                nativeComponent: nativeComponentName,
+                id: uuid(),
+              }),
+            };
+            set(library, node.id, node);
+          }
+        }
+      }
+    )
+);

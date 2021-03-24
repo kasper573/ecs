@@ -1,14 +1,10 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
+import { set } from "../../nominal";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { updateLibraryReducer } from "./updateLibraryReducer";
 
-export const createLibraryNodeReducer: EditorStateReducer<{
-  systemId: SystemDefinitionId;
-  node: LibraryNode;
-}> = (state, { systemId, node }) => {
-  return updateLibraryReducer(state, {
-    systemId,
-    change: (library) => [...library, node],
-  });
+export const createLibraryNodeReducer: EditorStateReducer<LibraryNode> = (
+  { ecs: { library } },
+  { payload: node }
+) => {
+  set(library, node.id, node);
 };

@@ -1,8 +1,7 @@
 import { SceneDefinition } from "../types/SceneDefinition";
 
 export const createSceneDefinition = (
-  props: PartialFor<SceneDefinition, "entities">
+  props: SceneDefinition
 ): SceneDefinition => ({
-  entities: [],
   ...props,
 });

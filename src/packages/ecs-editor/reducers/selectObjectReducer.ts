@@ -11,18 +11,18 @@ export const selectObjectReducer = <K extends keyof EditorSelectionValues>(
     objectName: K;
     selectedValue: EditorSelectionValues[K];
   }
-): EditorState => {
+): void => {
   const { objectName, selectedValue } = payload;
   if (selectedValue === undefined) {
-    return state; // Nothing selected for this object
+    return; // Nothing selected for this object
+  }
+  const didChange = state.selection[objectName] !== selectedValue;
+  if (!didChange) {
+    return; // Same selection
   }
   const { selection: reset } = resetSelectionReducer(state, objectName);
-  const selection = {
+  state.selection = {
     ...reset,
     [objectName]: selectedValue,
-  };
-  return {
-    ...state,
-    selection,
   };
 };

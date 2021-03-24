@@ -1,26 +1,37 @@
 {
-  "scenes": [
-    {
-      "entities": [
-        {
-          "id": "foo",
-          "definitionId": "uuid1",
-          "name": "foo",
-          "components": [
-            {
-              "id": "uuid2",
-              "definitionId": "uuid0",
-              "properties": "{}"
-            }
-          ]
-        }
-      ],
+  "systems": {
+    "1": {
+      "id": "1",
+      "name": "System A"
+    }
+  },
+  "scenes": {
+    "2": {
+      "id": "2",
+      "systemId": "1",
       "name": "Scene A"
     }
-  ],
-  "library": [
-    {
-      "id": "uuid0",
+  },
+  "entities": {
+    "3": {
+      "id": "3",
+      "systemId": "1",
+      "sceneId": "2",
+      "definitionId": "uuid1",
+      "name": "entity",
+      "components": [
+        {
+          "id": "uuid2",
+          "definitionId": "uuid0",
+          "properties": "{}"
+        }
+      ]
+    }
+  },
+  "library": {
+    "4": {
+      "id": "4",
+      "systemId": "1",
       "type": "component",
       "component": {
         "id": "uuid0",
@@ -29,8 +40,9 @@
         "nativeComponent": "foo"
       }
     },
-    {
-      "id": "uuid0",
+    "5": {
+      "id": "5",
+      "systemId": "1",
       "type": "entity",
       "entity": {
         "id": "uuid1",
@@ -44,6 +56,5 @@
         "name": "Entity A"
       }
     }
-  ],
-  "name": "System A"
+  }
 }

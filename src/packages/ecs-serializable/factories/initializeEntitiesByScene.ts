@@ -1,8 +1,10 @@
-import { SceneDefinition } from "../types/SceneDefinition";
+import { SceneDefinition, SceneDefinitionId } from "../types/SceneDefinition";
 import { EntityConstructorMap } from "../types/EntityConstructorMap";
 import { Entity } from "../../ecs/Entity";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { ComponentMap } from "../types/ComponentMap";
+import { EntityInitializer } from "../types/EntityInitializer";
+import { set } from "../../nominal";
 import { createEntityInstanceFactory } from "./createEntityInstanceFactory";
 
 /**
@@ -11,6 +13,7 @@ import { createEntityInstanceFactory } from "./createEntityInstanceFactory";
  */
 export const initializeEntitiesByScene = (
   scenes: SceneDefinition[],
+  entityInitializers: EntityInitializer[],
   entityDefinitions: EntityDefinition[],
   entityConstructors: EntityConstructorMap,
   componentConstructors: ComponentMap
@@ -21,8 +24,11 @@ export const initializeEntitiesByScene = (
       entityConstructors,
       componentConstructors
     );
-    return {
-      ...scenes,
-      [scene.name]: scene.entities.map(createEntityInstance),
-    };
-  }, {} as Record<string, Entity[]>);
+    return set(
+      scenes,
+      scene.id,
+      entityInitializers
+        .filter((init) => init.sceneId === scene.id)
+        .map(createEntityInstance)
+    );
+  }, {} as Record<SceneDefinitionId, Entity[]>);

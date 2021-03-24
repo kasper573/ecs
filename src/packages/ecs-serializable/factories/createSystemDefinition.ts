@@ -1,9 +1,7 @@
 import { SystemDefinition } from "../types/SystemDefinition";
 
 export const createSystemDefinition = (
-  props: PartialFor<SystemDefinition, "scenes" | "library">
+  props: SystemDefinition
 ): SystemDefinition => ({
-  scenes: [],
-  library: [],
   ...props,
 });

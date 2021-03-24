@@ -1,9 +1,11 @@
 import { range } from "lodash";
 import { EditorState } from "../types/EditorState";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import {
+  SystemDefinition,
+  SystemDefinitionId,
+} from "../../ecs-serializable/types/SystemDefinition";
 import { uuid } from "../functions/uuid";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import {
@@ -15,45 +17,63 @@ import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInit
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
+import { set, values } from "../../nominal";
+import { SerializableECS } from "../../ecs-serializable/types/SerializableECS";
 
 /**
  * Mocks a fixed number of instances of all object types belonging to EditorState
  */
 export const mockEditorState = (): EditorState => {
-  const systems = fixedAmount().map(mockSystem);
+  const ecs: SerializableECS = {
+    entities: {},
+    library: {},
+    scenes: {},
+    systems: {},
+  };
+
+  fixedAmount().forEach((nr) => mockSystem(ecs, nr));
+
+  const system = values(ecs.systems)[0];
+  const scene = values(ecs.scenes).filter(
+    (scene) => scene.systemId === system.id
+  )[0];
+  const entity = values(ecs.entities).filter(
+    (init) => init.sceneId === scene.id
+  )[0];
+
   return {
-    systems,
+    ecs,
     selection: {
-      system: systems[0].id,
-      scene: systems[0].scenes[0].id,
+      system: system.id,
+      scene: scene.id,
       inspected: {
         type: "entityInitializer",
-        id: systems[0].scenes[0].entities[0].id,
+        id: entity.id,
       },
     },
   };
 };
 
-const mockSystem = (nr: number): SystemDefinition => {
-  const library = mockLibrary();
-  const { entities, components } = getDefinitionsInLibrary(library);
-  return {
+const mockSystem = (ecs: SerializableECS, nr: number) => {
+  const system: SystemDefinition = {
     id: id(`system${nr}`),
-    scenes: fixedAmount().map((nr) => mockScene(nr, entities, components)),
-    library,
     name: `System ${nr}`,
   };
+  set(ecs.systems, system.id, system);
+  mockLibrary(ecs, system.id);
+  fixedAmount().map((nr) => mockScene(ecs, system.id, nr));
 };
 
-const mockLibrary = (): LibraryDefinition => {
+const mockLibrary = (ecs: SerializableECS, systemId: SystemDefinitionId) => {
   const componentDefinitions = fixedAmount().map(mockComponentDefinition);
   const entityDefinitions = fixedAmount().map((nr) =>
     mockEntityDefinition(nr, componentDefinitions)
   );
 
-  return [
+  const nodes = [
     ...entityDefinitions.map(
       (entity): LibraryEntityNode => ({
+        systemId,
         id: id("library-entity-node"),
         type: "entity",
         entity,
@@ -61,6 +81,7 @@ const mockLibrary = (): LibraryDefinition => {
     ),
     ...componentDefinitions.map(
       (component): LibraryComponentNode => ({
+        systemId,
         id: id("library-component-node"),
         type: "component",
         component,
@@ -68,12 +89,17 @@ const mockLibrary = (): LibraryDefinition => {
     ),
     ...fixedAmount().map(
       (nr): LibraryFolderNode => ({
+        systemId,
         id: id(`library-folder-node`),
         type: "folder",
         name: `Folder ${nr}`,
       })
     ),
   ];
+
+  for (const node of nodes) {
+    set(ecs.library, node.id, node);
+  }
 };
 
 const mockEntityDefinition = (
@@ -105,26 +131,31 @@ const mockComponentInitializer = (
 });
 
 const mockScene = (
-  nr: number,
-  entityDefinitions: EntityDefinition[],
-  componentDefinitions: ComponentDefinition[]
-): SceneDefinition => ({
-  id: id(`scene${nr}`),
-  name: `Scene ${nr}`,
-  entities: entityDefinitions.map((entityDefinition) =>
-    mockEntityInitializer(entityDefinition, componentDefinitions)
-  ),
-});
-
-const mockEntityInitializer = (
-  definition: EntityDefinition,
-  componentDefinitions: ComponentDefinition[]
-): EntityInitializer => ({
-  id: id("entity-initializer"),
-  definitionId: definition.id,
-  name: definition.name,
-  components: componentDefinitions.map(mockComponentInitializer),
-});
+  ecs: SerializableECS,
+  systemId: SystemDefinitionId,
+  nr: number
+) => {
+  const scene: SceneDefinition = {
+    systemId,
+    id: id(`scene${nr}`),
+    name: `Scene ${nr}`,
+  };
+  set(ecs.scenes, scene.id, scene);
+  const lib = getDefinitionsInLibrary(
+    values(ecs.library).filter((node) => node.systemId === systemId)
+  );
+  for (const def of values(lib.entities)) {
+    const init: EntityInitializer = {
+      systemId,
+      sceneId: scene.id,
+      id: id("entity-initializer"),
+      definitionId: def.id,
+      name: def.name,
+      components: values(lib.components).map(mockComponentInitializer),
+    };
+    set(ecs.entities, init.id, init);
+  }
+};
 
 const fixedAmount = () => range(0, 3);
 

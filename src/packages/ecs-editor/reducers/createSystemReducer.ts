@@ -1,11 +1,10 @@
-import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
 import { EditorStateReducer } from "../types/EditorStateReducer";
+import { set } from "../../nominal";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 
 export const createSystemReducer: EditorStateReducer<SystemDefinition> = (
-  state,
-  system
-) => ({
-  ...state,
-  systems: [...state.systems, createSystemDefinition(system)],
-});
+  { ecs: { systems } },
+  { payload: system }
+) => {
+  set(systems, system.id, system);
+};

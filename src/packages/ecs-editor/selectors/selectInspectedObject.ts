@@ -1,26 +1,19 @@
 import { EditorState } from "../types/EditorState";
 import { InspectedObject } from "../types/InspectedObject";
-import { selectSelectedSystem } from "./selectSelectedSystem";
-import { selectSelectedScene } from "./selectSelectedScene";
+import { get } from "../../nominal";
 
-export const selectInspectedObject = (
-  state: EditorState,
-  selectedSystem = selectSelectedSystem(state),
-  selectedScene = selectSelectedScene(state, selectedSystem)
-): InspectedObject | undefined => {
-  const { inspected } = state.selection;
+export const selectInspectedObject = ({
+  ecs: { entities, library },
+  selection: { inspected },
+}: EditorState): InspectedObject | undefined => {
   if (inspected?.type === "entityInitializer") {
-    const object = selectedScene?.entities.find(
-      (entity) => entity.id === inspected.id
-    );
+    const object = get(entities, inspected.id);
     if (object) {
       return { type: "entityInitializer", object };
     }
   }
   if (inspected?.type === "libraryNode") {
-    const object = selectedSystem?.library.find(
-      (node) => node.id === inspected.id
-    );
+    const object = get(library, inspected.id);
     if (object) {
       return { type: "libraryNode", object };
     }

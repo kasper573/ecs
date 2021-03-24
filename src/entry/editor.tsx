@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
 import reportWebVitals from "../reportWebVitals";
-import { Editor } from "../packages/ecs-editor/editors/Editor";
 import { App } from "../packages/shared-components/App";
 import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
-import { SystemDefinition } from "../packages/ecs-serializable/types/SystemDefinition";
 import { Interactive } from "../packages/ecs-interactive/Interactive";
-import systemDefinitionsJson from "./defaultEditorSystems.json";
+import { Editor } from "../packages/ecs-editor/editors/Editor";
+import { createStore } from "../packages/ecs-editor/store";
+import defaultECS from "./defaultECS.json";
 
 export const nativeComponents = {
   describable: Describable,
@@ -15,17 +16,16 @@ export const nativeComponents = {
   interactive: Interactive,
 };
 
-const systemDefinitions = (systemDefinitionsJson as object) as SystemDefinition[];
+const store = createStore({ ecs: defaultECS, selection: {} }, nativeComponents);
 
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <App>
-        <Editor
-          nativeComponents={nativeComponents}
-          defaultState={{ systems: systemDefinitions, selection: {} }}
-        />
-      </App>
+      <Provider store={store}>
+        <App>
+          <Editor nativeComponents={nativeComponents} />
+        </App>
+      </Provider>
     </React.StrictMode>,
     document.getElementById("root")
   );

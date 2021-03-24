@@ -1,5 +1,5 @@
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 
 /**
  * The object that InspectedValue resolves into.

@@ -1,16 +1,20 @@
 import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
-import { EditorStateReducer } from "../types/EditorStateReducer";
 import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import {
   EditorSelectionName,
   editorSelectionOrder,
 } from "../types/EditorSelection";
+import { EditorState } from "../types/EditorState";
+import { filterUntilNoChange } from "../functions/filterUntilNoChange";
 
 /**
  * Ensures selection for objects that has a default available.
  * (Returns the original state object if no selection was changed)
  */
-export const ensureSelectionReducer: EditorStateReducer<void> = (state) => {
+export const ensureSelectionReducer = (state: EditorState): EditorState =>
+  filterUntilNoChange(ensureSelectionOnce, state);
+
+const ensureSelectionOnce = (state: EditorState): EditorState => {
   const newSelection = { ...state.selection };
   const selected = selectSelectedObjects(state);
   let didChange = false;

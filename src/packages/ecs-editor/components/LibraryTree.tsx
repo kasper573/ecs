@@ -4,18 +4,17 @@ import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
 import { createLibraryTree } from "../functions/createLibraryTree";
-import { createLibraryMap } from "../functions/createLibraryMap";
-import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
+import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { TreeNode } from "../types/TreeNode";
+import { get, set } from "../../nominal";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 import { LibraryTreeItemProps } from "./LibraryTreeItem";
 
 export type LibraryTreeProps = {
   selected?: LibraryNode;
   onSelectedChange: (newSelected: LibraryNode) => void;
-  library: LibraryDefinition;
+  library: LibraryNode[];
 } & Pick<LibraryTreeItemProps, "onEdit" | "onDelete">;
 
 /**
@@ -30,7 +29,10 @@ export const LibraryTree = ({
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
-    const map = createLibraryMap(library);
+    const map = library.reduce(
+      (map, node) => set(map, node.id, node),
+      {} as Record<LibraryNodeId, LibraryNode>
+    );
     return [
       map,
       createLibraryTree(library, { compareFn: compareLibraryTreeNodes }),
@@ -43,7 +45,7 @@ export const LibraryTree = ({
   const handleSelect = (e: ChangeEvent<{}>, nodeIdStr: string) => {
     // Cannot select folders
     const nodeId = nodeIdStr as LibraryNodeId;
-    const node = nodeMap.get(nodeId);
+    const node = get(nodeMap, nodeId);
     if (node && node.type !== "folder") {
       onSelectedChange(node);
     }
@@ -65,7 +67,7 @@ const compareLibraryTreeNodes = (
   a: TreeNode<LibraryNode>,
   b: TreeNode<LibraryNode>
 ) => {
-  const aLabel = selectLibraryNodeLabel(a.value);
-  const bLabel = selectLibraryNodeLabel(b.value);
+  const aLabel = getLibraryNodeLabel(a.value);
+  const bLabel = getLibraryNodeLabel(b.value);
   return aLabel.localeCompare(bLabel);
 };

@@ -3,27 +3,16 @@ import {
   SceneDefinition,
   SceneDefinitionId,
 } from "../../ecs-serializable/types/SceneDefinition";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { requireSystem } from "../selectors/requireSystem";
-import { requireScene } from "../selectors/requireScene";
-import { updateSystemReducer } from "./updateSystemReducer";
+import { get, set } from "../../nominal";
 
 export const updateSceneReducer: EditorStateReducer<{
-  systemId: SystemDefinitionId;
   sceneId: SceneDefinitionId;
   update: Partial<SceneDefinition>;
-}> = (state, { systemId, sceneId, update }) => {
-  const system = requireSystem(state, systemId);
-  const scene = requireScene(state, systemId, sceneId);
+}> = ({ ecs: { scenes } }, { payload: { sceneId, update } }) => {
+  const scene = get(scenes, sceneId);
+  if (!scene) {
+    throw new Error("Scene not found");
+  }
 
-  const updatedScenes = system.scenes.slice();
-  const index = updatedScenes.indexOf(scene);
-  updatedScenes[index] = { ...scene, ...update };
-
-  return updateSystemReducer(state, {
-    systemId,
-    update: {
-      scenes: updatedScenes,
-    },
-  });
+  set(scenes, sceneId, { ...scene, ...update });
 };

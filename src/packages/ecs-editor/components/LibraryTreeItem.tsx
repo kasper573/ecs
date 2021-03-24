@@ -3,7 +3,7 @@ import { TreeItem } from "@material-ui/lab";
 import { MenuItem } from "@material-ui/core";
 import React from "react";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
-import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
+import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import {
@@ -40,7 +40,7 @@ export const LibraryTreeItem = ({
     <TreeItemWithoutFocusColor
       key={node.value.id}
       nodeId={node.value.id}
-      label={selectLibraryNodeLabel(node.value)}
+      label={getLibraryNodeLabel(node.value)}
       collapseIcon={collapseIcon}
       expandIcon={expandIcon}
       {...triggerProps}

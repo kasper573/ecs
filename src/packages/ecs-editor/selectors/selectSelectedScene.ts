@@ -1,7 +1,7 @@
 import { EditorState } from "../types/EditorState";
-import { selectSelectedSystem } from "./selectSelectedSystem";
+import { get } from "../../nominal";
 
-export const selectSelectedScene = (
-  state: EditorState,
-  selectedSystem = selectSelectedSystem(state)
-) => selectedSystem?.scenes.find((scene) => scene.id === state.selection.scene);
+export const selectSelectedScene = ({
+  selection,
+  ecs: { scenes },
+}: EditorState) => (selection.scene ? get(scenes, selection.scene) : undefined);

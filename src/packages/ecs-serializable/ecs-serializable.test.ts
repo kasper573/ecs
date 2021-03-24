@@ -3,6 +3,7 @@ import * as path from "path";
 import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
+import { set } from "../nominal";
 import { createSystem } from "./factories/createSystem";
 import { EntityInitializerId } from "./types/EntityInitializer";
 import {
@@ -10,7 +11,6 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { SystemDefinition, SystemDefinitionId } from "./types/SystemDefinition";
 import { createSystemDefinition } from "./factories/createSystemDefinition";
 import { createSceneDefinition } from "./factories/createSceneDefinition";
 import { createEntityInitializer } from "./factories/createEntityInitializer";
@@ -18,8 +18,8 @@ import { createEntityDefinition } from "./factories/createEntityDefinition";
 import { createComponentDefinition } from "./factories/createComponentDefinition";
 import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
 import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
-import { SceneDefinitionId } from "./types/SceneDefinition";
 import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
+import { SerializableECS } from "./types/SerializableECS";
 
 class Foo extends Component.extend({
   fn: {
@@ -45,7 +45,7 @@ describe("instantiating a System using SystemDefinition", () => {
   it("succeeds when using one entity", () => {
     const entity = createEntityDefinition({
       name: "Entity A",
-      id: "1" as EntityDefinitionId,
+      id: uid(),
     });
     const system = mockSystem([entity]);
     expect(system.entities.length).toBe(1);
@@ -54,12 +54,12 @@ describe("instantiating a System using SystemDefinition", () => {
 
   it("succeeds when using one component", () => {
     const component = createComponentDefinition({
-      id: "1" as ComponentDefinitionId,
+      id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     });
     const entity = createEntityDefinition({
-      id: "1" as EntityDefinitionId,
+      id: uid(),
       name: "Entity A",
       components: [
         {
@@ -75,12 +75,12 @@ describe("instantiating a System using SystemDefinition", () => {
 
   it("succeeds when using a component with options", () => {
     const component = createComponentDefinition({
-      id: "1" as ComponentDefinitionId,
+      id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     });
     const entity = createEntityDefinition({
-      id: "1" as EntityDefinitionId,
+      id: uid(),
       name: "Entity A",
       components: [
         {
@@ -95,71 +95,63 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("succeeds when using serialized data", () => {
-    const systemDefinition: SystemDefinition = JSON.parse(serializedSystem);
-    const system = createSystem(systemDefinition, nativeComponents);
+    const ecs: SerializableECS = JSON.parse(serializedSystem);
+    const system = createSystem(ecs, nativeComponents);
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
   it("succeeds when using two entities with different ids", () => {
     const entity1 = createEntityDefinition({
       name: "Entity A",
-      id: "1" as EntityDefinitionId,
+      id: uid(),
     });
     const entity2 = createEntityDefinition({
       name: "Entity A",
-      id: "2" as EntityDefinitionId,
+      id: uid(),
     });
     const system = mockSystem([entity1, entity2]);
     expect(system.entities.length).toBe(2);
   });
 
-  it("throws error when using two entities with the same id", () => {
-    const entity1 = createEntityDefinition({
-      name: "Entity A",
-      id: "1" as EntityDefinitionId,
-    });
-    const entity2 = createEntityDefinition({
-      name: "Entity A",
-      id: "1" as EntityDefinitionId,
-    });
-    expect(() => mockSystem([entity1, entity2])).toThrow();
-  });
-
   it("throws error when referencing entity definition that doesn't exist", () => {
-    const definition = createSystemDefinition({
-      id: "systemA" as SystemDefinitionId,
+    const system = createSystemDefinition({
+      id: uid(),
       name: "System A",
-      library: [],
-      scenes: [
-        createSceneDefinition({
-          id: "scene1" as SceneDefinitionId,
-          name: "Scene A",
-          entities: [
-            createEntityInitializer({
-              id: "1" as EntityInitializerId,
-              definitionId: "bogus" as EntityDefinitionId,
-            }),
-          ],
-        }),
-      ],
     });
+    const scene = createSceneDefinition({
+      id: uid(),
+      name: "Scene A",
+      systemId: system.id,
+    });
+    const entity = createEntityInitializer({
+      id: uid(),
+      sceneId: scene.id,
+      systemId: system.id,
+      definitionId: "bogus" as EntityDefinitionId,
+    });
+    const ecs: SerializableECS = {
+      systems: [system],
+      scenes: [scene],
+      entities: [entity],
+      library: [],
+    };
 
-    expect(() => createSystem(definition, nativeComponents)).toThrow();
+    expect(() => createSystem(ecs, nativeComponents)).toThrow();
   });
 
   it("succeeds when using two components with different ids", () => {
     const component1 = createComponentDefinition({
-      id: "1" as ComponentDefinitionId,
+      id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     });
     const component2 = createComponentDefinition({
-      id: "2" as ComponentDefinitionId,
+      id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     });
     const entity = createEntityDefinition({
-      id: "1" as EntityDefinitionId,
+      id: uid(),
       name: "Entity A",
       components: [
         {
@@ -178,39 +170,9 @@ describe("instantiating a System using SystemDefinition", () => {
     expect(system.entities[0].components.length).toBe(2);
   });
 
-  it("throws error when using two components with the same id", () => {
-    const component1 = createComponentDefinition({
-      id: "1" as ComponentDefinitionId,
-      name: "Foo",
-      nativeComponent: "foo",
-    });
-    const component2 = createComponentDefinition({
-      id: "1" as ComponentDefinitionId,
-      name: "Foo",
-      nativeComponent: "foo",
-    });
-    const entity = createEntityDefinition({
-      id: "1" as EntityDefinitionId,
-      name: "Entity A",
-      components: [
-        {
-          id: uid(),
-          definitionId: component1.id,
-          properties: createComponentPropertiesDefinition({}),
-        },
-        {
-          id: uid(),
-          definitionId: component2.id,
-          properties: createComponentPropertiesDefinition({}),
-        },
-      ],
-    });
-    expect(() => mockSystem([entity], [component1, component2])).toThrow();
-  });
-
   it("throws error when referencing component that doesn't exist", () => {
     const entity = createEntityDefinition({
-      id: "1" as EntityDefinitionId,
+      id: uid(),
       name: "Entity A",
       components: [
         {
@@ -227,43 +189,63 @@ describe("instantiating a System using SystemDefinition", () => {
 let idCounter = 0;
 const uid = <T extends string>() => ("id" + idCounter++) as T;
 
-export const mockSystem = (
+const mockSystem = (
   entities: EntityDefinition[],
   components: ComponentDefinition[] = []
-) =>
-  createSystem(
-    createSystemDefinition({
-      id: "systemA" as SystemDefinitionId,
-      name: "System A",
-      library: [
-        ...components.map(
-          (component): LibraryNode => ({
-            id: (component.id as string) as LibraryNodeId,
-            type: "component",
-            component,
-          })
-        ),
-        ...entities.map(
-          (entity): LibraryNode => ({
-            id: (entity.id as string) as LibraryNodeId,
-            type: "entity",
-            entity,
-          })
-        ),
-      ],
-      scenes: [
-        createSceneDefinition({
-          id: "scene1" as SceneDefinitionId,
-          name: "Scene A",
-          entities: entities.map(({ id, components }, index) =>
-            createEntityInitializer({
-              id: `initializer${index}` as EntityInitializerId,
-              definitionId: id,
-              components: components.map(inheritComponentInitializer),
-            })
-          ),
-        }),
-      ],
-    }),
-    nativeComponents
-  );
+) => {
+  const ecs: SerializableECS = {
+    systems: {},
+    scenes: {},
+    entities: {},
+    library: {},
+  };
+
+  const system = createSystemDefinition({
+    id: uid(),
+    name: "System A",
+  });
+  set(ecs.systems, system.id, system);
+
+  const scene = createSceneDefinition({
+    systemId: system.id,
+    id: uid(),
+    name: "Scene A",
+  });
+  set(ecs.scenes, scene.id, scene);
+
+  entities.forEach(({ id, components }, index) => {
+    const entity = createEntityInitializer({
+      systemId: system.id,
+      sceneId: scene.id,
+      id: `initializer${index}` as EntityInitializerId,
+      definitionId: id,
+      components: components.map(inheritComponentInitializer),
+    });
+    set(ecs.entities, entity.id, entity);
+  });
+
+  const libraryNodes = [
+    ...components.map(
+      (component): LibraryNode => ({
+        systemId: system.id,
+        id: (component.id as string) as LibraryNodeId,
+        type: "component",
+        component,
+      })
+    ),
+    ...entities.map(
+      (entity): LibraryNode => ({
+        systemId: system.id,
+        id: (entity.id as string) as LibraryNodeId,
+        type: "entity",
+        entity,
+      })
+    ),
+  ];
+
+  for (const node of libraryNodes) {
+    set(ecs.library, node.id, node);
+  }
+
+  return createSystem(ecs, nativeComponents);
+};

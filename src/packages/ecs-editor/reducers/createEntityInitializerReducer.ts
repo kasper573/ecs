@@ -1,36 +1,23 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
+import { set, values } from "../../nominal";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { getEntityDefinitionInLibrary } from "../../ecs-serializable/functions/getEntityDefinitionInLibrary";
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
-import { requireSystem } from "../selectors/requireSystem";
-import { requireScene } from "../selectors/requireScene";
-import { updateSceneReducer } from "./updateSceneReducer";
+import { LibraryEntityNode } from "../../ecs-serializable/types/LibraryNode";
 
-export const createEntityInitializerReducer: EditorStateReducer<{
-  systemId: SystemDefinitionId;
-  sceneId: SceneDefinitionId;
-  entityInitializer: EntityInitializer;
-}> = (state, { systemId, sceneId, entityInitializer }) => {
-  const system = requireSystem(state, systemId);
-  const entityDefinition = getEntityDefinitionInLibrary(
-    system.library,
-    entityInitializer.definitionId
+export const createEntityInitializerReducer: EditorStateReducer<EntityInitializer> = (
+  { ecs: { entities, library, scenes } },
+  { payload: initializer }
+) => {
+  const definition = values(library).find(
+    (node): node is LibraryEntityNode =>
+      node.type === "entity" && node.entity.id === initializer.definitionId
   );
-  if (!entityDefinition) {
+  if (!definition) {
     throw new Error(`Referenced entity definition not found`);
   }
-
-  const entities = requireScene(state, systemId, sceneId).entities;
-  return updateSceneReducer(state, {
-    systemId,
-    sceneId,
-    update: {
-      entities: [
-        ...entities,
-        inheritEntityDefinitionComponents(entityInitializer, entityDefinition),
-      ],
-    },
-  });
+  set(
+    entities,
+    initializer.id,
+    inheritEntityDefinitionComponents(initializer, definition.entity)
+  );
 };

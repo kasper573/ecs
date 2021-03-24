@@ -3,23 +3,13 @@ import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { updateLibraryReducer } from "./updateLibraryReducer";
+import { set } from "../../nominal";
 
 export const updateLibraryNodeReducer: EditorStateReducer<{
-  systemId: SystemDefinitionId;
   nodeId: LibraryNodeId;
   replacement: LibraryNode;
-}> = (state, { systemId, nodeId, replacement }) =>
-  updateLibraryReducer(state, {
-    systemId,
-    change: (library) => {
-      const updated = library.slice();
-      const index = updated.findIndex((node) => node.id === nodeId);
-      if (index === -1) {
-        throw new Error("Can't find library node");
-      }
-      updated[index] = replacement;
-      return updated;
-    },
-  });
+}> = ({ ecs: { library } }, { payload: { nodeId, replacement } }) => {
+  set(library, nodeId, replacement);
+
+  // TODO call reactToLibraryUpdateReducer
+};

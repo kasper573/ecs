@@ -1,4 +1,3 @@
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
 import {
   LibraryNode,
   LibraryNodeId,
@@ -17,7 +16,7 @@ import { pullMap } from "./pullMap";
  * @param compareFn Set to sort each child group by this compare function.
  */
 export const createLibraryTree = (
-  library: LibraryDefinition,
+  library: LibraryNode[],
   { rootId, compareFn }: CreateLibraryTreeOptions
 ): TreeNode<LibraryNode>[] => {
   const treeNodeMap = new Map<LibraryNodeId, TreeNode<LibraryNode>>();

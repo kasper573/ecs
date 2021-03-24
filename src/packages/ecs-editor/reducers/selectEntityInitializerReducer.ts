@@ -4,7 +4,7 @@ import { selectObjectReducer } from "./selectObjectReducer";
 
 export const selectEntityInitializerReducer: EditorStateReducer<EntityInitializerId> = (
   state,
-  entityInitializerId
+  { payload: entityInitializerId }
 ) =>
   selectObjectReducer(state, {
     objectName: "inspected",

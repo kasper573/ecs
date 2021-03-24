@@ -1,102 +1,63 @@
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import {
-  EntityInitializer,
-  EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
-import {
-  EntityDefinition,
-  EntityDefinitionId,
-} from "../../ecs-serializable/types/EntityDefinition";
-import {
-  ComponentDefinition,
-  ComponentDefinitionId,
-} from "../../ecs-serializable/types/ComponentDefinition";
-import {
-  ComponentInitializer,
-  ComponentInitializerId,
-} from "../../ecs-serializable/types/ComponentInitializer";
+import { mockEditorState } from "../mocks/mockEditorState";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
-import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { get, values } from "../../nominal";
+import { uuid } from "../functions/uuid";
+import {
+  LibraryComponentNode,
+  LibraryEntityNode,
+} from "../../ecs-serializable/types/LibraryNode";
+import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { core } from "../slices/core";
 import { createEntityInitializerReducer } from "./createEntityInitializerReducer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {
-  // The component that the system has in the library
-  const componentDefinition: ComponentDefinition = {
-    id: "componentDefinition" as ComponentDefinitionId,
-    nativeComponent: "foo",
-    name: "componentDefinition",
-  };
+  const initialState = mockEditorState();
+  const libraryEntityNode = values(initialState.ecs.library).find(
+    (node): node is LibraryEntityNode => node.type === "entity"
+  )!;
+  const libraryComponentNode = values(initialState.ecs.library).find(
+    (node): node is LibraryComponentNode => node.type === "component"
+  )!;
+  const scene = values(initialState.ecs.scenes).find(
+    (scene) => scene.systemId === libraryEntityNode.systemId
+  )!;
 
-  // The library contains an entity with its own component
-  const definitionComponent: ComponentInitializer = {
-    id: "definitionComponent" as ComponentInitializerId,
-    definitionId: componentDefinition.id,
-    properties: createComponentPropertiesDefinition({ definitionProp: "123" }),
-  };
-  const entityDefinition: EntityDefinition = {
-    id: "definitionId" as EntityDefinitionId,
-    name: "definition",
-    components: [definitionComponent],
-  };
+  const definitionComponent = libraryEntityNode.entity.components[0];
 
-  // The user initializes that entity with its own new component
   const initializerComponent: ComponentInitializer = {
-    id: "initializerComponent" as ComponentInitializerId,
-    definitionId: componentDefinition.id,
-    properties: createComponentPropertiesDefinition({ initializerProp: 123 }),
-  };
-  const entityInitializer: EntityInitializer = {
-    id: "initializerId" as EntityInitializerId,
-    name: "initializer",
-    components: [initializerComponent],
-    definitionId: entityDefinition.id,
+    definitionId: libraryComponentNode.component.id,
+    properties: createComponentPropertiesDefinition({ foo: 123 }),
+    id: uuid(),
   };
 
-  // Set up EntityState
-  const library: LibraryDefinition = [
-    {
-      id: "componentNode" as LibraryNodeId,
-      type: "component",
-      component: componentDefinition,
-    },
-    {
-      id: "entityNode" as LibraryNodeId,
-      type: "entity",
-      entity: entityDefinition,
-    },
-  ];
-  const scene = {
-    id: "sceneId" as SceneDefinitionId,
-    name: "scene",
-    entities: [],
-  };
-  const system = {
-    id: "system" as SystemDefinitionId,
-    library,
-    scenes: [scene],
-    name: "system",
-  };
-  const initialState = {
-    selection: {},
-    systems: [system],
+  const entityInitializer: EntityInitializer = {
+    systemId: libraryEntityNode.systemId,
+    sceneId: scene.id,
+    id: uuid(),
+    definitionId: libraryEntityNode.entity.id,
+    name: libraryEntityNode.entity.name,
+    components: [initializerComponent],
   };
 
   // Perform test
-  const updatedState = createEntityInitializerReducer(initialState, {
-    systemId: system.id,
-    sceneId: scene.id,
-    entityInitializer,
-  });
-  const updatedComponents =
-    updatedState.systems[0].scenes[0].entities[0].components;
+  createEntityInitializerReducer(
+    initialState,
+    core.actions.CREATE_ENTITY_INITIALIZER(entityInitializer)
+  );
+
+  const updatedEntityInitializer = get(
+    initialState.ecs.entities,
+    entityInitializer.id
+  );
 
   // Should maintain the component passed in while creating entity
-  expect(updatedComponents).toContainEqual(initializerComponent);
+  expect(updatedEntityInitializer.components).toContainEqual(
+    initializerComponent
+  );
 
   // But should also copy the components in the definition
-  expect(updatedComponents).toContainEqual({
+  expect(updatedEntityInitializer.components).toContainEqual({
     ...definitionComponent,
     properties: createComponentPropertiesDefinition({}),
   });

@@ -14,13 +14,12 @@ import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
+import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import { omit } from "../functions/omit";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
-import { useEditorState } from "../hooks/useEditorState";
 import {
   AddIcon,
   EntityInitializerIcon,
@@ -42,74 +41,85 @@ import { CreateEntityInitializerButton } from "../components/CreateEntityInitial
 import { SimpleDialog } from "../components/SimpleDialog";
 import { InspectedObject } from "../types/InspectedObject";
 import { EditorStateContext } from "../EditorStateContext";
-import {
-  EditorSelectionName,
-  EditorSelectionValuesDefined,
-} from "../types/EditorSelection";
+import { EditorSelectionName } from "../types/EditorSelection";
 import { renameLibraryNode } from "../functions/renameLibraryNode";
+import { useDispatch, useSelector } from "../store";
+import { values } from "../../nominal";
+import { requireSelection } from "../functions/requireSelection";
+import { core } from "../slices/core";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
 
 export type EditorProps = {
-  defaultState: EditorState;
   nativeComponents: NativeComponents;
+};
+
+const selectDerivedState = (state: EditorState) => {
+  const { ecs, selection } = state;
+  const selected = selectSelectedObjects(state);
+  const selectedSystemLibrary = values(ecs.library).filter(
+    (node) => node.systemId === selection.system
+  );
+  return {
+    ecs,
+    selection,
+    selected,
+    selectedSystemScenes: values(ecs.scenes).filter(
+      (scene) => scene.systemId === selection.system
+    ),
+    selectedSceneEntities: values(ecs.entities).filter(
+      (entity) => entity.sceneId === selection.scene
+    ),
+    selectedSystemLibrary,
+    libraryDefinitions: getDefinitionsInLibrary(selectedSystemLibrary),
+  };
 };
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
  */
-export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
-  const [state, dispatch] = useEditorState(nativeComponents, defaultState);
-
-  const selected = selectSelectedObjects(state);
-  const libraryDefinitions = getDefinitionsInLibrary(
-    selected.system?.library ?? []
-  );
-  const [system, resetSystem] = useSystemInitializer(
+export const Editor = ({ nativeComponents }: EditorProps) => {
+  const {
+    ecs,
     selected,
-    nativeComponents
-  );
-  useSceneSync(system, selected, dispatch);
+    selection,
+    selectedSystemScenes,
+    selectedSystemLibrary,
+    selectedSceneEntities,
+    libraryDefinitions,
+  } = useSelector(selectDerivedState);
 
-  const requireSelection = <K extends EditorSelectionName>(name: K) => {
-    const value = state.selection[name];
-    if (value !== undefined) {
-      return value as EditorSelectionValuesDefined[K];
-    }
-    throw new Error("Can't proceed without selection: " + name);
-  };
+  const [system, resetSystem] = useSystemInitializer(nativeComponents);
+  useSceneSync(system);
 
-  const saveInspectorChange = (
-    updated: InspectedObject,
-    current: InspectedObject
-  ) => {
+  const dispatch = useDispatch();
+
+  const selectionFor = <K extends EditorSelectionName>(name: K) =>
+    requireSelection(selection, name);
+
+  const saveInspectorChange = (updated: InspectedObject) => {
     switch (updated.type) {
       case "entityInitializer":
-        dispatch({
-          type: "UPDATE_ENTITY_INITIALIZER",
-          payload: {
-            systemId: requireSelection("system"),
-            sceneId: requireSelection("scene"),
+        dispatch(
+          core.actions.UPDATE_ENTITY_INITIALIZER({
             entityId: updated.object.id,
             update: updated.object,
-          },
-        });
+          })
+        );
 
         break;
       case "libraryNode":
-        dispatch({
-          type: "UPDATE_LIBRARY_NODE",
-          payload: {
-            systemId: requireSelection("system"),
+        dispatch(
+          core.actions.UPDATE_LIBRARY_NODE({
             nodeId: updated.object.id,
             replacement: updated.object,
-          },
-        });
+          })
+        );
     }
   };
 
   const [showSaveDialog, saveDialog] = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
-      <pre>{serializeJS(state.systems, { space: 2 })}</pre>
+      <pre>{serializeJS(ecs, { space: 2 })}</pre>
     </SimpleDialog>
   ));
 
@@ -117,78 +127,59 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
-      dispatch({
-        type: "CREATE_SYSTEM",
-        payload: createSystemDefinition({ id: uuid(), name }),
-      }),
+      dispatch(
+        core.actions.CREATE_SYSTEM(createSystemDefinition({ id: uuid(), name }))
+      ),
     onRenameItem: (system, name) =>
-      dispatch({
-        type: "UPDATE_SYSTEM",
-        payload: { systemId: system.id, update: { name } },
-      }),
-    onDeleteItem: (system) =>
-      dispatch({ type: "DELETE_SYSTEM", payload: system.id }),
+      dispatch(
+        core.actions.UPDATE_SYSTEM({ systemId: system.id, update: { name } })
+      ),
+    onDeleteItem: (system) => dispatch(core.actions.DELETE_SYSTEM(system.id)),
   });
 
   const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
     createDialogTitle: "Add scene",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
-      dispatch({
-        type: "CREATE_SCENE",
-        payload: {
-          systemId: requireSelection("system"),
-          scene: createSceneDefinition({ id: uuid(), name }),
-        },
-      }),
+      dispatch(
+        core.actions.CREATE_SCENE(
+          createSceneDefinition({
+            id: uuid(),
+            name,
+            systemId: selectionFor("system"),
+          })
+        )
+      ),
     onRenameItem: (scene, name) =>
-      dispatch({
-        type: "UPDATE_SCENE",
-        payload: {
-          systemId: requireSelection("system"),
+      dispatch(
+        core.actions.UPDATE_SCENE({
           sceneId: scene.id,
           update: { name },
-        },
-      }),
-    onDeleteItem: (scene) =>
-      dispatch({
-        type: "DELETE_SCENE",
-        payload: {
-          systemId: requireSelection("system"),
-          sceneId: scene.id,
-        },
-      }),
+        })
+      ),
+    onDeleteItem: (scene) => dispatch(core.actions.DELETE_SCENE(scene.id)),
   });
 
   const [libraryNodeEvents, LibraryNodeDialogs] = useCrudDialogs<LibraryNode>({
     createDialogTitle: "Add entity",
-    getItemName: selectLibraryNodeLabel,
+    getItemName: getLibraryNodeLabel,
     onCreateItem: (name) =>
-      dispatch({
-        type: "CREATE_LIBRARY_NODE",
-        payload: {
-          systemId: requireSelection("system"),
-          node: {
-            id: uuid(),
-            type: "entity",
-            entity: createEntityDefinition({ id: uuid(), name }),
-          },
-        },
-      }),
+      dispatch(
+        core.actions.CREATE_LIBRARY_NODE({
+          systemId: selectionFor("system"),
+          id: uuid(),
+          type: "entity",
+          entity: createEntityDefinition({ id: uuid(), name }),
+        })
+      ),
     onRenameItem: (target, name) =>
-      dispatch({
-        type: "UPDATE_LIBRARY_NODE",
-        payload: {
-          systemId: requireSelection("system"),
+      dispatch(
+        core.actions.UPDATE_LIBRARY_NODE({
           nodeId: target.id,
           replacement: renameLibraryNode(target, name),
-        },
-      }),
-    onDeleteItem: (node) =>
-      dispatch({
-        type: "DELETE_LIBRARY_NODE",
-        payload: { systemId: requireSelection("system"), nodeId: node.id },
-      }),
+        })
+      ),
+    onDeleteItem: (node) => dispatch(core.actions.DELETE_LIBRARY_NODE(node.id)),
   });
 
   const [
@@ -199,24 +190,14 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
     getItemName: (item) => item.name,
     onCreateItem: () => {},
     onRenameItem: (entity, name) =>
-      dispatch({
-        type: "UPDATE_ENTITY_INITIALIZER",
-        payload: {
-          systemId: requireSelection("system"),
-          sceneId: requireSelection("scene"),
+      dispatch(
+        core.actions.UPDATE_ENTITY_INITIALIZER({
           entityId: entity.id,
           update: { name },
-        },
-      }),
+        })
+      ),
     onDeleteItem: (entity) =>
-      dispatch({
-        type: "DELETE_ENTITY_INITIALIZER",
-        payload: {
-          systemId: requireSelection("system"),
-          sceneId: requireSelection("scene"),
-          entityId: entity.id,
-        },
-      }),
+      dispatch(core.actions.DELETE_ENTITY_INITIALIZER(entity.id)),
   });
 
   const appBar = (
@@ -250,10 +231,10 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
       </PanelHeader>
       <CrudList
         active={selected.system}
-        items={state.systems}
+        items={values(ecs.systems)}
         {...omit(systemEvents, "onCreateItem")}
         onSelectItem={(system) =>
-          dispatch({ type: "SELECT_SYSTEM", payload: system.id })
+          dispatch(core.actions.SELECT_SYSTEM(system.id))
         }
         getItemProps={({ name }) => ({ name, icon: SystemIcon })}
       />
@@ -279,7 +260,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
         {dialogs}
         <FlatPanel>
           <Typography>
-            {state.systems.length > 0
+            {values(ecs.systems).length > 0
               ? "Please select a system"
               : "Please create a system"}
           </Typography>
@@ -298,7 +279,7 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
             system && <TextSystem system={system} />
           ) : (
             <Typography>
-              {selected.system.scenes.length > 0
+              {selectedSystemScenes.length > 0
                 ? "Please select a scene"
                 : "Please create a scene"}
             </Typography>
@@ -319,44 +300,39 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
           <CrudList
             title={PanelName.Scenes}
             active={selected.scene}
-            items={selected.system?.scenes ?? []}
+            items={selectedSystemScenes}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
             onSelectItem={(scene) =>
-              dispatch({ type: "SELECT_SCENE", payload: scene.id })
+              dispatch(core.actions.SELECT_SCENE(scene.id))
             }
             {...omit(sceneEvents, "onCreateItem")}
           />
         </Panel>
+
         {selected.scene && (
           <>
             <Panel name={PanelName.Instances}>
               <PanelHeader title={PanelName.Instances}>
                 <CreateEntityInitializerButton
-                  entityDefinitions={libraryDefinitions.entities}
+                  entityDefinitions={values(libraryDefinitions.entities)}
                   onCreate={(entityInitializer) =>
-                    dispatch({
-                      type: "CREATE_ENTITY_INITIALIZER",
-                      payload: {
-                        systemId: requireSelection("system"),
-                        sceneId: requireSelection("scene"),
-                        entityInitializer,
-                      },
-                    })
+                    dispatch(
+                      core.actions.CREATE_ENTITY_INITIALIZER(entityInitializer)
+                    )
                   }
                 />
               </PanelHeader>
               <CrudList
                 active={selected.entityInitializer}
-                items={selected.scene?.entities ?? []}
+                items={selectedSceneEntities}
                 getItemProps={({ name }) => ({
                   name,
                   icon: EntityInitializerIcon,
                 })}
                 onSelectItem={(entityInitializer) =>
-                  dispatch({
-                    type: "SELECT_ENTITY_INITIALIZER",
-                    payload: entityInitializer.id,
-                  })
+                  dispatch(
+                    core.actions.SELECT_ENTITY_INITIALIZER(entityInitializer.id)
+                  )
                 }
                 {...omit(entityInitializerEvents, "onCreateItem")}
               />
@@ -374,15 +350,12 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                 </Tooltip>
               </PanelHeader>
               <LibraryTree
-                library={selected.system.library}
+                library={selectedSystemLibrary}
                 selected={selected.libraryNode}
                 onEdit={libraryNodeEvents.onUpdateItem}
                 onDelete={libraryNodeEvents.onDeleteItem}
                 onSelectedChange={(node) =>
-                  dispatch({
-                    type: "SELECT_LIBRARY_NODE",
-                    payload: node.id,
-                  })
+                  dispatch(core.actions.SELECT_LIBRARY_NODE(node.id))
                 }
               />
             </Panel>
@@ -391,7 +364,10 @@ export const Editor = ({ defaultState, nativeComponents }: EditorProps) => {
                 <EditorStateContext.Provider
                   value={{
                     nativeComponents,
-                    libraryDefinitions,
+                    libraryDefinitions: {
+                      entities: values(libraryDefinitions.entities),
+                      components: values(libraryDefinitions.components),
+                    },
                   }}
                 >
                   <InspectedObjectEditor

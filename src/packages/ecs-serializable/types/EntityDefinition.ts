@@ -4,13 +4,15 @@ export type EntityDefinitionId = Nominal<string, "EntityDefinitionId">;
 
 export type EntityDefinition = {
   /**
-   * Automatically generated id (unique within parent System).
+   * uuid
    */
   id: EntityDefinitionId;
   /**
-   * User specified name (duplicates allowed).
-   * Purely presentational.
+   * Used for presentation
    */
   name: string;
+  /**
+   * Components that will be inherited by all entity initializers
+   */
   components: ComponentInitializer[];
 };

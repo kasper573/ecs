@@ -1,26 +1,12 @@
-import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
-import { requireScene } from "../selectors/requireScene";
-import { updateSceneReducer } from "./updateSceneReducer";
+import { remove } from "../../nominal";
 
-export const deleteEntityInitializerReducer: EditorStateReducer<{
-  systemId: SystemDefinitionId;
-  sceneId: SceneDefinitionId;
-  entityId: EntityInitializerId;
-}> = (state, { systemId, sceneId, entityId }) => {
-  const entities = requireScene(state, systemId, sceneId).entities;
-  const entity = entities.find(({ id }) => id === entityId);
-  if (!entity) {
-    throw new Error("Could not find entity");
+export const deleteEntityInitializerReducer: EditorStateReducer<EntityInitializerId> = (
+  { ecs: { entities } },
+  { payload: id }
+) => {
+  if (!remove(entities, id)) {
+    throw new Error("Could not remove entity");
   }
-  return updateSceneReducer(state, {
-    systemId,
-    sceneId,
-    update: {
-      entities: without(entities, entity),
-    },
-  });
 };

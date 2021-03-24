@@ -9,8 +9,8 @@ import { selectSelectedScene } from "./selectSelectedScene";
 export const selectSelectedObjects = (state: EditorState) => {
   // Resolve EditorSelectionValues into EditorSelectionObjects
   const system = selectSelectedSystem(state);
-  const scene = selectSelectedScene(state, system);
-  const inspected = selectInspectedObject(state, system, scene);
+  const scene = selectSelectedScene(state);
+  const inspected = selectInspectedObject(state);
   // Unpack InspectedObject into named properties for convenience
   const libraryNode =
     inspected?.type === "libraryNode" ? inspected.object : undefined;

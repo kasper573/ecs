@@ -1,6 +1,6 @@
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 
-export const selectLibraryNodeLabel = (node: LibraryNode): string => {
+export const getLibraryNodeLabel = (node: LibraryNode): string => {
   switch (node.type) {
     case "folder":
       return node.name;

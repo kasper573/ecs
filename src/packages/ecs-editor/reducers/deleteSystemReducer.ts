@@ -1,17 +1,12 @@
-import { without } from "lodash";
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { remove } from "../../nominal";
 
 export const deleteSystemReducer: EditorStateReducer<SystemDefinitionId> = (
-  state,
-  systemId
+  { ecs: { systems } },
+  { payload: id }
 ) => {
-  const index = state.systems.findIndex(({ id }) => id === systemId);
-  if (index === -1) {
-    throw new Error("Can't find system");
+  if (!remove(systems, id)) {
+    throw new Error("Could not remove system");
   }
-  return {
-    ...state,
-    systems: without(state.systems, state.systems[index]),
-  };
 };

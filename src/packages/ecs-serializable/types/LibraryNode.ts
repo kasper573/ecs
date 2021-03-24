@@ -1,5 +1,6 @@
 import { EntityDefinition } from "./EntityDefinition";
 import { ComponentDefinition } from "./ComponentDefinition";
+import { SystemDefinitionId } from "./SystemDefinition";
 
 export type LibraryNodeId = Nominal<string, "LibraryNodeId">;
 
@@ -21,6 +22,7 @@ export type LibraryComponentNode = LibraryNodeBase<
 >;
 
 export type LibraryNodeBase<Type, Props> = {
+  systemId: SystemDefinitionId;
   parentId?: LibraryNodeId;
   id: LibraryNodeId;
   type: Type;

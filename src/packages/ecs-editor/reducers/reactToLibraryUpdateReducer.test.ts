@@ -1,14 +1,17 @@
 import { without } from "lodash";
 import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { mockEditorState } from "../mocks/mockEditorState";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { LibraryEntityNode } from "../../ecs-serializable/types/LibraryNode";
+import {
+  LibraryEntityNode,
+  LibraryNode,
+} from "../../ecs-serializable/types/LibraryNode";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
+import { values } from "../../nominal";
+import { core } from "../slices/core";
 import { updateLibraryNodeReducer } from "./updateLibraryNodeReducer";
 
 test("removing a component from an entity definition removes that component from its corresponding entity initializers", () => {
@@ -33,8 +36,10 @@ test("removing a component from an entity definition removes that component from
 test("adding a component to an entity definition adds a copy of that component to corresponding entity initializers", () => {
   let addedComponent: ComponentInitializer | undefined;
   const affectedInitializers = testUpdateEntityDefinition(
-    (targetEntity, { library }) => {
-      const definitionId = getDefinitionsInLibrary(library).components[0].id;
+    (targetEntity, library) => {
+      const definitionId = values(
+        getDefinitionsInLibrary(library).components
+      )[0].id;
       addedComponent = createComponentInitializer({
         id: uuid(),
         definitionId,
@@ -56,37 +61,37 @@ test("adding a component to an entity definition adds a copy of that component t
 const testUpdateEntityDefinition = (
   entityChange: (
     targetEntity: EntityDefinition,
-    targetSystem: SystemDefinition
+    targetLibrary: LibraryNode[]
   ) => EntityDefinition
 ) => {
   // Prepare state
-  const initialState = mockEditorState();
-  const targetSystem = initialState.systems[0];
-  const targetEntity = getDefinitionsInLibrary(targetSystem.library)
-    .entities[0];
+  const state = mockEditorState();
+  const targetSystem = values(state.ecs.systems)[0];
+  const targetSystemLibrary = values(state.ecs.library).filter(
+    (node) => node.systemId === targetSystem.id
+  );
+  const targetEntity = values(
+    getDefinitionsInLibrary(targetSystemLibrary).entities
+  )[0];
 
   // Perform update
-  const libraryNode = targetSystem.library.find(
+  const libraryNode = targetSystemLibrary.find(
     (node): node is LibraryEntityNode =>
       node.type === "entity" && node.entity.id === targetEntity.id
   )!;
-  const updatedState = updateLibraryNodeReducer(initialState, {
-    systemId: targetSystem.id,
-    nodeId: libraryNode.id,
-    replacement: {
-      ...libraryNode,
-      entity: entityChange(targetEntity, targetSystem),
-    },
-  });
+  updateLibraryNodeReducer(
+    state,
+    core.actions.UPDATE_LIBRARY_NODE({
+      nodeId: libraryNode.id,
+      replacement: {
+        ...libraryNode,
+        entity: entityChange(targetEntity, targetSystemLibrary),
+      },
+    })
+  );
 
   // Find all entity initializers that should have been affected
-  return updatedState.systems[0].scenes.reduce(
-    (initializers, scene) => [
-      ...initializers,
-      ...scene.entities.filter(
-        (candidate) => candidate.definitionId === targetEntity.id
-      ),
-    ],
-    [] as EntityInitializer[]
+  return values(state.ecs.entities).filter(
+    (entity) => entity.definitionId === targetEntity.id
   );
 };
