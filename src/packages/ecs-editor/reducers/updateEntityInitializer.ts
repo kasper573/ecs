@@ -5,7 +5,7 @@ import {
 } from "../../ecs-serializable/types/EntityInitializer";
 import { get, set } from "../../nominal";
 
-export const updateEntityInitializerReducer: EditorStateReducer<{
+export const updateEntityInitializer: EditorStateReducer<{
   entityId: EntityInitializerId;
   update: Partial<EntityInitializer>;
 }> = ({ ecs: { entities } }, { payload: { entityId, update } }) => {

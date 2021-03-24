@@ -1,12 +1,12 @@
 import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
-import { selectObjectReducer } from "./selectObjectReducer";
+import { setSelectedObject } from "./setSelectedObject";
 
-export const selectEntityInitializerReducer: EditorStateReducer<EntityInitializerId> = (
+export const selectEntityInitializer: EditorStateReducer<EntityInitializerId> = (
   state,
   { payload: entityInitializerId }
 ) =>
-  selectObjectReducer(state, {
+  setSelectedObject(state, {
     objectName: "inspected",
     selectedValue: { type: "entityInitializer", id: entityInitializerId },
   });

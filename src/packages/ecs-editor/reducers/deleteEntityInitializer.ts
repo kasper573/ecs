@@ -2,7 +2,7 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
 import { remove } from "../../nominal";
 
-export const deleteEntityInitializerReducer: EditorStateReducer<EntityInitializerId> = (
+export const deleteEntityInitializer: EditorStateReducer<EntityInitializerId> = (
   { ecs: { entities } },
   { payload: id }
 ) => {

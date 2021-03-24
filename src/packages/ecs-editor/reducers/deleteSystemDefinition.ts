@@ -2,7 +2,7 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { remove } from "../../nominal";
 
-export const deleteSystemDefinitionReducer: EditorStateReducer<SystemDefinitionId> = (
+export const deleteSystemDefinition: EditorStateReducer<SystemDefinitionId> = (
   { ecs: { systems } },
   { payload: id }
 ) => {

@@ -11,7 +11,7 @@ import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { values } from "../../nominal";
 import { core } from "../slices/core";
-import { updateLibraryNodeReducer } from "./updateLibraryNodeReducer";
+import { updateLibraryNode } from "./updateLibraryNode";
 
 test("removing a component from an entity definition removes that component from its corresponding entity initializers", () => {
   let removedComponent: ComponentInitializer | undefined;
@@ -78,7 +78,7 @@ const testUpdateEntityDefinition = (
     (node): node is LibraryEntityNode =>
       node.type === "entity" && node.entity.id === targetEntity.id
   )!;
-  updateLibraryNodeReducer(
+  updateLibraryNode(
     state,
     core.actions.updateLibraryNode({
       nodeId: libraryNode.id,

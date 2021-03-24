@@ -11,7 +11,7 @@ import { filterUntilNoChange } from "../functions/filterUntilNoChange";
  * Ensures selection for objects that has a default available.
  * (Returns the original state object if no selection was changed)
  */
-export const ensureSelectionReducer = (state: EditorState): EditorState =>
+export const ensureSelection = (state: EditorState): EditorState =>
   filterUntilNoChange(ensureSelectionOnce, state);
 
 const ensureSelectionOnce = (state: EditorState): EditorState => {

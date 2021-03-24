@@ -9,7 +9,7 @@ import {
 } from "../../ecs-serializable/types/LibraryNode";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { core } from "../slices/core";
-import { createEntityInitializerReducer } from "./createEntityInitializerReducer";
+import { createEntityInitializer } from "./createEntityInitializer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {
   const initialState = mockEditorState();
@@ -41,7 +41,7 @@ test("creating an entity initializer copies all components from definition (with
   };
 
   // Perform test
-  createEntityInitializerReducer(
+  createEntityInitializer(
     initialState,
     core.actions.createEntityInitializer(entityInitializer)
   );

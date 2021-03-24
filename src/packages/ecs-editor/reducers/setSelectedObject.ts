@@ -1,11 +1,11 @@
 import { EditorState } from "../types/EditorState";
 import { EditorSelectionValues } from "../types/EditorSelection";
-import { resetSelectionReducer } from "./resetSelectionReducer";
+import { resetSelection } from "./resetSelection";
 
 /**
  * Updates the selection for the specified object type
  */
-export const selectObjectReducer = <K extends keyof EditorSelectionValues>(
+export const setSelectedObject = <K extends keyof EditorSelectionValues>(
   state: EditorState,
   payload: {
     objectName: K;
@@ -20,7 +20,7 @@ export const selectObjectReducer = <K extends keyof EditorSelectionValues>(
   if (!didChange) {
     return; // Same selection
   }
-  const { selection: reset } = resetSelectionReducer(state, objectName);
+  const { selection: reset } = resetSelection(state, objectName);
   state.selection = {
     ...reset,
     [objectName]: selectedValue,

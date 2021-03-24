@@ -4,7 +4,7 @@ import { EntityInitializer } from "../../ecs-serializable/types/EntityInitialize
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
 import { LibraryEntityNode } from "../../ecs-serializable/types/LibraryNode";
 
-export const createEntityInitializerReducer: EditorStateReducer<EntityInitializer> = (
+export const createEntityInitializer: EditorStateReducer<EntityInitializer> = (
   { ecs: { entities, library, scenes } },
   { payload: initializer }
 ) => {

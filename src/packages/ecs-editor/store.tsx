@@ -6,11 +6,11 @@ import {
 } from "react-redux";
 import { NativeComponents } from "../ecs-serializable/types/NativeComponents";
 import { EditorState } from "./types/EditorState";
-import { ensureSelectionReducer } from "./reducers/ensureSelectionReducer";
+import { ensureSelection } from "./reducers/ensureSelection";
 import {
   ensureNativeComponentsAction,
-  ensureNativeComponentsReducer,
-} from "./reducers/ensureNativeComponentsReducer";
+  ensureNativeComponents,
+} from "./reducers/ensureNativeComponents";
 import { core } from "./slices/core";
 
 type RootReducer = typeof core.reducer;
@@ -23,8 +23,8 @@ const createRootReducer = (nativeComponents: NativeComponents): RootReducer => (
   state = core.reducer(state, action);
   // React to state change with generic reducers that make
   // sure certain parts of the state is in a specific way
-  state = ensureSelectionReducer(state);
-  state = ensureNativeComponentsReducer(
+  state = ensureSelection(state);
+  state = ensureNativeComponents(
     state,
     ensureNativeComponentsAction(nativeComponents)
   );

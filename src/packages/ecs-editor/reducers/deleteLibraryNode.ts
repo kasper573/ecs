@@ -2,7 +2,7 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { remove } from "../../nominal";
 
-export const deleteLibraryNodeReducer: EditorStateReducer<LibraryNodeId> = (
+export const deleteLibraryNode: EditorStateReducer<LibraryNodeId> = (
   { ecs: { library } },
   { payload: nodeId }
 ) => {

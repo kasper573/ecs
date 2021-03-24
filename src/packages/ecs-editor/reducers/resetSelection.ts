@@ -9,9 +9,7 @@ import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelection
 /**
  * Reset to the default selection for the specified object and all child objects
  */
-export const resetSelectionReducer = <
-  ObjectName extends keyof EditorSelectionValues
->(
+export const resetSelection = <ObjectName extends keyof EditorSelectionValues>(
   state: EditorState,
   fromObjectName: ObjectName
 ): EditorState => {

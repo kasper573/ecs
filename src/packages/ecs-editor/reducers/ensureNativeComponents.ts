@@ -11,7 +11,7 @@ export const ensureNativeComponentsAction = createAction<
   "ensureNativeComponents"
 >("ensureNativeComponents");
 
-export const ensureNativeComponentsReducer = createReducer(
+export const ensureNativeComponents = createReducer(
   createEditorState(),
   (builder) =>
     builder.addCase(

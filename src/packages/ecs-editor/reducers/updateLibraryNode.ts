@@ -5,7 +5,7 @@ import {
 } from "../../ecs-serializable/types/LibraryNode";
 import { set } from "../../nominal";
 
-export const updateLibraryNodeReducer: EditorStateReducer<{
+export const updateLibraryNode: EditorStateReducer<{
   nodeId: LibraryNodeId;
   replacement: LibraryNode;
 }> = ({ ecs: { library } }, { payload: { nodeId, replacement } }) => {
