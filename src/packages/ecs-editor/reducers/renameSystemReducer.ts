@@ -5,13 +5,13 @@ import {
   SystemDefinitionId,
 } from "../../ecs-serializable/types/SystemDefinition";
 
-export const updateSystemReducer: EditorStateReducer<{
+export const renameSystemReducer: EditorStateReducer<{
   systemId: SystemDefinitionId;
-  update: Partial<SystemDefinition>;
-}> = ({ ecs: { systems } }, { payload: { systemId, update } }) => {
+  name: SystemDefinition["name"];
+}> = ({ ecs: { systems } }, { payload: { systemId, name } }) => {
   const system = get(systems, systemId);
   if (!system) {
     throw new Error("System not found");
   }
-  set(systems, systemId, { ...system, ...update });
+  set(systems, systemId, { ...system, name });
 };

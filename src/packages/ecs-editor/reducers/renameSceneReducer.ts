@@ -5,14 +5,14 @@ import {
 } from "../../ecs-serializable/types/SceneDefinition";
 import { get, set } from "../../nominal";
 
-export const updateSceneReducer: EditorStateReducer<{
+export const renameSceneReducer: EditorStateReducer<{
   sceneId: SceneDefinitionId;
-  update: Partial<SceneDefinition>;
-}> = ({ ecs: { scenes } }, { payload: { sceneId, update } }) => {
+  name: SceneDefinition["name"];
+}> = ({ ecs: { scenes } }, { payload: { sceneId, name } }) => {
   const scene = get(scenes, sceneId);
   if (!scene) {
     throw new Error("Scene not found");
   }
 
-  set(scenes, sceneId, { ...scene, ...update });
+  set(scenes, sceneId, { ...scene, name });
 };

@@ -126,9 +126,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     onCreateItem: (name) =>
       dispatch(core.actions.CREATE_SYSTEM({ id: uuid(), name })),
     onRenameItem: (system, name) =>
-      dispatch(
-        core.actions.UPDATE_SYSTEM({ systemId: system.id, update: { name } })
-      ),
+      dispatch(core.actions.RENAME_SYSTEM({ systemId: system.id, name })),
     onDeleteItem: (system) => dispatch(core.actions.DELETE_SYSTEM(system.id)),
   });
 
@@ -145,9 +143,9 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
       ),
     onRenameItem: (scene, name) =>
       dispatch(
-        core.actions.UPDATE_SCENE({
+        core.actions.RENAME_SCENE({
           sceneId: scene.id,
-          update: { name },
+          name,
         })
       ),
     onDeleteItem: (scene) => dispatch(core.actions.DELETE_SCENE(scene.id)),

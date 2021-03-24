@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createEditorState } from "../functions/createEditorState";
 import { createSystemReducer } from "../reducers/createSystemReducer";
-import { updateSystemReducer } from "../reducers/updateSystemReducer";
+import { renameSystemReducer } from "../reducers/renameSystemReducer";
 import { deleteSystemReducer } from "../reducers/deleteSystemReducer";
 import { selectSystemReducer } from "../reducers/selectSystemReducer";
 import { createSceneReducer } from "../reducers/createSceneReducer";
-import { updateSceneReducer } from "../reducers/updateSceneReducer";
+import { renameSceneReducer } from "../reducers/renameSceneReducer";
 import { deleteSceneReducer } from "../reducers/deleteSceneReducer";
 import { selectSceneReducer } from "../reducers/selectSceneReducer";
 import { createEntityInitializerReducer } from "../reducers/createEntityInitializerReducer";
@@ -25,11 +25,11 @@ export const core = createSlice({
   name: "core",
   reducers: {
     CREATE_SYSTEM: createSystemReducer,
-    UPDATE_SYSTEM: updateSystemReducer,
+    RENAME_SYSTEM: renameSystemReducer,
     DELETE_SYSTEM: deleteSystemReducer,
     SELECT_SYSTEM: selectSystemReducer,
     CREATE_SCENE: createSceneReducer,
-    UPDATE_SCENE: updateSceneReducer,
+    RENAME_SCENE: renameSceneReducer,
     DELETE_SCENE: deleteSceneReducer,
     SELECT_SCENE: selectSceneReducer,
     CREATE_ENTITY_INITIALIZER: createEntityInitializerReducer,
