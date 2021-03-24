@@ -2,7 +2,7 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { remove } from "../../nominal";
 
-export const deleteSceneReducer: EditorStateReducer<SceneDefinitionId> = (
+export const deleteSceneDefinitionReducer: EditorStateReducer<SceneDefinitionId> = (
   { ecs: { scenes } },
   { payload: id }
 ) => {

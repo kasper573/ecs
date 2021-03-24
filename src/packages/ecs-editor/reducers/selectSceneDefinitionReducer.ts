@@ -2,7 +2,7 @@ import { EditorStateReducer } from "../types/EditorStateReducer";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { selectObjectReducer } from "./selectObjectReducer";
 
-export const selectSceneReducer: EditorStateReducer<SceneDefinitionId> = (
+export const selectSceneDefinitionReducer: EditorStateReducer<SceneDefinitionId> = (
   state,
   { payload: sceneId }
 ) =>

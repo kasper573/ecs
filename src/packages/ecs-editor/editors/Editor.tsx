@@ -124,10 +124,13 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
-      dispatch(core.actions.CREATE_SYSTEM({ id: uuid(), name })),
+      dispatch(core.actions.CREATE_SYSTEM_DEFINITION({ id: uuid(), name })),
     onRenameItem: (system, name) =>
-      dispatch(core.actions.RENAME_SYSTEM({ systemId: system.id, name })),
-    onDeleteItem: (system) => dispatch(core.actions.DELETE_SYSTEM(system.id)),
+      dispatch(
+        core.actions.RENAME_SYSTEM_DEFINITION({ systemId: system.id, name })
+      ),
+    onDeleteItem: (system) =>
+      dispatch(core.actions.DELETE_SYSTEM_DEFINITION(system.id)),
   });
 
   const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
@@ -135,7 +138,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
       dispatch(
-        core.actions.CREATE_SCENE({
+        core.actions.CREATE_SCENE_DEFINITION({
           id: uuid(),
           name,
           systemId: selectionFor("system"),
@@ -143,12 +146,13 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
       ),
     onRenameItem: (scene, name) =>
       dispatch(
-        core.actions.RENAME_SCENE({
+        core.actions.RENAME_SCENE_DEFINITION({
           sceneId: scene.id,
           name,
         })
       ),
-    onDeleteItem: (scene) => dispatch(core.actions.DELETE_SCENE(scene.id)),
+    onDeleteItem: (scene) =>
+      dispatch(core.actions.DELETE_SCENE_DEFINITION(scene.id)),
   });
 
   const [libraryNodeEvents, LibraryNodeDialogs] = useCrudDialogs<LibraryNode>({
@@ -225,7 +229,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
         items={values(ecs.systems)}
         {...omit(systemEvents, "onCreateItem")}
         onSelectItem={(system) =>
-          dispatch(core.actions.SELECT_SYSTEM(system.id))
+          dispatch(core.actions.SELECT_SYSTEM_DEFINITION(system.id))
         }
         getItemProps={({ name }) => ({ name, icon: SystemIcon })}
       />
@@ -294,7 +298,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
             items={selectedSystemScenes}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
             onSelectItem={(scene) =>
-              dispatch(core.actions.SELECT_SCENE(scene.id))
+              dispatch(core.actions.SELECT_SCENE_DEFINITION(scene.id))
             }
             {...omit(sceneEvents, "onCreateItem")}
           />

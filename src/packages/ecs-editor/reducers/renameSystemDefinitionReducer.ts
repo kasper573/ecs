@@ -5,7 +5,7 @@ import {
   SystemDefinitionId,
 } from "../../ecs-serializable/types/SystemDefinition";
 
-export const renameSystemReducer: EditorStateReducer<{
+export const renameSystemDefinitionReducer: EditorStateReducer<{
   systemId: SystemDefinitionId;
   name: SystemDefinition["name"];
 }> = ({ ecs: { systems } }, { payload: { systemId, name } }) => {

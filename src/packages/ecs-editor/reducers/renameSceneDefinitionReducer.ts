@@ -5,7 +5,7 @@ import {
 } from "../../ecs-serializable/types/SceneDefinition";
 import { get, set } from "../../nominal";
 
-export const renameSceneReducer: EditorStateReducer<{
+export const renameSceneDefinitionReducer: EditorStateReducer<{
   sceneId: SceneDefinitionId;
   name: SceneDefinition["name"];
 }> = ({ ecs: { scenes } }, { payload: { sceneId, name } }) => {

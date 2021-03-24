@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createEditorState } from "../functions/createEditorState";
-import { createSystemReducer } from "../reducers/createSystemReducer";
-import { renameSystemReducer } from "../reducers/renameSystemReducer";
-import { deleteSystemReducer } from "../reducers/deleteSystemReducer";
-import { selectSystemReducer } from "../reducers/selectSystemReducer";
-import { createSceneReducer } from "../reducers/createSceneReducer";
-import { renameSceneReducer } from "../reducers/renameSceneReducer";
-import { deleteSceneReducer } from "../reducers/deleteSceneReducer";
-import { selectSceneReducer } from "../reducers/selectSceneReducer";
+import { createSystemDefinitionReducer } from "../reducers/createSystemDefinitionReducer";
+import { renameSystemDefinitionReducer } from "../reducers/renameSystemDefinitionReducer";
+import { deleteSystemDefinitionReducer } from "../reducers/deleteSystemDefinitionReducer";
+import { selectSystemDefinitionReducer } from "../reducers/selectSystemDefinitionReducer";
+import { createSceneDefinitionReducer } from "../reducers/createSceneDefinitionReducer";
+import { renameSceneDefinitionReducer } from "../reducers/renameSceneDefinitionReducer";
+import { deleteSceneDefinitionReducer } from "../reducers/deleteSceneDefinitionReducer";
+import { selectSceneDefinitionReducer } from "../reducers/selectSceneDefinitionReducer";
 import { createEntityInitializerReducer } from "../reducers/createEntityInitializerReducer";
 import { updateEntityInitializerReducer } from "../reducers/updateEntityInitializerReducer";
 import { deleteEntityInitializerReducer } from "../reducers/deleteEntityInitializerReducer";
@@ -24,14 +24,14 @@ export const core = createSlice({
   initialState: createEditorState(),
   name: "core",
   reducers: {
-    CREATE_SYSTEM: createSystemReducer,
-    RENAME_SYSTEM: renameSystemReducer,
-    DELETE_SYSTEM: deleteSystemReducer,
-    SELECT_SYSTEM: selectSystemReducer,
-    CREATE_SCENE: createSceneReducer,
-    RENAME_SCENE: renameSceneReducer,
-    DELETE_SCENE: deleteSceneReducer,
-    SELECT_SCENE: selectSceneReducer,
+    CREATE_SYSTEM_DEFINITION: createSystemDefinitionReducer,
+    RENAME_SYSTEM_DEFINITION: renameSystemDefinitionReducer,
+    DELETE_SYSTEM_DEFINITION: deleteSystemDefinitionReducer,
+    SELECT_SYSTEM_DEFINITION: selectSystemDefinitionReducer,
+    CREATE_SCENE_DEFINITION: createSceneDefinitionReducer,
+    RENAME_SCENE_DEFINITION: renameSceneDefinitionReducer,
+    DELETE_SCENE_DEFINITION: deleteSceneDefinitionReducer,
+    SELECT_SCENE_DEFINITION: selectSceneDefinitionReducer,
     CREATE_ENTITY_INITIALIZER: createEntityInitializerReducer,
     UPDATE_ENTITY_INITIALIZER: updateEntityInitializerReducer,
     DELETE_ENTITY_INITIALIZER: deleteEntityInitializerReducer,
