@@ -97,7 +97,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     switch (updated.type) {
       case "entityInitializer":
         dispatch(
-          core.actions.UPDATE_ENTITY_INITIALIZER({
+          core.actions.updateEntityInitializer({
             entityId: updated.object.id,
             update: updated.object,
           })
@@ -106,7 +106,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
         break;
       case "libraryNode":
         dispatch(
-          core.actions.UPDATE_LIBRARY_NODE({
+          core.actions.updateLibraryNode({
             nodeId: updated.object.id,
             replacement: updated.object,
           })
@@ -124,13 +124,13 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
-      dispatch(core.actions.CREATE_SYSTEM_DEFINITION({ id: uuid(), name })),
+      dispatch(core.actions.createSystemDefinition({ id: uuid(), name })),
     onRenameItem: (system, name) =>
       dispatch(
-        core.actions.RENAME_SYSTEM_DEFINITION({ systemId: system.id, name })
+        core.actions.renameSystemDefinition({ systemId: system.id, name })
       ),
     onDeleteItem: (system) =>
-      dispatch(core.actions.DELETE_SYSTEM_DEFINITION(system.id)),
+      dispatch(core.actions.deleteSystemDefinition(system.id)),
   });
 
   const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
@@ -138,7 +138,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
       dispatch(
-        core.actions.CREATE_SCENE_DEFINITION({
+        core.actions.createSceneDefinition({
           id: uuid(),
           name,
           systemId: selectionFor("system"),
@@ -146,13 +146,13 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
       ),
     onRenameItem: (scene, name) =>
       dispatch(
-        core.actions.RENAME_SCENE_DEFINITION({
+        core.actions.renameSceneDefinition({
           sceneId: scene.id,
           name,
         })
       ),
     onDeleteItem: (scene) =>
-      dispatch(core.actions.DELETE_SCENE_DEFINITION(scene.id)),
+      dispatch(core.actions.deleteSceneDefinition(scene.id)),
   });
 
   const [libraryNodeEvents, LibraryNodeDialogs] = useCrudDialogs<LibraryNode>({
@@ -160,7 +160,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     getItemName: getLibraryNodeLabel,
     onCreateItem: (name) =>
       dispatch(
-        core.actions.CREATE_LIBRARY_NODE({
+        core.actions.createLibraryNode({
           systemId: selectionFor("system"),
           id: uuid(),
           type: "entity",
@@ -169,12 +169,12 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
       ),
     onRenameItem: (target, name) =>
       dispatch(
-        core.actions.UPDATE_LIBRARY_NODE({
+        core.actions.updateLibraryNode({
           nodeId: target.id,
           replacement: renameLibraryNode(target, name),
         })
       ),
-    onDeleteItem: (node) => dispatch(core.actions.DELETE_LIBRARY_NODE(node.id)),
+    onDeleteItem: (node) => dispatch(core.actions.deleteLibraryNode(node.id)),
   });
 
   const [
@@ -186,13 +186,13 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     onCreateItem: () => {},
     onRenameItem: (entity, name) =>
       dispatch(
-        core.actions.UPDATE_ENTITY_INITIALIZER({
+        core.actions.updateEntityInitializer({
           entityId: entity.id,
           update: { name },
         })
       ),
     onDeleteItem: (entity) =>
-      dispatch(core.actions.DELETE_ENTITY_INITIALIZER(entity.id)),
+      dispatch(core.actions.deleteEntityInitializer(entity.id)),
   });
 
   const appBar = (
@@ -229,7 +229,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
         items={values(ecs.systems)}
         {...omit(systemEvents, "onCreateItem")}
         onSelectItem={(system) =>
-          dispatch(core.actions.SELECT_SYSTEM_DEFINITION(system.id))
+          dispatch(core.actions.selectSystemDefinition(system.id))
         }
         getItemProps={({ name }) => ({ name, icon: SystemIcon })}
       />
@@ -298,7 +298,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
             items={selectedSystemScenes}
             getItemProps={({ name }) => ({ name, icon: SceneIcon })}
             onSelectItem={(scene) =>
-              dispatch(core.actions.SELECT_SCENE_DEFINITION(scene.id))
+              dispatch(core.actions.selectSceneDefinition(scene.id))
             }
             {...omit(sceneEvents, "onCreateItem")}
           />
@@ -312,7 +312,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
                   entityDefinitions={values(libraryDefinitions.entities)}
                   onCreate={(entityInitializer) =>
                     dispatch(
-                      core.actions.CREATE_ENTITY_INITIALIZER(entityInitializer)
+                      core.actions.createEntityInitializer(entityInitializer)
                     )
                   }
                 />
@@ -326,7 +326,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
                 })}
                 onSelectItem={(entityInitializer) =>
                   dispatch(
-                    core.actions.SELECT_ENTITY_INITIALIZER(entityInitializer.id)
+                    core.actions.selectEntityInitializer(entityInitializer.id)
                   )
                 }
                 {...omit(entityInitializerEvents, "onCreateItem")}
@@ -350,7 +350,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
                 onEdit={libraryNodeEvents.onUpdateItem}
                 onDelete={libraryNodeEvents.onDeleteItem}
                 onSelectedChange={(node) =>
-                  dispatch(core.actions.SELECT_LIBRARY_NODE(node.id))
+                  dispatch(core.actions.selectLibraryNode(node.id))
                 }
               />
             </Panel>

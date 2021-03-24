@@ -80,7 +80,7 @@ const testUpdateEntityDefinition = (
   )!;
   updateLibraryNodeReducer(
     state,
-    core.actions.UPDATE_LIBRARY_NODE({
+    core.actions.updateLibraryNode({
       nodeId: libraryNode.id,
       replacement: {
         ...libraryNode,

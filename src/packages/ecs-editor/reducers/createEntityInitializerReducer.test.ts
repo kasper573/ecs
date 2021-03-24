@@ -43,7 +43,7 @@ test("creating an entity initializer copies all components from definition (with
   // Perform test
   createEntityInitializerReducer(
     initialState,
-    core.actions.CREATE_ENTITY_INITIALIZER(entityInitializer)
+    core.actions.createEntityInitializer(entityInitializer)
   );
 
   const updatedEntityInitializer = get(
