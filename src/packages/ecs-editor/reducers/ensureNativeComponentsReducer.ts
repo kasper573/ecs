@@ -2,7 +2,6 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { set, values } from "../../nominal";
 import { uuid } from "../functions/uuid";
-import { createComponentDefinition } from "../../ecs-serializable/factories/createComponentDefinition";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { createEditorState } from "../functions/createEditorState";
 import { EditorState } from "../types/EditorState";
@@ -39,11 +38,11 @@ export const ensureNativeComponentsReducer = createReducer(
               id: uuid(),
               type: "component",
               systemId: system.id,
-              component: createComponentDefinition({
+              component: {
                 name: nativeComponentName,
                 nativeComponent: nativeComponentName,
                 id: uuid(),
-              }),
+              },
             };
             set(library, node.id, node);
           }

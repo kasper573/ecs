@@ -3,7 +3,6 @@ import { without } from "lodash";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
@@ -33,11 +32,11 @@ export const EntityDefinitionEditor = ({
   function addComponent(definition: ComponentDefinition) {
     updateComponents([
       ...value.components,
-      createComponentInitializer({
+      {
         id: uuid(),
         definitionId: definition.id,
         properties: createComponentPropertiesDefinition({}),
-      }),
+      },
     ]);
   }
 

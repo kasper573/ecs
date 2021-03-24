@@ -8,7 +8,6 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { EditorStateContext } from "../EditorStateContext";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
@@ -35,13 +34,11 @@ export const EntityInitializerEditor = ({
   );
 
   function createComponent(definition: ComponentDefinition) {
-    addComponent(
-      createComponentInitializer({
-        id: uuid(),
-        definitionId: definition.id,
-        properties: createComponentPropertiesDefinition({}),
-      })
-    );
+    addComponent({
+      id: uuid(),
+      definitionId: definition.id,
+      properties: createComponentPropertiesDefinition({}),
+    });
   }
 
   function addComponent(initializer: ComponentInitializer) {

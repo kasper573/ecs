@@ -7,7 +7,6 @@ import {
 } from "../../ecs-serializable/types/LibraryNode";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { values } from "../../nominal";
@@ -40,11 +39,11 @@ test("adding a component to an entity definition adds a copy of that component t
       const definitionId = values(
         getDefinitionsInLibrary(library).components
       )[0].id;
-      addedComponent = createComponentInitializer({
+      addedComponent = {
         id: uuid(),
         definitionId,
         properties: createComponentPropertiesDefinition({}),
-      });
+      };
       return {
         ...targetEntity,
         components: [...targetEntity.components, addedComponent],

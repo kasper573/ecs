@@ -1,7 +1,6 @@
 import React from "react";
 import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { createEntityInitializer } from "../../ecs-serializable/factories/createEntityInitializer";
 import { uuid } from "../functions/uuid";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
@@ -34,15 +33,14 @@ export const CreateEntityInitializerButton = ({
       <Autocomplete
         onChange={(e, definition) => {
           if (definition) {
-            onCreate(
-              createEntityInitializer({
-                systemId: requireSelection(selection, "system"),
-                sceneId: requireSelection(selection, "scene"),
-                id: uuid(),
-                name: definition.name,
-                definitionId: definition.id,
-              })
-            );
+            onCreate({
+              systemId: requireSelection(selection, "system"),
+              sceneId: requireSelection(selection, "scene"),
+              id: uuid(),
+              name: definition.name,
+              definitionId: definition.id,
+              components: [],
+            });
           }
         }}
         renderInput={(params) => (

@@ -4,9 +4,6 @@ import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { createSystemDefinition } from "../../ecs-serializable/factories/createSystemDefinition";
-import { createSceneDefinition } from "../../ecs-serializable/factories/createSceneDefinition";
-import { createEntityDefinition } from "../../ecs-serializable/factories/createEntityDefinition";
 import { EditorState } from "../types/EditorState";
 import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
@@ -127,9 +124,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
-      dispatch(
-        core.actions.CREATE_SYSTEM(createSystemDefinition({ id: uuid(), name }))
-      ),
+      dispatch(core.actions.CREATE_SYSTEM({ id: uuid(), name })),
     onRenameItem: (system, name) =>
       dispatch(
         core.actions.UPDATE_SYSTEM({ systemId: system.id, update: { name } })
@@ -142,13 +137,11 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
       dispatch(
-        core.actions.CREATE_SCENE(
-          createSceneDefinition({
-            id: uuid(),
-            name,
-            systemId: selectionFor("system"),
-          })
-        )
+        core.actions.CREATE_SCENE({
+          id: uuid(),
+          name,
+          systemId: selectionFor("system"),
+        })
       ),
     onRenameItem: (scene, name) =>
       dispatch(
@@ -169,7 +162,7 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
           systemId: selectionFor("system"),
           id: uuid(),
           type: "entity",
-          entity: createEntityDefinition({ id: uuid(), name }),
+          entity: { id: uuid(), name, components: [] },
         })
       ),
     onRenameItem: (target, name) =>

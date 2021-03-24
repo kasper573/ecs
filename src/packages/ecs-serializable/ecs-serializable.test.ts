@@ -5,21 +5,21 @@ import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
 import { set } from "../nominal";
 import { createSystem } from "./factories/createSystem";
-import { EntityInitializerId } from "./types/EntityInitializer";
+import {
+  EntityInitializer,
+  EntityInitializerId,
+} from "./types/EntityInitializer";
 import {
   ComponentDefinition,
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { createSystemDefinition } from "./factories/createSystemDefinition";
-import { createSceneDefinition } from "./factories/createSceneDefinition";
-import { createEntityInitializer } from "./factories/createEntityInitializer";
-import { createEntityDefinition } from "./factories/createEntityDefinition";
-import { createComponentDefinition } from "./factories/createComponentDefinition";
 import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
 import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
 import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
 import { SerializableECS } from "./types/SerializableECS";
+import { SceneDefinition } from "./types/SceneDefinition";
+import { SystemDefinition } from "./types/SystemDefinition";
 
 class Foo extends Component.extend({
   fn: {
@@ -43,22 +43,23 @@ const serializedSystem = fs.readFileSync(
 
 describe("instantiating a System using SystemDefinition", () => {
   it("succeeds when using one entity", () => {
-    const entity = createEntityDefinition({
+    const entity: EntityDefinition = {
       name: "Entity A",
       id: uid(),
-    });
+      components: [],
+    };
     const system = mockSystem([entity]);
     expect(system.entities.length).toBe(1);
     expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
   it("succeeds when using one component", () => {
-    const component = createComponentDefinition({
+    const component: ComponentDefinition = {
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
-    });
-    const entity = createEntityDefinition({
+    };
+    const entity: EntityDefinition = {
       id: uid(),
       name: "Entity A",
       components: [
@@ -68,18 +69,18 @@ describe("instantiating a System using SystemDefinition", () => {
           properties: createComponentPropertiesDefinition({}),
         },
       ],
-    });
+    };
     const system = mockSystem([entity], [component]);
     expect(system.entities[0].components[0]).toBeInstanceOf(Foo);
   });
 
   it("succeeds when using a component with options", () => {
-    const component = createComponentDefinition({
+    const component: ComponentDefinition = {
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
-    });
-    const entity = createEntityDefinition({
+    };
+    const entity: EntityDefinition = {
       id: uid(),
       name: "Entity A",
       components: [
@@ -89,7 +90,7 @@ describe("instantiating a System using SystemDefinition", () => {
           properties: createComponentPropertiesDefinition({ fn: () => 2 }),
         },
       ],
-    });
+    };
     const system = mockSystem([entity], [component]);
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
@@ -101,34 +102,38 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("succeeds when using two entities with different ids", () => {
-    const entity1 = createEntityDefinition({
+    const entity1: EntityDefinition = {
       name: "Entity A",
       id: uid(),
-    });
-    const entity2 = createEntityDefinition({
+      components: [],
+    };
+    const entity2: EntityDefinition = {
       name: "Entity A",
       id: uid(),
-    });
+      components: [],
+    };
     const system = mockSystem([entity1, entity2]);
     expect(system.entities.length).toBe(2);
   });
 
   it("throws error when referencing entity definition that doesn't exist", () => {
-    const system = createSystemDefinition({
+    const system: SystemDefinition = {
       id: uid(),
       name: "System A",
-    });
-    const scene = createSceneDefinition({
+    };
+    const scene: SceneDefinition = {
       id: uid(),
       name: "Scene A",
       systemId: system.id,
-    });
-    const entity = createEntityInitializer({
+    };
+    const entity: EntityInitializer = {
       id: uid(),
       sceneId: scene.id,
       systemId: system.id,
       definitionId: "bogus" as EntityDefinitionId,
-    });
+      name: "entity",
+      components: [],
+    };
     const ecs: SerializableECS = {
       systems: [system],
       scenes: [scene],
@@ -140,17 +145,17 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("succeeds when using two components with different ids", () => {
-    const component1 = createComponentDefinition({
+    const component1: ComponentDefinition = {
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
-    });
-    const component2 = createComponentDefinition({
+    };
+    const component2: ComponentDefinition = {
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
-    });
-    const entity = createEntityDefinition({
+    };
+    const entity: EntityDefinition = {
       id: uid(),
       name: "Entity A",
       components: [
@@ -165,13 +170,13 @@ describe("instantiating a System using SystemDefinition", () => {
           properties: createComponentPropertiesDefinition({}),
         },
       ],
-    });
+    };
     const system = mockSystem([entity], [component1, component2]);
     expect(system.entities[0].components.length).toBe(2);
   });
 
   it("throws error when referencing component that doesn't exist", () => {
-    const entity = createEntityDefinition({
+    const entity: EntityDefinition = {
       id: uid(),
       name: "Entity A",
       components: [
@@ -181,7 +186,7 @@ describe("instantiating a System using SystemDefinition", () => {
           properties: createComponentPropertiesDefinition({}),
         },
       ],
-    });
+    };
     expect(() => mockSystem([entity], [])).toThrow();
   });
 });
@@ -200,27 +205,28 @@ const mockSystem = (
     library: {},
   };
 
-  const system = createSystemDefinition({
+  const system: SystemDefinition = {
     id: uid(),
     name: "System A",
-  });
+  };
   set(ecs.systems, system.id, system);
 
-  const scene = createSceneDefinition({
+  const scene: SceneDefinition = {
     systemId: system.id,
     id: uid(),
     name: "Scene A",
-  });
+  };
   set(ecs.scenes, scene.id, scene);
 
   entities.forEach(({ id, components }, index) => {
-    const entity = createEntityInitializer({
+    const entity: EntityInitializer = {
+      name: `entity${index}`,
       systemId: system.id,
       sceneId: scene.id,
       id: `initializer${index}` as EntityInitializerId,
       definitionId: id,
       components: components.map(inheritComponentInitializer),
-    });
+    };
     set(ecs.entities, entity.id, entity);
   });
 
