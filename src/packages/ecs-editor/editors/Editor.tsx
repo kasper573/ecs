@@ -102,7 +102,6 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
             update: updated.object,
           })
         );
-
         break;
       case "libraryNode":
         dispatch(

@@ -1,10 +1,9 @@
-import { EditorStateReducer } from "../types/EditorStateReducer";
 import { set } from "../../nominal";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
-export const createLibraryNode: EditorStateReducer<LibraryNode> = (
-  { ecs: { library } },
-  { payload: node }
-) => {
-  set(library, node.id, node);
-};
+export const createLibraryNode = createEditorStateReducer<LibraryNode>(
+  ({ ecs: { library } }, { payload: node }) => {
+    set(library, node.id, node);
+  }
+);

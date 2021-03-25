@@ -11,18 +11,21 @@ export const setSelectedObject = <K extends keyof EditorSelectionValues>(
     objectName: K;
     selectedValue: EditorSelectionValues[K];
   }
-): void => {
+): EditorState => {
   const { objectName, selectedValue } = payload;
   if (selectedValue === undefined) {
-    return; // Nothing selected for this object
+    return state; // Nothing selected for this object
   }
   const didChange = state.selection[objectName] !== selectedValue;
   if (!didChange) {
-    return; // Same selection
+    return state; // Same selection
   }
-  const { selection: reset } = resetSelection(state, objectName);
-  state.selection = {
-    ...reset,
-    [objectName]: selectedValue,
+  const { selection } = resetSelection(state, objectName);
+  return {
+    ...state,
+    selection: {
+      ...selection,
+      [objectName]: selectedValue,
+    },
   };
 };

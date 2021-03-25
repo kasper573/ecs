@@ -8,7 +8,6 @@ import {
   LibraryEntityNode,
 } from "../../ecs-serializable/types/LibraryNode";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { core } from "../slices/core";
 import { createEntityInitializer } from "./createEntityInitializer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {
@@ -41,13 +40,13 @@ test("creating an entity initializer copies all components from definition (with
   };
 
   // Perform test
-  createEntityInitializer(
-    initialState,
-    core.actions.createEntityInitializer(entityInitializer)
-  );
+  const updatedState = createEntityInitializer(initialState, {
+    type: "",
+    payload: entityInitializer,
+  });
 
   const updatedEntityInitializer = get(
-    initialState.ecs.entities,
+    updatedState.ecs.entities,
     entityInitializer.id
   );
 

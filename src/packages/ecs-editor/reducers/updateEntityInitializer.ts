@@ -1,17 +1,17 @@
-import { EditorStateReducer } from "../types/EditorStateReducer";
+import { get, set } from "../../nominal";
 import {
   EntityInitializer,
   EntityInitializerId,
 } from "../../ecs-serializable/types/EntityInitializer";
-import { get, set } from "../../nominal";
+import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
-export const updateEntityInitializer: EditorStateReducer<{
+export const updateEntityInitializer = createEditorStateReducer<{
   entityId: EntityInitializerId;
   update: Partial<EntityInitializer>;
-}> = ({ ecs: { entities } }, { payload: { entityId, update } }) => {
+}>(({ ecs: { entities } }, { payload: { entityId, update } }) => {
   const entity = get(entities, entityId);
   if (!entity) {
     throw new Error("Entity initializer not found");
   }
   set(entities, entityId, { ...entity, ...update });
-};
+});

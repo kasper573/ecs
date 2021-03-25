@@ -7,10 +7,7 @@ import {
 import { NativeComponents } from "../ecs-serializable/types/NativeComponents";
 import { EditorState } from "./types/EditorState";
 import { ensureSelection } from "./reducers/ensureSelection";
-import {
-  ensureNativeComponentsAction,
-  ensureNativeComponents,
-} from "./reducers/ensureNativeComponents";
+import { ensureNativeComponents } from "./reducers/ensureNativeComponents";
 import { core } from "./slices/core";
 
 type RootReducer = typeof core.reducer;
@@ -24,10 +21,10 @@ const createRootReducer = (nativeComponents: NativeComponents): RootReducer => (
   // React to state change with generic reducers that make
   // sure certain parts of the state is in a specific way
   state = ensureSelection(state);
-  state = ensureNativeComponents(
-    state,
-    ensureNativeComponentsAction(nativeComponents)
-  );
+  state = ensureNativeComponents(state, {
+    type: "",
+    payload: nativeComponents,
+  });
   return state;
 };
 

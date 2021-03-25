@@ -1,15 +1,15 @@
-import { EditorStateReducer } from "../types/EditorStateReducer";
+import { set } from "../../nominal";
+import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { set } from "../../nominal";
 
-export const updateLibraryNode: EditorStateReducer<{
+export const updateLibraryNode = createEditorStateReducer<{
   nodeId: LibraryNodeId;
   replacement: LibraryNode;
-}> = ({ ecs: { library } }, { payload: { nodeId, replacement } }) => {
+}>(({ ecs: { library } }, { payload: { nodeId, replacement } }) => {
   set(library, nodeId, replacement);
 
   // TODO call reactToLibraryUpdateReducer
-};
+});
