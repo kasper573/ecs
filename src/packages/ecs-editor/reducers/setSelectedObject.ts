@@ -1,5 +1,8 @@
 import { EditorState } from "../types/EditorState";
-import { EditorSelectionValues } from "../types/EditorSelection";
+import {
+  editorSelectionOrder,
+  EditorSelectionValues,
+} from "../types/EditorSelection";
 import { resetSelection } from "./resetSelection";
 
 /**
@@ -20,12 +23,23 @@ export const setSelectedObject = <K extends keyof EditorSelectionValues>(
   if (!didChange) {
     return state; // Same selection
   }
-  const { selection } = resetSelection(state, objectName);
-  return {
+
+  // Apply selection
+  const updatedState: EditorState = {
     ...state,
     selection: {
-      ...selection,
+      ...state.selection,
       [objectName]: selectedValue,
     },
   };
+
+  // Reset selection for objects below the selected object
+  const nextObjectName =
+    editorSelectionOrder[editorSelectionOrder.indexOf(objectName) + 1];
+  if (nextObjectName) {
+    return resetSelection(updatedState, nextObjectName);
+  }
+
+  // Selected the deepest object, no need to reset
+  return updatedState;
 };
