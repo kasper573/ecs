@@ -16,9 +16,6 @@ export const setSelectedObject = <K extends keyof EditorSelectionValues>(
   }
 ): EditorState => {
   const { objectName, selectedValue } = payload;
-  if (selectedValue === undefined) {
-    return state; // Nothing selected for this object
-  }
   const didChange = state.selection[objectName] !== selectedValue;
   if (!didChange) {
     return state; // Same selection
