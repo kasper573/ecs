@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { without } from "lodash";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
@@ -6,13 +6,14 @@ import { PanelName } from "../components/PanelName";
 import { EntityInitializerIcon } from "../components/icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
-import { EditorStateContext } from "../EditorStateContext";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
+import { useSelector } from "../store";
+import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -24,13 +25,16 @@ export const EntityInitializerEditor = ({
   value: entityInitializer,
   onChange,
 }: EntityInitializerEditorProps) => {
-  const { libraryDefinitions } = useContext(EditorStateContext);
-  const entityDefinition = libraryDefinitions.entities.find(
-    (def) => def.id === entityInitializer.definitionId
-  )!;
+  const entityDefinition = useSelector(
+    selectEntityDefinition(entityInitializer.definitionId)
+  );
+  if (!entityDefinition) {
+    throw new Error(
+      "Can't edit entity initializer without entity definition available"
+    );
+  }
   const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent,
-    libraryDefinitions.components
+    removeComponent
   );
 
   function createComponent(definition: ComponentDefinition) {
@@ -63,10 +67,7 @@ export const EntityInitializerEditor = ({
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
-        <SelectComponentDefinitionButton
-          componentDefinitions={libraryDefinitions.components}
-          onSelected={createComponent}
-        />
+        <SelectComponentDefinitionButton onSelected={createComponent} />
       </PanelHeader>
       <InspectedObjectInfo
         icon={<EntityInitializerIcon />}
@@ -75,7 +76,6 @@ export const EntityInitializerEditor = ({
       <ComponentInitializerList
         baseItems={entityDefinition.components}
         primaryItems={entityInitializer.components}
-        definitions={libraryDefinitions.components}
         onChange={updateComponents}
         onRemove={askToDeleteComponent}
         onRestore={restoreComponent}

@@ -142,7 +142,8 @@ const mockScene = (
   };
   set(ecs.scenes, scene.id, scene);
   const lib = getDefinitionsInLibrary(
-    values(ecs.library).filter((node) => node.systemId === systemId)
+    ecs.library,
+    (node) => node.systemId === systemId
   );
   for (const def of values(lib.entities)) {
     const init: EntityInitializer = {

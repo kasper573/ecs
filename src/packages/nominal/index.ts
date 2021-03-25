@@ -1,7 +1,7 @@
 // Type safe operations on Records using a Nominal type as key
 
 export const get = <T extends Record<keyof any, unknown>>(o: T, key: keyof T) =>
-  o[key] as ValueOf<T>;
+  o[key] as ValueOf<T> | undefined;
 
 export const set = <T extends Record<keyof any, unknown>>(
   o: T,

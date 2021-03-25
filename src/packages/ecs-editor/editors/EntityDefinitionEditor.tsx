@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { without } from "lodash";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
@@ -10,7 +10,6 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { EditorStateContext } from "../EditorStateContext";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
@@ -23,10 +22,8 @@ export const EntityDefinitionEditor = ({
   value,
   onChange,
 }: EntityDefinitionEditorProps) => {
-  const { libraryDefinitions } = useContext(EditorStateContext);
   const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent,
-    libraryDefinitions.components
+    removeComponent
   );
 
   function addComponent(definition: ComponentDefinition) {
@@ -54,15 +51,11 @@ export const EntityDefinitionEditor = ({
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
-        <SelectComponentDefinitionButton
-          componentDefinitions={libraryDefinitions.components}
-          onSelected={addComponent}
-        />
+        <SelectComponentDefinitionButton onSelected={addComponent} />
       </PanelHeader>
       <InspectedObjectInfo icon={<EntityDefinitionIcon />} name={value.name} />
       <ComponentInitializerList
         primaryItems={value.components}
-        definitions={libraryDefinitions.components}
         onChange={updateComponents}
         onRemove={askToDeleteComponent}
       />

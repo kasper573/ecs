@@ -5,6 +5,7 @@ import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
 import { useDispatch, useSelector } from "../store";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { core } from "../slices/core";
+import { selectSelectedScene } from "../selectors/selectSelectedScene";
 
 /**
  * Synchronizes scene selection in Editor and System state.
@@ -13,7 +14,7 @@ import { core } from "../slices/core";
 export const useSceneSync = (system: System | undefined) => {
   const [, refresh] = useReducer((n) => n + 1, 0);
   const dispatch = useDispatch();
-  const editorSceneId = useSelector(({ selection }) => selection.scene);
+  const editorSceneId = useSelector(selectSelectedScene)?.id;
 
   const updateSystemSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);

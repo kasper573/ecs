@@ -4,19 +4,15 @@ import { TextSystem } from "../../ecs-react/TextSystem";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { EditorState } from "../types/EditorState";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import { useSystemInitializer } from "../hooks/useSystemInitializer";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../functions/uuid";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
-import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { useDialog } from "../hooks/useDialog";
 import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import { omit } from "../functions/omit";
-import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import {
   AddIcon,
   EntityInitializerIcon,
@@ -37,44 +33,19 @@ import { LibraryTree } from "../components/LibraryTree";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { SimpleDialog } from "../components/SimpleDialog";
 import { InspectedObject } from "../types/InspectedObject";
-import { EditorStateContext } from "../EditorStateContext";
 import { EditorSelectionName } from "../types/EditorSelection";
 import { renameLibraryNode } from "../functions/renameLibraryNode";
 import { useDispatch, useSelector } from "../store";
 import { values } from "../../nominal";
 import { requireSelection } from "../functions/requireSelection";
 import { core } from "../slices/core";
+import { selectTopLevelState } from "../selectors/selectTopLevelState";
 import { InspectedObjectEditor } from "./InspectedObjectEditor";
-
-export type EditorProps = {
-  nativeComponents: NativeComponents;
-};
-
-const selectDerivedState = (state: EditorState) => {
-  const { ecs, selection } = state;
-  const selected = selectSelectedObjects(state);
-  const selectedSystemLibrary = values(ecs.library).filter(
-    (node) => node.systemId === selection.system
-  );
-  return {
-    ecs,
-    selection,
-    selected,
-    selectedSystemScenes: values(ecs.scenes).filter(
-      (scene) => scene.systemId === selection.system
-    ),
-    selectedSceneEntities: values(ecs.entities).filter(
-      (entity) => entity.sceneId === selection.scene
-    ),
-    selectedSystemLibrary,
-    libraryDefinitions: getDefinitionsInLibrary(selectedSystemLibrary),
-  };
-};
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
  */
-export const Editor = ({ nativeComponents }: EditorProps) => {
+export const Editor = () => {
   const {
     ecs,
     selected,
@@ -82,10 +53,9 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
     selectedSystemScenes,
     selectedSystemLibrary,
     selectedSceneEntities,
-    libraryDefinitions,
-  } = useSelector(selectDerivedState);
+  } = useSelector(selectTopLevelState);
 
-  const [system, resetSystem] = useSystemInitializer(nativeComponents);
+  const [system, resetSystem] = useSystemInitializer();
   useSceneSync(system);
 
   const dispatch = useDispatch();
@@ -308,7 +278,6 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
             <Panel name={PanelName.Instances}>
               <PanelHeader title={PanelName.Instances}>
                 <CreateEntityInitializerButton
-                  entityDefinitions={values(libraryDefinitions.entities)}
                   onCreate={(entityInitializer) =>
                     dispatch(
                       core.actions.createEntityInitializer(entityInitializer)
@@ -355,20 +324,10 @@ export const Editor = ({ nativeComponents }: EditorProps) => {
             </Panel>
             <Panel name={PanelName.Inspector}>
               {selected.inspected && (
-                <EditorStateContext.Provider
-                  value={{
-                    nativeComponents,
-                    libraryDefinitions: {
-                      entities: values(libraryDefinitions.entities),
-                      components: values(libraryDefinitions.components),
-                    },
-                  }}
-                >
-                  <InspectedObjectEditor
-                    value={selected.inspected}
-                    onChange={saveInspectorChange}
-                  />
-                </EditorStateContext.Provider>
+                <InspectedObjectEditor
+                  value={selected.inspected}
+                  onChange={saveInspectorChange}
+                />
               )}
             </Panel>
           </>

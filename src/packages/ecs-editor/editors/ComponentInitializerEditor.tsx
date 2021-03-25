@@ -4,7 +4,7 @@ import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInit
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createComponentProperties } from "../../ecs-serializable/factories/createComponentProperties";
 import { updateComponentPropertiesDefinition } from "../../ecs-serializable/factories/updateComponentPropertiesDefinition";
-import { EditorStateContext } from "../EditorStateContext";
+import { NativeComponentsContext } from "../NativeComponentsContext";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { keys } from "../../nominal";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
@@ -22,7 +22,7 @@ export const ComponentInitializerEditor = ({
   definition,
   onChange,
 }: ComponentInitializerEditorProps) => {
-  const { nativeComponents } = useContext(EditorStateContext);
+  const nativeComponents = useContext(NativeComponentsContext);
 
   const baseProperties = useMemo(
     () => (base ? createComponentProperties(base.properties) : {}),
