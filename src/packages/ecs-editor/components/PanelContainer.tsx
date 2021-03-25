@@ -26,8 +26,8 @@ export const PanelContainer = styled.div`
     grid-template-rows: auto auto auto auto auto;
     grid-template-areas:
       "${panels.Runtime}"
-      "${panels.Inspector}"
       "${panels.Instances}"
+      "${panels.Inspector}"
       "${panels.Library}"
       "${panels.Scenes}"
     ;
