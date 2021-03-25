@@ -9,6 +9,7 @@ import {
 import React, { ComponentType } from "react";
 import styled from "styled-components";
 import { useContextMenu } from "../hooks/useContextMenu";
+import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
 
 export type CrudListItemProps<
   D extends React.ElementType = "li",
@@ -38,13 +39,14 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   icon: Icon,
   ...listItemProps
 }: CrudListItemProps<D, P>) => {
+  const ref = useOnFocusedAndKeyPressed("Delete", onDelete);
   const [triggerProps, menu] = useContextMenu([
     onEdit && <MenuItem onClick={onEdit}>Rename</MenuItem>,
     onDelete && <MenuItem onClick={onDelete}>Delete</MenuItem>,
   ]);
 
   return (
-    <ListItem {...triggerProps} {...listItemProps}>
+    <ListItem {...triggerProps} {...listItemProps} innerRef={ref}>
       {menu}
       {Icon && (
         <ListItemAvatar>

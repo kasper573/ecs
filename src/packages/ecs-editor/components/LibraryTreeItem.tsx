@@ -6,6 +6,7 @@ import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -25,6 +26,11 @@ export const LibraryTreeItem = ({
   onEdit,
   onDelete,
 }: LibraryTreeItemProps) => {
+  const ref = useOnFocusedAndKeyPressed(
+    "Delete",
+    onDelete ? () => onDelete(node.value) : undefined
+  );
+
   const [triggerProps, menu] = useContextMenu([
     onEdit && <MenuItem onClick={() => onEdit(node.value)}>Rename</MenuItem>,
     onDelete && (
@@ -38,6 +44,7 @@ export const LibraryTreeItem = ({
   const expandIcon = isFolder ? <FolderIcon /> : <LabelIcon />;
   return (
     <TreeItemWithoutFocusColor
+      ref={ref}
       key={node.value.id}
       nodeId={node.value.id}
       label={getLibraryNodeLabel(node.value)}
