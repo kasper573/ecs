@@ -1,10 +1,12 @@
 import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
-import { selectSelectedObjects } from "../selectors/selectSelectedObjects";
 import {
   EditorSelectionName,
   editorSelectionOrder,
 } from "../types/EditorSelection";
 import { EditorState } from "../types/EditorState";
+import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
+import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
+import { selectInspectedObject } from "../selectors/selectInspectedObject";
 import { setSelectedObject } from "./setSelectedObject";
 
 /**
@@ -17,10 +19,9 @@ export const ensureSelection = (state: EditorState): EditorState =>
       state: EditorState,
       objectName: ObjectName
     ) => {
-      const selected = selectSelectedObjects(state);
-      const objectForSelection = selected[objectName];
-      if (objectForSelection) {
-        return state; // Current selection is valid, resolves to an object
+      const resolvedObject = objectSelectors[objectName](state);
+      if (resolvedObject) {
+        return state; // Current selection is valid
       }
       return setSelectedObject(state, {
         objectName,
@@ -29,3 +30,9 @@ export const ensureSelection = (state: EditorState): EditorState =>
     },
     state
   );
+
+const objectSelectors = {
+  system: selectSelectedSystemDefinition,
+  scene: selectSelectedSceneDefinition,
+  inspected: selectInspectedObject,
+};

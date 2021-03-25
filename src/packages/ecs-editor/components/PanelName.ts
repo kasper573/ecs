@@ -2,7 +2,7 @@
  * All known editor panels.
  */
 export enum PanelName {
-  Scene = "Scene",
+  Runtime = "Runtime",
   Instances = "Instances",
   Inspector = "Inspector",
   Scenes = "Scenes",

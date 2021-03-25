@@ -1,8 +1,17 @@
 import { EditorState } from "../types/EditorState";
-import { get } from "../../nominal";
+import { values } from "../../nominal";
 import { ComponentDefinitionId } from "../../ecs-serializable/types/ComponentDefinition";
-import { selectLibraryDefinitions } from "./selectLibraryDefinitions";
+import { LibraryComponentNode } from "../../ecs-serializable/types/LibraryNode";
 
 export const selectComponentDefinition = (id?: ComponentDefinitionId) => (
   state: EditorState
-) => (id ? get(selectLibraryDefinitions(state).components, id) : undefined);
+) => {
+  if (!id) {
+    return;
+  }
+  const node = values(state.ecs.library).find(
+    (node): node is LibraryComponentNode =>
+      node.type === "component" && node.component.id === id
+  );
+  return node?.component;
+};

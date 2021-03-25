@@ -51,12 +51,12 @@ test("creating an entity initializer copies all components from definition (with
   );
 
   // Should maintain the component passed in while creating entity
-  expect(updatedEntityInitializer.components).toContainEqual(
+  expect(updatedEntityInitializer?.components).toContainEqual(
     initializerComponent
   );
 
   // But should also copy the components in the definition
-  expect(updatedEntityInitializer.components).toContainEqual({
+  expect(updatedEntityInitializer?.components).toContainEqual({
     ...definitionComponent,
     properties: createComponentPropertiesDefinition({}),
   });

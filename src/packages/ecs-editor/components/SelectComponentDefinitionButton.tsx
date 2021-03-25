@@ -3,8 +3,7 @@ import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { useSelector } from "../store";
-import { selectLibraryDefinitions } from "../selectors/selectLibraryDefinitions";
-import { values } from "../../nominal";
+import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
 import { AddIcon } from "./icons";
 import { CommonPopper } from "./CommonPopper";
 
@@ -15,7 +14,7 @@ export type SelectComponentDefinitionButtonProps = {
 export const SelectComponentDefinitionButton = ({
   onSelected,
 }: SelectComponentDefinitionButtonProps) => {
-  const { components } = useSelector(selectLibraryDefinitions);
+  const components = useSelector(selectListOfComponentDefinition);
   return (
     <CommonPopper
       popupId="add-component"
@@ -41,7 +40,7 @@ export const SelectComponentDefinitionButton = ({
           />
         )}
         getOptionLabel={(definition) => definition.name}
-        options={values(components)}
+        options={components}
       />
     </CommonPopper>
   );

@@ -18,14 +18,14 @@ export const PanelContainer = styled.div`
   grid-template-columns: 300px auto 300px 300px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "${panels.Scenes} ${panels.Scene} ${panels.Instances} ${panels.Inspector}"
-    "${panels.Scenes} ${panels.Scene} ${panels.Instances} ${panels.Library}"
+    "${panels.Scenes} ${panels.Runtime} ${panels.Instances} ${panels.Inspector}"
+    "${panels.Scenes} ${panels.Runtime} ${panels.Instances} ${panels.Library}"
   ;
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
     grid-template-rows: auto auto auto auto auto;
     grid-template-areas:
-      "${panels.Scene}"
+      "${panels.Runtime}"
       "${panels.Inspector}"
       "${panels.Instances}"
       "${panels.Library}"

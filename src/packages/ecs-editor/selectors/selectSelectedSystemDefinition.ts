@@ -1,7 +1,7 @@
 import { EditorState } from "../types/EditorState";
 import { get } from "../../nominal";
 
-export const selectSelectedSystem = ({
+export const selectSelectedSystemDefinition = ({
   selection,
   ecs: { systems },
 }: EditorState) =>

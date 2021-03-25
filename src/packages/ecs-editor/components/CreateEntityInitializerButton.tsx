@@ -4,10 +4,8 @@ import { Autocomplete } from "@material-ui/lab";
 import { uuid } from "../functions/uuid";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { useSelector } from "../store";
-import { requireSelection } from "../functions/requireSelection";
-import { selectLibraryDefinitions } from "../selectors/selectLibraryDefinitions";
-import { values } from "../../nominal";
 import { selectEditorSelection } from "../selectors/selectEditorSelection";
+import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 import { CommonPopper } from "./CommonPopper";
 import { AddIcon } from "./icons";
 
@@ -18,8 +16,11 @@ export type CreateEntityInitializerButtonProps = {
 export const CreateEntityInitializerButton = ({
   onCreate,
 }: CreateEntityInitializerButtonProps) => {
-  const selection = useSelector(selectEditorSelection);
-  const { entities } = useSelector(selectLibraryDefinitions);
+  const { system, scene } = useSelector(selectEditorSelection);
+  const entities = useSelector(selectListOfEntityDefinition);
+  if (!system || !scene) {
+    return null; // Can't create entity without system and scene selected
+  }
   return (
     <CommonPopper
       popupId="instantiate-entity"
@@ -35,8 +36,8 @@ export const CreateEntityInitializerButton = ({
         onChange={(e, definition) => {
           if (definition) {
             onCreate({
-              systemId: requireSelection(selection, "system"),
-              sceneId: requireSelection(selection, "scene"),
+              systemId: system,
+              sceneId: scene,
               id: uuid(),
               name: definition.name,
               definitionId: definition.id,
@@ -52,7 +53,7 @@ export const CreateEntityInitializerButton = ({
           />
         )}
         getOptionLabel={(entity) => entity.name}
-        options={values(entities)}
+        options={entities}
       />
     </CommonPopper>
   );
