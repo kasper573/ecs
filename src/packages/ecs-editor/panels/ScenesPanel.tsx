@@ -20,7 +20,7 @@ export const ScenesPanel = () => {
   const selectedScene = useSelector(selectSelectedSceneDefinition);
   const scenes = useSelector(selectListOfSceneDefinition);
   const dispatch = useDispatch();
-  const [sceneEvents, SceneDialogs] = useCrudDialogs<SceneDefinition>({
+  const [sceneEvents, sceneDialogs] = useCrudDialogs<SceneDefinition>({
     createDialogTitle: "Add scene",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
@@ -48,7 +48,7 @@ export const ScenesPanel = () => {
 
   return (
     <Panel name={PanelName.Scenes}>
-      <SceneDialogs />
+      {sceneDialogs}
       <PanelHeader title={PanelName.Scenes}>
         {selectedSystem && (
           <Tooltip title="Add scene">

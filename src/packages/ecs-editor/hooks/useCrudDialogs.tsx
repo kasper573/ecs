@@ -1,6 +1,6 @@
-import React, { useState } from "react";
 import { DeleteDialog } from "../components/DeleteDialog";
 import { NameDialog } from "../components/NameDialog";
+import { useRenderProxy } from "./useRenderProxy";
 
 export type UseCrudDialogsProps<T> = {
   /**
@@ -40,63 +40,48 @@ export function useCrudDialogs<T>({
   onRenameItem,
   onDeleteItem,
 }: UseCrudDialogsProps<T>) {
-  // State
-  const [dialog, setDialog] = useState<DialogKind>();
-  const [selectedItem, selectItem] = useState<T>();
-  const selectedItemName = selectedItem ? getItemName(selectedItem) : "";
+  const [setNameDialogProps, nameDialog] = useRenderProxy(NameDialog, {
+    open: false,
+  });
+  const [setDeleteDialogProps, deleteDialog] = useRenderProxy(DeleteDialog, {
+    open: false,
+  });
 
-  // Event handlers
-  const handleClose = () => setDialog(undefined);
-  const handleRename = (newName: string) =>
-    onRenameItem(selectedItem!, newName);
-  const handleDelete = () => onDeleteItem(selectedItem!);
+  const events = {
+    onCreateItem: () => {
+      setNameDialogProps({
+        open: true,
+        title: createDialogTitle,
+        defaultValue: "",
+        onSave: onCreateItem,
+        onClose: () => setNameDialogProps({ open: false }),
+      });
+    },
+    onUpdateItem: (item: T) => {
+      setNameDialogProps({
+        open: true,
+        title: `Edit ${getItemName(item)}`,
+        defaultValue: getItemName(item),
+        onSave: (name) => onRenameItem(item, name),
+        onClose: () => setNameDialogProps({ open: false }),
+      });
+    },
+    onDeleteItem: (item: T) => {
+      setDeleteDialogProps({
+        open: true,
+        name: getItemName(item),
+        onDelete: () => onDeleteItem(item),
+        onClose: () => setDeleteDialogProps({ open: false }),
+      });
+    },
+  };
 
-  // Actions
-  const showCreateDialog = () => {
-    selectItem(undefined);
-    setDialog("create");
-  };
-  const showRenameDialog = (item: T) => {
-    setDialog("rename");
-    selectItem(item);
-  };
-  const showDeleteDialog = (item: T) => {
-    setDialog("delete");
-    selectItem(item);
-  };
-
-  const Dialogs = () => (
+  const dialogs = (
     <>
-      <NameDialog
-        open={dialog === "create"}
-        title={createDialogTitle}
-        defaultValue={selectedItemName}
-        onClose={handleClose}
-        onSave={onCreateItem}
-      />
-      <NameDialog
-        open={dialog === "rename"}
-        title={`Edit "${selectedItemName}"`}
-        defaultValue={selectedItemName}
-        onClose={handleClose}
-        onSave={handleRename}
-      />
-      <DeleteDialog
-        open={dialog === "delete"}
-        onClose={handleClose}
-        onDelete={handleDelete}
-        name={selectedItemName}
-      />
+      {nameDialog}
+      {deleteDialog}
     </>
   );
 
-  const events = {
-    onCreateItem: showCreateDialog,
-    onUpdateItem: showRenameDialog,
-    onDeleteItem: showDeleteDialog,
-  };
-
-  return [events, Dialogs] as const;
+  return [events, dialogs] as const;
 }
-
-type DialogKind = "create" | "rename" | "delete";

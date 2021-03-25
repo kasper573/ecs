@@ -21,7 +21,7 @@ export const LibraryPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
-  const [libraryNodeEvents, LibraryNodeDialogs] = useCrudDialogs<LibraryNode>({
+  const [libraryNodeEvents, libraryNodeDialogs] = useCrudDialogs<LibraryNode>({
     createDialogTitle: "Add entity",
     getItemName: getLibraryNodeLabel,
     onCreateItem: (name) =>
@@ -44,7 +44,7 @@ export const LibraryPanel = () => {
   });
   return (
     <Panel name={PanelName.Library}>
-      <LibraryNodeDialogs />
+      {libraryNodeDialogs}
       <PanelHeader title="Library">
         {selectedSystem && (
           <Tooltip title="Create entity">

@@ -16,7 +16,7 @@ export const SystemsPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systems = useSelector(selectListOfSystemDefinition);
   const dispatch = useDispatch();
-  const [systemEvents, SystemDialogs] = useCrudDialogs<SystemDefinition>({
+  const [systemEvents, systemDialogs] = useCrudDialogs<SystemDefinition>({
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
     onCreateItem: (name) =>
@@ -35,7 +35,7 @@ export const SystemsPanel = () => {
 
   return (
     <>
-      <SystemDialogs />
+      {systemDialogs}
       <PanelHeader title="Systems">
         <Tooltip title="Add system">
           <IconButton

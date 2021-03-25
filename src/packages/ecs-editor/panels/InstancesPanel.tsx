@@ -19,7 +19,7 @@ export const InstancesPanel = () => {
   const dispatch = useDispatch();
   const [
     entityInitializerEvents,
-    EntityInitializerDialogs,
+    entityInitializerDialogs,
   ] = useCrudDialogs<EntityInitializer>({
     createDialogTitle: "Initialize entity",
     getItemName: (item) => item.name,
@@ -41,7 +41,7 @@ export const InstancesPanel = () => {
   );
   return (
     <Panel name={PanelName.Instances}>
-      <EntityInitializerDialogs />
+      {entityInitializerDialogs}
       <PanelHeader title={PanelName.Instances}>
         <CreateEntityInitializerButton
           onCreate={(entityInitializer) =>

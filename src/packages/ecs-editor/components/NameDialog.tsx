@@ -33,7 +33,7 @@ export const NameDialog = ({
   open,
   title,
   defaultValue,
-  onClose = () => {},
+  onClose = noop,
   onSave,
   ...dialogProps
 }: NameDialogProps) => {
@@ -101,3 +101,5 @@ export const NameDialog = ({
     </Dialog>
   );
 };
+
+const noop = () => {};
