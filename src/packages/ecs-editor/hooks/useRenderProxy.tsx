@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import TypedEmitter from "typed-emitter";
+import { useAsRef } from "../../use-as-ref/useAsRef";
 
 export type AnyComponent<P = any> =
   | keyof JSX.IntrinsicElements
@@ -55,12 +56,15 @@ function RenderProxy<T extends AnyComponent>({
   component,
   basePayload,
 }: RenderProxyProps<T>) {
-  const [payload, setPayload] = useState<RenderProxyPayload<T>>();
+  const [payload, setPayload] = useState<RenderProxyPayload<T>>(basePayload);
+  const payloadRef = useAsRef(payload);
   useEffect(() => {
-    events.on("payload", setPayload);
+    events.on("payload", (payload) =>
+      setPayload({ ...payloadRef.current, ...payload })
+    );
     return () => {
       events.removeAllListeners();
     };
-  }, [events]);
-  return React.createElement(component, { ...basePayload, ...payload });
+  }, [events, payloadRef]);
+  return React.createElement(component, payload);
 }
