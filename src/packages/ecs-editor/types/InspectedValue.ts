@@ -10,7 +10,7 @@ export type InspectedValue =
 
 type InspectedLibraryNodeId = {
   type: "libraryNode";
-  id: LibraryNode["id"];
+  id: LibraryNode["nodeId"];
 };
 
 type InspectedEntityInitializerId = {

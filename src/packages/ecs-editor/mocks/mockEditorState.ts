@@ -8,45 +8,43 @@ import { uuid } from "../functions/uuid";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import {
-  LibraryComponentNode,
-  LibraryEntityNode,
-  LibraryFolderNode,
-} from "../../ecs-serializable/types/LibraryNode";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
 import { set, values } from "../../nominal";
-import { SerializableECS } from "../../ecs-serializable/types/SerializableECS";
+import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
+import { createEditorState } from "../functions/createEditorState";
 
 /**
  * Mocks a fixed number of instances of all object types belonging to EditorState
  */
-export const mockEditorState = (): EditorState => {
-  const ecs: SerializableECS = {
-    entities: {},
-    library: {},
-    scenes: {},
-    systems: {},
-  };
+export const mockEditorState = (
+  nativeComponentNames: string[] = mockNativeComponentNames(3),
+  mockSize = 3
+): EditorState => {
+  const ecs = createEditorState().ecs;
 
-  fixedAmount().forEach((nr) => mockSystem(ecs, nr));
+  mock(mockSize).forEach((nr) =>
+    mockSystem(ecs, nr, nativeComponentNames, mockSize)
+  );
 
   const system = values(ecs.systems)[0];
-  const scene = values(ecs.scenes).filter(
+  const scene = values(ecs.scenes).find(
     (scene) => scene.systemId === system.id
-  )[0];
-  const entity = values(ecs.entities).filter(
-    (init) => init.sceneId === scene.id
-  )[0];
+  );
+  const entity = values(ecs.entityInitializers).find(
+    (init) => init.sceneId === scene?.id
+  );
 
   return {
     ecs,
     selection: {
-      system: system.id,
-      scene: scene.id,
-      inspected: {
+      system: system?.id,
+      scene: scene?.id,
+      inspected: entity && {
         type: "entityInitializer",
         id: entity.id,
       },
@@ -54,67 +52,89 @@ export const mockEditorState = (): EditorState => {
   };
 };
 
-const mockSystem = (ecs: SerializableECS, nr: number) => {
+const mockNativeComponentNames = (mockSize: number) =>
+  mock(mockSize).map((nr) => `nativeComponent${nr}`);
+
+const mockSystem = (
+  ecs: ECSDefinition,
+  nr: number,
+  nativeComponentNames: string[],
+  mockSize: number
+) => {
   const system: SystemDefinition = {
     id: id(`system${nr}`),
     name: `System ${nr}`,
   };
   set(ecs.systems, system.id, system);
-  mockLibrary(ecs, system.id);
-  fixedAmount().map((nr) => mockScene(ecs, system.id, nr));
+  mockLibrary(ecs, system.id, nativeComponentNames, mockSize);
+  mock(mockSize).map((nr) => mockScene(ecs, system.id, nr));
 };
 
-const mockLibrary = (ecs: SerializableECS, systemId: SystemDefinitionId) => {
-  const componentDefinitions = fixedAmount().map(mockComponentDefinition);
-  const entityDefinitions = fixedAmount().map((nr) =>
-    mockEntityDefinition(nr, componentDefinitions)
-  );
+const mockLibrary = (
+  ecs: ECSDefinition,
+  systemId: SystemDefinitionId,
+  nativeComponentNames: string[],
+  mockSize: number
+) => {
+  const folders = mock(mockSize).map((nr) => {
+    const folder: LibraryFolder = {
+      systemId,
+      nodeId: id(`library-folder-node-id`),
+      id: id(`library-folder-id`),
+      name: `Folder ${nr}`,
+    };
+    set(ecs.libraryFolders, folder.id, folder);
+    return folder;
+  });
 
-  const nodes = [
-    ...entityDefinitions.map(
-      (entity): LibraryEntityNode => ({
-        systemId,
-        id: id("library-entity-node"),
-        type: "entity",
-        entity,
-      })
-    ),
-    ...componentDefinitions.map(
-      (component): LibraryComponentNode => ({
-        systemId,
-        id: id("library-component-node"),
-        type: "component",
-        component,
-      })
-    ),
-    ...fixedAmount().map(
-      (nr): LibraryFolderNode => ({
-        systemId,
-        id: id(`library-folder-node`),
-        type: "folder",
-        name: `Folder ${nr}`,
-      })
-    ),
-  ];
-
-  for (const node of nodes) {
-    set(ecs.library, node.id, node);
+  for (let i = 0; i < folders.length; i++) {
+    const folder = folders[i];
+    const next = folders[i + 1];
+    if (next) {
+      next.parentNodeId = folder.nodeId;
+    }
   }
+
+  const componentDefinitions = mock(mockSize).map((nr) => {
+    const def = mockComponentDefinition(
+      nr,
+      systemId,
+      nativeComponentNames[nr % nativeComponentNames.length]
+    );
+    def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
+    set(ecs.componentDefinitions, def.id, def);
+    return def;
+  });
+
+  mock(mockSize).forEach((nr) => {
+    const def = mockEntityDefinition(nr, systemId, componentDefinitions);
+    def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
+    set(ecs.entityDefinitions, def.id, def);
+  });
 };
 
 const mockEntityDefinition = (
   nr: number,
+  systemId: SystemDefinitionId,
   definitions: ComponentDefinition[]
 ): EntityDefinition => ({
+  systemId,
+  nodeId: id(`entity-definition-node-id${nr}`),
   id: id(`entity-definition${nr}`),
   name: `Entity${nr}`,
   components: definitions.map(mockComponentInitializer),
 });
 
-const mockComponentDefinition = (nr: number): ComponentDefinition => ({
+const mockComponentDefinition = (
+  nr: number,
+  systemId: SystemDefinitionId,
+  nativeComponentName: string
+): ComponentDefinition => ({
+  systemId,
+  nodeId: id(`component-definition-node-id${nr}`),
   id: id(`component-definition${nr}`),
   name: `Component ${nr}`,
-  nativeComponent: `NativeComponent${nr}`,
+  nativeComponent: nativeComponentName,
 });
 
 const mockComponentInitializer = (
@@ -131,33 +151,30 @@ const mockComponentInitializer = (
 });
 
 const mockScene = (
-  ecs: SerializableECS,
+  ecs: ECSDefinition,
   systemId: SystemDefinitionId,
   nr: number
 ) => {
+  const systemECS = getECSDefinitionForSystem(ecs, systemId);
   const scene: SceneDefinition = {
     systemId,
     id: id(`scene${nr}`),
     name: `Scene ${nr}`,
   };
   set(ecs.scenes, scene.id, scene);
-  const lib = getDefinitionsInLibrary(
-    ecs.library,
-    (node) => node.systemId === systemId
-  );
-  for (const def of values(lib.entities)) {
+  for (const def of values(systemECS.entityDefinitions)) {
     const init: EntityInitializer = {
       systemId,
       sceneId: scene.id,
       id: id("entity-initializer"),
       definitionId: def.id,
       name: def.name,
-      components: values(lib.components).map(mockComponentInitializer),
+      components: def.components.map(inheritComponentInitializer),
     };
-    set(ecs.entities, init.id, init);
+    set(ecs.entityInitializers, init.id, init);
   }
 };
 
-const fixedAmount = () => range(0, 3);
+const mock = (n: number) => range(1, n + 1);
 
 const id = <T extends string>(name: string) => `${name} (${uuid()})` as T;

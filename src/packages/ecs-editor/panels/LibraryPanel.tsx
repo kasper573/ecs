@@ -9,38 +9,49 @@ import { LibraryTree } from "../components/LibraryTree";
 import { core } from "../slices/core";
 import { Panel } from "../components/Panel";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { uuid } from "../functions/uuid";
-import { renameLibraryNode } from "../functions/renameLibraryNode";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
+import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 
 export const LibraryPanel = () => {
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
-  const [libraryNodeEvents, libraryNodeDialogs] = useCrudDialogs<LibraryNode>({
+  const [
+    libraryNodeEvents,
+    libraryNodeDialogs,
+  ] = useCrudDialogs<DiscriminatedLibraryNode>({
     createDialogTitle: "Add entity",
-    getItemName: getLibraryNodeLabel,
+    getItemName: (node) => node.name,
     onCreateItem: (name) =>
       dispatch(
-        core.actions.createLibraryNode({
-          systemId: selectedSystem?.id!,
+        core.actions.createEntityDefinition({
+          nodeId: uuid(),
           id: uuid(),
-          type: "entity",
-          entity: { id: uuid(), name, components: [] },
+          systemId: selectedSystem?.id!,
+          name,
+          components: [],
         })
       ),
     onRenameItem: (target, name) =>
       dispatch(
-        core.actions.updateLibraryNode({
-          nodeId: target.id,
-          replacement: renameLibraryNode(target, name),
+        core.actions.renameLibraryNode({
+          nodeId: target.nodeId,
+          name,
         })
       ),
-    onDeleteItem: (node) => dispatch(core.actions.deleteLibraryNode(node.id)),
+    onDeleteItem: (node) => {
+      switch (node.type) {
+        case "entity":
+          return dispatch(core.actions.deleteEntityDefinition(node.id));
+        case "component":
+          return dispatch(core.actions.deleteComponentDefinition(node.id));
+        case "folder":
+          return dispatch(core.actions.deleteLibraryFolder(node.id));
+      }
+    },
   });
   return (
     <Panel name={PanelName.Library}>
@@ -63,8 +74,8 @@ export const LibraryPanel = () => {
         library={nodes}
         onEdit={libraryNodeEvents.onUpdateItem}
         onDelete={libraryNodeEvents.onDeleteItem}
-        onSelectedChange={(node) =>
-          dispatch(core.actions.selectLibraryNode(node.id))
+        onSelectedChange={({ nodeId }) =>
+          dispatch(core.actions.setSelectedLibraryNode(nodeId))
         }
       />
     </Panel>

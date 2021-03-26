@@ -1,20 +1,17 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import { TreeView } from "@material-ui/lab";
-import {
-  LibraryNode,
-  LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
-import { TreeNode } from "../types/TreeNode";
 import { get, set } from "../../nominal";
+import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 import { LibraryTreeItemProps } from "./LibraryTreeItem";
 
 export type LibraryTreeProps = {
-  selected?: LibraryNode;
-  onSelectedChange: (newSelected: LibraryNode) => void;
-  library: LibraryNode[];
+  selected?: DiscriminatedLibraryNode;
+  onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
+  library: DiscriminatedLibraryNode[];
 } & Pick<LibraryTreeItemProps, "onEdit" | "onDelete">;
 
 /**
@@ -30,8 +27,8 @@ export const LibraryTree = ({
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
     const map = library.reduce(
-      (map, node) => set(map, node.id, node),
-      {} as Record<LibraryNodeId, LibraryNode>
+      (map, node) => set(map, node.nodeId, node),
+      {} as Record<LibraryNodeId, DiscriminatedLibraryNode>
     );
     return [
       map,
@@ -43,18 +40,15 @@ export const LibraryTree = ({
     setExpanded(nodeIds as LibraryNodeId[]);
 
   const handleSelect = (e: ChangeEvent<{}>, nodeIdStr: string) => {
-    // Cannot select folders
     const nodeId = nodeIdStr as LibraryNodeId;
-    const node = get(nodeMap, nodeId);
-    if (node && node.type !== "folder") {
-      onSelectedChange(node);
-    }
+    const node = get(nodeMap, nodeId)!;
+    onSelectedChange(node);
   };
 
   return (
     <TreeView
       expanded={expanded}
-      selected={selected?.id ?? ""}
+      selected={selected?.nodeId ?? ""}
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
@@ -63,11 +57,5 @@ export const LibraryTree = ({
   );
 };
 
-const compareLibraryTreeNodes = (
-  a: TreeNode<LibraryNode>,
-  b: TreeNode<LibraryNode>
-) => {
-  const aLabel = getLibraryNodeLabel(a.value);
-  const bLabel = getLibraryNodeLabel(b.value);
-  return aLabel.localeCompare(bLabel);
-};
+const compareLibraryTreeNodes = (a: LibraryTreeNode, b: LibraryTreeNode) =>
+  a.value.name.localeCompare(b.value.name);

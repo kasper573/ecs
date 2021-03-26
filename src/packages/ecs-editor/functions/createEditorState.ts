@@ -4,8 +4,10 @@ export const createEditorState = (): EditorState => ({
   ecs: {
     systems: {},
     scenes: {},
-    entities: {},
-    library: {},
+    entityInitializers: {},
+    entityDefinitions: {},
+    componentDefinitions: {},
+    libraryFolders: {},
   },
   selection: {},
 });

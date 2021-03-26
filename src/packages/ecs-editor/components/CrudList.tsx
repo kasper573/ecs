@@ -15,6 +15,10 @@ export type CrudListProps<T> = Omit<ListProps, "onChange"> & {
   /**
    * Resolves the CrudListItemProps to pass on to each rendered CrudListItem
    */
+  getItemKey?: (item: T, index: number) => string | number;
+  /**
+   * Resolves the CrudListItemProps to pass on to each rendered CrudListItem
+   */
   getItemProps?: (item: T) => Partial<CrudListItemProps>;
   /**
    * Called when an item is selected
@@ -47,7 +51,8 @@ export function CrudList<T>({
   title,
   items,
   active,
-  getItemProps = () => ({}),
+  getItemKey = defaultKey,
+  getItemProps = defaultProps,
   onSelectItem,
   onUpdateItem,
   onDeleteItem,
@@ -58,7 +63,7 @@ export function CrudList<T>({
     <List {...listProps}>
       {items.map((item, index) => (
         <CrudListItem
-          key={index}
+          key={getItemKey(item, index)}
           name={`Item ${index + 1}`}
           onClick={onSelectItem ? () => onSelectItem(item) : undefined}
           onEdit={onUpdateItem ? () => onUpdateItem(item) : undefined}
@@ -71,3 +76,7 @@ export function CrudList<T>({
     </List>
   );
 }
+
+const defaultProps = () => ({});
+
+const defaultKey = (item: unknown, index: number) => index;

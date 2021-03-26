@@ -29,7 +29,7 @@ export const SystemsPanel = () => {
       dispatch(core.actions.deleteSystemDefinition(system.id)),
   });
   const handleSystemSelected = useCallback(
-    (system) => dispatch(core.actions.selectSystemDefinition(system.id)),
+    (system) => dispatch(core.actions.setSelectedSystemDefinition(system.id)),
     [dispatch]
   );
 
@@ -52,11 +52,14 @@ export const SystemsPanel = () => {
         items={systems}
         onSelectItem={handleSystemSelected}
         getItemProps={getItemProps}
+        getItemKey={getItemKey}
         {...omit(systemEvents, "onCreateItem")}
       />
     </>
   );
 };
+
+const getItemKey = ({ id }: SystemDefinition) => id;
 
 const getItemProps = ({ name }: SystemDefinition) => ({
   name,

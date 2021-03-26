@@ -2,7 +2,7 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
 import { setSelectedObject } from "./setSelectedObject";
 
-export const selectEntityInitializer = createEditorStateReducer<EntityInitializerId>(
+export const setSelectedEntityInitializer = createEditorStateReducer<EntityInitializerId>(
   (state, { payload: entityInitializerId }) =>
     setSelectedObject(state, {
       objectName: "inspected",

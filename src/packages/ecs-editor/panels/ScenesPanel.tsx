@@ -42,7 +42,7 @@ export const ScenesPanel = () => {
       dispatch(core.actions.deleteSceneDefinition(scene.id)),
   });
   const handleSceneSelected = useCallback(
-    (scene) => dispatch(core.actions.selectSceneDefinition(scene.id)),
+    (scene) => dispatch(core.actions.setSelectedSceneDefinition(scene.id)),
     [dispatch]
   );
 
@@ -67,11 +67,14 @@ export const ScenesPanel = () => {
         active={selectedScene}
         items={scenes}
         getItemProps={getItemProps}
+        getItemKey={getItemKey}
         onSelectItem={handleSceneSelected}
         {...omit(sceneEvents, "onCreateItem")}
       />
     </Panel>
   );
 };
+
+const getItemKey = ({ id }: SceneDefinition) => id;
 
 const getItemProps = ({ name }: SceneDefinition) => ({ name, icon: SceneIcon });

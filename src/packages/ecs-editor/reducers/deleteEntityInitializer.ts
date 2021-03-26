@@ -3,8 +3,8 @@ import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitiali
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
 export const deleteEntityInitializer = createEditorStateReducer<EntityInitializerId>(
-  ({ ecs: { entities } }, { payload: id }) => {
-    if (!remove(entities, id)) {
+  ({ ecs: { entityInitializers } }, { payload: id }) => {
+    if (!remove(entityInitializers, id)) {
       throw new Error("Could not remove entity");
     }
   }

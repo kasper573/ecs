@@ -31,7 +31,7 @@ export const useSceneSync = (system: System | undefined) => {
     const systemSceneId: SceneDefinitionId = sm?.sceneId;
     const didSceneChange = editorSceneId !== systemSceneId;
     if (didSceneChange) {
-      dispatch(core.actions.selectSceneDefinition(systemSceneId));
+      dispatch(core.actions.setSelectedSceneDefinition(systemSceneId));
     }
   };
 

@@ -26,4 +26,4 @@ export const values = <T extends Record<keyof any, unknown>>(o: T) =>
 
 export const keys = <T>(obj: T) => Object.keys(obj) as Array<keyof T>;
 
-type ValueOf<T> = T extends Record<keyof any, infer V> ? V : never;
+export type ValueOf<T> = T extends Record<keyof any, infer V> ? V : never;

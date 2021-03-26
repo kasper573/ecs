@@ -36,7 +36,7 @@ export const InstancesPanel = () => {
   });
   const handleNodeSelected = useCallback(
     (entityInitializer) =>
-      dispatch(core.actions.selectEntityInitializer(entityInitializer.id)),
+      dispatch(core.actions.setSelectedEntityInitializer(entityInitializer.id)),
     [dispatch]
   );
   return (
@@ -53,12 +53,15 @@ export const InstancesPanel = () => {
         active={selectedEntity}
         items={entities}
         getItemProps={getItemProps}
+        getItemKey={getItemKey}
         onSelectItem={handleNodeSelected}
         {...omit(entityInitializerEvents, "onCreateItem")}
       />
     </Panel>
   );
 };
+
+const getItemKey = ({ id }: EntityInitializer) => id;
 
 const getItemProps = ({ name }: EntityInitializer) => ({
   name,

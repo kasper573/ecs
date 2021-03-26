@@ -1,35 +1,33 @@
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { set, values } from "../../nominal";
 import { uuid } from "../functions/uuid";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
+import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 
 export const ensureNativeComponents = createEditorStateReducer<NativeComponents>(
-  ({ ecs: { library, systems } }, { payload: nativeComponents }) => {
-    const libraryNodeList = values(library);
-
+  (
+    { ecs: { componentDefinitions, systems } },
+    { payload: nativeComponents }
+  ) => {
+    const componentDefinitionList = values(componentDefinitions);
     for (const system of values(systems)) {
       for (const nativeComponentName of Object.keys(nativeComponents)) {
-        const hasComponent = libraryNodeList.find(
-          (node) =>
-            node.systemId === system.id &&
-            node.type === "component" &&
-            node.component.nativeComponent === nativeComponentName
+        const hasComponent = componentDefinitionList.find(
+          (component) =>
+            component.systemId === system.id &&
+            component.nativeComponent === nativeComponentName
         );
         if (hasComponent) {
           continue;
         }
-        const node: LibraryNode = {
+        const component: ComponentDefinition = {
+          nodeId: uuid(),
           id: uuid(),
-          type: "component",
           systemId: system.id,
-          component: {
-            name: nativeComponentName,
-            nativeComponent: nativeComponentName,
-            id: uuid(),
-          },
+          name: nativeComponentName,
+          nativeComponent: nativeComponentName,
         };
-        set(library, node.id, node);
+        set(componentDefinitions, component.id, component);
       }
     }
   }

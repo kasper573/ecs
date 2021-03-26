@@ -12,12 +12,15 @@ import { useContextMenu } from "../hooks/useContextMenu";
 import { ExpandAccordionIcon } from "../components/icons";
 import { useSelector } from "../store";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
-import { ComponentInitializerEditor } from "./ComponentInitializerEditor";
+import {
+  ComponentInitializerEditor,
+  ComponentInitializerEditorProps,
+} from "./ComponentInitializerEditor";
 
 export type ComponentInitializerAccordionProps = {
   base?: ComponentInitializer;
   primary?: ComponentInitializer;
-  onChange: (updated: ComponentInitializer) => void;
+  onUpdate: ComponentInitializerEditorProps["onChange"];
   onRestore?: (updated: ComponentInitializer) => void;
   onRemove?: (updated: ComponentInitializer) => void;
 };
@@ -25,7 +28,7 @@ export type ComponentInitializerAccordionProps = {
 export const ComponentInitializerAccordion = ({
   base,
   primary,
-  onChange,
+  onUpdate,
   onRemove = noop,
   onRestore = noop,
 }: ComponentInitializerAccordionProps) => {
@@ -64,7 +67,7 @@ export const ComponentInitializerAccordion = ({
             base={base}
             primary={primary}
             definition={definition}
-            onChange={onChange}
+            onChange={onUpdate}
           />
         </AccordionDetails>
       )}

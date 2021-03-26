@@ -1,89 +1,119 @@
 {
   "systems": {
-    "a5985c3f-1fcc-414c-bc37-4fa944f73727": {
-      "id": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
+    "6a734bf7-26b8-46c8-925f-0d5bfeebf599": {
+      "id": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
       "name": "Game"
     }
   },
   "scenes": {
-    "1672cc2a-5132-4235-a3ca-e87164441ecb": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "id": "1672cc2a-5132-4235-a3ca-e87164441ecb",
-      "name": "Room"
+    "a9ea7f60-e974-47bd-9482-4bf960d5b1d6": {
+      "id": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
+      "name": "Room",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599"
     }
   },
-  "entities": {
-    "6a64a11e-b6a7-4386-bc25-a2108db0e50e": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "sceneId": "1672cc2a-5132-4235-a3ca-e87164441ecb",
-      "id": "6a64a11e-b6a7-4386-bc25-a2108db0e50e",
-      "definitionId": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c",
-      "name": "Campfire",
+  "entityInitializers": {
+    "060788d9-86ba-4d2b-b27b-1789ba350f74": {
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
+      "id": "060788d9-86ba-4d2b-b27b-1789ba350f74",
+      "name": "Apple",
+      "definitionId": "95c75a22-1cb9-4008-9513-0eda7f92e71f",
       "components": [
         {
-          "id": "110cb4da-6a6e-414c-be95-b4ea53c9bb04",
-          "definitionId": "describable",
+          "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
+          "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
           "properties": "{}"
         },
         {
-          "id": "44a2942d-e511-4ad7-8dfb-5776cf285db2",
-          "definitionId": "interactive",
+          "id": "228a5967-62e5-47e2-b2ee-284baf8a1bd3",
+          "definitionId": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
+          "properties": "{}"
+        }
+      ]
+    },
+    "04a5322e-c883-4f40-adc3-bd6933548e39": {
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
+      "id": "04a5322e-c883-4f40-adc3-bd6933548e39",
+      "name": "Campfire",
+      "definitionId": "ca55d857-fbb6-4bb5-9c5b-3636eaac3801",
+      "components": [
+        {
+          "id": "abe409f6-593e-4e87-a2e2-5d4fa6dd0ec1",
+          "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
+          "properties": "{}"
+        },
+        {
+          "id": "69e04e0c-35ba-44da-9c33-1e9a162a668f",
+          "definitionId": "e0aca893-61d5-4329-b3af-b21e918c958f",
           "properties": "{}"
         }
       ]
     }
   },
-  "library": {
-    "describable": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "id": "describable",
-      "type": "component",
-      "component": {
-        "name": "describable",
-        "nativeComponent": "describable",
-        "id": "describable"
-      }
+  "entityDefinitions": {
+    "95c75a22-1cb9-4008-9513-0eda7f92e71f": {
+      "nodeId": "98ae8072-95f3-4e45-b798-cef5d68423c3",
+      "id": "95c75a22-1cb9-4008-9513-0eda7f92e71f",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "Apple",
+      "components": [
+        {
+          "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
+          "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
+          "properties": "{\"description\":\"You see an apple\"}"
+        },
+        {
+          "id": "228a5967-62e5-47e2-b2ee-284baf8a1bd3",
+          "definitionId": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
+          "properties": "{\"name\":\"apple\"}"
+        }
+      ],
+      "type": "entity"
     },
-    "collectable": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "id": "collectable",
-      "type": "component",
-      "component": {
-        "name": "collectable",
-        "nativeComponent": "collectable",
-        "id": "collectable"
-      }
-    },
-    "interactive": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "id": "interactive",
-      "type": "component",
-      "component": {
-        "name": "interactive",
-        "nativeComponent": "interactive",
-        "id": "interactive"
-      }
-    },
-    "ceb6b977-df67-4754-9d00-ab7ce1ddb3a7": {
-      "systemId": "a5985c3f-1fcc-414c-bc37-4fa944f73727",
-      "id": "ceb6b977-df67-4754-9d00-ab7ce1ddb3a7",
-      "type": "entity",
-      "entity": {
-        "components": [
-          {
-            "id": "110cb4da-6a6e-414c-be95-b4ea53c9bb04",
-            "definitionId": "describable",
-            "properties": "{\"description\":\"You see a sparkling campfire\"}"
-          },
-          {
-            "id": "44a2942d-e511-4ad7-8dfb-5776cf285db2",
-            "definitionId": "interactive",
-            "properties": "{\"action\":\"Sit down\",\"perform\":() =\u003E \"You feel warm\"}"
-          }
-        ],
-        "id": "eb63b6e1-b68c-486a-8b27-fec0bfea8a8c",
-        "name": "Campfire"
-      }
+    "ca55d857-fbb6-4bb5-9c5b-3636eaac3801": {
+      "nodeId": "8b5a542e-b4c9-4733-86ef-4295eb0b3ff0",
+      "id": "ca55d857-fbb6-4bb5-9c5b-3636eaac3801",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "Campfire",
+      "components": [
+        {
+          "id": "abe409f6-593e-4e87-a2e2-5d4fa6dd0ec1",
+          "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
+          "properties": "{\"description\":\"You see a sparkling campfire\"}"
+        },
+        {
+          "id": "69e04e0c-35ba-44da-9c33-1e9a162a668f",
+          "definitionId": "e0aca893-61d5-4329-b3af-b21e918c958f",
+          "properties": "{\"action\":\"Sit down\",\"perform\":() =\u003E \"You feel warm\"}"
+        }
+      ],
+      "type": "entity"
     }
-  }
+  },
+  "componentDefinitions": {
+    "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac": {
+      "nodeId": "b1bff000-f3f6-498e-8d55-ca5c7aa99304",
+      "id": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "describable",
+      "nativeComponent": "describable"
+    },
+    "fdc683d3-9701-432a-8891-8c9c1a3ee0aa": {
+      "nodeId": "62a565a0-5952-430e-9c39-c87354d16263",
+      "id": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "collectable",
+      "nativeComponent": "collectable"
+    },
+    "e0aca893-61d5-4329-b3af-b21e918c958f": {
+      "nodeId": "61d032ca-63e4-46fd-8caf-6b42380c3afa",
+      "id": "e0aca893-61d5-4329-b3af-b21e918c958f",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "interactive",
+      "nativeComponent": "interactive"
+    }
+  },
+  "libraryFolders": {}
 }

@@ -15,29 +15,26 @@ import { pullMap } from "./pullMap";
  * @param rootId Set to control which parentId to regard as the root. Defaults to undefined. Use this to select a subset of the hierarchy.
  * @param compareFn Set to sort each child group by this compare function.
  */
-export const createLibraryTree = (
-  library: LibraryNode[],
-  { rootId, compareFn }: CreateLibraryTreeOptions
-): TreeNode<LibraryNode>[] => {
-  const treeNodeMap = new Map<LibraryNodeId, TreeNode<LibraryNode>>();
-  const childrenMap = new Map<
-    LibraryNodeId | undefined,
-    TreeNode<LibraryNode>[]
-  >();
+export const createLibraryTree = <Node extends LibraryNode>(
+  library: Node[],
+  { rootId, compareFn }: CreateLibraryTreeOptions<Node>
+): TreeNode<Node>[] => {
+  const treeNodeMap = new Map<LibraryNodeId, TreeNode<Node>>();
+  const childrenMap = new Map<LibraryNodeId | undefined, TreeNode<Node>[]>();
 
   // Create TreeNode instances for all LibraryNodes
   // Create a map of all TreeNode children
   for (const libraryNode of library) {
     const treeNode = { value: libraryNode, children: [] };
-    treeNodeMap.set(libraryNode.id, treeNode);
-    const children = pullMap(childrenMap, libraryNode.parentId, []);
+    treeNodeMap.set(libraryNode.nodeId, treeNode);
+    const children = pullMap(childrenMap, libraryNode.parentNodeId, []);
     children.push(treeNode);
   }
 
   // Assign children to parent nodes
-  for (const { id } of library) {
-    const treeNode = treeNodeMap.get(id)!;
-    treeNode.children = childrenMap.get(id) ?? [];
+  for (const { nodeId } of library) {
+    const treeNode = treeNodeMap.get(nodeId)!;
+    treeNode.children = childrenMap.get(nodeId) ?? [];
 
     // Apply sort to all children
     if (compareFn) {
@@ -56,7 +53,7 @@ export const createLibraryTree = (
   return rootNodes;
 };
 
-type CreateLibraryTreeOptions = {
+type CreateLibraryTreeOptions<Node extends LibraryNode> = {
   rootId?: LibraryNodeId;
-  compareFn?: (a: TreeNode<LibraryNode>, b: TreeNode<LibraryNode>) => number;
+  compareFn?: (a: TreeNode<Node>, b: TreeNode<Node>) => number;
 };

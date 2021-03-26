@@ -3,11 +3,11 @@ import { Inventory } from "../../ecs-collectable/Inventory";
 import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
-import { getDefinitionsInLibrary } from "../functions/getDefinitionsInLibrary";
-import { SerializableECS } from "../types/SerializableECS";
+import { ECSDefinition } from "../types/ECSDefinition";
 import { SystemDefinitionId } from "../types/SystemDefinition";
 import { SceneDefinitionId } from "../types/SceneDefinition";
 import { keys, values } from "../../nominal";
+import { getECSDefinitionForSystem } from "../functions/getECSDefinitionForSystem";
 import { defineEntities } from "./defineEntities";
 import { defineComponents } from "./defineComponents";
 import { initializeEntitiesByScene } from "./initializeEntitiesByScene";
@@ -16,30 +16,29 @@ import { initializeEntitiesByScene } from "./initializeEntitiesByScene";
  * Creates a System instance for the specified SystemDefinition
  */
 export const createSystem = (
-  ecs: SerializableECS,
+  arbitraryECS: ECSDefinition,
   nativeComponents: NativeComponents,
-  systemId: SystemDefinitionId = values(ecs.systems)[0].id,
+  systemId: SystemDefinitionId = values(arbitraryECS.systems)[0].id,
   preferredSceneId?: SceneDefinitionId
 ): System => {
-  const systemLibrary = values(ecs.library).filter(
-    (node) => node.systemId === systemId
-  );
-  const systemScenes = values(ecs.scenes).filter(
-    (scene) => scene.systemId === systemId
-  );
-  const { entities, components } = getDefinitionsInLibrary(systemLibrary);
+  const {
+    scenes,
+    componentDefinitions,
+    entityDefinitions,
+    entityInitializers,
+  } = getECSDefinitionForSystem(arbitraryECS, systemId);
   const componentConstructors = defineComponents(
-    values(components),
+    values(componentDefinitions),
     nativeComponents
   );
   const entityConstructors = defineEntities(
-    values(entities),
+    values(entityDefinitions),
     componentConstructors
   );
   const entitiesByScene = initializeEntitiesByScene(
-    systemScenes,
-    values(ecs.entities),
-    values(entities),
+    values(scenes),
+    values(entityInitializers),
+    values(entityDefinitions),
     entityConstructors,
     componentConstructors
   );

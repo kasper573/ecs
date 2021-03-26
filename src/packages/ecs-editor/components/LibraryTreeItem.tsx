@@ -3,10 +3,9 @@ import { TreeItem } from "@material-ui/lab";
 import { MenuItem } from "@material-ui/core";
 import React from "react";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
-import { getLibraryNodeLabel } from "../functions/getLibraryNodeLabel";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
+import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -17,8 +16,8 @@ import { LibraryTreeItems } from "./LibraryTreeItems";
 
 export type LibraryTreeItemProps = {
   node: LibraryTreeNode;
-  onEdit?: (node: LibraryNode) => void;
-  onDelete?: (node: LibraryNode) => void;
+  onEdit?: (node: DiscriminatedLibraryNode) => void;
+  onDelete?: (node: DiscriminatedLibraryNode) => void;
 };
 
 export const LibraryTreeItem = ({
@@ -45,9 +44,9 @@ export const LibraryTreeItem = ({
   return (
     <TreeItemWithoutFocusColor
       ref={ref}
-      key={node.value.id}
-      nodeId={node.value.id}
-      label={getLibraryNodeLabel(node.value)}
+      key={node.value.nodeId}
+      nodeId={node.value.nodeId}
+      label={node.value.name}
       collapseIcon={collapseIcon}
       expandIcon={expandIcon}
       {...triggerProps}

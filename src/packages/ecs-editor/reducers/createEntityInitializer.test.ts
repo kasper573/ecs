@@ -3,39 +3,31 @@ import { createComponentPropertiesDefinition } from "../../ecs-serializable/fact
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { get, values } from "../../nominal";
 import { uuid } from "../functions/uuid";
-import {
-  LibraryComponentNode,
-  LibraryEntityNode,
-} from "../../ecs-serializable/types/LibraryNode";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { createEntityInitializer } from "./createEntityInitializer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {
   const initialState = mockEditorState();
-  const libraryEntityNode = values(initialState.ecs.library).find(
-    (node): node is LibraryEntityNode => node.type === "entity"
-  )!;
-  const libraryComponentNode = values(initialState.ecs.library).find(
-    (node): node is LibraryComponentNode => node.type === "component"
-  )!;
-  const scene = values(initialState.ecs.scenes).find(
-    (scene) => scene.systemId === libraryEntityNode.systemId
-  )!;
-
-  const definitionComponent = libraryEntityNode.entity.components[0];
+  const system = values(initialState.ecs.systems)[0];
+  const selectedECS = getECSDefinitionForSystem(initialState.ecs, system.id);
+  const entityDefinition = values(selectedECS.entityDefinitions)[0];
+  const componentDefinition = values(selectedECS.componentDefinitions)[0];
+  const scene = values(selectedECS.scenes)[0];
+  const definitionComponent = entityDefinition.components[0];
 
   const initializerComponent: ComponentInitializer = {
-    definitionId: libraryComponentNode.component.id,
+    definitionId: componentDefinition.id,
     properties: createComponentPropertiesDefinition({ foo: 123 }),
     id: uuid(),
   };
 
   const entityInitializer: EntityInitializer = {
-    systemId: libraryEntityNode.systemId,
+    systemId: system.id,
     sceneId: scene.id,
     id: uuid(),
-    definitionId: libraryEntityNode.entity.id,
-    name: libraryEntityNode.entity.name,
+    definitionId: entityDefinition.id,
+    name: entityDefinition.name,
     components: [initializerComponent],
   };
 
@@ -46,7 +38,7 @@ test("creating an entity initializer copies all components from definition (with
   });
 
   const updatedEntityInitializer = get(
-    updatedState.ecs.entities,
+    updatedState.ecs.entityInitializers,
     entityInitializer.id
   );
 

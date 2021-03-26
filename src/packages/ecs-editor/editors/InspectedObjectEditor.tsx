@@ -4,28 +4,16 @@ import { LibraryNodeEditor } from "./LibraryNodeEditor";
 
 export type InspectedObjectEditorProps = {
   value: InspectedObject;
-  onChange: (updated: InspectedObject, current: InspectedObject) => void;
 };
 
 export const InspectedObjectEditor = ({
   value,
-  onChange,
 }: InspectedObjectEditorProps) => {
   switch (value?.type) {
     case "entityInitializer":
-      return (
-        <EntityInitializerEditor
-          value={value.object}
-          onChange={(object) => onChange({ ...value, object }, value)}
-        />
-      );
+      return <EntityInitializerEditor value={value.object} />;
     case "libraryNode":
-      return (
-        <LibraryNodeEditor
-          value={value?.object}
-          onChange={(object) => onChange({ ...value, object }, value)}
-        />
-      );
+      return <LibraryNodeEditor value={value?.object} />;
   }
   return null;
 };

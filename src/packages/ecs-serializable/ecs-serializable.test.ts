@@ -1,5 +1,3 @@
-import * as fs from "fs";
-import * as path from "path";
 import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
@@ -15,9 +13,8 @@ import {
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
 import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
-import { LibraryNode, LibraryNodeId } from "./types/LibraryNode";
 import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
-import { SerializableECS } from "./types/SerializableECS";
+import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
 
@@ -36,15 +33,11 @@ const nativeComponents = {
   foo: Foo,
 };
 
-const serializedSystem = fs.readFileSync(
-  path.resolve(__dirname, "./fixtures/serializedSystem.json"),
-  "utf-8"
-);
-
-describe("instantiating a System using SystemDefinition", () => {
+describe("instantiating a System using ECSDefinition", () => {
   it("succeeds when using one entity", () => {
-    const entity: EntityDefinition = {
+    const entity: Omit<EntityDefinition, "systemId"> = {
       name: "Entity A",
+      nodeId: uid(),
       id: uid(),
       components: [],
     };
@@ -54,12 +47,14 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("succeeds when using one component", () => {
-    const component: ComponentDefinition = {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const entity: EntityDefinition = {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Entity A",
       components: [
@@ -75,12 +70,14 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("succeeds when using a component with options", () => {
-    const component: ComponentDefinition = {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const entity: EntityDefinition = {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Entity A",
       components: [
@@ -95,19 +92,15 @@ describe("instantiating a System using SystemDefinition", () => {
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
-  it("succeeds when using serialized data", () => {
-    const ecs: SerializableECS = JSON.parse(serializedSystem);
-    const system = createSystem(ecs, nativeComponents);
-    expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
-  });
-
   it("succeeds when using two entities with different ids", () => {
-    const entity1: EntityDefinition = {
+    const entity1: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       name: "Entity A",
       id: uid(),
       components: [],
     };
-    const entity2: EntityDefinition = {
+    const entity2: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       name: "Entity A",
       id: uid(),
       components: [],
@@ -134,28 +127,33 @@ describe("instantiating a System using SystemDefinition", () => {
       name: "entity",
       components: [],
     };
-    const ecs: SerializableECS = {
-      systems: [system],
-      scenes: [scene],
-      entities: [entity],
-      library: [],
+    const ecs: ECSDefinition = {
+      systems: { [system.id]: system },
+      scenes: { [scene.id]: scene },
+      entityInitializers: { [entity.id]: entity },
+      entityDefinitions: {},
+      componentDefinitions: {},
+      libraryFolders: {},
     };
 
     expect(() => createSystem(ecs, nativeComponents)).toThrow();
   });
 
   it("succeeds when using two components with different ids", () => {
-    const component1: ComponentDefinition = {
+    const component1: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const component2: ComponentDefinition = {
+    const component2: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const entity: EntityDefinition = {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Entity A",
       components: [
@@ -176,7 +174,8 @@ describe("instantiating a System using SystemDefinition", () => {
   });
 
   it("throws error when referencing component that doesn't exist", () => {
-    const entity: EntityDefinition = {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
       id: uid(),
       name: "Entity A",
       components: [
@@ -195,14 +194,16 @@ let idCounter = 0;
 const uid = <T extends string>() => ("id" + idCounter++) as T;
 
 const mockSystem = (
-  entities: EntityDefinition[],
-  components: ComponentDefinition[] = []
+  entities: Array<Omit<EntityDefinition, "systemId">>,
+  components: Array<Omit<ComponentDefinition, "systemId">> = []
 ) => {
-  const ecs: SerializableECS = {
+  const ecs: ECSDefinition = {
     systems: {},
     scenes: {},
-    entities: {},
-    library: {},
+    entityInitializers: {},
+    entityDefinitions: {},
+    componentDefinitions: {},
+    libraryFolders: {},
   };
 
   const system: SystemDefinition = {
@@ -227,31 +228,22 @@ const mockSystem = (
       definitionId: id,
       components: components.map(inheritComponentInitializer),
     };
-    set(ecs.entities, entity.id, entity);
+    set(ecs.entityInitializers, entity.id, entity);
   });
 
-  const libraryNodes = [
-    ...components.map(
-      (component): LibraryNode => ({
-        systemId: system.id,
-        id: (component.id as string) as LibraryNodeId,
-        type: "component",
-        component,
-      })
-    ),
-    ...entities.map(
-      (entity): LibraryNode => ({
-        systemId: system.id,
-        id: (entity.id as string) as LibraryNodeId,
-        type: "entity",
-        entity,
-      })
-    ),
-  ];
+  components.forEach((component) => {
+    set(ecs.componentDefinitions, component.id, {
+      ...component,
+      systemId: system.id,
+    });
+  });
 
-  for (const node of libraryNodes) {
-    set(ecs.library, node.id, node);
-  }
+  entities.forEach((entity) => {
+    set(ecs.entityDefinitions, entity.id, {
+      ...entity,
+      systemId: system.id,
+    });
+  });
 
   return createSystem(ecs, nativeComponents);
 };

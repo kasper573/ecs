@@ -8,10 +8,10 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 export const updateEntityInitializer = createEditorStateReducer<{
   entityId: EntityInitializerId;
   update: Partial<EntityInitializer>;
-}>(({ ecs: { entities } }, { payload: { entityId, update } }) => {
-  const entity = get(entities, entityId);
+}>(({ ecs: { entityInitializers } }, { payload: { entityId, update } }) => {
+  const entity = get(entityInitializers, entityId);
   if (!entity) {
     throw new Error("Entity initializer not found");
   }
-  set(entities, entityId, { ...entity, ...update });
+  set(entityInitializers, entityId, { ...entity, ...update });
 });
