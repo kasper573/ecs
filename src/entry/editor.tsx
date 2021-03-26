@@ -16,10 +16,7 @@ export const nativeComponents = {
   interactive: Interactive,
 };
 
-const store = createStore(
-  { ecs: defaultECS, selection: {}, nativeComponents },
-  nativeComponents
-);
+const store = createStore({ ecs: defaultECS, selection: {}, nativeComponents });
 
 function render() {
   ReactDOM.render(

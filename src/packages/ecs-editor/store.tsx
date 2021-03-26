@@ -4,37 +4,21 @@ import {
   useDispatch as useReduxDispatch,
   useSelector as useReduxSelector,
 } from "react-redux";
-import { NativeComponents } from "../ecs-serializable/types/NativeComponents";
 import { EditorState } from "./types/EditorState";
 import { ensureSelection } from "./reducers/ensureSelection";
-import { ensureNativeComponents } from "./reducers/ensureNativeComponents";
 import { core } from "./slices/core";
+import { createFilteredReducer } from "./functions/createFilteredReducer";
+import { ensureNativeComponents } from "./reducers/ensureNativeComponents";
 
-type RootReducer = typeof core.reducer;
+const rootReducer = createFilteredReducer(core.reducer, [
+  ensureSelection,
+  ensureNativeComponents,
+]);
 
-const createRootReducer = (nativeComponents: NativeComponents): RootReducer => (
-  state,
-  action
-) => {
-  // Perform core action
-  state = core.reducer(state, action);
-  // React to state change with generic reducers that make
-  // sure certain parts of the state is in a specific way
-  state = ensureSelection(state);
-  state = ensureNativeComponents(state, {
-    type: "",
-    payload: nativeComponents,
-  });
-  return state;
-};
-
-export const createStore = (
-  preloadedState: EditorState,
-  nativeComponents: NativeComponents
-) =>
+export const createStore = (preloadedState: EditorState) =>
   configureStore({
     preloadedState,
-    reducer: createRootReducer(nativeComponents),
+    reducer: rootReducer,
   });
 
 type EditorStore = ReturnType<typeof createStore>;

@@ -1,14 +1,10 @@
-import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { set, values } from "../../nominal";
 import { uuid } from "../functions/uuid";
-import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
-export const ensureNativeComponents = createEditorStateReducer<NativeComponents>(
-  (
-    { ecs: { componentDefinitions, systems } },
-    { payload: nativeComponents }
-  ) => {
+export const ensureNativeComponents = createEditorStateReducer(
+  ({ ecs: { componentDefinitions, systems }, nativeComponents }) => {
     const componentDefinitionList = values(componentDefinitions);
     for (const system of values(systems)) {
       for (const nativeComponentName of Object.keys(nativeComponents)) {
