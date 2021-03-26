@@ -1,22 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { IconButton, Slider, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
-import { useDispatch } from "../store";
-import { NativeComponentsContext } from "../NativeComponentsContext";
+import { useDispatch, useSelector } from "../store";
 import { core } from "../slices/core";
 import { mockEditorState } from "../mocks/mockEditorState";
+import { selectNativeComponents } from "../selectors/selectNativeComponents";
 import { GenerateIcon } from "./icons";
 
 export const DevTools = () => {
   const [mockSize, setMockSize] = useState(10);
   const dispatch = useDispatch();
-  const nativeComponents = useContext(NativeComponentsContext);
+  const nativeComponents = useSelector(selectNativeComponents);
 
   const mock = () =>
     dispatch(
-      core.actions.setEditorState(
-        mockEditorState(Object.keys(nativeComponents), mockSize)
-      )
+      core.actions.setEditorState(mockEditorState(nativeComponents, mockSize))
     );
   return (
     <Actions>

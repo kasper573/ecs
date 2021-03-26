@@ -1,12 +1,13 @@
 import { Table, TableBody } from "@material-ui/core";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createComponentProperties } from "../../ecs-serializable/factories/createComponentProperties";
 import { updateComponentPropertiesDefinition } from "../../ecs-serializable/factories/updateComponentPropertiesDefinition";
-import { NativeComponentsContext } from "../NativeComponentsContext";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { keys } from "../../nominal";
+import { useSelector } from "../store";
+import { selectNativeComponents } from "../selectors/selectNativeComponents";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
 
 export type ComponentInitializerEditorProps = {
@@ -22,7 +23,7 @@ export const ComponentInitializerEditor = ({
   definition,
   onChange,
 }: ComponentInitializerEditorProps) => {
-  const nativeComponents = useContext(NativeComponentsContext);
+  const nativeComponents = useSelector(selectNativeComponents);
 
   const baseProperties = useMemo(
     () => (base ? createComponentProperties(base.properties) : {}),

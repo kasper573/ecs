@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { System } from "../../ecs/System";
 import { createSystem } from "../../ecs-serializable/factories/createSystem";
 import { useSelector } from "../store";
 import { selectAll } from "../selectors/selectAll";
-import { NativeComponentsContext } from "../NativeComponentsContext";
+import { selectNativeComponents } from "../selectors/selectNativeComponents";
 
 /**
  * Automates system initialization (Initializes a System using a SystemDefinition).
@@ -15,7 +15,7 @@ import { NativeComponentsContext } from "../NativeComponentsContext";
 export const useSystemInitializer = () => {
   const [system, setSystem] = useState<System>();
   const { ecs, selection } = useSelector(selectAll);
-  const nativeComponents = useContext(NativeComponentsContext);
+  const nativeComponents = useSelector(selectNativeComponents);
 
   const resetSystem = () => {
     if (selection.system) {

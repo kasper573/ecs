@@ -17,18 +17,20 @@ import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getE
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
 import { createEditorState } from "../functions/createEditorState";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
+import { Component } from "../../ecs/Component";
 
 /**
  * Mocks a fixed number of instances of all object types belonging to EditorState
  */
 export const mockEditorState = (
-  nativeComponentNames: string[] = mockNativeComponentNames(3),
+  nativeComponents: NativeComponents = mockNativeComponents(3),
   mockSize = 3
 ): EditorState => {
   const ecs = createEditorState().ecs;
 
   mock(mockSize).forEach((nr) =>
-    mockSystem(ecs, nr, nativeComponentNames, mockSize)
+    mockSystem(ecs, nr, Object.keys(nativeComponents), mockSize)
   );
 
   const system = values(ecs.systems)[0];
@@ -41,6 +43,7 @@ export const mockEditorState = (
 
   return {
     ecs,
+    nativeComponents,
     selection: {
       system: system?.id,
       scene: scene?.id,
@@ -52,8 +55,14 @@ export const mockEditorState = (
   };
 };
 
-const mockNativeComponentNames = (mockSize: number) =>
-  mock(mockSize).map((nr) => `nativeComponent${nr}`);
+const mockNativeComponents = (mockSize: number): NativeComponents =>
+  mock(mockSize).reduce(
+    (nativeComponents, nr) => ({
+      ...nativeComponents,
+      [`nativeComponent${nr}`]: Component,
+    }),
+    {} as NativeComponents
+  );
 
 const mockSystem = (
   ecs: ECSDefinition,

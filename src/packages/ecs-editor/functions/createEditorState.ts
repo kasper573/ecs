@@ -1,6 +1,9 @@
 import { EditorState } from "../types/EditorState";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 
-export const createEditorState = (): EditorState => ({
+export const createEditorState = (
+  nativeComponents: NativeComponents = {}
+): EditorState => ({
   ecs: {
     systems: {},
     scenes: {},
@@ -10,4 +13,5 @@ export const createEditorState = (): EditorState => ({
     libraryFolders: {},
   },
   selection: {},
+  nativeComponents,
 });

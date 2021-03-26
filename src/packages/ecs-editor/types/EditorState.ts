@@ -1,4 +1,5 @@
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { EditorSelectionValues } from "./EditorSelection";
 
 /**
@@ -12,4 +13,5 @@ export type EditorState = {
    * The current selection in the UI
    */
   selection: EditorSelectionValues;
+  nativeComponents: NativeComponents;
 };

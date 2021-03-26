@@ -8,7 +8,6 @@ import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { Interactive } from "../packages/ecs-interactive/Interactive";
 import { Editor } from "../packages/ecs-editor/editors/Editor";
 import { createStore } from "../packages/ecs-editor/store";
-import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponentsContext";
 import defaultECS from "./defaultECS.json";
 
 export const nativeComponents = {
@@ -17,18 +16,19 @@ export const nativeComponents = {
   interactive: Interactive,
 };
 
-const store = createStore({ ecs: defaultECS, selection: {} }, nativeComponents);
+const store = createStore(
+  { ecs: defaultECS, selection: {}, nativeComponents },
+  nativeComponents
+);
 
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <NativeComponentsContext.Provider value={nativeComponents}>
-        <Provider store={store}>
-          <App>
-            <Editor />
-          </App>
-        </Provider>
-      </NativeComponentsContext.Provider>
+      <Provider store={store}>
+        <App>
+          <Editor />
+        </App>
+      </Provider>
     </React.StrictMode>,
     document.getElementById("root")
   );
