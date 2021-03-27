@@ -24,8 +24,8 @@ export const EntityInitializerEditor = ({
   value: entityInitializer,
 }: EntityInitializerEditorProps) => {
   const dispatch = useDispatch();
-  const entityDefinition = useSelector(
-    selectEntityDefinition(entityInitializer.definitionId)
+  const entityDefinition = useSelector((state) =>
+    selectEntityDefinition(state, entityInitializer.definitionId)
   );
   if (!entityDefinition) {
     throw new Error(

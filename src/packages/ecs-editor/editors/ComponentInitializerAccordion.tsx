@@ -36,8 +36,8 @@ export const ComponentInitializerAccordion = ({
   if (!initializer) {
     throw new Error("primary or base must be specified");
   }
-  const definition = useSelector(
-    selectComponentDefinition(initializer.definitionId)
+  const definition = useSelector((state) =>
+    selectComponentDefinition(state, initializer.definitionId)
   );
   if (!definition) {
     throw new Error("Cannot render without entity definition");

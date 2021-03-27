@@ -9,8 +9,8 @@ export const useDeleteComponentDialog = (
 ) => {
   const [component, setComponent] = useState<ComponentInitializer>();
   const isOpen = !!component;
-  const definition = useSelector(
-    selectComponentDefinition(component?.definitionId)
+  const definition = useSelector((state) =>
+    selectComponentDefinition(state, component?.definitionId)
   );
 
   const handleClose = () => setComponent(undefined);
