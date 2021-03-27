@@ -4,7 +4,7 @@ import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
 import { useDispatch, useSelector, useStore } from "../store";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
 
 /**

@@ -1,7 +1,7 @@
 import { Entity } from "../ecs/Entity";
 import { SystemModule } from "../ecs/SystemModule";
 import { System } from "../ecs/System";
-import { get } from "../nominal";
+import { get } from "../ecs-common/nominal";
 import { Scene } from "./Scene";
 
 export class SceneManager<SceneId extends keyof any> implements SystemModule {

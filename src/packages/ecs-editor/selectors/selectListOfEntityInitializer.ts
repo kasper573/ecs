@@ -1,4 +1,4 @@
-import { values } from "../../nominal";
+import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
 import { createShallowSelector } from "../functions/createShallowSelector";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";

@@ -1,8 +1,8 @@
-import { remove } from "../../nominal";
+import { remove } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { deleteEntityInitializer } from "./deleteEntityInitializer";
 
 export const deleteSceneDefinition = createEditorStateReducer<SceneDefinitionId>(

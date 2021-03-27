@@ -6,14 +6,14 @@ import { EntityInitializerIcon } from "../components/icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
 import { useDispatch, useSelector } from "../store";
 import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {

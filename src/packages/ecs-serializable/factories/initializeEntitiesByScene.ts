@@ -4,7 +4,7 @@ import { Entity } from "../../ecs/Entity";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { ComponentMap } from "../types/ComponentMap";
 import { EntityInitializer } from "../types/EntityInitializer";
-import { set } from "../../nominal";
+import { set } from "../../ecs-common/nominal";
 import { createEntityInstanceFactory } from "./createEntityInstanceFactory";
 
 /**

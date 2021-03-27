@@ -3,7 +3,7 @@ import {
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
 import { TreeNode } from "../types/TreeNode";
-import { pullMap } from "./pullMap";
+import { pullMap } from "../../ecs-common/pullMap";
 
 /**
  * Creates a tree data structure of a LibraryDefinition.

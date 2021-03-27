@@ -1,5 +1,5 @@
-import { set, values } from "../../nominal";
-import { uuid } from "../functions/uuid";
+import { set, values } from "../../ecs-common/nominal";
+import { uuid } from "../../ecs-common/uuid";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";

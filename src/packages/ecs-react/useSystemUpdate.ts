@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { System } from "../ecs/System";
-import { useAsRef } from "../use-as-ref/useAsRef";
+import { useAsRef } from "../ecs-common/useAsRef";
 
 /**
  * Calls the update function whenever the specified system changes or updates.

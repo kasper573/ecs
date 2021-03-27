@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { get } from "../../nominal";
+import { get } from "../../ecs-common/nominal";
 
 export const selectSelectedSceneDefinition = ({
   selection,

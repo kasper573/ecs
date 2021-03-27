@@ -1,4 +1,4 @@
-import { set } from "../../nominal";
+import { set } from "../../ecs-common/nominal";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 

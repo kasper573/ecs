@@ -9,7 +9,7 @@ import undoable, { StateWithHistory } from "redux-undo";
 import { NativeComponents } from "../ecs-serializable/types/NativeComponents";
 import { EditorState } from "./types/EditorState";
 import { ensureSelection } from "./reducers/ensureSelection";
-import { core } from "./slices/core";
+import { core } from "./core";
 import { ensureNativeComponents } from "./reducers/ensureNativeComponents";
 
 /**

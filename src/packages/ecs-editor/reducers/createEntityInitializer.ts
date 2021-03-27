@@ -1,4 +1,4 @@
-import { get, set } from "../../nominal";
+import { get, set } from "../../ecs-common/nominal";
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/factories/inheritEntityDefinitionComponents";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";

@@ -5,7 +5,7 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { createComponentProperties } from "../../ecs-serializable/factories/createComponentProperties";
 import { updateComponentPropertiesDefinition } from "../../ecs-serializable/factories/updateComponentPropertiesDefinition";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { keys } from "../../nominal";
+import { keys } from "../../ecs-common/nominal";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
 

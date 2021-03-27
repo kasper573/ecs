@@ -1,8 +1,8 @@
-import { get, remove, values } from "../../nominal";
+import { get, remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { LibraryFolderId } from "../../ecs-serializable/types/LibraryFolder";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { deleteEntityDefinition } from "./deleteEntityDefinition";
 import { deleteComponentDefinition } from "./deleteComponentDefinition";
 

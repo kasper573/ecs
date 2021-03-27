@@ -1,4 +1,4 @@
-import { values } from "../../nominal";
+import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
 import { createShallowSelector } from "../functions/createShallowSelector";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";

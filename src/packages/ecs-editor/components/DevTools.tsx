@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import { IconButton, Slider, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "../store";
-import { core } from "../slices/core";
-import { mockEditorState } from "../mocks/mockEditorState";
+import { core } from "../core";
+import { mockEditorState } from "../functions/mockEditorState";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import { GenerateIcon } from "./icons";
 

@@ -3,7 +3,7 @@ import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { values } from "../../nominal";
+import { values } from "../../ecs-common/nominal";
 import { createShallowSelector } from "../functions/createShallowSelector";
 
 const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>

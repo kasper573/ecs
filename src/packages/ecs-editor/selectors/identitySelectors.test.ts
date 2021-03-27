@@ -1,5 +1,5 @@
-import { mockEditorState } from "../mocks/mockEditorState";
-import { values } from "../../nominal";
+import { mockEditorState } from "../functions/mockEditorState";
+import { values } from "../../ecs-common/nominal";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
 import { selectDefaultSelectionValue } from "./selectDefaultSelectionValue";

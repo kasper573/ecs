@@ -1,10 +1,10 @@
-import { mockEditorState } from "../mocks/mockEditorState";
+import { mockEditorState } from "../functions/mockEditorState";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { values } from "../../nominal";
-import { core } from "../slices/core";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { values } from "../../ecs-common/nominal";
+import { core } from "../core";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
 import { addComponentInitializer } from "./addComponentInitializer";
 
 test("adding a component to an entity definition adds a copy of that component to corresponding entity initializers", () => {

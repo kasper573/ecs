@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
@@ -11,7 +11,7 @@ import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInit
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { useDispatch } from "../store";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {

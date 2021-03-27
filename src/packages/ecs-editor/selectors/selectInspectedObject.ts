@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { InspectedObject } from "../types/InspectedObject";
-import { get } from "../../nominal";
+import { get } from "../../ecs-common/nominal";
 import { createShallowSelector } from "../functions/createShallowSelector";
 import { selectLibraryNode } from "./selectLibraryNode";
 

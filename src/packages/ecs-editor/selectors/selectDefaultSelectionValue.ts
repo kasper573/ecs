@@ -3,7 +3,7 @@ import {
   EditorSelectionName,
   EditorSelectionValues,
 } from "../types/EditorSelection";
-import { values } from "../../nominal";
+import { values } from "../../ecs-common/nominal";
 
 export function selectDefaultSelectionValue<
   ObjectName extends EditorSelectionName

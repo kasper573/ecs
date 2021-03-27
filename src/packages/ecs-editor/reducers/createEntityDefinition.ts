@@ -1,4 +1,4 @@
-import { set } from "../../nominal";
+import { set } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 

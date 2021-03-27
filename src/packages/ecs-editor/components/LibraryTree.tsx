@@ -2,7 +2,7 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { TreeView } from "@material-ui/lab";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
-import { get, set } from "../../nominal";
+import { get, set } from "../../ecs-common/nominal";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { LibraryTreeItems } from "./LibraryTreeItems";

@@ -1,7 +1,7 @@
 import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
-import { set } from "../nominal";
+import { set } from "../ecs-common/nominal";
 import { createSystem } from "./factories/createSystem";
 import {
   EntityInitializer,

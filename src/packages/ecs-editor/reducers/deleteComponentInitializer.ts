@@ -1,4 +1,4 @@
-import { get } from "../../nominal";
+import { get } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentInitializer,

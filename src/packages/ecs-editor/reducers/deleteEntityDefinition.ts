@@ -1,7 +1,7 @@
-import { get, remove } from "../../nominal";
+import { get, remove } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
-import { core } from "../slices/core";
+import { core } from "../core";
 import { selectEntityInitializersFor } from "../selectors/selectEntityInitializersFor";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
 import { deleteEntityInitializer } from "./deleteEntityInitializer";

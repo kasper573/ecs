@@ -1,5 +1,5 @@
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { values } from "../../nominal";
+import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
 import { createShallowSelector } from "../functions/createShallowSelector";
 

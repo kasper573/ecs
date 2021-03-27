@@ -1,4 +1,4 @@
-import { set } from "../../nominal";
+import { set } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { selectLibraryNode } from "../selectors/selectLibraryNode";

@@ -4,21 +4,21 @@ import {
   SystemDefinition,
   SystemDefinitionId,
 } from "../../ecs-serializable/types/SystemDefinition";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { set, values } from "../../nominal";
+import { set, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
-import { createEditorState } from "../functions/createEditorState";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { Component } from "../../ecs/Component";
+import { createEditorState } from "./createEditorState";
 
 /**
  * Mocks a fixed number of instances of all object types belonging to EditorState

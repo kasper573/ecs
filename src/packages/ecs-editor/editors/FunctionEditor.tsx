@@ -4,7 +4,7 @@ import {
   deserializeJS,
   serializeJS,
 } from "../../ecs-serializable/jsSerializer";
-import { useAsRef } from "../../use-as-ref/useAsRef";
+import { useAsRef } from "../../ecs-common/useAsRef";
 
 export const FunctionEditor = ({
   value: inputFunction,

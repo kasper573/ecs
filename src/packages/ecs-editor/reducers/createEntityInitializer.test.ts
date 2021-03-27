@@ -1,10 +1,10 @@
-import { mockEditorState } from "../mocks/mockEditorState";
+import { mockEditorState } from "../functions/mockEditorState";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { get, values } from "../../nominal";
-import { uuid } from "../functions/uuid";
+import { get, values } from "../../ecs-common/nominal";
+import { uuid } from "../../ecs-common/uuid";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
 import { createEntityInitializer } from "./createEntityInitializer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {

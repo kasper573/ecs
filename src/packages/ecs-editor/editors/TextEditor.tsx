@@ -1,7 +1,7 @@
 import { TextField, TextFieldProps } from "@material-ui/core";
 import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useAsRef } from "../../use-as-ref/useAsRef";
+import { useAsRef } from "../../ecs-common/useAsRef";
 
 export type TextEditorProps = {
   value: TextFieldProps["value"];

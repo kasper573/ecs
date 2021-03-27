@@ -1,6 +1,6 @@
-import { set, ValueOf, values } from "../../nominal";
-import { ECSDefinition } from "../types/ECSDefinition";
-import { SystemDefinitionId } from "../types/SystemDefinition";
+import { set, ValueOf, values } from "../ecs-common/nominal";
+import { ECSDefinition } from "./types/ECSDefinition";
+import { SystemDefinitionId } from "./types/SystemDefinition";
 
 export const getECSDefinitionForSystem = (
   multiECS: ECSDefinition,

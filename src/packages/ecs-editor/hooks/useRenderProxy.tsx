@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import TypedEmitter from "typed-emitter";
-import { useAsRef } from "../../use-as-ref/useAsRef";
+import { useAsRef } from "../../ecs-common/useAsRef";
 
 export type AnyComponent<P = any> =
   | keyof JSX.IntrinsicElements

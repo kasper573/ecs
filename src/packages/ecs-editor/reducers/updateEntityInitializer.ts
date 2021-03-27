@@ -1,4 +1,4 @@
-import { get, set } from "../../nominal";
+import { get, set } from "../../ecs-common/nominal";
 import {
   EntityInitializer,
   EntityInitializerId,

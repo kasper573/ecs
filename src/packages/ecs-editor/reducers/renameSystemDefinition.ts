@@ -1,4 +1,4 @@
-import { get, set } from "../../nominal";
+import { get, set } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 

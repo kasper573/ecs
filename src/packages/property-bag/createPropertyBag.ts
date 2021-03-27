@@ -1,4 +1,4 @@
-import { keys } from "../nominal";
+import { keys } from "../ecs-common/nominal";
 import { PropertyBagMethods } from "./types/PropertyBagMethods";
 import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";

@@ -5,11 +5,11 @@ import { AddIcon, SystemIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { CrudList } from "../components/CrudList";
-import { omit } from "../functions/omit";
-import { core } from "../slices/core";
+import { omit } from "../../ecs-common/omit";
+import { core } from "../core";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 
 export const SystemsPanel = () => {

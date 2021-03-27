@@ -1,4 +1,4 @@
-import { remove } from "../../nominal";
+import { remove } from "../../ecs-common/nominal";
 import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 

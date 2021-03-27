@@ -1,7 +1,7 @@
 import React from "react";
 import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import { uuid } from "../functions/uuid";
+import { uuid } from "../../ecs-common/uuid";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { useSelector } from "../store";
 import { selectEditorSelection } from "../selectors/selectEditorSelection";

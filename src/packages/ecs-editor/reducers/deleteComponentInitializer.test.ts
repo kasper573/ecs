@@ -1,7 +1,7 @@
-import { mockEditorState } from "../mocks/mockEditorState";
-import { values } from "../../nominal";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
-import { core } from "../slices/core";
+import { mockEditorState } from "../functions/mockEditorState";
+import { values } from "../../ecs-common/nominal";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
+import { core } from "../core";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
 
 test("removing a component from an entity definition removes that component from its corresponding entity initializers", () => {
