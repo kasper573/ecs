@@ -14,7 +14,7 @@ export class BridgeRepairEquipment extends Entity {
     return this.system.modules.resolveType(Inventory);
   }
   get bridge() {
-    return this.sceneManager.scene.findType(Bridge);
+    return this.sceneManager.scene?.findType(Bridge);
   }
 
   constructor() {

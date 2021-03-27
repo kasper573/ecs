@@ -12,7 +12,7 @@ export const LibraryTreeItems = ({
 }: LibraryTreeItemsProps) => (
   <>
     {nodes.map((node) => (
-      <LibraryTreeItem key={node.value.id} node={node} {...itemProps} />
+      <LibraryTreeItem key={node.value.nodeId} node={node} {...itemProps} />
     ))}
   </>
 );

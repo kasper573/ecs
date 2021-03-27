@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { System } from "../../ecs/System";
 import { createSystem } from "../../ecs-serializable/factories/createSystem";
-import { useAsRef } from "../../use-as-ref/useAsRef";
-import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
-import { EditorSelectionObjects } from "../types/EditorSelection";
+import { useSelector } from "../store";
+import { selectAll } from "../selectors/selectAll";
+import { NativeComponentsContext } from "../NativeComponentsContext";
 
 /**
  * Automates system initialization (Initializes a System using a SystemDefinition).
@@ -12,30 +12,20 @@ import { EditorSelectionObjects } from "../types/EditorSelection";
  *
  * Returns the most recent System instance and a function to trigger the system reinitialization manually.
  */
-export const useSystemInitializer = (
-  selected: Partial<EditorSelectionObjects>,
-  nativeComponents: NativeComponents
-) => {
+export const useSystemInitializer = () => {
   const [system, setSystem] = useState<System>();
-  const selectedSceneNameRef = useAsRef(selected.scene?.name);
+  const { ecs, selection } = useSelector(selectAll);
+  const nativeComponents = useContext(NativeComponentsContext);
 
   const resetSystem = () => {
-    if (selected.system) {
+    if (selection.system) {
       setSystem(
-        createSystem(
-          selected.system,
-          nativeComponents,
-          selectedSceneNameRef.current
-        )
+        createSystem(ecs, nativeComponents, selection.system, selection.scene)
       );
     }
   };
 
-  useEffect(resetSystem, [
-    selected.system,
-    selectedSceneNameRef,
-    nativeComponents,
-  ]);
+  useEffect(resetSystem, [ecs, selection, nativeComponents]);
 
   return [system, resetSystem] as const;
 };

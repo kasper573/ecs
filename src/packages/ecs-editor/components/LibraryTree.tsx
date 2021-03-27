@@ -1,21 +1,17 @@
 import { ChangeEvent, useMemo, useState } from "react";
 import { TreeView } from "@material-ui/lab";
-import {
-  LibraryNode,
-  LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
+import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
-import { createLibraryMap } from "../functions/createLibraryMap";
-import { selectLibraryNodeLabel } from "../selectors/selectLibraryNodeLabel";
-import { TreeNode } from "../types/TreeNode";
+import { get, set } from "../../nominal";
+import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 import { LibraryTreeItemProps } from "./LibraryTreeItem";
 
 export type LibraryTreeProps = {
-  selected?: LibraryNode;
-  onSelectedChange: (newSelected: LibraryNode) => void;
-  library: LibraryDefinition;
+  selected?: DiscriminatedLibraryNode;
+  onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
+  library: DiscriminatedLibraryNode[];
 } & Pick<LibraryTreeItemProps, "onEdit" | "onDelete">;
 
 /**
@@ -30,7 +26,10 @@ export const LibraryTree = ({
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
-    const map = createLibraryMap(library);
+    const map = library.reduce(
+      (map, node) => set(map, node.nodeId, node),
+      {} as Record<LibraryNodeId, DiscriminatedLibraryNode>
+    );
     return [
       map,
       createLibraryTree(library, { compareFn: compareLibraryTreeNodes }),
@@ -41,18 +40,15 @@ export const LibraryTree = ({
     setExpanded(nodeIds as LibraryNodeId[]);
 
   const handleSelect = (e: ChangeEvent<{}>, nodeIdStr: string) => {
-    // Cannot select folders
     const nodeId = nodeIdStr as LibraryNodeId;
-    const node = nodeMap.get(nodeId);
-    if (node && node.type !== "folder") {
-      onSelectedChange(node);
-    }
+    const node = get(nodeMap, nodeId)!;
+    onSelectedChange(node);
   };
 
   return (
     <TreeView
       expanded={expanded}
-      selected={selected?.id ?? ""}
+      selected={selected?.nodeId ?? ""}
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
@@ -61,11 +57,5 @@ export const LibraryTree = ({
   );
 };
 
-const compareLibraryTreeNodes = (
-  a: TreeNode<LibraryNode>,
-  b: TreeNode<LibraryNode>
-) => {
-  const aLabel = selectLibraryNodeLabel(a.value);
-  const bLabel = selectLibraryNodeLabel(b.value);
-  return aLabel.localeCompare(bLabel);
-};
+const compareLibraryTreeNodes = (a: LibraryTreeNode, b: LibraryTreeNode) =>
+  a.value.name.localeCompare(b.value.name);

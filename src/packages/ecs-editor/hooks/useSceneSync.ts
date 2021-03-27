@@ -1,45 +1,42 @@
-import { Dispatch, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { System } from "../../ecs/System";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { EditorActions } from "../types/EditorActions";
 import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
-import { EditorSelectionObjects } from "../types/EditorSelection";
+import { useDispatch, useSelector, useStore } from "../store";
+import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
+import { core } from "../slices/core";
+import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
 
 /**
  * Synchronizes scene selection in Editor and System state.
  * (Updates Editor scene selection whenever the scene changes in the specified system and vice versa)
  */
-export const useSceneSync = (
-  system: System | undefined,
-  selected: Partial<EditorSelectionObjects>,
-  dispatch: Dispatch<EditorActions>
-) => {
+export const useSceneSync = (system: System | undefined) => {
   const [, refresh] = useReducer((n) => n + 1, 0);
+  const dispatch = useDispatch();
+  const editorSceneId = useSelector(selectSelectedSceneDefinition)?.id;
+  const store = useStore();
 
   const updateSystemSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);
-    const newSceneId = selected.scene?.name;
-    const didSceneChange = newSceneId !== sm?.sceneId;
+    const didSceneChange = editorSceneId !== sm?.sceneId;
     if (didSceneChange && sm && system) {
-      sm.sceneId = newSceneId;
+      sm.sceneId = editorSceneId;
       system.update();
       refresh();
     }
   };
 
-  const updateUISceneSelection = () => {
+  const updateEditorSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);
-    const editorSceneId = selected.scene?.name;
-    const systemSceneId = sm?.sceneId;
+    const systemSceneId: SceneDefinitionId = sm?.sceneId;
+    const editorSceneId = store.getState().present.selection.scene;
     const didSceneChange = editorSceneId !== systemSceneId;
-    const scene = selected.system?.scenes.find(
-      (scene) => scene.name === systemSceneId
-    );
-    if (didSceneChange && scene) {
-      dispatch({ type: "SELECT_SCENE", payload: scene.id });
+    if (didSceneChange) {
+      dispatch(core.actions.setSelectedSceneDefinition(systemSceneId));
     }
   };
 
-  useEffect(updateSystemSceneSelection, [selected.scene, system]);
-  useSystemUpdate(system, updateUISceneSelection);
+  useEffect(updateSystemSceneSelection, [editorSceneId, system]);
+  useSystemUpdate(system, updateEditorSceneSelection);
 };

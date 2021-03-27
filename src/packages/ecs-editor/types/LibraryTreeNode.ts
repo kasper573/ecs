@@ -1,4 +1,4 @@
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
 import { TreeNode } from "./TreeNode";
+import { DiscriminatedLibraryNode } from "./DiscriminatedLibraryNode";
 
-export type LibraryTreeNode = TreeNode<LibraryNode>;
+export type LibraryTreeNode = TreeNode<DiscriminatedLibraryNode>;

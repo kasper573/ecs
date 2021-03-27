@@ -8,16 +8,19 @@ import {
 import React from "react";
 import styled from "styled-components";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { ExpandAccordionIcon } from "../components/icons";
-import { ComponentInitializerEditor } from "./ComponentInitializerEditor";
+import { useSelector } from "../store";
+import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
+import {
+  ComponentInitializerEditor,
+  ComponentInitializerEditorProps,
+} from "./ComponentInitializerEditor";
 
 export type ComponentInitializerAccordionProps = {
   base?: ComponentInitializer;
   primary?: ComponentInitializer;
-  definition: ComponentDefinition;
-  onChange: (updated: ComponentInitializer) => void;
+  onUpdate: ComponentInitializerEditorProps["onChange"];
   onRestore?: (updated: ComponentInitializer) => void;
   onRemove?: (updated: ComponentInitializer) => void;
 };
@@ -25,11 +28,21 @@ export type ComponentInitializerAccordionProps = {
 export const ComponentInitializerAccordion = ({
   base,
   primary,
-  definition,
-  onChange,
+  onUpdate,
   onRemove = noop,
   onRestore = noop,
 }: ComponentInitializerAccordionProps) => {
+  const initializer = primary || base;
+  if (!initializer) {
+    throw new Error("primary or base must be specified");
+  }
+  const definition = useSelector((state) =>
+    selectComponentDefinition(state, initializer.definitionId)
+  );
+  if (!definition) {
+    throw new Error("Cannot render without entity definition");
+  }
+
   const [toggleProps, contextMenu] = useContextMenu([
     primary ? (
       <MenuItem onClick={() => onRemove(primary)}>Remove component</MenuItem>
@@ -54,7 +67,7 @@ export const ComponentInitializerAccordion = ({
             base={base}
             primary={primary}
             definition={definition}
-            onChange={onChange}
+            onChange={onUpdate}
           />
         </AccordionDetails>
       )}

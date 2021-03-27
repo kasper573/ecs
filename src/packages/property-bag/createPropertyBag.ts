@@ -1,4 +1,4 @@
-import { typedKeys } from "../ecs-editor/functions/typedKeys";
+import { keys } from "../nominal";
 import { PropertyBagMethods } from "./types/PropertyBagMethods";
 import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";
@@ -33,7 +33,7 @@ export const createPropertyBag = <
 
     constructor(values: Partial<ResolvablePropertyValuesFor<Properties>> = {}) {
       super();
-      typedKeys(directProperties).forEach((name) => {
+      keys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
           configurable: true,
           get: () =>

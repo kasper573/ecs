@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { DeleteDialog } from "../components/DeleteDialog";
+import { useSelector } from "../store";
+import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 
 export const useDeleteComponentDialog = (
-  deleteComponent: (component: ComponentInitializer) => void,
-  definitions: ComponentDefinition[]
+  deleteComponent: (component: ComponentInitializer) => void
 ) => {
   const [component, setComponent] = useState<ComponentInitializer>();
   const isOpen = !!component;
-  const definition = component
-    ? definitions.find((def) => def.id === component.definitionId)
-    : undefined;
+  const definition = useSelector((state) =>
+    selectComponentDefinition(state, component?.definitionId)
+  );
 
   const handleClose = () => setComponent(undefined);
   const handleDelete = () => deleteComponent(component!);

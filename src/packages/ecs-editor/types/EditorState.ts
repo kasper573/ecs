@@ -1,4 +1,4 @@
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
 import { EditorSelectionValues } from "./EditorSelection";
 
 /**
@@ -7,10 +7,7 @@ import { EditorSelectionValues } from "./EditorSelection";
  * preferably via the main reducer `mutations/updateState.ts`.
  */
 export type EditorState = {
-  /**
-   * ECS definitions
-   */
-  systems: SystemDefinition[];
+  ecs: ECSDefinition;
   /**
    * The current selection in the UI
    */

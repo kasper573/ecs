@@ -4,9 +4,9 @@ import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInit
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createComponentProperties } from "../../ecs-serializable/factories/createComponentProperties";
 import { updateComponentPropertiesDefinition } from "../../ecs-serializable/factories/updateComponentPropertiesDefinition";
-import { typedKeys } from "../functions/typedKeys";
-import { EditorStateContext } from "../EditorStateContext";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
+import { keys } from "../../nominal";
+import { NativeComponentsContext } from "../NativeComponentsContext";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
 
 export type ComponentInitializerEditorProps = {
@@ -22,7 +22,7 @@ export const ComponentInitializerEditor = ({
   definition,
   onChange,
 }: ComponentInitializerEditorProps) => {
-  const { nativeComponents } = useContext(EditorStateContext);
+  const nativeComponents = useContext(NativeComponentsContext);
 
   const baseProperties = useMemo(
     () => (base ? createComponentProperties(base.properties) : {}),
@@ -53,7 +53,7 @@ export const ComponentInitializerEditor = ({
 
   const hasBase = !!base;
   const nativeComponent = nativeComponents[definition.nativeComponent];
-  const propertyNames = typedKeys(nativeComponent.propertyInfos);
+  const propertyNames = keys(nativeComponent.propertyInfos);
   return (
     <Table size="small">
       <TableBody>

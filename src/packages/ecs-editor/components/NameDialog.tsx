@@ -33,14 +33,17 @@ export const NameDialog = ({
   open,
   title,
   defaultValue,
-  onClose = () => {},
+  onClose = noop,
   onSave,
   ...dialogProps
 }: NameDialogProps) => {
   const [value, setValue] = useState(defaultValue);
   const [error, setError] = useState("");
 
-  const manualClose = () => onClose({}, "backdropClick");
+  const manualClose = () => {
+    setError("");
+    onClose({}, "backdropClick");
+  };
 
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.currentTarget.value);
@@ -101,3 +104,5 @@ export const NameDialog = ({
     </Dialog>
   );
 };
+
+const noop = () => {};

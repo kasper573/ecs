@@ -1,16 +1,15 @@
 import { ComponentInitializer } from "./ComponentInitializer";
+import { LibraryNode } from "./LibraryNode";
 
 export type EntityDefinitionId = Nominal<string, "EntityDefinitionId">;
 
-export type EntityDefinition = {
+export type EntityDefinition = LibraryNode & {
   /**
-   * Automatically generated id (unique within parent System).
+   * uuid
    */
   id: EntityDefinitionId;
   /**
-   * User specified name (duplicates allowed).
-   * Purely presentational.
+   * Components that will be inherited by all entity initializers
    */
-  name: string;
   components: ComponentInitializer[];
 };

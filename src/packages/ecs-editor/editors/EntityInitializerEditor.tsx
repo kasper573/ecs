@@ -1,75 +1,99 @@
-import React, { useContext } from "react";
-import { without } from "lodash";
+import React, { useCallback } from "react";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
 import { EntityInitializerIcon } from "../components/icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
-import { EditorStateContext } from "../EditorStateContext";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
+import { useDispatch, useSelector } from "../store";
+import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
+import { core } from "../slices/core";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
   value: EntityInitializer;
-  onChange: (updated: EntityInitializer) => void;
 };
 
 export const EntityInitializerEditor = ({
   value: entityInitializer,
-  onChange,
 }: EntityInitializerEditorProps) => {
-  const { libraryDefinitions } = useContext(EditorStateContext);
-  const entityDefinition = libraryDefinitions.entities.find(
-    (def) => def.id === entityInitializer.definitionId
-  )!;
-  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent,
-    libraryDefinitions.components
+  const dispatch = useDispatch();
+  const entityDefinition = useSelector((state) =>
+    selectEntityDefinition(state, entityInitializer.definitionId)
   );
-
-  function createComponent(definition: ComponentDefinition) {
-    addComponent(
-      createComponentInitializer({
-        id: uuid(),
-        definitionId: definition.id,
-        properties: createComponentPropertiesDefinition({}),
-      })
+  if (!entityDefinition) {
+    throw new Error(
+      "Can't edit entity initializer without entity definition available"
     );
   }
 
-  function addComponent(initializer: ComponentInitializer) {
-    updateComponents([...entityInitializer.components, initializer]);
-  }
+  const addComponent = useCallback(
+    (definition: ComponentDefinition) =>
+      dispatch(
+        core.actions.addComponentInitializer({
+          target: "initializer",
+          id: entityInitializer.id,
+          component: {
+            definitionId: definition.id,
+            id: uuid(),
+            properties: createComponentPropertiesDefinition({}),
+          },
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
 
-  function updateComponents(components: ComponentInitializer[]) {
-    onChange({
-      ...entityInitializer,
-      components,
-    });
-  }
+  const updateProperties = useCallback(
+    (component: ComponentInitializer) =>
+      dispatch(
+        core.actions.updateComponentProperties({
+          target: "initializer",
+          id: entityInitializer.id,
+          componentId: component.id,
+          properties: component.properties,
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
 
-  function removeComponent(component: ComponentInitializer) {
-    updateComponents(without(entityInitializer.components, component));
-  }
+  const removeComponent = useCallback(
+    (component: ComponentInitializer) =>
+      dispatch(
+        core.actions.deleteComponentInitializer({
+          target: "initializer",
+          id: entityInitializer.id,
+          componentId: component.id,
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
 
-  function restoreComponent(baseComponent: ComponentInitializer) {
-    addComponent(inheritComponentInitializer(baseComponent));
-  }
+  const restoreComponent = useCallback(
+    (baseComponent: ComponentInitializer) =>
+      dispatch(
+        core.actions.addComponentInitializer({
+          target: "initializer",
+          id: entityInitializer.id,
+          component: inheritComponentInitializer(baseComponent),
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
+
+  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
+    removeComponent
+  );
 
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
-        <SelectComponentDefinitionButton
-          componentDefinitions={libraryDefinitions.components}
-          onSelected={createComponent}
-        />
+        <SelectComponentDefinitionButton onSelected={addComponent} />
       </PanelHeader>
       <InspectedObjectInfo
         icon={<EntityInitializerIcon />}
@@ -78,8 +102,7 @@ export const EntityInitializerEditor = ({
       <ComponentInitializerList
         baseItems={entityDefinition.components}
         primaryItems={entityInitializer.components}
-        definitions={libraryDefinitions.components}
-        onChange={updateComponents}
+        onUpdate={updateProperties}
         onRemove={askToDeleteComponent}
         onRestore={restoreComponent}
       />

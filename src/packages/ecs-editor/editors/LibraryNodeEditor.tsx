@@ -1,27 +1,18 @@
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
+import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { ComponentDefinitionEditor } from "./ComponentDefinitionEditor";
 import { EntityDefinitionEditor } from "./EntityDefinitionEditor";
 import { LibraryFolderEditor } from "./LibraryFolderEditor";
 
 export type LibraryNodeEditorProps = {
-  value: LibraryNode;
-  onChange: (updated: LibraryNode) => void;
+  value: DiscriminatedLibraryNode;
 };
 
-export const LibraryNodeEditor = ({
-  value,
-  onChange,
-}: LibraryNodeEditorProps) => {
+export const LibraryNodeEditor = ({ value }: LibraryNodeEditorProps) => {
   switch (value?.type) {
     case "component":
-      return <ComponentDefinitionEditor value={value.component} />;
+      return <ComponentDefinitionEditor value={value} />;
     case "entity":
-      return (
-        <EntityDefinitionEditor
-          value={value.entity}
-          onChange={(entity) => onChange({ ...value, entity })}
-        />
-      );
+      return <EntityDefinitionEditor value={value} />;
     case "folder":
       return <LibraryFolderEditor value={value} />;
   }

@@ -8,17 +8,12 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
-export type DeleteDialogProps = Pick<DialogProps, "open"> & {
+export type DeleteDialogProps = Pick<DialogProps, "open" | "onClose"> & {
   /**
    * The dialog title and confirm message will use this value
    * to help clarify to the user what is being deleted.
    */
   name: string;
-  /**
-   * Called when the dialog wants to be closed
-   * (either by selecting the close button or delete button)
-   */
-  onClose: () => void;
   /**
    * Called when the user has confirmed the delete
    */
@@ -29,13 +24,14 @@ export type DeleteDialogProps = Pick<DialogProps, "open"> & {
  * A dialog that asks to confirm a delete.
  */
 export const DeleteDialog = ({
-  onClose,
+  onClose = noop,
   onDelete,
   name,
   ...dialogProps
 }: DeleteDialogProps) => {
+  const manualClose = () => onClose({}, "backdropClick");
   const closeAndDelete = () => {
-    onClose();
+    manualClose();
     onDelete();
   };
   return (
@@ -51,7 +47,7 @@ export const DeleteDialog = ({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={manualClose} color="secondary">
           Cancel
         </Button>
         <Button onClick={closeAndDelete} autoFocus color="primary">
@@ -61,3 +57,5 @@ export const DeleteDialog = ({
     </Dialog>
   );
 };
+
+const noop = () => {};

@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
-import { without } from "lodash";
+import React, { useCallback } from "react";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { createComponentInitializer } from "../../ecs-serializable/factories/createComponentInitializer";
 import { uuid } from "../functions/uuid";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../components/PanelName";
@@ -11,61 +9,78 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
-import { EditorStateContext } from "../EditorStateContext";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
+import { useDispatch } from "../store";
+import { core } from "../slices/core";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
   value: EntityDefinition;
-  onChange: (updated: EntityDefinition) => void;
 };
 
 export const EntityDefinitionEditor = ({
-  value,
-  onChange,
+  value: entityDefinition,
 }: EntityDefinitionEditorProps) => {
-  const { libraryDefinitions } = useContext(EditorStateContext);
-  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent,
-    libraryDefinitions.components
+  const dispatch = useDispatch();
+
+  const addComponent = useCallback(
+    (component: ComponentDefinition) =>
+      dispatch(
+        core.actions.addComponentInitializer({
+          target: "definition",
+          id: entityDefinition.id,
+          component: {
+            definitionId: component.id,
+            id: uuid(),
+            properties: createComponentPropertiesDefinition({}),
+          },
+        })
+      ),
+    [entityDefinition.id, dispatch]
   );
 
-  function addComponent(definition: ComponentDefinition) {
-    updateComponents([
-      ...value.components,
-      createComponentInitializer({
-        id: uuid(),
-        definitionId: definition.id,
-        properties: createComponentPropertiesDefinition({}),
-      }),
-    ]);
-  }
+  const updateProperties = useCallback(
+    (component: ComponentInitializer) =>
+      dispatch(
+        core.actions.updateComponentProperties({
+          target: "definition",
+          id: entityDefinition.id,
+          componentId: component.id,
+          properties: component.properties,
+        })
+      ),
+    [entityDefinition.id, dispatch]
+  );
 
-  function updateComponents(components: ComponentInitializer[]) {
-    onChange({
-      ...value,
-      components,
-    });
-  }
+  const removeComponent = useCallback(
+    (component: ComponentInitializer) =>
+      dispatch(
+        core.actions.deleteComponentInitializer({
+          target: "definition",
+          id: entityDefinition.id,
+          componentId: component.id,
+        })
+      ),
+    [entityDefinition.id, dispatch]
+  );
 
-  function removeComponent(component: ComponentInitializer) {
-    updateComponents(without(value.components, component));
-  }
+  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
+    removeComponent
+  );
 
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
-        <SelectComponentDefinitionButton
-          componentDefinitions={libraryDefinitions.components}
-          onSelected={addComponent}
-        />
+        <SelectComponentDefinitionButton onSelected={addComponent} />
       </PanelHeader>
-      <InspectedObjectInfo icon={<EntityDefinitionIcon />} name={value.name} />
+      <InspectedObjectInfo
+        icon={<EntityDefinitionIcon />}
+        name={entityDefinition.name}
+      />
       <ComponentInitializerList
-        primaryItems={value.components}
-        definitions={libraryDefinitions.components}
-        onChange={updateComponents}
+        primaryItems={entityDefinition.components}
         onRemove={askToDeleteComponent}
+        onUpdate={updateProperties}
       />
       {deleteDialog}
     </>

@@ -1,27 +1,19 @@
-import { EntityDefinition } from "./EntityDefinition";
-import { ComponentDefinition } from "./ComponentDefinition";
+import { SystemDefinitionId } from "./SystemDefinition";
 
 export type LibraryNodeId = Nominal<string, "LibraryNodeId">;
 
-export type LibraryNode =
-  | LibraryFolderNode
-  | LibraryEntityNode
-  | LibraryComponentNode;
-
-export type LibraryFolderNode = LibraryNodeBase<"folder", { name: string }>;
-
-export type LibraryEntityNode = LibraryNodeBase<
-  "entity",
-  { entity: EntityDefinition }
->;
-
-export type LibraryComponentNode = LibraryNodeBase<
-  "component",
-  { component: ComponentDefinition }
->;
-
-export type LibraryNodeBase<Type, Props> = {
-  parentId?: LibraryNodeId;
-  id: LibraryNodeId;
-  type: Type;
-} & Props;
+export type LibraryNode = {
+  /**
+   * The nodeId and parentNodeId is used to arrange library nodes in a tree
+   */
+  nodeId: LibraryNodeId;
+  parentNodeId?: LibraryNodeId;
+  /**
+   * Used for presentation
+   */
+  name: string;
+  /**
+   * The id of the system this scene belongs to
+   */
+  systemId: SystemDefinitionId;
+};

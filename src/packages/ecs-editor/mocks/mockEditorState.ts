@@ -1,94 +1,148 @@
 import { range } from "lodash";
 import { EditorState } from "../types/EditorState";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import {
+  SystemDefinition,
+  SystemDefinitionId,
+} from "../../ecs-serializable/types/SystemDefinition";
 import { uuid } from "../functions/uuid";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
-import { LibraryDefinition } from "../../ecs-serializable/types/LibraryDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import {
-  LibraryComponentNode,
-  LibraryEntityNode,
-  LibraryFolderNode,
-} from "../../ecs-serializable/types/LibraryNode";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { getDefinitionsInLibrary } from "../../ecs-serializable/functions/getDefinitionsInLibrary";
+import { set, values } from "../../nominal";
+import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
+import { createEditorState } from "../functions/createEditorState";
+import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
+import { Component } from "../../ecs/Component";
 
 /**
  * Mocks a fixed number of instances of all object types belonging to EditorState
  */
-export const mockEditorState = (): EditorState => {
-  const systems = fixedAmount().map(mockSystem);
+export const mockEditorState = (
+  nativeComponents: NativeComponents = mockNativeComponents(3),
+  mockSize = 3
+): EditorState => {
+  const ecs = createEditorState().ecs;
+
+  mock(mockSize).forEach((nr) =>
+    mockSystem(ecs, nr, Object.keys(nativeComponents), mockSize)
+  );
+
+  const system = values(ecs.systems)[0];
+  const scene = values(ecs.scenes).find(
+    (scene) => scene.systemId === system.id
+  );
+  const entity = values(ecs.entityInitializers).find(
+    (init) => init.sceneId === scene?.id
+  );
+
   return {
-    systems,
+    ecs,
     selection: {
-      system: systems[0].id,
-      scene: systems[0].scenes[0].id,
-      inspected: {
+      system: system?.id,
+      scene: scene?.id,
+      inspected: entity && {
         type: "entityInitializer",
-        id: systems[0].scenes[0].entities[0].id,
+        id: entity.id,
       },
     },
   };
 };
 
-const mockSystem = (nr: number): SystemDefinition => {
-  const library = mockLibrary();
-  const { entities, components } = getDefinitionsInLibrary(library);
-  return {
-    id: id(`system${nr}`),
-    scenes: fixedAmount().map((nr) => mockScene(nr, entities, components)),
-    library,
-    name: `System ${nr}`,
-  };
-};
-
-const mockLibrary = (): LibraryDefinition => {
-  const componentDefinitions = fixedAmount().map(mockComponentDefinition);
-  const entityDefinitions = fixedAmount().map((nr) =>
-    mockEntityDefinition(nr, componentDefinitions)
+const mockNativeComponents = (mockSize: number): NativeComponents =>
+  mock(mockSize).reduce(
+    (nativeComponents, nr) => ({
+      ...nativeComponents,
+      [`nativeComponent${nr}`]: Component,
+    }),
+    {} as NativeComponents
   );
 
-  return [
-    ...entityDefinitions.map(
-      (entity): LibraryEntityNode => ({
-        id: id("library-entity-node"),
-        type: "entity",
-        entity,
-      })
-    ),
-    ...componentDefinitions.map(
-      (component): LibraryComponentNode => ({
-        id: id("library-component-node"),
-        type: "component",
-        component,
-      })
-    ),
-    ...fixedAmount().map(
-      (nr): LibraryFolderNode => ({
-        id: id(`library-folder-node`),
-        type: "folder",
-        name: `Folder ${nr}`,
-      })
-    ),
-  ];
+const mockSystem = (
+  ecs: ECSDefinition,
+  nr: number,
+  nativeComponentNames: string[],
+  mockSize: number
+) => {
+  const system: SystemDefinition = {
+    id: id(`system${nr}`),
+    name: `System ${nr}`,
+  };
+  set(ecs.systems, system.id, system);
+  mockLibrary(ecs, system.id, nativeComponentNames, mockSize);
+  mock(mockSize).map((nr) => mockScene(ecs, system.id, nr));
+};
+
+const mockLibrary = (
+  ecs: ECSDefinition,
+  systemId: SystemDefinitionId,
+  nativeComponentNames: string[],
+  mockSize: number
+) => {
+  const folders = mock(mockSize).map((nr) => {
+    const folder: LibraryFolder = {
+      systemId,
+      nodeId: id(`library-folder-node-id`),
+      id: id(`library-folder-id`),
+      name: `Folder ${nr}`,
+    };
+    set(ecs.libraryFolders, folder.id, folder);
+    return folder;
+  });
+
+  for (let i = 0; i < folders.length; i++) {
+    const folder = folders[i];
+    const next = folders[i + 1];
+    if (next) {
+      next.parentNodeId = folder.nodeId;
+    }
+  }
+
+  const componentDefinitions = mock(mockSize).map((nr) => {
+    const def = mockComponentDefinition(
+      nr,
+      systemId,
+      nativeComponentNames[nr % nativeComponentNames.length]
+    );
+    def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
+    set(ecs.componentDefinitions, def.id, def);
+    return def;
+  });
+
+  mock(mockSize).forEach((nr) => {
+    const def = mockEntityDefinition(nr, systemId, componentDefinitions);
+    def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
+    set(ecs.entityDefinitions, def.id, def);
+  });
 };
 
 const mockEntityDefinition = (
   nr: number,
+  systemId: SystemDefinitionId,
   definitions: ComponentDefinition[]
 ): EntityDefinition => ({
+  systemId,
+  nodeId: id(`entity-definition-node-id${nr}`),
   id: id(`entity-definition${nr}`),
   name: `Entity${nr}`,
   components: definitions.map(mockComponentInitializer),
 });
 
-const mockComponentDefinition = (nr: number): ComponentDefinition => ({
+const mockComponentDefinition = (
+  nr: number,
+  systemId: SystemDefinitionId,
+  nativeComponentName: string
+): ComponentDefinition => ({
+  systemId,
+  nodeId: id(`component-definition-node-id${nr}`),
   id: id(`component-definition${nr}`),
   name: `Component ${nr}`,
-  nativeComponent: `NativeComponent${nr}`,
+  nativeComponent: nativeComponentName,
 });
 
 const mockComponentInitializer = (
@@ -105,27 +159,30 @@ const mockComponentInitializer = (
 });
 
 const mockScene = (
-  nr: number,
-  entityDefinitions: EntityDefinition[],
-  componentDefinitions: ComponentDefinition[]
-): SceneDefinition => ({
-  id: id(`scene${nr}`),
-  name: `Scene ${nr}`,
-  entities: entityDefinitions.map((entityDefinition) =>
-    mockEntityInitializer(entityDefinition, componentDefinitions)
-  ),
-});
+  ecs: ECSDefinition,
+  systemId: SystemDefinitionId,
+  nr: number
+) => {
+  const systemECS = getECSDefinitionForSystem(ecs, systemId);
+  const scene: SceneDefinition = {
+    systemId,
+    id: id(`scene${nr}`),
+    name: `Scene ${nr}`,
+  };
+  set(ecs.scenes, scene.id, scene);
+  for (const def of values(systemECS.entityDefinitions)) {
+    const init: EntityInitializer = {
+      systemId,
+      sceneId: scene.id,
+      id: id("entity-initializer"),
+      definitionId: def.id,
+      name: def.name,
+      components: def.components.map(inheritComponentInitializer),
+    };
+    set(ecs.entityInitializers, init.id, init);
+  }
+};
 
-const mockEntityInitializer = (
-  definition: EntityDefinition,
-  componentDefinitions: ComponentDefinition[]
-): EntityInitializer => ({
-  id: id("entity-initializer"),
-  definitionId: definition.id,
-  name: definition.name,
-  components: componentDefinitions.map(mockComponentInitializer),
-});
-
-const fixedAmount = () => range(0, 3);
+const mock = (n: number) => range(1, n + 1);
 
 const id = <T extends string>(name: string) => `${name} (${uuid()})` as T;

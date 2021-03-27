@@ -1,7 +1,8 @@
-import { Switch, TextField } from "@material-ui/core";
+import { Switch } from "@material-ui/core";
 import { ZodType, ZodTypes } from "zod";
 import { isType } from "../../property-bag/isType";
 import { FunctionEditor } from "./FunctionEditor";
+import { TextEditor } from "./TextEditor";
 
 export type PrimitiveEditorProps = {
   value: unknown;
@@ -24,10 +25,10 @@ export const renderPrimitiveEditor = ({
   }
   if (isType(type, ZodTypes.number)) {
     return (
-      <TextField
-        value={value ?? 0}
+      <TextEditor
+        value={(value as string) ?? "0"}
         type="number"
-        onChange={(e) => onChange(parseFloat(e.currentTarget.value))}
+        onChange={(updated) => onChange(parseFloat(updated as string))}
       />
     );
   }
@@ -40,12 +41,7 @@ export const renderPrimitiveEditor = ({
     );
   }
   if (isType(type, ZodTypes.string)) {
-    return (
-      <TextField
-        value={value ?? ""}
-        onChange={(e) => onChange(e.currentTarget.value)}
-      />
-    );
+    return <TextEditor value={(value as string) ?? ""} onChange={onChange} />;
   }
 };
 

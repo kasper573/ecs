@@ -16,4 +16,5 @@ export {
   FolderOpen as FolderOpenIcon,
   SaveAlt as SaveIcon,
   ExpandMore as ExpandAccordionIcon,
+  DynamicFeed as GenerateIcon,
 } from "@material-ui/icons";
