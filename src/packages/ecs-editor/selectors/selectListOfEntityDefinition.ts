@@ -1,6 +1,6 @@
 import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 
 const selectParams = (
@@ -8,7 +8,7 @@ const selectParams = (
   forSystemId: SystemDefinitionId | undefined = state.selection.system
 ) => [state.ecs.entityDefinitions, forSystemId] as const;
 
-export const selectListOfEntityDefinition = createShallowSelector(
+export const selectListOfEntityDefinition = createMemoizedSelector(
   selectParams,
   ([entityDefinitions, forSystemId]) =>
     values(entityDefinitions).filter(

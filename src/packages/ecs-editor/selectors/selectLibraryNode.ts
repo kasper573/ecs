@@ -4,7 +4,7 @@ import {
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
 import { values } from "../../ecs-common/nominal";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 
 const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>
   [
@@ -14,7 +14,7 @@ const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>
     nodeId,
   ] as const;
 
-export const selectLibraryNode = createShallowSelector(
+export const selectLibraryNode = createMemoizedSelector(
   selectParams,
   ([entityDefinitions, componentDefinitions, libraryFolders, nodeId]) => {
     const isNode = (node: LibraryNode) => node.nodeId === nodeId;

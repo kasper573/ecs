@@ -1,9 +1,9 @@
 import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 
-export const selectListOfComponentDefinition = createShallowSelector(
+export const selectListOfComponentDefinition = createMemoizedSelector(
   (
     state: EditorState,
     forSystemId: SystemDefinitionId | undefined = state.selection.system

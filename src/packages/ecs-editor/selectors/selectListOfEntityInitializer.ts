@@ -1,9 +1,9 @@
 import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 
-export const selectListOfEntityInitializer = createShallowSelector(
+export const selectListOfEntityInitializer = createMemoizedSelector(
   (
     state: EditorState,
     forSceneId: SceneDefinitionId | undefined = state.selection.scene

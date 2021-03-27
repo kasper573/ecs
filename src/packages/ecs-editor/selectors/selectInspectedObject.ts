@@ -1,10 +1,10 @@
 import { EditorState } from "../types/EditorState";
 import { InspectedObject } from "../types/InspectedObject";
 import { get } from "../../ecs-common/nominal";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { selectLibraryNode } from "./selectLibraryNode";
 
-export const selectInspectedObject = createShallowSelector(
+export const selectInspectedObject = createMemoizedSelector(
   (state: EditorState): InspectedObject | undefined => {
     const {
       ecs: { entityInitializers },

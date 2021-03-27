@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
-import { createShallowSelector } from "../functions/createShallowSelector";
+import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { selectListOfLibraryFolder } from "./selectListOfLibraryFolder";
 import { selectListOfComponentDefinition } from "./selectListOfComponentDefinition";
 import { selectListOfEntityDefinition } from "./selectListOfEntityDefinition";
@@ -15,7 +15,7 @@ const selectParams = (
     selectListOfLibraryFolder(state, forSystemId),
   ] as const;
 
-export const selectListOfLibraryNode = createShallowSelector(
+export const selectListOfLibraryNode = createMemoizedSelector(
   selectParams,
   ([entityDefinitions, componentDefinitions, libraryFolders]) => {
     return [
