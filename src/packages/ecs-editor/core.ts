@@ -9,7 +9,7 @@ import { renameSceneDefinition } from "./reducers/renameSceneDefinition";
 import { deleteSceneDefinition } from "./reducers/deleteSceneDefinition";
 import { setSelectedSceneDefinition } from "./reducers/setSelectedSceneDefinition";
 import { createEntityInitializer } from "./reducers/createEntityInitializer";
-import { updateEntityInitializer } from "./reducers/updateEntityInitializer";
+import { renameEntityInitializer } from "./reducers/renameEntityInitializer";
 import { deleteEntityInitializer } from "./reducers/deleteEntityInitializer";
 import { setSelectedEntityInitializer } from "./reducers/setSelectedEntityInitializer";
 import { createEntityDefinition } from "./reducers/createEntityDefinition";
@@ -37,7 +37,7 @@ export const core = createSlice({
     renameSceneDefinition,
     deleteSceneDefinition,
     createEntityInitializer,
-    updateEntityInitializer,
+    renameEntityInitializer,
     deleteEntityInitializer,
     setSelectedSystemDefinition,
     setSelectedSceneDefinition,

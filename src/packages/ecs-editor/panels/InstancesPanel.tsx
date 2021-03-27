@@ -26,9 +26,9 @@ export const InstancesPanel = () => {
     onCreateItem: () => {},
     onRenameItem: (entity, name) =>
       dispatch(
-        core.actions.updateEntityInitializer({
+        core.actions.renameEntityInitializer({
           entityId: entity.id,
-          update: { name },
+          name,
         })
       ),
     onDeleteItem: (entity) =>
