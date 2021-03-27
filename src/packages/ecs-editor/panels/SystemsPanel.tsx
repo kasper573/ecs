@@ -1,5 +1,5 @@
 import { IconButton, Tooltip } from "@material-ui/core";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { PanelHeader } from "../components/PanelHeader";
 import { AddIcon, SystemIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";
@@ -11,16 +11,21 @@ import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
+import { NativeComponentsContext } from "../NativeComponentsContext";
 
 export const SystemsPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systems = useSelector(selectListOfSystemDefinition);
+  const nativeComponents = useContext(NativeComponentsContext);
   const dispatch = useDispatch();
   const [systemEvents, systemDialogs] = useCrudDialogs<SystemDefinition>({
     createDialogTitle: "Add system",
     getItemName: (item) => item.name,
-    onCreateItem: (name) =>
-      dispatch(core.actions.createSystemDefinition({ id: uuid(), name })),
+    onCreateItem: (name) => {
+      const system: SystemDefinition = { id: uuid(), name };
+      dispatch(core.actions.createSystemDefinition(system));
+      addNativeComponentsForSystem(system);
+    },
     onRenameItem: (system, name) =>
       dispatch(
         core.actions.renameSystemDefinition({ systemId: system.id, name })
@@ -28,6 +33,21 @@ export const SystemsPanel = () => {
     onDeleteItem: (system) =>
       dispatch(core.actions.deleteSystemDefinition(system.id)),
   });
+
+  function addNativeComponentsForSystem(system: SystemDefinition) {
+    for (const nativeComponentName of Object.keys(nativeComponents)) {
+      dispatch(
+        core.actions.createComponentDefinition({
+          nodeId: uuid(),
+          id: uuid(),
+          systemId: system.id,
+          name: nativeComponentName,
+          nativeComponent: nativeComponentName,
+        })
+      );
+    }
+  }
+
   const handleSystemSelected = useCallback(
     (system) => dispatch(core.actions.setSelectedSystemDefinition(system.id)),
     [dispatch]

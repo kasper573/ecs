@@ -22,6 +22,8 @@ import { updateComponentProperties } from "./reducers/updateComponentProperties"
 import { deleteLibraryFolder } from "./reducers/deleteLibraryFolder";
 import { deleteComponentDefinition } from "./reducers/deleteComponentDefinition";
 import { setEditorState } from "./reducers/setEditorState";
+import { ensureSelection } from "./reducers/ensureSelection";
+import { createComponentDefinition } from "./reducers/createComponentDefinition";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -51,6 +53,8 @@ export const core = createSlice({
     addComponentInitializer,
     updateComponentProperties,
     deleteComponentInitializer,
+    createComponentDefinition,
     setEditorState,
   },
+  extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
 });
