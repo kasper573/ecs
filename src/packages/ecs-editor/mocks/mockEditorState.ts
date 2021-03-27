@@ -43,7 +43,6 @@ export const mockEditorState = (
 
   return {
     ecs,
-    nativeComponents,
     selection: {
       system: system?.id,
       scene: scene?.id,
