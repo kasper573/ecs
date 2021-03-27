@@ -18,12 +18,12 @@ export const DevTools = () => {
     );
   return (
     <Actions>
-      <Tooltip title={`Mock size: ${mockSize}`}>
+      <Tooltip title={`Mock size ${mockSize}`}>
         <Slider
           value={mockSize}
           onChange={(e, value) => setMockSize(value as number)}
           color="secondary"
-          getAriaValueText={(value) => `Mock size: ${value}`}
+          getAriaValueText={(value) => `Mock size ${value}`}
           valueLabelDisplay="off"
           step={1}
           min={0}
