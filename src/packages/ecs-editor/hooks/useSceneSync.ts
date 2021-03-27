@@ -2,7 +2,7 @@ import { useEffect, useReducer } from "react";
 import { System } from "../../ecs/System";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { useSystemUpdate } from "../../ecs-react/useSystemUpdate";
-import { useDispatch, useSelector } from "../store";
+import { useDispatch, useSelector, useStore } from "../store";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { core } from "../slices/core";
 import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
@@ -15,6 +15,7 @@ export const useSceneSync = (system: System | undefined) => {
   const [, refresh] = useReducer((n) => n + 1, 0);
   const dispatch = useDispatch();
   const editorSceneId = useSelector(selectSelectedSceneDefinition)?.id;
+  const store = useStore();
 
   const updateSystemSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);
@@ -26,9 +27,10 @@ export const useSceneSync = (system: System | undefined) => {
     }
   };
 
-  const updateUISceneSelection = () => {
+  const updateEditorSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);
     const systemSceneId: SceneDefinitionId = sm?.sceneId;
+    const editorSceneId = store.getState().selection.scene;
     const didSceneChange = editorSceneId !== systemSceneId;
     if (didSceneChange) {
       dispatch(core.actions.setSelectedSceneDefinition(systemSceneId));
@@ -36,5 +38,5 @@ export const useSceneSync = (system: System | undefined) => {
   };
 
   useEffect(updateSystemSceneSelection, [editorSceneId, system]);
-  useSystemUpdate(system, updateUISceneSelection);
+  useSystemUpdate(system, updateEditorSceneSelection);
 };

@@ -3,6 +3,7 @@ import {
   TypedUseSelectorHook,
   useDispatch as useReduxDispatch,
   useSelector as useReduxSelector,
+  useStore as useReduxStore,
 } from "react-redux";
 import { NativeComponents } from "../ecs-serializable/types/NativeComponents";
 import { EditorState } from "./types/EditorState";
@@ -28,5 +29,6 @@ type EditorStore = ReturnType<typeof createStore>;
 type EditorRootState = ReturnType<EditorStore["getState"]>;
 type EditorDispatch = EditorStore["dispatch"];
 
+export const useStore: () => EditorStore = useReduxStore;
 export const useDispatch: () => EditorDispatch = useReduxDispatch;
 export const useSelector: TypedUseSelectorHook<EditorRootState> = useReduxSelector;
