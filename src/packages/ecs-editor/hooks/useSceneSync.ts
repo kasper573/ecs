@@ -30,7 +30,7 @@ export const useSceneSync = (system: System | undefined) => {
   const updateEditorSceneSelection = () => {
     const sm = system?.modules.findType(SceneManager);
     const systemSceneId: SceneDefinitionId = sm?.sceneId;
-    const editorSceneId = store.getState().selection.scene;
+    const editorSceneId = store.getState().present.selection.scene;
     const didSceneChange = editorSceneId !== systemSceneId;
     if (didSceneChange) {
       dispatch(core.actions.setSelectedSceneDefinition(systemSceneId));

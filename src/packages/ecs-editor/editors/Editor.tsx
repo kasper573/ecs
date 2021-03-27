@@ -8,6 +8,7 @@ import { LibraryPanel } from "../panels/LibraryPanel";
 import { SystemsPanel } from "../panels/SystemsPanel";
 import { InstancesPanel } from "../panels/InstancesPanel";
 import { InspectorPanel } from "../panels/InspectorPanel";
+import { Hotkeys } from "../components/Hotkeys";
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
@@ -21,5 +22,6 @@ export const Editor = () => (
       <InstancesPanel />
       <LibraryPanel />
     </PanelContainer>
+    <Hotkeys />
   </AppBarAndDrawer>
 );
