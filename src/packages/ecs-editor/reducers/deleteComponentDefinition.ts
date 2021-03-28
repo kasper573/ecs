@@ -1,10 +1,9 @@
-import { get, remove } from "../../ecs-common/nominal";
+import { get, remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentDefinition,
   ComponentDefinitionId,
 } from "../../ecs-serializable/types/ComponentDefinition";
-import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 import { core } from "../core";
 import { EditorState } from "../types/EditorState";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
@@ -37,9 +36,8 @@ function* related(
   state: EditorState,
   componentDefinition: ComponentDefinition
 ) {
-  for (const entityDefinition of selectListOfEntityDefinition(
-    state,
-    componentDefinition.systemId
+  for (const entityDefinition of values(state.ecs.entityDefinitions).filter(
+    (def) => def.systemId === componentDefinition.systemId
   )) {
     for (const componentInitializer of entityDefinition.components) {
       if (componentInitializer.definitionId === componentDefinition.id) {

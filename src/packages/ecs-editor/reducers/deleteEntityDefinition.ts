@@ -1,8 +1,7 @@
-import { get, remove } from "../../ecs-common/nominal";
+import { get, remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
 import { core } from "../core";
-import { selectEntityInitializersFor } from "../selectors/selectEntityInitializersFor";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
 import { deleteEntityInitializer } from "./deleteEntityInitializer";
 
@@ -13,7 +12,9 @@ export const deleteEntityDefinition = createEditorStateReducer<EntityDefinitionI
       throw new Error("Could not find entity definition");
     }
     // Delete related entity initializers
-    for (const init of selectEntityInitializersFor(state, def)) {
+    for (const init of values(state.ecs.entityInitializers).filter(
+      (init) => init.definitionId === def.id
+    )) {
       deleteEntityInitializer(
         state,
         core.actions.deleteEntityInitializer(init.id)

@@ -1,11 +1,7 @@
-import { remove } from "../../ecs-common/nominal";
+import { remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { core } from "../core";
-import { selectListOfSceneDefinition } from "../selectors/selectListOfSceneDefinition";
-import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
-import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
-import { selectListOfLibraryFolder } from "../selectors/selectListOfLibraryFolder";
 import { deleteSceneDefinition } from "./deleteSceneDefinition";
 import { deleteEntityDefinition } from "./deleteEntityDefinition";
 import { deleteLibraryFolder } from "./deleteLibraryFolder";
@@ -17,19 +13,25 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
       throw new Error("Could not delete system");
     }
     // Delete related objects
-    for (const scene of selectListOfSceneDefinition(state, id)) {
+    for (const scene of values(state.ecs.scenes).filter(
+      (scene) => scene.systemId === id
+    )) {
       deleteSceneDefinition(
         state,
         core.actions.deleteSceneDefinition(scene.id)
       );
     }
-    for (const def of selectListOfEntityDefinition(state, id)) {
+    for (const def of values(state.ecs.entityDefinitions).filter(
+      (def) => def.systemId === id
+    )) {
       deleteEntityDefinition(
         state,
         core.actions.deleteEntityDefinition(def.id)
       );
     }
-    for (const def of selectListOfComponentDefinition(state, id)) {
+    for (const def of values(state.ecs.componentDefinitions).filter(
+      (def) => def.systemId === id
+    )) {
       deleteComponentDefinition(
         state,
         core.actions.deleteComponentDefinition(def.id)
@@ -37,8 +39,8 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
     }
 
     // Delete only root folders because deleteLibraryFolder deletes ancestors already
-    const rootFolders = selectListOfLibraryFolder(state, id).filter(
-      (folder) => !folder.parentNodeId
+    const rootFolders = values(state.ecs.libraryFolders).filter(
+      (folder) => !folder.parentNodeId && folder.systemId === id
     );
     for (const folder of rootFolders) {
       deleteLibraryFolder(state, core.actions.deleteLibraryFolder(folder.id));
