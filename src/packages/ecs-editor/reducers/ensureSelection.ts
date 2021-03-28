@@ -1,38 +1,31 @@
-import { selectDefaultSelectionValue } from "../selectors/selectDefaultSelectionValue";
-import {
-  EditorSelectionName,
-  editorSelectionOrder,
-} from "../types/EditorSelection";
-import { EditorState } from "../types/EditorState";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
-import { selectInspectedObject } from "../selectors/selectInspectedObject";
-import { setSelectedObject } from "./setSelectedObject";
+import { getDefaultSelectionValue } from "../functions/getDefaultSelectionValue";
+import { createEditorStateReducer } from "../functions/createEditorStateReducer";
+import { get } from "../../ecs-common/nominal";
+import { core } from "../core";
+import { setSelectedSystemDefinition } from "./setSelectedSystemDefinition";
+import { setSelectedSceneDefinition } from "./setSelectedSceneDefinition";
 
 /**
  * Ensures selection for objects that has a default available.
- * (Returns the original state object if no selection was changed)
  */
-export const ensureSelection = (state: EditorState): EditorState =>
-  editorSelectionOrder.reduce(
-    <ObjectName extends EditorSelectionName>(
-      state: EditorState,
-      objectName: ObjectName
-    ) => {
-      const resolvedObject = objectSelectors[objectName](state);
-      if (resolvedObject) {
-        return state; // Current selection is valid
-      }
-      return setSelectedObject(state, {
-        objectName,
-        selectedValue: selectDefaultSelectionValue(state, objectName),
-      });
-    },
-    state
-  );
-
-const objectSelectors = {
-  system: selectSelectedSystemDefinition,
-  scene: selectSelectedSceneDefinition,
-  inspected: selectInspectedObject,
-};
+export const ensureSelection = createEditorStateReducer((state) => {
+  const { ecs, selection } = state;
+  const selectedSystem = selection.system && get(ecs.systems, selection.system);
+  const selectedScene = selection.scene && get(ecs.scenes, selection.scene);
+  if (!selectedSystem) {
+    setSelectedSystemDefinition(
+      state,
+      core.actions.setSelectedSystemDefinition(
+        getDefaultSelectionValue(state, "system")
+      )
+    );
+  }
+  if (!selectedScene) {
+    setSelectedSceneDefinition(
+      state,
+      core.actions.setSelectedSceneDefinition(
+        getDefaultSelectionValue(state, "scene")
+      )
+    );
+  }
+});

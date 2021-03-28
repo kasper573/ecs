@@ -1,0 +1,15 @@
+{
+  "overrides": [
+    {
+      "files": ["reducers/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["../selectors/**"]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,10 +1,9 @@
-import { get } from "../../ecs-common/nominal";
+import { get, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentInitializer,
   ComponentInitializerId,
 } from "../../ecs-serializable/types/ComponentInitializer";
-import { selectEntityInitializersFor } from "../selectors/selectEntityInitializersFor";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 
 type DeleteComponentInitializerPayload = ComponentInitializerReducerPayload<{
@@ -38,7 +37,9 @@ export const deleteComponentInitializer = createEditorStateReducer<DeleteCompone
             "Could not remove component from target entity definition"
           );
         }
-        for (const init of selectEntityInitializersFor(state, def)) {
+        for (const init of values(state.ecs.entityInitializers).filter(
+          (init) => init.definitionId === def.id
+        )) {
           removeComponent(init.components, payload.componentId);
         }
         break;

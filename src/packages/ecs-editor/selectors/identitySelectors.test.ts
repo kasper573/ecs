@@ -2,11 +2,9 @@ import { mockEditorState } from "../functions/mockEditorState";
 import { values } from "../../ecs-common/nominal";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
-import { selectDefaultSelectionValue } from "./selectDefaultSelectionValue";
 import { selectECS } from "./selectECS";
 import { selectEditorSelection } from "./selectEditorSelection";
 import { selectEntityDefinition } from "./selectEntityDefinition";
-import { selectEntityInitializersFor } from "./selectEntityInitializersFor";
 import { selectHasScenes } from "./selectHasScenes";
 import { selectHasSystems } from "./selectHasSystems";
 import { selectInspectedObject } from "./selectInspectedObject";
@@ -22,7 +20,7 @@ import { selectSelectedSceneDefinition } from "./selectSelectedSceneDefinition";
 import { selectSelectedLibraryNode } from "./selectSelectedLibraryNode";
 
 // Suite disabled until createMemoizedSelector has been properly implemented
-describe.skip("selector returns identical values given the same parameters", () => {
+describe("selector returns identical values given the same parameters", () => {
   const state = mockEditorState();
   const cDef = values(state.ecs.componentDefinitions)[0];
   const eDef = values(state.ecs.entityDefinitions)[0];
@@ -31,15 +29,11 @@ describe.skip("selector returns identical values given the same parameters", () 
   test("selectAll", () => testIdentity(selectAll, state));
   test("selectComponentDefinition", () =>
     testIdentity(selectComponentDefinition, state, cDef.id));
-  test("selectDefaultSelectionValue", () =>
-    testIdentity(selectDefaultSelectionValue, state, "system"));
   test("selectECS", () => testIdentity(selectECS, state));
   test("selectEditorSelection", () =>
     testIdentity(selectEditorSelection, state));
   test("selectEntityDefinition", () =>
     testIdentity(selectEntityDefinition, state, eDef.id));
-  test("selectEntityInitializersFor", () =>
-    testIdentity(selectEntityInitializersFor, state, eDef));
   test("selectHasScenes", () =>
     testIdentity(selectHasScenes, state, system.id));
   test("selectHasSystems", () => testIdentity(selectHasSystems, state));

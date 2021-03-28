@@ -35,13 +35,22 @@ export const LibraryPanel = () => {
           components: [],
         })
       ),
-    onRenameItem: (target, name) =>
-      dispatch(
-        core.actions.renameLibraryNode({
-          nodeId: target.nodeId,
-          name,
-        })
-      ),
+    onRenameItem: (target, name) => {
+      switch (target.type) {
+        case "entity":
+          return dispatch(
+            core.actions.renameEntityDefinition({ id: target.id, name })
+          );
+        case "component":
+          return dispatch(
+            core.actions.renameComponentDefinition({ id: target.id, name })
+          );
+        case "folder":
+          return dispatch(
+            core.actions.renameLibraryFolder({ id: target.id, name })
+          );
+      }
+    },
     onDeleteItem: (node) => {
       switch (node.type) {
         case "entity":

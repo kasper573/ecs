@@ -5,7 +5,7 @@ import {
 } from "../types/EditorSelection";
 import { values } from "../../ecs-common/nominal";
 
-export function selectDefaultSelectionValue<
+export function getDefaultSelectionValue<
   ObjectName extends EditorSelectionName
 >(
   state: EditorState,
@@ -16,7 +16,7 @@ export function selectDefaultSelectionValue<
  * Returns the selection for the first object in the list for the specified object.
  * (Returns undefined if the list for the specified object is empty)
  */
-export function selectDefaultSelectionValue(
+export function getDefaultSelectionValue(
   state: EditorState,
   objectName: EditorSelectionName
 ): EditorSelectionValues[EditorSelectionName] {
@@ -29,8 +29,5 @@ export function selectDefaultSelectionValue(
         (scene) => scene.systemId === state.selection.system
       );
       return scene && scene.id;
-    case "inspected":
-      // Reset inspection when selecting a non-inspector object
-      return undefined;
   }
 }
