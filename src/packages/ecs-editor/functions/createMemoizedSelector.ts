@@ -1,13 +1,17 @@
-/**
- * Placeholder function for future implementation of selector memoization.
- * Does not actually memoize right now (we can't, since we use selectors in reducers that use immer drafts).
- */
-export const createMemoizedSelector: CreateMemoizedSelector = (
-  selectParams,
-  select
-) => (...args) => select(selectParams(...args));
+import { shallowEqual } from "react-redux";
+import { createSelectorCreator, defaultMemoize } from "reselect";
 
-type CreateMemoizedSelector = <
+/**
+ * Creates a selector with shallow equality check for parameters to memoize on.
+ */
+export const createMemoizedSelector: CreateShallowSelectorWithParams = createSelectorCreator(
+  defaultMemoize,
+  shallowEqual
+);
+
+// createSelectorCreator has trouble inferring types properly,
+// so we use this specific type definition that fits our use case.
+type CreateShallowSelectorWithParams = <
   SelectParams extends (...args: any) => any,
   Select extends (params: ReturnType<SelectParams>) => any
 >(
