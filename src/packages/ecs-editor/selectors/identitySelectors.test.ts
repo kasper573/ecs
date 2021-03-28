@@ -2,7 +2,6 @@ import { mockEditorState } from "../functions/mockEditorState";
 import { values } from "../../ecs-common/nominal";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
-import { selectDefaultSelectionValue } from "./selectDefaultSelectionValue";
 import { selectECS } from "./selectECS";
 import { selectEditorSelection } from "./selectEditorSelection";
 import { selectEntityDefinition } from "./selectEntityDefinition";
@@ -30,8 +29,6 @@ describe("selector returns identical values given the same parameters", () => {
   test("selectAll", () => testIdentity(selectAll, state));
   test("selectComponentDefinition", () =>
     testIdentity(selectComponentDefinition, state, cDef.id));
-  test("selectDefaultSelectionValue", () =>
-    testIdentity(selectDefaultSelectionValue, state, "system"));
   test("selectECS", () => testIdentity(selectECS, state));
   test("selectEditorSelection", () =>
     testIdentity(selectEditorSelection, state));
