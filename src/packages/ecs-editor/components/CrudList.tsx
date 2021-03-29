@@ -31,6 +31,11 @@ export type CrudListProps<T> = Omit<ListProps, "onChange"> & {
    */
   onUpdateItem?: (item: T) => void;
   /**
+   * Called when the duplicate button for an item is pressed.
+   * (No duplicate button is shown if this callback is not specified)
+   */
+  onDuplicateItem?: (item: T) => void;
+  /**
    * Called when the delete button for an item is pressed.
    * (No edit button is shown if this callback is not specified)
    */
@@ -54,6 +59,7 @@ export function CrudList<T>({
   getItemKey = defaultKey,
   getItemProps = defaultProps,
   onSelectItem,
+  onDuplicateItem,
   onUpdateItem,
   onDeleteItem,
   ...listProps
@@ -67,6 +73,9 @@ export function CrudList<T>({
           name={`Item ${index + 1}`}
           onClick={onSelectItem ? () => onSelectItem(item) : undefined}
           onEdit={onUpdateItem ? () => onUpdateItem(item) : undefined}
+          onDuplicate={
+            onDuplicateItem ? () => onDuplicateItem(item) : undefined
+          }
           onDelete={onDeleteItem ? () => onDeleteItem(item) : undefined}
           selected={selectable && active === item}
           button={selectable}

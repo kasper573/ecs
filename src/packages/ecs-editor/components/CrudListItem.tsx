@@ -20,6 +20,10 @@ export type CrudListItemProps<
    */
   onEdit?: () => void;
   /**
+   * Called when the duplicate button is pressed
+   */
+  onDuplicate?: () => void;
+  /**
    * Called when the delete button is pressed
    */
   onDelete?: () => void;
@@ -35,6 +39,7 @@ export type CrudListItemProps<
 export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   name,
   onEdit,
+  onDuplicate,
   onDelete,
   icon: Icon,
   ...listItemProps
@@ -42,6 +47,7 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   const ref = useOnFocusedAndKeyPressed("Delete", onDelete);
   const [triggerProps, menu] = useContextMenu([
     onEdit && <MenuItem onClick={onEdit}>Rename</MenuItem>,
+    onDuplicate && <MenuItem onClick={onDuplicate}>Duplicate</MenuItem>,
     onDelete && <MenuItem onClick={onDelete}>Delete</MenuItem>,
   ]);
 
