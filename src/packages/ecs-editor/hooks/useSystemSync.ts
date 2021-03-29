@@ -40,7 +40,12 @@ export const useSystemSync = () => {
     forceUpdate();
   };
 
-  const resetSystem = useCallback(() => setSystem(undefined), []);
+  const resetSystem = useCallback(() => {
+    if (selection.system) {
+      const selectedECS = getECSDefinitionForSystem(ecs, selection.system);
+      setSystem(createSystem(selectedECS, nativeComponents));
+    }
+  }, [ecs, selection.system, nativeComponents]);
 
   useEffect(syncSystem, [ecs, selection.system, nativeComponents, systemRef]);
 
