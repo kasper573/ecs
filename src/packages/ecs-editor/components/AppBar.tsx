@@ -8,7 +8,6 @@ import styled from "styled-components";
 import { useSelector } from "../store";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { useDialog } from "../hooks/useDialog";
-import { serializeJS } from "../../ecs-serializable/jsSerializer";
 import { selectECS } from "../selectors/selectECS";
 import { EditorTitle } from "./EditorTitle";
 import { SaveIcon } from "./icons";
@@ -21,7 +20,7 @@ export const AppBar = () => {
 
   const [showSaveDialog, saveDialog] = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
-      <pre>{serializeJS(ecs, { space: 2 })}</pre>
+      {props.open && <pre>{JSON.stringify(ecs, null, 2)}</pre>}
     </SimpleDialog>
   ));
 
