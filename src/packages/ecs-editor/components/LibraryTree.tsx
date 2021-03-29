@@ -12,7 +12,7 @@ export type LibraryTreeProps = {
   selected?: DiscriminatedLibraryNode;
   onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
   library: DiscriminatedLibraryNode[];
-} & Pick<LibraryTreeItemProps, "onEdit" | "onDelete">;
+} & Pick<LibraryTreeItemProps, "onEdit" | "onDuplicate" | "onDelete">;
 
 /**
  * Displays a LibraryDefinition as a MUI TreeView.
@@ -22,6 +22,7 @@ export const LibraryTree = ({
   selected,
   onSelectedChange,
   onEdit,
+  onDuplicate,
   onDelete,
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
@@ -52,7 +53,10 @@ export const LibraryTree = ({
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
-      <LibraryTreeItems nodes={treeRoots} itemProps={{ onEdit, onDelete }} />
+      <LibraryTreeItems
+        nodes={treeRoots}
+        itemProps={{ onEdit, onDelete, onDuplicate }}
+      />
     </TreeView>
   );
 };

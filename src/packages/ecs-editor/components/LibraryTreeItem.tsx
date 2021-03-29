@@ -17,14 +17,17 @@ import { LibraryTreeItems } from "./LibraryTreeItems";
 export type LibraryTreeItemProps = {
   node: LibraryTreeNode;
   onEdit?: (node: DiscriminatedLibraryNode) => void;
+  onDuplicate?: (node: DiscriminatedLibraryNode) => void;
   onDelete?: (node: DiscriminatedLibraryNode) => void;
 };
 
 export const LibraryTreeItem = ({
   node,
   onEdit,
+  onDuplicate,
   onDelete,
 }: LibraryTreeItemProps) => {
+  const isFolder = node.value.type === "folder";
   const ref = useOnFocusedAndKeyPressed(
     "Delete",
     onDelete ? () => onDelete(node.value) : undefined
@@ -32,12 +35,14 @@ export const LibraryTreeItem = ({
 
   const [triggerProps, menu] = useContextMenu([
     onEdit && <MenuItem onClick={() => onEdit(node.value)}>Rename</MenuItem>,
+    !isFolder && onDuplicate ? (
+      <MenuItem onClick={() => onDuplicate(node.value)}>Duplicate</MenuItem>
+    ) : undefined,
     onDelete && (
       <MenuItem onClick={() => onDelete(node.value)}>Delete</MenuItem>
     ),
   ]);
 
-  const isFolder = node.value.type === "folder";
   const LabelIcon = labelIcons[node.value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
   const expandIcon = isFolder ? <FolderIcon /> : <LabelIcon />;
