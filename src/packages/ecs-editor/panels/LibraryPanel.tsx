@@ -1,5 +1,5 @@
 import { IconButton, Tooltip } from "@material-ui/core";
-import React from "react";
+import React, { useCallback } from "react";
 import { PanelName } from "../components/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { AddIcon } from "../components/icons";
@@ -62,6 +62,17 @@ export const LibraryPanel = () => {
       }
     },
   });
+  const handleDuplicate = useCallback(
+    (node: DiscriminatedLibraryNode) => {
+      switch (node.type) {
+        case "entity":
+          return dispatch(core.actions.duplicateEntityDefinition(node.id));
+        case "component":
+          return dispatch(core.actions.duplicateComponentDefinition(node.id));
+      }
+    },
+    [dispatch]
+  );
   return (
     <Panel name={PanelName.Library}>
       {libraryNodeDialogs}
@@ -82,6 +93,7 @@ export const LibraryPanel = () => {
         selected={selectedNode}
         library={nodes}
         onEdit={libraryNodeEvents.onUpdateItem}
+        onDuplicate={handleDuplicate}
         onDelete={libraryNodeEvents.onDeleteItem}
         onSelectedChange={({ nodeId }) =>
           dispatch(core.actions.setSelectedLibraryNode(nodeId))

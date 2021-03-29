@@ -28,6 +28,8 @@ import { renameEntityDefinition } from "./reducers/renameEntityDefinition";
 import { renameLibraryFolder } from "./reducers/renameLibraryFolder";
 import { duplicateEntityInitializer } from "./reducers/duplicateEntityInitializer";
 import { duplicateSceneDefinition } from "./reducers/duplicateSceneDefinition";
+import { duplicateEntityDefinition } from "./reducers/duplicateEntityDefinition";
+import { duplicateComponentDefinition } from "./reducers/duplicateComponentDefinition";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -53,6 +55,7 @@ export const core = createSlice({
     setSelectedLibraryNode,
     createEntityDefinition,
     renameEntityDefinition,
+    duplicateEntityDefinition,
     deleteEntityDefinition,
     renameLibraryFolder,
     deleteLibraryFolder,
@@ -62,6 +65,7 @@ export const core = createSlice({
     updateComponentProperties,
     deleteComponentInitializer,
     createComponentDefinition,
+    duplicateComponentDefinition,
     setEditorState,
   },
   extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
