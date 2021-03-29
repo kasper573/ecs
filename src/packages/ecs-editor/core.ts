@@ -30,6 +30,7 @@ import { duplicateEntityInitializer } from "./reducers/duplicateEntityInitialize
 import { duplicateSceneDefinition } from "./reducers/duplicateSceneDefinition";
 import { duplicateEntityDefinition } from "./reducers/duplicateEntityDefinition";
 import { duplicateComponentDefinition } from "./reducers/duplicateComponentDefinition";
+import { duplicateComponentInitializer } from "./reducers/duplicateComponentInitializer";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -64,6 +65,7 @@ export const core = createSlice({
     addComponentInitializer,
     updateComponentProperties,
     deleteComponentInitializer,
+    duplicateComponentInitializer,
     createComponentDefinition,
     duplicateComponentDefinition,
     setEditorState,

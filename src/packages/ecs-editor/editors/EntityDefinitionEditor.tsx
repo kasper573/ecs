@@ -64,6 +64,18 @@ export const EntityDefinitionEditor = ({
     [entityDefinition.id, dispatch]
   );
 
+  const duplicateComponent = useCallback(
+    (selectedComponent: ComponentInitializer) =>
+      dispatch(
+        core.actions.duplicateComponentInitializer({
+          target: "definition",
+          id: entityDefinition.id,
+          componentId: selectedComponent.id,
+        })
+      ),
+    [entityDefinition.id, dispatch]
+  );
+
   const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
     removeComponent
   );
@@ -81,6 +93,7 @@ export const EntityDefinitionEditor = ({
         primaryItems={entityDefinition.components}
         onRemove={askToDeleteComponent}
         onUpdate={updateProperties}
+        onDuplicate={duplicateComponent}
       />
       {deleteDialog}
     </>

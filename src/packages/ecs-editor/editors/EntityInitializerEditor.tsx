@@ -86,6 +86,18 @@ export const EntityInitializerEditor = ({
     [entityInitializer.id, dispatch]
   );
 
+  const duplicateComponent = useCallback(
+    (selectedComponent: ComponentInitializer) =>
+      dispatch(
+        core.actions.duplicateComponentInitializer({
+          target: "initializer",
+          id: entityInitializer.id,
+          componentId: selectedComponent.id,
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
+
   const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
     removeComponent
   );
@@ -103,6 +115,7 @@ export const EntityInitializerEditor = ({
         baseItems={entityDefinition.components}
         primaryItems={entityInitializer.components}
         onUpdate={updateProperties}
+        onDuplicate={duplicateComponent}
         onRemove={askToDeleteComponent}
         onRestore={restoreComponent}
       />
