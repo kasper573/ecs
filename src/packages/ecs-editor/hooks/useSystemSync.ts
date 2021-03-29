@@ -6,12 +6,12 @@ import {
   useState,
 } from "react";
 import { System } from "../../ecs/System";
-import { createSystem } from "../../ecs-serializable/factories/createSystem";
+import { createSystem } from "../../ecs-serializable/functions/createSystem";
 import { useSelector } from "../store";
 import { selectAll } from "../selectors/selectAll";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { updateSystem } from "../../ecs-serializable/factories/updateSystem";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
+import { updateSystem } from "../../ecs-serializable/functions/updateSystem";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { useAsRef } from "../../ecs-common/useAsRef";
 
 /**

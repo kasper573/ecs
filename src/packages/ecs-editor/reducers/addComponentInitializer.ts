@@ -1,6 +1,6 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { get, values } from "../../ecs-common/nominal";
-import { inheritComponentInitializer } from "../../ecs-serializable/factories/inheritComponentInitializer";
+import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 

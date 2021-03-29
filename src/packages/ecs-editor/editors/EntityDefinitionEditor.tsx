@@ -8,7 +8,7 @@ import { PanelName } from "../components/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/factories/createComponentPropertiesDefinition";
+import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { useDispatch } from "../store";
 import { core } from "../core";

@@ -2,7 +2,7 @@ import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
 import { set } from "../ecs-common/nominal";
-import { createSystem } from "./factories/createSystem";
+import { createSystem } from "./functions/createSystem";
 import {
   EntityInitializer,
   EntityInitializerId,
@@ -12,8 +12,8 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
-import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
+import { createComponentPropertiesDefinition } from "./functions/createComponentPropertiesDefinition";
+import { inheritComponentInitializer } from "./functions/inheritComponentInitializer";
 import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";

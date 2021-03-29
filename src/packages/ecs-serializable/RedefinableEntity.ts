@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { Entity } from "../ecs/Entity";
 import { ComponentInstance } from "../ecs/Component";
-import { createComponentProperties } from "./factories/createComponentProperties";
+import { createComponentProperties } from "./functions/createComponentProperties";
 import { EntityDefinition } from "./types/EntityDefinition";
 import { ComponentMap } from "./types/ComponentMap";
 import { EntityInitializer } from "./types/EntityInitializer";
