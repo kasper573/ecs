@@ -47,21 +47,23 @@ export const LibraryTreeItem = ({
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
   const expandIcon = isFolder ? <FolderIcon /> : <LabelIcon />;
   return (
-    <TreeItemWithoutFocusColor
-      ref={ref}
-      key={node.value.nodeId}
-      nodeId={node.value.nodeId}
-      label={node.value.name}
-      collapseIcon={collapseIcon}
-      expandIcon={expandIcon}
-      {...triggerProps}
-    >
-      <LibraryTreeItems
-        nodes={node.children}
-        itemProps={{ onEdit, onDelete }}
-      />
+    <>
       {menu}
-    </TreeItemWithoutFocusColor>
+      <TreeItemWithoutFocusColor
+        ref={ref}
+        key={node.value.nodeId}
+        nodeId={node.value.nodeId}
+        label={node.value.name}
+        collapseIcon={collapseIcon}
+        expandIcon={expandIcon}
+        {...triggerProps}
+      >
+        <LibraryTreeItems
+          nodes={node.children}
+          itemProps={{ onEdit, onDelete }}
+        />
+      </TreeItemWithoutFocusColor>
+    </>
   );
 };
 
