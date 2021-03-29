@@ -34,8 +34,13 @@ export const InstancesPanel = () => {
     onDeleteItem: (entity) =>
       dispatch(core.actions.deleteEntityInitializer(entity.id)),
   });
+  const handleDuplicate = useCallback(
+    (entityInitializer: EntityInitializer) =>
+      dispatch(core.actions.duplicateEntityInitializer(entityInitializer.id)),
+    [dispatch]
+  );
   const handleNodeSelected = useCallback(
-    (entityInitializer) =>
+    (entityInitializer: EntityInitializer) =>
       dispatch(core.actions.setSelectedEntityInitializer(entityInitializer.id)),
     [dispatch]
   );
@@ -55,6 +60,7 @@ export const InstancesPanel = () => {
         getItemProps={getItemProps}
         getItemKey={getItemKey}
         onSelectItem={handleNodeSelected}
+        onDuplicateItem={handleDuplicate}
         {...omit(entityInitializerEvents, "onCreateItem")}
       />
     </Panel>
