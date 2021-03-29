@@ -11,13 +11,14 @@ export type ComponentInitializerListProps = {
   primaryItems: ComponentInitializer[];
 } & Pick<
   ComponentInitializerAccordionProps,
-  "onRestore" | "onRemove" | "onUpdate"
+  "onRestore" | "onDuplicate" | "onRemove" | "onUpdate"
 >;
 
 export const ComponentInitializerList = ({
   baseItems = [],
   primaryItems,
   onRemove,
+  onDuplicate,
   onUpdate,
   onRestore,
 }: ComponentInitializerListProps) => (
@@ -34,6 +35,7 @@ export const ComponentInitializerList = ({
             base={base}
             primary={primary}
             onRemove={onRemove}
+            onDuplicate={onDuplicate}
             onRestore={onRestore}
             onUpdate={onUpdate}
           />

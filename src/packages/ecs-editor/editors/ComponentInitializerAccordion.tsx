@@ -21,13 +21,15 @@ export type ComponentInitializerAccordionProps = {
   base?: ComponentInitializer;
   primary?: ComponentInitializer;
   onUpdate: ComponentInitializerEditorProps["onChange"];
-  onRestore?: (updated: ComponentInitializer) => void;
-  onRemove?: (updated: ComponentInitializer) => void;
+  onDuplicate?: (selected: ComponentInitializer) => void;
+  onRestore?: (selected: ComponentInitializer) => void;
+  onRemove?: (selected: ComponentInitializer) => void;
 };
 
 export const ComponentInitializerAccordion = ({
   base,
   primary,
+  onDuplicate,
   onUpdate,
   onRemove = noop,
   onRestore = noop,
@@ -44,12 +46,13 @@ export const ComponentInitializerAccordion = ({
   }
 
   const [toggleProps, contextMenu] = useContextMenu([
+    onDuplicate && (
+      <MenuItem onClick={() => onDuplicate(initializer)}>Duplicate</MenuItem>
+    ),
     primary ? (
-      <MenuItem onClick={() => onRemove(primary)}>Remove component</MenuItem>
+      <MenuItem onClick={() => onRemove(primary)}>Remove</MenuItem>
     ) : (
-      base && (
-        <MenuItem onClick={() => onRestore(base)}>Restore component</MenuItem>
-      )
+      base && <MenuItem onClick={() => onRestore(base)}>Restore</MenuItem>
     ),
   ]);
   return (
