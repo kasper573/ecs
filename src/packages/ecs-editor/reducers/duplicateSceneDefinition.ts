@@ -6,6 +6,7 @@ import {
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { uuid } from "../../ecs-common/uuid";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinitionId>(
   ({ ecs: { scenes, entityInitializers } }, { payload: id }) => {
@@ -18,7 +19,7 @@ export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinition
     const duplicateScene: SceneDefinition = {
       ...scene,
       id: uuid(),
-      name: scene.name + " Copy",
+      name: duplicateName(scene.name),
     };
     set(scenes, duplicateScene.id, duplicateScene);
 

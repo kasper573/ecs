@@ -5,6 +5,7 @@ import {
   EntityInitializer,
   EntityInitializerId,
 } from "../../ecs-serializable/types/EntityInitializer";
+import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateEntityInitializer = createEditorStateReducer<EntityInitializerId>(
   ({ ecs: { entityInitializers } }, { payload: id }) => {
@@ -15,7 +16,7 @@ export const duplicateEntityInitializer = createEditorStateReducer<EntityInitial
     const duplicate: EntityInitializer = {
       ...initializer,
       id: uuid(),
-      name: initializer.name + " Copy",
+      name: duplicateName(initializer.name),
     };
     set(entityInitializers, duplicate.id, duplicate);
   }

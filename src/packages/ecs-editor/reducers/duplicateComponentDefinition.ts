@@ -5,6 +5,7 @@ import {
   ComponentDefinitionId,
 } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
+import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateComponentDefinition = createEditorStateReducer<ComponentDefinitionId>(
   (state, { payload: id }) => {
@@ -17,7 +18,7 @@ export const duplicateComponentDefinition = createEditorStateReducer<ComponentDe
       ...def,
       id: uuid(),
       nodeId: uuid(),
-      name: def.name + " Copy",
+      name: duplicateName(def.name),
     };
     set(state.ecs.componentDefinitions, duplicate.id, duplicate);
   }

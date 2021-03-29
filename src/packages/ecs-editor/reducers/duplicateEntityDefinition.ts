@@ -5,6 +5,7 @@ import {
   EntityDefinitionId,
 } from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
+import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateEntityDefinition = createEditorStateReducer<EntityDefinitionId>(
   (state, { payload: id }) => {
@@ -17,7 +18,7 @@ export const duplicateEntityDefinition = createEditorStateReducer<EntityDefiniti
       ...def,
       id: uuid(),
       nodeId: uuid(),
-      name: def.name + " Copy",
+      name: duplicateName(def.name),
     };
     set(state.ecs.entityDefinitions, duplicate.id, duplicate);
   }
