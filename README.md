@@ -6,6 +6,8 @@ An ECS game engine and editor built with Typescript and React.
 > but both the engine and editor is built on a generic Entity Component System and could be used
 > to build other games if the proper components are developed.
 
+[Try the game editor](https://ksandin-ecs-editor.surge.sh/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Getting started
