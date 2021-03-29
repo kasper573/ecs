@@ -12,7 +12,7 @@ import { PunchingBag } from "./entities/PunchingBag";
 
 export const createGame = () => {
   const bridge = new Bridge();
-  const sceneManager = new TextAdventureSM("cliff", {
+  const sceneManager = new TextAdventureSM({
     cliff: [bridge, new BridgeRepairEquipment(), new PunchingBag()],
     bridge: [bridge],
     pit: [new Darkness(), new Ladder()],

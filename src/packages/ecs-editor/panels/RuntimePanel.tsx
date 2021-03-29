@@ -2,7 +2,7 @@ import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { useSelector } from "../store";
-import { useSystemInitializer } from "../hooks/useSystemInitializer";
+import { useSystemSync } from "../hooks/useSystemSync";
 import { useSceneSync } from "../hooks/useSceneSync";
 import { ResetIcon } from "../components/icons";
 import { FlatPanel } from "../components/FlatPanel";
@@ -19,7 +19,7 @@ export const RuntimePanel = () => {
   const selectedScene = useSelector(selectSelectedSceneDefinition);
   const hasScenes = useSelector(selectHasScenes);
   const hasSystem = useSelector(selectHasSystems);
-  const [system, resetSystem] = useSystemInitializer();
+  const [system, resetSystem] = useSystemSync();
   useSceneSync(system);
 
   if (!selectedSystem) {

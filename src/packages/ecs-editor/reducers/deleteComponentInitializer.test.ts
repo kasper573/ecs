@@ -1,6 +1,6 @@
 import { mockEditorState } from "../functions/mockEditorState";
 import { values } from "../../ecs-common/nominal";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/getECSDefinitionForSystem";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { core } from "../core";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
 

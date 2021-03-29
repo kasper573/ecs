@@ -36,7 +36,7 @@ const setup = () => {
     new Describable({ description: "A visible entity" }),
     new Collectable(),
   ]);
-  const sceneManager = new SceneManager("default", { default: [entity] });
+  const sceneManager = new SceneManager({ default: [entity] });
   const inventory = new Inventory();
   const system = new System({
     modules: [sceneManager, inventory],

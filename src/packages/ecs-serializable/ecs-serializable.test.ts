@@ -2,7 +2,7 @@ import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
 import { set } from "../ecs-common/nominal";
-import { createSystem } from "./factories/createSystem";
+import { createSystem } from "./functions/createSystem";
 import {
   EntityInitializer,
   EntityInitializerId,
@@ -12,11 +12,14 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { createComponentPropertiesDefinition } from "./factories/createComponentPropertiesDefinition";
-import { inheritComponentInitializer } from "./factories/inheritComponentInitializer";
+import { createComponentPropertiesDefinition } from "./functions/createComponentPropertiesDefinition";
+import { inheritComponentInitializer } from "./functions/inheritComponentInitializer";
 import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
+import { DeserializationMemory } from "./DeserializationMemory";
+import { updateSystem } from "./functions/updateSystem";
+import { ComponentInitializer } from "./types/ComponentInitializer";
 
 class Foo extends Component.extend({
   fn: {
@@ -190,12 +193,365 @@ describe("instantiating a System using ECSDefinition", () => {
   });
 });
 
+describe("updating a System instance using ECSDefinition", () => {
+  it("can add entity constructor", () => {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const ecsWithEntity = {
+      ...emptyECS,
+      entityDefinitions: { [entity.id]: entity },
+    };
+    const system = createSystem(emptyECS, nativeComponents);
+    updateSystem(system, ecsWithEntity, nativeComponents);
+    const memory = system.modules.resolveType(DeserializationMemory);
+    expect(memory.entityConstructors.size).toBe(1);
+  });
+
+  it("can remove entity constructor", () => {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const ecsWithEntity = {
+      ...emptyECS,
+      entityDefinitions: { [entity.id]: entity },
+    };
+    const system = createSystem(ecsWithEntity, nativeComponents);
+    updateSystem(system, emptyECS, nativeComponents);
+    const memory = system.modules.resolveType(DeserializationMemory);
+    expect(memory.entityConstructors.size).toBe(0);
+  });
+
+  it("can add component constructor", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const ecsWithComponent = {
+      ...emptyECS,
+      componentDefinitions: { [component.id]: component },
+    };
+    const system = createSystem(emptyECS, nativeComponents);
+    updateSystem(system, ecsWithComponent, nativeComponents);
+    const memory = system.modules.resolveType(DeserializationMemory);
+    expect(memory.componentConstructors.size).toBe(1);
+  });
+
+  it("can remove component constructor", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const ecsWithComponent = {
+      ...emptyECS,
+      componentDefinitions: { [component.id]: component },
+    };
+    const system = createSystem(ecsWithComponent, nativeComponents);
+    updateSystem(system, emptyECS, nativeComponents);
+    const memory = system.modules.resolveType(DeserializationMemory);
+    expect(memory.componentConstructors.size).toBe(0);
+  });
+
+  it("can add entity instance", () => {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const ecsWithEntity = mockECS([entity]);
+    const system = createSystem(emptyECS, nativeComponents);
+    updateSystem(system, ecsWithEntity, nativeComponents);
+    expect(system.entities.length).toBe(1);
+  });
+
+  it("can maintain entity instances across updates", () => {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const ecsWithEntity = mockECS([entity]);
+    const system = createSystem(ecsWithEntity, nativeComponents);
+    const instanceBeforeUpdate = system.entities[0];
+    updateSystem(system, ecsWithEntity, nativeComponents);
+    const instanceAfterUpdate = system.entities[0];
+    expect(instanceAfterUpdate).toBe(instanceBeforeUpdate);
+  });
+
+  it("can remove entity instance", () => {
+    const entity: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const ecsWithEntity = mockECS([entity]);
+    const system = createSystem(ecsWithEntity, nativeComponents);
+    updateSystem(system, emptyECS, nativeComponents);
+    expect(system.entities.length).toBe(0);
+  });
+
+  it("can add component to entity definition", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityWithoutComponent: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entityWithComponent: Omit<EntityDefinition, "systemId"> = {
+      ...entityWithoutComponent,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({}),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityWithoutComponent], []);
+    const ecs2 = mockECS([entityWithComponent], [component]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components.length).toBe(0);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components.length).toBe(1);
+  });
+
+  it("can remove component from entity definition", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityWithoutComponent: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entityWithComponent: Omit<EntityDefinition, "systemId"> = {
+      ...entityWithoutComponent,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({}),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityWithComponent], [component]);
+    const ecs2 = mockECS([entityWithoutComponent], []);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components.length).toBe(1);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components.length).toBe(0);
+  });
+
+  it("can update component properties in entity definition", () => {
+    const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const componentInitializer: ComponentInitializer = {
+      id: uid(),
+      properties: createComponentPropertiesDefinition({}),
+      definitionId: componentDefinition.id,
+    };
+    const entity1: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({ isActive: false }),
+        },
+      ],
+    };
+    const entity2: Omit<EntityDefinition, "systemId"> = {
+      ...entity1,
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({ isActive: true }),
+        },
+      ],
+    };
+
+    const ecs1 = mockECS([entity1], [componentDefinition]);
+    const ecs2 = mockECS([entity2], [componentDefinition]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(true);
+  });
+
+  it("can add component to entity initializer", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const noComponent: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const hasComponent: typeof noComponent = {
+      ...noComponent,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({}),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityDefinition], [], [noComponent]);
+    const ecs2 = mockECS([entityDefinition], [component], [hasComponent]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components.length).toBe(0);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components.length).toBe(1);
+  });
+
+  it("can remove component from entity initializer", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const noComponent: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const hasComponent: typeof noComponent = {
+      ...noComponent,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({}),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityDefinition], [component], [hasComponent]);
+    const ecs2 = mockECS([entityDefinition], [], [noComponent]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components.length).toBe(1);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components.length).toBe(0);
+  });
+
+  it("can update component properties in entity initializer", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({ isActive: false }),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const entity2: typeof entity1 = {
+      ...entity1,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({ isActive: true }),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityDefinition], [component], [entity1]);
+    const ecs2 = mockECS([entityDefinition], [component], [entity2]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(true);
+  });
+});
+
+const emptyECS: ECSDefinition = {
+  componentDefinitions: {},
+  entityInitializers: {},
+  entityDefinitions: {},
+  systems: {},
+  libraryFolders: {},
+  scenes: {},
+};
+
 let idCounter = 0;
 const uid = <T extends string>() => ("id" + idCounter++) as T;
 
-const mockSystem = (
-  entities: Array<Omit<EntityDefinition, "systemId">>,
-  components: Array<Omit<ComponentDefinition, "systemId">> = []
+const mockECS = (
+  entityDefinitions: Array<Omit<EntityDefinition, "systemId">>,
+  componentDefinitions: Array<Omit<ComponentDefinition, "systemId">> = [],
+  entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
 ) => {
   const ecs: ECSDefinition = {
     systems: {},
@@ -219,31 +575,40 @@ const mockSystem = (
   };
   set(ecs.scenes, scene.id, scene);
 
-  entities.forEach(({ id, components }, index) => {
-    const entity: EntityInitializer = {
+  if (!entityInitializers) {
+    entityInitializers = entityDefinitions.map(({ id, components }, index) => ({
       name: `entity${index}`,
-      systemId: system.id,
-      sceneId: scene.id,
       id: `initializer${index}` as EntityInitializerId,
       definitionId: id,
       components: components.map(inheritComponentInitializer),
-    };
-    set(ecs.entityInitializers, entity.id, entity);
+    }));
+  }
+
+  entityInitializers.forEach((entity) => {
+    set(ecs.entityInitializers, entity.id, {
+      ...entity,
+      sceneId: scene.id,
+      systemId: system.id,
+    });
   });
 
-  components.forEach((component) => {
+  componentDefinitions.forEach((component) => {
     set(ecs.componentDefinitions, component.id, {
       ...component,
       systemId: system.id,
     });
   });
 
-  entities.forEach((entity) => {
+  entityDefinitions.forEach((entity) => {
     set(ecs.entityDefinitions, entity.id, {
       ...entity,
       systemId: system.id,
     });
   });
-
-  return createSystem(ecs, nativeComponents);
+  return ecs;
 };
+
+const mockSystem = (
+  entities: Array<Omit<EntityDefinition, "systemId">>,
+  components: Array<Omit<ComponentDefinition, "systemId">> = []
+) => createSystem(mockECS(entities, components), nativeComponents);
