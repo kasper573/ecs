@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { without } from "lodash";
 import { EntityConstructorMap } from "../types/EntityConstructorMap";
-import { ComponentMap } from "../types/ComponentMap";
+import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { EntityInstanceMap } from "../types/EntityInstanceMap";
 import { EntityInitializer } from "../types/EntityInitializer";
@@ -13,7 +13,7 @@ import { defineEntity } from "./defineEntity";
 export const commitEntities = (
   definitions: EntityDefinition[],
   initializers: EntityInitializer[],
-  componentConstructors: ComponentMap,
+  componentConstructors: ComponentConstructorMap,
   entityConstructors: EntityConstructorMap,
   entityInstances: EntityInstanceMap
 ) => {

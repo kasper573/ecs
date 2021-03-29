@@ -3,14 +3,14 @@ import { Entity } from "../ecs/Entity";
 import { ComponentInstance } from "../ecs/Component";
 import { createComponentProperties } from "./functions/createComponentProperties";
 import { EntityDefinition } from "./types/EntityDefinition";
-import { ComponentMap } from "./types/ComponentMap";
+import { ComponentConstructorMap } from "./types/ComponentConstructorMap";
 import { EntityInitializer } from "./types/EntityInitializer";
 import { ComponentInitializerId } from "./types/ComponentInitializer";
 import { ComponentPropertiesDefinition } from "./types/ComponentPropertiesDefinition";
 
 export class RedefinableEntity extends Entity {
   define(
-    componentConstructors: ComponentMap,
+    componentConstructors: ComponentConstructorMap,
     definition: EntityDefinition,
     initializer: EntityInitializer
   ) {

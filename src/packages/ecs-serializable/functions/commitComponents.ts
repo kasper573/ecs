@@ -1,5 +1,5 @@
 import { without } from "lodash";
-import { ComponentMap } from "../types/ComponentMap";
+import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
 import { ComponentDefinition } from "../types/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
 import { defineComponent } from "./defineComponent";
@@ -10,7 +10,7 @@ import { defineComponent } from "./defineComponent";
 export const commitComponents = (
   definitions: ComponentDefinition[],
   nativeComponents: NativeComponents,
-  componentMap: ComponentMap
+  componentMap: ComponentConstructorMap
 ) => {
   const definedIds = Array.from(componentMap.keys());
   const currentIds = definitions.map((d) => d.id);
