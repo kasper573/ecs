@@ -27,6 +27,7 @@ import { renameComponentDefinition } from "./reducers/renameComponentDefinition"
 import { renameEntityDefinition } from "./reducers/renameEntityDefinition";
 import { renameLibraryFolder } from "./reducers/renameLibraryFolder";
 import { duplicateEntityInitializer } from "./reducers/duplicateEntityInitializer";
+import { duplicateSceneDefinition } from "./reducers/duplicateSceneDefinition";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -40,6 +41,7 @@ export const core = createSlice({
     deleteSystemDefinition,
     createSceneDefinition,
     renameSceneDefinition,
+    duplicateSceneDefinition,
     deleteSceneDefinition,
     createEntityInitializer,
     renameEntityInitializer,

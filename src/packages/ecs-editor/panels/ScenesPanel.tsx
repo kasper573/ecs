@@ -41,8 +41,14 @@ export const ScenesPanel = () => {
     onDeleteItem: (scene) =>
       dispatch(core.actions.deleteSceneDefinition(scene.id)),
   });
+  const handleDuplicate = useCallback(
+    (scene: SceneDefinition) =>
+      dispatch(core.actions.duplicateSceneDefinition(scene.id)),
+    [dispatch]
+  );
   const handleSceneSelected = useCallback(
-    (scene) => dispatch(core.actions.setSelectedSceneDefinition(scene.id)),
+    (scene: SceneDefinition) =>
+      dispatch(core.actions.setSelectedSceneDefinition(scene.id)),
     [dispatch]
   );
 
@@ -69,6 +75,7 @@ export const ScenesPanel = () => {
         getItemProps={getItemProps}
         getItemKey={getItemKey}
         onSelectItem={handleSceneSelected}
+        onDuplicateItem={handleDuplicate}
         {...omit(sceneEvents, "onCreateItem")}
       />
     </Panel>
