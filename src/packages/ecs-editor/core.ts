@@ -31,6 +31,7 @@ import { duplicateSceneDefinition } from "./reducers/duplicateSceneDefinition";
 import { duplicateEntityDefinition } from "./reducers/duplicateEntityDefinition";
 import { duplicateComponentDefinition } from "./reducers/duplicateComponentDefinition";
 import { duplicateComponentInitializer } from "./reducers/duplicateComponentInitializer";
+import { createLibraryFolder } from "./reducers/createLibraryFolder";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -58,6 +59,7 @@ export const core = createSlice({
     renameEntityDefinition,
     duplicateEntityDefinition,
     deleteEntityDefinition,
+    createLibraryFolder,
     renameLibraryFolder,
     deleteLibraryFolder,
     renameComponentDefinition,

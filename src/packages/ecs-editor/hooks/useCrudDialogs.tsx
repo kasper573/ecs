@@ -15,18 +15,18 @@ export type UseCrudDialogsProps<T> = {
    * Called when the create dialog flow has finished successfully
    * @param name The specified name to create an item for
    */
-  onCreateItem: (name: string) => void;
+  onCreateItem?: (name: string) => void;
   /**
    * Called when the rename dialog flow has finished successfully
    * @param item The item selected to be renamed
    * @param name The specified name to rename the item to
    */
-  onRenameItem: (item: T, newName: string) => void;
+  onRenameItem?: (item: T, newName: string) => void;
   /**
    * Called when the delete dialog flow has finished successfully
    * @param item The item selected to be deleted
    */
-  onDeleteItem: (item: T) => void;
+  onDeleteItem?: (item: T) => void;
 };
 
 /**
@@ -36,9 +36,9 @@ export type UseCrudDialogsProps<T> = {
 export function useCrudDialogs<T>({
   createDialogTitle,
   getItemName,
-  onCreateItem,
-  onRenameItem,
-  onDeleteItem,
+  onCreateItem = noop,
+  onRenameItem = noop,
+  onDeleteItem = noop,
 }: UseCrudDialogsProps<T>) {
   const [setNameDialogProps, nameDialog] = useRenderProxy(NameDialog, {
     open: false,
@@ -85,3 +85,5 @@ export function useCrudDialogs<T>({
 
   return [events, dialogs] as const;
 }
+
+const noop = () => {};

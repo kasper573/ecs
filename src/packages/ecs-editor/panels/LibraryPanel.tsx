@@ -1,8 +1,7 @@
-import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useCallback } from "react";
+import { IconButton, MenuItem } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
-import { AddIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfLibraryNode } from "../selectors/selectListOfLibraryNode";
 import { LibraryTree } from "../components/LibraryTree";
@@ -13,6 +12,9 @@ import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { MenuFor } from "../components/MenuFor";
+import { AddIcon } from "../components/icons";
+import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 
 export const LibraryPanel = () => {
   const dispatch = useDispatch();
@@ -62,6 +64,22 @@ export const LibraryPanel = () => {
       }
     },
   });
+  const [
+    libraryFolderEvents,
+    libraryFolderDialogs,
+  ] = useCrudDialogs<LibraryFolder>({
+    createDialogTitle: "Add folder",
+    getItemName: (node) => node.name,
+    onCreateItem: (name) =>
+      dispatch(
+        core.actions.createLibraryFolder({
+          nodeId: uuid(),
+          id: uuid(),
+          systemId: selectedSystem?.id!,
+          name,
+        })
+      ),
+  });
   const handleDuplicate = useCallback(
     (node: DiscriminatedLibraryNode) => {
       switch (node.type) {
@@ -76,17 +94,25 @@ export const LibraryPanel = () => {
   return (
     <Panel name={PanelName.Library}>
       {libraryNodeDialogs}
+      {libraryFolderDialogs}
       <PanelHeader title="Library">
         {selectedSystem && (
-          <Tooltip title="Create entity">
-            <IconButton
-              edge="end"
-              aria-label="create entity"
-              onClick={libraryNodeEvents.onCreateItem}
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
+          <MenuFor
+            items={[
+              <MenuItem onClick={libraryFolderEvents.onCreateItem}>
+                Folder
+              </MenuItem>,
+              <MenuItem onClick={libraryNodeEvents.onCreateItem}>
+                Entity
+              </MenuItem>,
+            ]}
+          >
+            {(props) => (
+              <IconButton edge="end" aria-label="create" {...props}>
+                <AddIcon />
+              </IconButton>
+            )}
+          </MenuFor>
         )}
       </PanelHeader>
       <LibraryTree
