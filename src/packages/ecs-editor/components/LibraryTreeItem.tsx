@@ -99,7 +99,14 @@ const dragSpec = (node: DiscriminatedLibraryNode) => {
     return {
       ...base,
       type: DragType.EntityDefinition,
-      item: node,
+      item: node as unknown,
+    };
+  }
+  if (node.type === "component") {
+    return {
+      ...base,
+      type: DragType.ComponentDefinition,
+      item: node as unknown,
     };
   }
   return base;
