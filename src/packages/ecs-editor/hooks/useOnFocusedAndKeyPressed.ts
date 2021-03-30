@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
+import { MutableRefObject, useEffect } from "react";
 
-export const useOnFocusedAndKeyPressed = <T extends HTMLElement>(
+export const useOnFocusedAndKeyPressed = <T extends Element>(
   key: string,
+  ref: MutableRefObject<T | undefined>,
   callback?: (...args: any[]) => any
 ) => {
-  const ref = useRef<T>();
   useEffect(() => {
     let handleKey: (e: KeyboardEvent) => void;
     if (callback) {
@@ -23,6 +23,5 @@ export const useOnFocusedAndKeyPressed = <T extends HTMLElement>(
         window.removeEventListener("keyup", handleKey);
       }
     };
-  }, [callback, key]);
-  return ref;
+  }, [callback, key, ref]);
 };

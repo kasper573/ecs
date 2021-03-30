@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import reportWebVitals from "../reportWebVitals";
 import { App } from "../packages/shared-components/App";
 import { Describable } from "../packages/ecs-describable/Describable";
@@ -22,13 +24,15 @@ const store = createStore({ ecs: defaultECS, selection: {} });
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <NativeComponentsContext.Provider value={nativeComponents}>
-        <Provider store={store}>
-          <App>
-            <Editor />
-          </App>
-        </Provider>
-      </NativeComponentsContext.Provider>
+      <DndProvider backend={HTML5Backend}>
+        <NativeComponentsContext.Provider value={nativeComponents}>
+          <Provider store={store}>
+            <App>
+              <Editor />
+            </App>
+          </Provider>
+        </NativeComponentsContext.Provider>
+      </DndProvider>
     </React.StrictMode>,
     document.getElementById("root")
   );

@@ -1,9 +1,11 @@
 import React, { useCallback } from "react";
+import { DropTargetMonitor } from "react-dnd";
+import { Typography } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { core } from "../core";
-import { useDispatch, useSelector } from "../store";
+import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
 import { CrudList } from "../components/CrudList";
 import { EntityInitializerIcon } from "../components/icons";
@@ -12,11 +14,16 @@ import { Panel } from "../components/Panel";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
+import { DragType } from "../types/DragType";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { uuid } from "../../ecs-common/uuid";
+import { DropBox } from "../components/DropBox";
 
 export const InstancesPanel = () => {
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
+  const store = useStore();
   const [
     entityInitializerEvents,
     entityInitializerDialogs,
@@ -44,13 +51,27 @@ export const InstancesPanel = () => {
       dispatch(core.actions.setSelectedEntityInitializer(entityInitializer.id)),
     [dispatch]
   );
+  function initializeDefinition(entityDefinition: EntityDefinition) {
+    const { system, scene } = store.getState().present.selection;
+    dispatch(
+      core.actions.createEntityInitializer({
+        systemId: system!,
+        sceneId: scene!,
+        id: uuid(),
+        name: entityDefinition.name,
+        definitionId: entityDefinition.id,
+        components: [],
+      })
+    );
+  }
+
   return (
     <Panel name={PanelName.Instances}>
       {entityInitializerDialogs}
       <PanelHeader title={PanelName.Instances}>
         <CreateEntityInitializerButton
-          onCreate={(entityInitializer) =>
-            dispatch(core.actions.createEntityInitializer(entityInitializer))
+          onCreate={(entityDefinition) =>
+            initializeDefinition(entityDefinition)
           }
         />
       </PanelHeader>
@@ -63,6 +84,9 @@ export const InstancesPanel = () => {
         onDuplicateItem={handleDuplicate}
         {...omit(entityInitializerEvents, "onCreateItem")}
       />
+      <DropBox spec={dropSpec(initializeDefinition)}>
+        <Typography>Drop to create instance</Typography>
+      </DropBox>
     </Panel>
   );
 };
@@ -72,4 +96,13 @@ const getItemKey = ({ id }: EntityInitializer) => id;
 const getItemProps = ({ name }: EntityInitializer) => ({
   name,
   icon: EntityInitializerIcon,
+});
+
+const dropSpec = (handleDrop: (def: EntityDefinition) => void) => ({
+  accept: DragType.EntityDefinition,
+  drop: handleDrop,
+  collect: (monitor: DropTargetMonitor) => ({
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+  }),
 });

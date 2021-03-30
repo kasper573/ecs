@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { TreeItem } from "@material-ui/lab";
 import { MenuItem } from "@material-ui/core";
-import React from "react";
+import React, { useRef } from "react";
+import { DragSourceMonitor } from "react-dnd";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { useDragForRef } from "../../ecs-common/useDragForRef";
+import { DragType } from "../types/DragType";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -27,9 +30,13 @@ export const LibraryTreeItem = ({
   onDuplicate,
   onDelete,
 }: LibraryTreeItemProps) => {
+  const focusRef = useRef<Element>();
+  const [, drag] = useDragForRef(focusRef, dragSpec(node.value));
   const isFolder = node.value.type === "folder";
-  const ref = useOnFocusedAndKeyPressed(
+
+  useOnFocusedAndKeyPressed(
     "Delete",
+    focusRef,
     onDelete ? () => onDelete(node.value) : undefined
   );
 
@@ -50,7 +57,7 @@ export const LibraryTreeItem = ({
     <>
       {menu}
       <TreeItemWithoutFocusColor
-        ref={ref}
+        ref={drag}
         key={node.value.nodeId}
         nodeId={node.value.nodeId}
         label={node.value.name}
@@ -79,4 +86,21 @@ const labelIcons = {
   folder: FolderIcon,
   entity: EntityDefinitionIcon,
   component: ComponentDefinitionIcon,
+};
+
+const dragSpec = (node: DiscriminatedLibraryNode) => {
+  const base = {
+    type: DragType.Unknown,
+    collect: (monitor: DragSourceMonitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  };
+  if (node.type === "entity") {
+    return {
+      ...base,
+      type: DragType.EntityDefinition,
+      item: node,
+    };
+  }
+  return base;
 };

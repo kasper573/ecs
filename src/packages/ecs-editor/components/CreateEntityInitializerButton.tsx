@@ -3,16 +3,15 @@ import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { bindPopper, bindToggle } from "material-ui-popup-state";
 import { usePopupState } from "material-ui-popup-state/hooks";
-import { uuid } from "../../ecs-common/uuid";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { useSelector } from "../store";
 import { selectEditorSelection } from "../selectors/selectEditorSelection";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { CommonPopper } from "./CommonPopper";
 import { AddIcon } from "./icons";
 
 export type CreateEntityInitializerButtonProps = {
-  onCreate: (entityInitializer: EntityInitializer) => void;
+  onCreate: (selected: EntityDefinition) => void;
 };
 
 export const CreateEntityInitializerButton = ({
@@ -42,14 +41,7 @@ export const CreateEntityInitializerButton = ({
         <Autocomplete
           onChange={(e, definition) => {
             if (definition) {
-              onCreate({
-                systemId: system,
-                sceneId: scene,
-                id: uuid(),
-                name: definition.name,
-                definitionId: definition.id,
-                components: [],
-              });
+              onCreate(definition);
             }
           }}
           renderInput={(params) => (
