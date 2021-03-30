@@ -4,7 +4,7 @@ import { SelectComponentDefinitionButton } from "../components/SelectComponentDe
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";

@@ -1,5 +1,5 @@
 import React from "react";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { useSelector } from "../store";
 import { selectInspectedObject } from "../selectors/selectInspectedObject";
 import { InspectedObjectEditor } from "../editors/InspectedObjectEditor";

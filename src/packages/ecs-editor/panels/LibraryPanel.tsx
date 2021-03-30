@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useCallback } from "react";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { AddIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";

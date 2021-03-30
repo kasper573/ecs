@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Theme } from "@material-ui/core/styles";
-import { PanelName as panels } from "./PanelName";
+import { PanelName as panels } from "../types/PanelName";
 
 const panelSpacing = ({ theme }: { theme: Theme }) => theme.spacing(1);
 

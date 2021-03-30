@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
 import { core } from "../core";

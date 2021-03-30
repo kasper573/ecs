@@ -7,7 +7,7 @@ import { useSceneSync } from "../hooks/useSceneSync";
 import { ResetIcon } from "../components/icons";
 import { FlatPanel } from "../components/FlatPanel";
 import { Panel } from "../components/Panel";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { selectHasSystems } from "../selectors/selectHasSystems";
 import { selectHasScenes } from "../selectors/selectHasScenes";

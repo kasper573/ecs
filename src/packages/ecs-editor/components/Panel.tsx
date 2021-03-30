@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Paper, PaperProps } from "@material-ui/core";
-import { PanelName } from "./PanelName";
+import { PanelName } from "../types/PanelName";
 
 export type PanelProps = PaperProps & {
   name?: PanelName;

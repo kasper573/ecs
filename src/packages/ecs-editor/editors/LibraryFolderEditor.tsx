@@ -1,5 +1,5 @@
 import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { FolderIcon } from "../components/icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";

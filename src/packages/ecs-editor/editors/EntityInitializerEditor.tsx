@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../components/PanelName";
+import { PanelName } from "../types/PanelName";
 import { EntityInitializerIcon } from "../components/icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
