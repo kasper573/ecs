@@ -31,25 +31,21 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
 
   let menuItems;
 
-  if (typeof menuItemsConfig === "function") {
-    // Function style configuration only automates keys,
-    // close callback will have to be called manually
-    menuItems = defined(
-      menuItemsConfig({ close: handleClose })
-    ).map((element, index) => cloneElement(element, { key: index }));
-  } else {
-    // Item array style configuration automates keys and close callback
-    menuItems = defined(menuItemsConfig).map((element, index) => {
-      return cloneElement(element, {
-        key: index,
+  if (Array.isArray(menuItemsConfig)) {
+    // Item array style configuration automates close callback calls.
+    menuItems = defined(menuItemsConfig).map((element) =>
+      cloneElement(element, {
         onClick: (e: MouseEvent<HTMLLIElement>) => {
           handleClose(e);
           if (element.props.onClick) {
             element.props.onClick(e);
           }
         },
-      });
-    });
+      })
+    );
+  } else {
+    // Functional configuration style does not automate close callback calls.
+    menuItems = defined(menuItemsConfig({ close: handleClose }));
   }
 
   const menu = (
@@ -59,21 +55,27 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
       anchorReference="anchorPosition"
       anchorPosition={position}
     >
-      {menuItems}
+      {menuItems.map((item, index) => (
+        // Wrapping each item in a span allows for nested menus.
+        // It also allows us to automate keys without using cloneElement.
+        <span key={index}>{item}</span>
+      ))}
     </Menu>
   );
 
   return [handleTrigger, menu] as const;
 };
 
-type CloseHandler = (e?: MouseEvent) => void;
+export type CloseHandler = (e?: MouseEvent) => void;
 
-type MenuItemElement = ReactElement<ComponentProps<typeof MenuItem>>;
+export type MenuItemElement = ReactElement<ComponentProps<typeof MenuItem>>;
 
-type MaybeMenuItemElements = Array<MenuItemElement | undefined>;
+export type MaybeMenuItemElements = Array<MenuItemElement | undefined>;
 
 export type MenuItemRendererProps = {
   close: CloseHandler;
 };
 
-type MenuItemRenderer = (props: MenuItemRendererProps) => MaybeMenuItemElements;
+export type MenuItemRenderer = (
+  props: MenuItemRendererProps
+) => MaybeMenuItemElements;
