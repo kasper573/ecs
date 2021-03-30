@@ -7,25 +7,24 @@ import {
   ComponentProps,
 } from "react";
 import { Menu, MenuItem, MenuProps } from "@material-ui/core";
-import { defined } from "../../ecs-common/defined";
 
 export type UseMenuItemsConfig = MenuItemRenderer | MaybeMenuItemElements;
 
 export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
   const [position, setPosition] = useState<{ left: number; top: number }>();
 
-  const handleTrigger: MouseEventHandler = (event) => {
-    event.preventDefault();
+  const handleTrigger: MouseEventHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setPosition({
-      left: event.clientX - 2,
-      top: event.clientY - 4,
+      left: e.clientX - 2,
+      top: e.clientY - 4,
     });
   };
 
   const handleClose: CloseHandler = (e) => {
-    if (e) {
-      e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
     setPosition(undefined);
   };
 
@@ -66,11 +65,13 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
   return [handleTrigger, menu] as const;
 };
 
-export type CloseHandler = (e?: MouseEvent) => void;
+export type CloseHandler = (e: MouseEvent) => void;
 
 export type MenuItemElement = ReactElement<ComponentProps<typeof MenuItem>>;
 
-export type MaybeMenuItemElements = Array<MenuItemElement | undefined>;
+export type MaybeMenuItemElements = Array<
+  MenuItemElement | undefined | boolean
+>;
 
 export type MenuItemRendererProps = {
   close: CloseHandler;
@@ -79,3 +80,7 @@ export type MenuItemRendererProps = {
 export type MenuItemRenderer = (
   props: MenuItemRendererProps
 ) => MaybeMenuItemElements;
+
+function defined<T>(items: Array<T | undefined | boolean>): T[] {
+  return items.filter((item): item is T => !!item);
+}

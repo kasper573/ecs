@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { IconButton, MenuItem } from "@material-ui/core";
+import React, { useRef } from "react";
+import { IconButton, MenuItem, Tooltip } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector } from "../store";
@@ -16,12 +16,16 @@ import { MenuFor } from "../components/MenuFor";
 import { AddIcon } from "../components/icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { combine } from "../../ecs-common/combine";
+import { MenuItemRendererProps } from "../hooks/useMenu";
+import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 
 export const LibraryPanel = () => {
+  const parentNodeIdRef = useRef<LibraryNodeId>();
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
+
   const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
     createDialogTitle: "Add entity",
     getItemName: (node) => node.name,
@@ -31,6 +35,7 @@ export const LibraryPanel = () => {
           nodeId: uuid(),
           id: uuid(),
           systemId: selectedSystem?.id!,
+          parentNodeId: parentNodeIdRef.current,
           name,
           components: [],
         })
@@ -71,41 +76,108 @@ export const LibraryPanel = () => {
           nodeId: uuid(),
           id: uuid(),
           systemId: selectedSystem?.id!,
+          parentNodeId: parentNodeIdRef.current,
           name,
         })
       ),
   });
-  const handleDuplicate = useCallback(
-    (node: DiscriminatedLibraryNode) => {
-      switch (node.type) {
-        case "entity":
-          return dispatch(core.actions.duplicateEntityDefinition(node.id));
-        case "component":
-          return dispatch(core.actions.duplicateComponentDefinition(node.id));
-      }
-    },
-    [dispatch]
-  );
+  const handleDuplicate = (node: DiscriminatedLibraryNode) => {
+    switch (node.type) {
+      case "entity":
+        return dispatch(core.actions.duplicateEntityDefinition(node.id));
+      case "component":
+        return dispatch(core.actions.duplicateComponentDefinition(node.id));
+    }
+  };
+  const handleSelect = ({ nodeId }: DiscriminatedLibraryNode) =>
+    dispatch(core.actions.setSelectedLibraryNode(nodeId));
+
+  const renderCreateMenuItems = (
+    { close }: MenuItemRendererProps,
+    parentNodeId?: LibraryNodeId
+  ) => [
+    <MenuItem
+      onClick={combine(close, () => {
+        parentNodeIdRef.current = parentNodeId;
+        folderEvents.onCreateItem();
+      })}
+    >
+      Folder
+    </MenuItem>,
+    <MenuItem
+      onClick={combine(close, () => {
+        parentNodeIdRef.current = parentNodeId;
+        nodeEvents.onCreateItem();
+      })}
+    >
+      Entity
+    </MenuItem>,
+  ];
+
+  const getMenuItemsForNode = (
+    node: DiscriminatedLibraryNode,
+    { close }: MenuItemRendererProps
+  ) => {
+    const isFolder = node.type === "folder";
+    const base = [
+      <MenuItem
+        onClick={(e) => {
+          close(e);
+          nodeEvents.onUpdateItem(node);
+        }}
+      >
+        Rename
+      </MenuItem>,
+      !isFolder && (
+        <MenuItem
+          onClick={(e) => {
+            close(e);
+            handleDuplicate(node);
+          }}
+        >
+          Duplicate
+        </MenuItem>
+      ),
+      <MenuItem
+        onClick={(e) => {
+          close(e);
+          nodeEvents.onDeleteItem(node);
+        }}
+      >
+        Delete
+      </MenuItem>,
+    ];
+    if (node.type === "folder") {
+      return [
+        <MenuFor
+          items={(props) =>
+            renderCreateMenuItems(
+              { close: combine(close, props.close)! },
+              node.nodeId
+            )
+          }
+        >
+          {(props) => <MenuItem {...props}>Create</MenuItem>}
+        </MenuFor>,
+        ...base,
+      ];
+    }
+    return base;
+  };
+
   return (
     <Panel name={PanelName.Library}>
       {nodeDialogs}
       {folderDialogs}
       <PanelHeader title="Library">
         {selectedSystem && (
-          <MenuFor
-            items={({ close }) => [
-              <MenuItem onClick={combine(close, folderEvents.onCreateItem)}>
-                Folder
-              </MenuItem>,
-              <MenuItem onClick={combine(close, nodeEvents.onCreateItem)}>
-                Entity
-              </MenuItem>,
-            ]}
-          >
+          <MenuFor items={renderCreateMenuItems}>
             {(props) => (
-              <IconButton edge="end" aria-label="create" {...props}>
-                <AddIcon />
-              </IconButton>
+              <Tooltip title="Create">
+                <IconButton edge="end" aria-label="create" {...props}>
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
             )}
           </MenuFor>
         )}
@@ -113,12 +185,8 @@ export const LibraryPanel = () => {
       <LibraryTree
         selected={selectedNode}
         library={nodes}
-        onEdit={nodeEvents.onUpdateItem}
-        onDuplicate={handleDuplicate}
-        onDelete={nodeEvents.onDeleteItem}
-        onSelectedChange={({ nodeId }) =>
-          dispatch(core.actions.setSelectedLibraryNode(nodeId))
-        }
+        menuItems={getMenuItemsForNode}
+        onSelectedChange={handleSelect}
       />
     </Panel>
   );

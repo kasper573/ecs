@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { TreeItem } from "@material-ui/lab";
-import { MenuItem } from "@material-ui/core";
 import React, { useRef } from "react";
 import { DragSourceMonitor } from "react-dnd";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { useDragForRef } from "../../ecs-common/useDragForRef";
 import { DragType } from "../types/DragType";
+import { MaybeMenuItemElements, MenuItemRendererProps } from "../hooks/useMenu";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -19,36 +18,22 @@ import { LibraryTreeItems } from "./LibraryTreeItems";
 
 export type LibraryTreeItemProps = {
   node: LibraryTreeNode;
-  onEdit?: (node: DiscriminatedLibraryNode) => void;
-  onDuplicate?: (node: DiscriminatedLibraryNode) => void;
-  onDelete?: (node: DiscriminatedLibraryNode) => void;
+  menuItems?: (
+    node: DiscriminatedLibraryNode,
+    props: MenuItemRendererProps
+  ) => MaybeMenuItemElements;
 };
 
 export const LibraryTreeItem = ({
   node,
-  onEdit,
-  onDuplicate,
-  onDelete,
+  menuItems = noop,
 }: LibraryTreeItemProps) => {
   const focusRef = useRef<Element>();
   const [, drag] = useDragForRef(focusRef, dragSpec(node.value));
   const isFolder = node.value.type === "folder";
-
-  useOnFocusedAndKeyPressed(
-    "Delete",
-    focusRef,
-    onDelete ? () => onDelete(node.value) : undefined
+  const [triggerProps, menu] = useContextMenu((props) =>
+    menuItems(node.value, props)
   );
-
-  const [triggerProps, menu] = useContextMenu([
-    onEdit && <MenuItem onClick={() => onEdit(node.value)}>Rename</MenuItem>,
-    !isFolder && onDuplicate ? (
-      <MenuItem onClick={() => onDuplicate(node.value)}>Duplicate</MenuItem>
-    ) : undefined,
-    onDelete && (
-      <MenuItem onClick={() => onDelete(node.value)}>Delete</MenuItem>
-    ),
-  ]);
 
   const LabelIcon = labelIcons[node.value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
@@ -65,10 +50,7 @@ export const LibraryTreeItem = ({
         expandIcon={expandIcon}
         {...triggerProps}
       >
-        <LibraryTreeItems
-          nodes={node.children}
-          itemProps={{ onEdit, onDelete }}
-        />
+        <LibraryTreeItems nodes={node.children} itemProps={{ menuItems }} />
       </TreeItemWithoutFocusColor>
     </>
   );
@@ -111,3 +93,5 @@ const dragSpec = (node: DiscriminatedLibraryNode) => {
   }
   return base;
 };
+
+const noop = () => [];
