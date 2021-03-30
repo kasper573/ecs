@@ -1,26 +1,20 @@
 import {
-  cloneElement,
-  ComponentProps,
-  MouseEvent,
   MouseEventHandler,
+  MouseEvent,
   ReactElement,
   useState,
+  cloneElement,
+  ComponentProps,
 } from "react";
-import { Menu, MenuItem } from "@material-ui/core";
+import { Menu, MenuItem, MenuProps } from "@material-ui/core";
+import { defined } from "../../ecs-common/defined";
 
-export type MenuItemElement = ReactElement<ComponentProps<typeof MenuItem>>;
+export type UseMenuItemsConfig = MenuItemRenderer | MaybeMenuItemElements;
 
-export const useMenu = <TriggerElement extends Element>(
-  maybeMenuItems: Array<MenuItemElement | undefined>
-) => {
+export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
   const [position, setPosition] = useState<{ left: number; top: number }>();
 
-  // Skip falsy items (for convenient use of this hook)
-  const menuItems = maybeMenuItems.filter(
-    (item): item is MenuItemElement => !!item
-  );
-
-  const handleTrigger: MouseEventHandler<TriggerElement> = (event) => {
+  const handleTrigger: MouseEventHandler = (event) => {
     event.preventDefault();
     setPosition({
       left: event.clientX - 2,
@@ -28,32 +22,58 @@ export const useMenu = <TriggerElement extends Element>(
     });
   };
 
-  const handleClose = () => {
+  const handleClose: CloseHandler = (e) => {
+    if (e) {
+      e.stopPropagation();
+    }
     setPosition(undefined);
   };
 
-  // Disable menu when no items are present
-  const menu = menuItems.length > 0 && (
+  let menuItems;
+
+  if (typeof menuItemsConfig === "function") {
+    // Function style configuration only automates keys,
+    // close callback will have to be called manually
+    menuItems = defined(
+      menuItemsConfig({ close: handleClose })
+    ).map((element, index) => cloneElement(element, { key: index }));
+  } else {
+    // Item array style configuration automates keys and close callback
+    menuItems = defined(menuItemsConfig).map((element, index) => {
+      return cloneElement(element, {
+        key: index,
+        onClick: (e: MouseEvent<HTMLLIElement>) => {
+          handleClose(e);
+          if (element.props.onClick) {
+            element.props.onClick(e);
+          }
+        },
+      });
+    });
+  }
+
+  const menu = (
     <Menu
       open={!!position}
-      onClose={handleClose}
+      onClose={handleClose as MenuProps["onClose"]} // Need to override since MenuProps["onClose"] is poorly defined
       anchorReference="anchorPosition"
       anchorPosition={position}
     >
-      {menuItems.map((element, index) =>
-        cloneElement(element, {
-          key: index,
-          onClick: (e: MouseEvent<HTMLLIElement>) => {
-            e.stopPropagation();
-            handleClose();
-            if (element.props.onClick) {
-              element.props.onClick(e);
-            }
-          },
-        })
-      )}
+      {menuItems}
     </Menu>
   );
 
   return [handleTrigger, menu] as const;
 };
+
+type CloseHandler = (e?: MouseEvent) => void;
+
+type MenuItemElement = ReactElement<ComponentProps<typeof MenuItem>>;
+
+type MaybeMenuItemElements = Array<MenuItemElement | undefined>;
+
+export type MenuItemRendererProps = {
+  close: CloseHandler;
+};
+
+type MenuItemRenderer = (props: MenuItemRendererProps) => MaybeMenuItemElements;

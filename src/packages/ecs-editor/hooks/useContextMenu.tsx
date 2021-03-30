@@ -1,9 +1,7 @@
-import { MenuItemElement, useMenu } from "./useMenu";
+import { UseMenuItemsConfig, useMenu } from "./useMenu";
 
-export const useContextMenu = (
-  maybeMenuItems: Array<MenuItemElement | undefined>
-) => {
-  const [handleClick, menu] = useMenu(maybeMenuItems);
+export const useContextMenu = (menuItems: UseMenuItemsConfig) => {
+  const [handleClick, menu] = useMenu(menuItems);
 
   const triggerProps = {
     onContextMenu: handleClick,

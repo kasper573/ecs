@@ -15,16 +15,14 @@ import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
 import { AddIcon } from "../components/icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { combine } from "../../ecs-common/combine";
 
 export const LibraryPanel = () => {
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
-  const [
-    libraryNodeEvents,
-    libraryNodeDialogs,
-  ] = useCrudDialogs<DiscriminatedLibraryNode>({
+  const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
     createDialogTitle: "Add entity",
     getItemName: (node) => node.name,
     onCreateItem: (name) =>
@@ -64,10 +62,7 @@ export const LibraryPanel = () => {
       }
     },
   });
-  const [
-    libraryFolderEvents,
-    libraryFolderDialogs,
-  ] = useCrudDialogs<LibraryFolder>({
+  const [folderEvents, folderDialogs] = useCrudDialogs<LibraryFolder>({
     createDialogTitle: "Add folder",
     getItemName: (node) => node.name,
     onCreateItem: (name) =>
@@ -93,16 +88,16 @@ export const LibraryPanel = () => {
   );
   return (
     <Panel name={PanelName.Library}>
-      {libraryNodeDialogs}
-      {libraryFolderDialogs}
+      {nodeDialogs}
+      {folderDialogs}
       <PanelHeader title="Library">
         {selectedSystem && (
           <MenuFor
-            items={[
-              <MenuItem onClick={libraryFolderEvents.onCreateItem}>
+            items={({ close }) => [
+              <MenuItem onClick={combine(close, folderEvents.onCreateItem)}>
                 Folder
               </MenuItem>,
-              <MenuItem onClick={libraryNodeEvents.onCreateItem}>
+              <MenuItem onClick={combine(close, nodeEvents.onCreateItem)}>
                 Entity
               </MenuItem>,
             ]}
@@ -118,9 +113,9 @@ export const LibraryPanel = () => {
       <LibraryTree
         selected={selectedNode}
         library={nodes}
-        onEdit={libraryNodeEvents.onUpdateItem}
+        onEdit={nodeEvents.onUpdateItem}
         onDuplicate={handleDuplicate}
-        onDelete={libraryNodeEvents.onDeleteItem}
+        onDelete={nodeEvents.onDeleteItem}
         onSelectedChange={({ nodeId }) =>
           dispatch(core.actions.setSelectedLibraryNode(nodeId))
         }

@@ -1,19 +1,16 @@
-import React, { ReactElement } from "react";
-import { MenuItemElement, useMenu } from "../hooks/useMenu";
+import { MouseEventHandler, ReactElement } from "react";
+import { UseMenuItemsConfig, useMenu } from "../hooks/useMenu";
 
-type MenuForProps<T extends Element> = {
-  items: MenuItemElement[];
-  children: (props: { onClick: React.MouseEventHandler<T> }) => ReactElement;
+type MenuForProps = {
+  items: UseMenuItemsConfig;
+  children: (props: { onClick: MouseEventHandler }) => ReactElement;
 };
 
 /**
  * Convenience render prop variant of useMenu hook
  */
-export const MenuFor = <T extends Element>({
-  items,
-  children: Trigger,
-}: MenuForProps<T>) => {
-  const [handleClick, menu] = useMenu<T>(items);
+export const MenuFor = ({ items, children: Trigger }: MenuForProps) => {
+  const [handleClick, menu] = useMenu(items);
   return (
     <>
       <Trigger onClick={handleClick} />
