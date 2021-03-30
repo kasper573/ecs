@@ -14,13 +14,19 @@ export type PanelProps = PaperProps & {
 export const Panel = styled(
   ({ children, name, style, ...paperProps }: PanelProps) => (
     <Paper {...paperProps} style={{ ...style, gridArea: name }}>
-      {children}
+      <PanelContent>{children}</PanelContent>
     </Paper>
   )
 )`
-  position: relative; // Ensure children with position absolute gets docked in the panel
   overflow-x: hidden;
   ${({ theme }) => theme.breakpoints.up("sm")} {
     overflow-y: auto;
   }
+`;
+
+const PanelContent = styled.div`
+  // Ensure children with position absolute is relative
+  // to panel content regardless of scroll position
+  position: relative;
+  min-height: 100%;
 `;

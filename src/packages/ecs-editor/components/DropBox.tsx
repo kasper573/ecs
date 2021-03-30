@@ -1,7 +1,7 @@
 import { useDrop } from "react-dnd";
 import { PropsWithChildren } from "react";
 import styled from "styled-components";
-import { DropTargetHookSpec } from "react-dnd/dist/types/hooks/types";
+import { DropTargetHookSpec } from "react-dnd";
 
 export type DropBoxSpec = DropTargetHookSpec<
   any,
@@ -19,20 +19,31 @@ export type DropBoxProps = PropsWithChildren<{
 export const DropBox = ({ children, spec }: DropBoxProps) => {
   const [{ canDrop, isOver }, drop] = useDrop(spec);
   return (
-    <Box ref={drop} $show={canDrop} $highlight={isOver}>
-      {canDrop && children}
-    </Box>
+    <Modal ref={drop} $show={canDrop}>
+      <Box $highlight={isOver}>{children}</Box>
+    </Modal>
   );
 };
 
-const Box = styled.div<{ $show: boolean; $highlight: boolean }>`
-  display: ${({ $show }) => ($show ? "flex" : "none")};
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-top: 1px solid ${({ theme }) => theme.palette.divider};
-  border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
-  padding: ${({ theme }) => theme.spacing(2)}px;
-  background-color: ${({ theme, $highlight }) =>
-    $highlight ? theme.palette.success.main : undefined};
+const Box = styled.div<{ $highlight: boolean }>`
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+`;
+
+const Modal = styled.div<{ $show: boolean }>`
+  opacity: ${({ $show }) => ($show ? 1 : 0)};
+  transition: ${({ theme }) =>
+    theme.transitions.create("opacity", {
+      duration: theme.transitions.duration.shortest,
+      easing: theme.transitions.easing.sharp,
+    })};
+  pointer-events: ${({ $show }) => ($show ? "inherit" : "none")};
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
 `;
