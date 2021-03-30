@@ -32,6 +32,7 @@ import { duplicateEntityDefinition } from "./reducers/duplicateEntityDefinition"
 import { duplicateComponentDefinition } from "./reducers/duplicateComponentDefinition";
 import { duplicateComponentInitializer } from "./reducers/duplicateComponentInitializer";
 import { createLibraryFolder } from "./reducers/createLibraryFolder";
+import { setThemeType } from "./reducers/setThemeType";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -71,6 +72,7 @@ export const core = createSlice({
     createComponentDefinition,
     duplicateComponentDefinition,
     setEditorState,
+    setThemeType,
   },
   extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
 });

@@ -11,6 +11,7 @@ import { Interactive } from "../packages/ecs-interactive/Interactive";
 import { Editor } from "../packages/ecs-editor/editors/Editor";
 import { createStore } from "../packages/ecs-editor/store";
 import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponentsContext";
+import { createEditorState } from "../packages/ecs-editor/functions/createEditorState";
 import defaultECS from "./defaultECS.json";
 
 export const nativeComponents = {
@@ -19,7 +20,10 @@ export const nativeComponents = {
   interactive: Interactive,
 };
 
-const store = createStore({ ecs: defaultECS, selection: {} });
+const store = createStore({
+  ...createEditorState(),
+  ecs: defaultECS,
+});
 
 function render() {
   ReactDOM.render(

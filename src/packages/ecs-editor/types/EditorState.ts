@@ -1,3 +1,4 @@
+import { PaletteType } from "@material-ui/core";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
 import { EditorSelectionValues } from "./EditorSelection";
 
@@ -8,6 +9,7 @@ import { EditorSelectionValues } from "./EditorSelection";
  */
 export type EditorState = {
   ecs: ECSDefinition;
+  themeType: PaletteType;
   /**
    * The current selection in the UI
    */

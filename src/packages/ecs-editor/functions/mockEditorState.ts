@@ -42,6 +42,7 @@ export const mockEditorState = (
   );
 
   return {
+    ...createEditorState(),
     ecs,
     selection: {
       system: system?.id,

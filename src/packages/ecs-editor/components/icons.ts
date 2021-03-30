@@ -17,4 +17,6 @@ export {
   SaveAlt as SaveIcon,
   ExpandMore as ExpandAccordionIcon,
   DynamicFeed as GenerateIcon,
+  Brightness4 as DarkThemeIcon,
+  Brightness7 as LightThemeIcon,
 } from "@material-ui/icons";

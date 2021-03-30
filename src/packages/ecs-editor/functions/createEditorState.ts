@@ -9,5 +9,6 @@ export const createEditorState = (): EditorState => ({
     componentDefinitions: {},
     libraryFolders: {},
   },
+  themeType: "dark",
   selection: {},
 });
