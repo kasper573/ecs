@@ -1,9 +1,5 @@
 import { MutableRefObject } from "react";
-import { useDrag } from "react-dnd";
-import {
-  DragSourceHookSpec,
-  FactoryOrInstance,
-} from "react-dnd/dist/types/hooks/types";
+import { useDrag, DragSourceHookSpec, FactoryOrInstance } from "react-dnd";
 
 /**
  * Identical to react-dnd/useDrag but with refs support.
