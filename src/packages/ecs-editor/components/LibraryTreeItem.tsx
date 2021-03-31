@@ -8,6 +8,7 @@ import { MaybeMenuItemElements, MenuItemRendererProps } from "../hooks/useMenu";
 import { useStore } from "../store";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
+import { useEmptyDNDPreview } from "../hooks/useEmptyDNDPreview";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -34,15 +35,15 @@ export const LibraryTreeItem = ({
   menuItems = noop,
 }: LibraryTreeItemProps) => {
   const store = useStore();
-  const [, drag] = useDrag(libraryNodeDragSpec(node.value));
+  const [, drag, preview] = useDrag(libraryNodeDragSpec(node.value));
   const [{ canDrop }, drop] = useDrop(
     libraryNodeDropSpec(node.value, handleDrop, () => store.getState().present)
   );
+  useEmptyDNDPreview(preview);
   const isFolder = node.value.type === "folder";
   const [triggerProps, contextMenu] = useContextMenu((props) =>
     menuItems(node.value, props)
   );
-
   function attachDndRef(el: HTMLElement) {
     drag(el);
     drop(el);
