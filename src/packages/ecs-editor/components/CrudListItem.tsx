@@ -6,10 +6,9 @@ import {
   ListItemText,
   MenuItem,
 } from "@material-ui/core";
-import React, { ComponentType, useRef } from "react";
+import React, { ComponentType } from "react";
 import styled from "styled-components";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { useOnFocusedAndKeyPressed } from "../hooks/useOnFocusedAndKeyPressed";
 
 export type CrudListItemProps<
   D extends React.ElementType = "li",
@@ -44,9 +43,6 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   icon: Icon,
   ...listItemProps
 }: CrudListItemProps<D, P>) => {
-  const ref = useRef<Element>();
-  useOnFocusedAndKeyPressed("Delete", ref, onDelete);
-
   const [triggerProps, menu] = useContextMenu([
     onEdit && <MenuItem onClick={onEdit}>Rename</MenuItem>,
     onDuplicate && <MenuItem onClick={onDuplicate}>Duplicate</MenuItem>,
@@ -54,7 +50,7 @@ export const CrudListItem = <D extends React.ElementType = "li", P = {}>({
   ]);
 
   return (
-    <ListItem {...triggerProps} {...listItemProps} innerRef={ref}>
+    <ListItem {...triggerProps} {...listItemProps}>
       {menu}
       {Icon && (
         <ListItemAvatar>

@@ -1,6 +1,6 @@
 import { PaletteType } from "@material-ui/core";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
-import { EditorSelectionValues } from "./EditorSelection";
+import { EditorSelectionName, EditorSelectionValues } from "./EditorSelection";
 
 /**
  * Immutable state representing the current state of the editor.
@@ -14,4 +14,5 @@ export type EditorState = {
    * The current selection in the UI
    */
   selection: EditorSelectionValues;
+  mostRecentSelectionName?: EditorSelectionName;
 };

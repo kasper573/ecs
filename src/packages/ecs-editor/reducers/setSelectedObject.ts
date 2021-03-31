@@ -29,8 +29,14 @@ export const setSelectedObject = createReducer(createEditorState(), (builder) =>
     setSelectedObjectAction,
     (state, { payload: { type, value } }) => {
       const didChange = state.selection[type] !== value;
+
+      // Remember the most recent selection (but not when unsetting a selection)
+      if (value) {
+        state.mostRecentSelectionName = type;
+      }
+
       if (!didChange) {
-        return; // Same selection
+        return; // No change to the selection value, can early out
       }
 
       // Apply selection
