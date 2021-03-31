@@ -4,7 +4,7 @@ import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
 import { get, set } from "../../ecs-common/nominal";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
-import { LibraryTreeNode } from "../types/LibraryTreeNode";
+import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { LibraryTreeItems, LibraryTreeItemsProps } from "./LibraryTreeItems";
 
 export type LibraryTreeProps = {
@@ -55,6 +55,3 @@ export const LibraryTree = ({
     </TreeView>
   );
 };
-
-const compareLibraryTreeNodes = (a: LibraryTreeNode, b: LibraryTreeNode) =>
-  a.value.name.localeCompare(b.value.name);
