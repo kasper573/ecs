@@ -91,6 +91,17 @@ export const LibraryPanel = () => {
   };
   const handleSelect = ({ nodeId }: DiscriminatedLibraryNode) =>
     dispatch(core.actions.setSelectedLibraryNode(nodeId));
+  const handleMoveNode = (
+    node: DiscriminatedLibraryNode,
+    target: DiscriminatedLibraryNode
+  ) => {
+    dispatch(
+      core.actions.moveLibraryNode({
+        id: node.nodeId,
+        targetId: target.nodeId,
+      })
+    );
+  };
 
   const renderCreateMenuItems = (
     { close }: MenuItemRendererProps,
@@ -185,7 +196,10 @@ export const LibraryPanel = () => {
       <LibraryTree
         selected={selectedNode}
         library={nodes}
-        menuItems={getMenuItemsForNode}
+        itemProps={{
+          menuItems: getMenuItemsForNode,
+          onMoveNode: handleMoveNode,
+        }}
         onSelectedChange={handleSelect}
       />
     </Panel>

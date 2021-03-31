@@ -5,14 +5,13 @@ import { createLibraryTree } from "../functions/createLibraryTree";
 import { get, set } from "../../ecs-common/nominal";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
-import { LibraryTreeItems } from "./LibraryTreeItems";
-import { LibraryTreeItemProps } from "./LibraryTreeItem";
+import { LibraryTreeItems, LibraryTreeItemsProps } from "./LibraryTreeItems";
 
 export type LibraryTreeProps = {
   selected?: DiscriminatedLibraryNode;
   onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
   library: DiscriminatedLibraryNode[];
-  menuItems: LibraryTreeItemProps["menuItems"];
+  itemProps?: LibraryTreeItemsProps["itemProps"];
 };
 
 /**
@@ -22,7 +21,7 @@ export const LibraryTree = ({
   library,
   selected,
   onSelectedChange,
-  menuItems,
+  itemProps,
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
@@ -52,7 +51,7 @@ export const LibraryTree = ({
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
     >
-      <LibraryTreeItems nodes={treeRoots} itemProps={{ menuItems }} />
+      <LibraryTreeItems nodes={treeRoots} itemProps={itemProps} />
     </TreeView>
   );
 };

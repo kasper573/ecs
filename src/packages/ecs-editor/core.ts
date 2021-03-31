@@ -33,6 +33,7 @@ import { duplicateComponentDefinition } from "./reducers/duplicateComponentDefin
 import { duplicateComponentInitializer } from "./reducers/duplicateComponentInitializer";
 import { createLibraryFolder } from "./reducers/createLibraryFolder";
 import { setThemeType } from "./reducers/setThemeType";
+import { moveLibraryNode } from "./reducers/moveLibraryNode";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -56,6 +57,7 @@ export const core = createSlice({
     setSelectedSceneDefinition,
     setSelectedEntityInitializer,
     setSelectedLibraryNode,
+    moveLibraryNode,
     createEntityDefinition,
     renameEntityDefinition,
     duplicateEntityDefinition,

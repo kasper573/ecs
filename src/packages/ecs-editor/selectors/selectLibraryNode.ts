@@ -1,10 +1,7 @@
 import { EditorState } from "../types/EditorState";
-import {
-  LibraryNode,
-  LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
-import { values } from "../../ecs-common/nominal";
+import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
+import { getLibraryNode } from "../functions/getLibraryNode";
 
 const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>
   [
@@ -16,21 +13,9 @@ const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>
 
 export const selectLibraryNode = createMemoizedSelector(
   selectParams,
-  ([entityDefinitions, componentDefinitions, libraryFolders, nodeId]) => {
-    const isNode = (node: LibraryNode) => node.nodeId === nodeId;
-    const entity = values(entityDefinitions).find(isNode);
-    if (entity) {
-      return { ...entity, type: "entity" as const };
-    }
-
-    const component = values(componentDefinitions).find(isNode);
-    if (component) {
-      return { ...component, type: "component" as const };
-    }
-
-    const folder = values(libraryFolders).find(isNode);
-    if (folder) {
-      return { ...folder, type: "folder" as const };
-    }
-  }
+  ([entityDefinitions, componentDefinitions, libraryFolders, nodeId]) =>
+    getLibraryNode(
+      { entityDefinitions, componentDefinitions, libraryFolders },
+      nodeId
+    )
 );
