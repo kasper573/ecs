@@ -130,7 +130,17 @@ export const LibraryPanel = () => {
     { close }: MenuItemRendererProps
   ) => {
     const isFolder = node.type === "folder";
-    const base = [
+    return [
+      <MenuFor
+        items={(props) =>
+          renderCreateMenuItems(
+            { close: combine(close, props.close)! },
+            isFolder ? node.nodeId : node.parentNodeId
+          )
+        }
+      >
+        {(props) => <MenuItem {...props}>Create</MenuItem>}
+      </MenuFor>,
       <MenuItem
         onClick={(e) => {
           close(e);
@@ -158,22 +168,6 @@ export const LibraryPanel = () => {
         Delete
       </MenuItem>,
     ];
-    if (node.type === "folder") {
-      return [
-        <MenuFor
-          items={(props) =>
-            renderCreateMenuItems(
-              { close: combine(close, props.close)! },
-              node.nodeId
-            )
-          }
-        >
-          {(props) => <MenuItem {...props}>Create</MenuItem>}
-        </MenuFor>,
-        ...base,
-      ];
-    }
-    return base;
   };
 
   return (
