@@ -11,6 +11,9 @@ import { useContextMenu } from "../hooks/useContextMenu";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { DragType } from "../types/DragType";
 import { MaybeMenuItemElements, MenuItemRendererProps } from "../hooks/useMenu";
+import { canMoveLibraryNodeTo } from "../functions/canMoveLibraryNodeTo";
+import { EditorState } from "../types/EditorState";
+import { useStore } from "../store";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -36,8 +39,11 @@ export const LibraryTreeItem = ({
   onMoveNode = noop,
   menuItems = noop,
 }: LibraryTreeItemProps) => {
+  const store = useStore();
   const [, drag] = useDrag(dragSpec(node.value));
-  const [{ acceptsDrop }, drop] = useDrop(dropSpec(node.value, handleDrop));
+  const [{ acceptsDrop }, drop] = useDrop(
+    dropSpec(node.value, handleDrop, () => store.getState().present)
+  );
   const isFolder = node.value.type === "folder";
   const [triggerProps, contextMenu] = useContextMenu((props) =>
     menuItems(node.value, props)
@@ -112,7 +118,8 @@ const dragSpec = (node: DiscriminatedLibraryNode) => ({
 
 const dropSpec = (
   targetNode: DiscriminatedLibraryNode,
-  handleDrop: (node: DiscriminatedLibraryNode) => void
+  handleDrop: (node: DiscriminatedLibraryNode) => void,
+  getEditorState: () => EditorState
 ) => ({
   drop: handleDrop,
   accept:
@@ -124,7 +131,13 @@ const dropSpec = (
         ]
       : [],
   collect: (monitor: DropTargetMonitor) => ({
-    acceptsDrop: monitor.isOver({ shallow: true }),
+    acceptsDrop:
+      monitor.isOver({ shallow: true }) &&
+      canMoveLibraryNodeTo(
+        getEditorState(),
+        monitor.getItem<DiscriminatedLibraryNode>().nodeId,
+        targetNode.nodeId
+      ),
   }),
 });
 
