@@ -19,31 +19,31 @@ export type DropBoxProps = PropsWithChildren<{
 export const DropBox = ({ children, spec }: DropBoxProps) => {
   const [{ canDrop, isOver }, drop] = useDrop(spec);
   return (
-    <Modal ref={drop} $show={canDrop}>
-      <Box $highlight={isOver}>{children}</Box>
-    </Modal>
+    <Dimmer ref={drop} $events={canDrop} $show={isOver}>
+      <Centered>{children}</Centered>
+    </Dimmer>
   );
 };
 
-const Box = styled.div<{ $highlight: boolean }>`
+const Centered = styled.div`
   position: sticky;
   top: 50%;
   transform: translateY(-50%);
   text-align: center;
 `;
 
-const Modal = styled.div<{ $show: boolean }>`
+const Dimmer = styled.div<{ $events: boolean; $show: boolean }>`
   opacity: ${({ $show }) => ($show ? 1 : 0)};
   transition: ${({ theme }) =>
     theme.transitions.create("opacity", {
       duration: theme.transitions.duration.shortest,
       easing: theme.transitions.easing.sharp,
     })};
-  pointer-events: ${({ $show }) => ($show ? "inherit" : "none")};
+  pointer-events: ${({ $events }) => ($events ? "all" : "none")};
+  background: rgba(0, 0, 0, 0.4);
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
 `;
