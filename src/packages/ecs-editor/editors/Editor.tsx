@@ -1,6 +1,10 @@
 import React, { useMemo } from "react";
-import { ThemeProvider } from "styled-components";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+import {
+  createMuiTheme,
+  CssBaseline,
+  MuiThemeProvider,
+} from "@material-ui/core";
 import { PanelContainer } from "../components/PanelContainer";
 import { AppBarAndDrawer } from "../components/AppBarAndDrawer";
 import { AppBar } from "../components/AppBar";
@@ -15,6 +19,7 @@ import { useSelector } from "../store";
 import { lightTheme } from "../fixtures/lightTheme";
 import { darkTheme } from "../fixtures/darkTheme";
 import { selectThemeType } from "../selectors/selectThemeType";
+import { GlobalStyle } from "../components/GlobalStyle";
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
@@ -26,8 +31,10 @@ export const Editor = () => {
     [themeType]
   );
   return (
-    <ThemeProvider theme={theme}>
+    <StyledThemeProvider theme={theme}>
       <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <GlobalStyle />
         <AppBarAndDrawer appBar={<AppBar />} drawer={<SystemsPanel />}>
           <PanelContainer>
             <RuntimePanel />
@@ -39,6 +46,6 @@ export const Editor = () => {
           <Hotkeys />
         </AppBarAndDrawer>
       </MuiThemeProvider>
-    </ThemeProvider>
+    </StyledThemeProvider>
   );
 };

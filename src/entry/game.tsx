@@ -1,6 +1,5 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import { App } from "../packages/shared-components/App";
 import { Game } from "../packages/twitch-text-adventure/react/Game";
 import reportWebVitals from "../reportWebVitals";
 import { createGame } from "../packages/twitch-text-adventure/createGame";
@@ -35,13 +34,11 @@ system.modules.push(
 function render() {
   ReactDOM.render(
     <React.StrictMode>
-      <App>
-        <Game
-          system={system}
-          timeLeft={countdown.timeLeft}
-          votesPerAction={pollClient.votesPerAnswerIndex}
-        />
-      </App>
+      <Game
+        system={system}
+        timeLeft={countdown.timeLeft}
+        votesPerAction={pollClient.votesPerAnswerIndex}
+      />
     </React.StrictMode>,
     document.getElementById("root")
   );

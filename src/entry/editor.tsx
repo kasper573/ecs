@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import reportWebVitals from "../reportWebVitals";
-import { App } from "../packages/shared-components/App";
 import { Describable } from "../packages/ecs-describable/Describable";
 import { Collectable } from "../packages/ecs-collectable/Collectable";
 import { Interactive } from "../packages/ecs-interactive/Interactive";
@@ -31,9 +30,7 @@ function render() {
       <DndProvider backend={HTML5Backend}>
         <NativeComponentsContext.Provider value={nativeComponents}>
           <Provider store={store}>
-            <App>
-              <Editor />
-            </App>
+            <Editor />
           </Provider>
         </NativeComponentsContext.Provider>
       </DndProvider>
