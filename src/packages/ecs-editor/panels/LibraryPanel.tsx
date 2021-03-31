@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import { IconButton, MenuItem, Tooltip } from "@material-ui/core";
+import { useDrop } from "react-dnd";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
-import { useDispatch, useSelector } from "../store";
+import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfLibraryNode } from "../selectors/selectListOfLibraryNode";
 import { LibraryTree } from "../components/LibraryTree";
 import { core } from "../core";
@@ -18,13 +19,22 @@ import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { combine } from "../../ecs-common/combine";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
+import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 
 export const LibraryPanel = () => {
   const parentNodeIdRef = useRef<LibraryNodeId>();
+  const store = useStore();
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
+  const [{ canDrop: canDropToRoot }, dropRoot] = useDrop(
+    libraryNodeDropSpec(
+      rootNode,
+      handleMoveToRoot,
+      () => store.getState().present
+    )
+  );
 
   const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
     createDialogTitle: "Add entity",
@@ -102,6 +112,11 @@ export const LibraryPanel = () => {
       })
     );
   };
+  function handleMoveToRoot(node: DiscriminatedLibraryNode) {
+    if (canDropToRoot) {
+      handleMoveNode(node, rootNode);
+    }
+  }
 
   const renderCreateMenuItems = (
     { close }: MenuItemRendererProps,
@@ -171,7 +186,7 @@ export const LibraryPanel = () => {
   };
 
   return (
-    <Panel name={PanelName.Library}>
+    <Panel ref={dropRoot} name={PanelName.Library}>
       {nodeDialogs}
       {folderDialogs}
       <PanelHeader title="Library">
@@ -199,3 +214,6 @@ export const LibraryPanel = () => {
     </Panel>
   );
 };
+
+// Is safe as root node since belonging to the root means to have no parent
+const rootNode = { type: "folder" } as DiscriminatedLibraryNode;

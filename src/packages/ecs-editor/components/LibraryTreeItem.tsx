@@ -35,7 +35,7 @@ export const LibraryTreeItem = ({
 }: LibraryTreeItemProps) => {
   const store = useStore();
   const [, drag] = useDrag(libraryNodeDragSpec(node.value));
-  const [{ acceptsDrop }, drop] = useDrop(
+  const [{ canDrop }, drop] = useDrop(
     libraryNodeDropSpec(node.value, handleDrop, () => store.getState().present)
   );
   const isFolder = node.value.type === "folder";
@@ -49,7 +49,7 @@ export const LibraryTreeItem = ({
   }
 
   function handleDrop(draggedNode: DiscriminatedLibraryNode) {
-    if (acceptsDrop) {
+    if (canDrop) {
       onMoveNode(draggedNode, node.value);
     }
   }
@@ -68,7 +68,7 @@ export const LibraryTreeItem = ({
         label={node.value.name}
         collapseIcon={collapseIcon}
         expandIcon={expandIcon}
-        $highlightDrop={acceptsDrop}
+        $highlightDrop={canDrop}
         {...triggerProps}
       >
         <LibraryTreeItems

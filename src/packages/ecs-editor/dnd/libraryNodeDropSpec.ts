@@ -18,13 +18,17 @@ export const libraryNodeDropSpec = (
           DNDType.LibraryFolder,
         ]
       : [],
-  collect: (monitor: DropTargetMonitor) => ({
-    acceptsDrop:
-      monitor.isOver({ shallow: true }) &&
-      canMoveLibraryNodeTo(
-        getEditorState(),
-        monitor.getItem<DiscriminatedLibraryNode>().nodeId,
-        targetNode.nodeId
-      ),
-  }),
+  collect: (monitor: DropTargetMonitor) => {
+    const isOver = monitor.isOver({ shallow: true });
+    const draggedNodeId = monitor.getItem<
+      DiscriminatedLibraryNode | undefined
+    >()?.nodeId;
+    const canMove = draggedNodeId
+      ? canMoveLibraryNodeTo(getEditorState(), draggedNodeId, targetNode.nodeId)
+      : false;
+    return {
+      isOver,
+      canDrop: isOver && canMove,
+    };
+  },
 });
