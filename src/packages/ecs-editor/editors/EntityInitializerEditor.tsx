@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { DropTargetMonitor } from "react-dnd";
 import { Typography } from "@material-ui/core";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
@@ -17,7 +16,7 @@ import { useDispatch, useSelector } from "../store";
 import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
-import { DragType } from "../types/DragType";
+import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -123,19 +122,10 @@ export const EntityInitializerEditor = ({
         onRemove={askToDeleteComponent}
         onRestore={restoreComponent}
       />
-      <DropBox spec={dropSpec(addComponent)}>
+      <DropBox spec={componentDefinitionDropSpec(addComponent)}>
         <Typography>Drop to add component</Typography>
       </DropBox>
       {deleteDialog}
     </>
   );
 };
-
-const dropSpec = (handleDrop: (def: ComponentDefinition) => void) => ({
-  accept: DragType.ComponentDefinition,
-  drop: handleDrop,
-  collect: (monitor: DropTargetMonitor) => ({
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  }),
-});

@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { Typography } from "@material-ui/core";
-import { DropTargetMonitor } from "react-dnd";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
@@ -15,7 +14,7 @@ import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { useDispatch } from "../store";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
-import { DragType } from "../types/DragType";
+import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -99,19 +98,10 @@ export const EntityDefinitionEditor = ({
         onUpdate={updateProperties}
         onDuplicate={duplicateComponent}
       />
-      <DropBox spec={dropSpec(addComponent)}>
+      <DropBox spec={componentDefinitionDropSpec(addComponent)}>
         <Typography>Drop to add component</Typography>
       </DropBox>
       {deleteDialog}
     </>
   );
 };
-
-const dropSpec = (handleDrop: (def: ComponentDefinition) => void) => ({
-  accept: DragType.ComponentDefinition,
-  drop: handleDrop,
-  collect: (monitor: DropTargetMonitor) => ({
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  }),
-});

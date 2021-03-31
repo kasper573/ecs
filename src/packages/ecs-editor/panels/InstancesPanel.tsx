@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { DropTargetMonitor } from "react-dnd";
 import { Typography } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
@@ -14,10 +13,10 @@ import { Panel } from "../components/Panel";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
-import { DragType } from "../types/DragType";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
+import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 
 export const InstancesPanel = () => {
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
@@ -84,7 +83,7 @@ export const InstancesPanel = () => {
         onDuplicateItem={handleDuplicate}
         {...omit(entityInitializerEvents, "onCreateItem")}
       />
-      <DropBox spec={dropSpec(initializeDefinition)}>
+      <DropBox spec={entityDefinitionDropSpec(initializeDefinition)}>
         <Typography>Drop to create instance</Typography>
       </DropBox>
     </Panel>
@@ -96,13 +95,4 @@ const getItemKey = ({ id }: EntityInitializer) => id;
 const getItemProps = ({ name }: EntityInitializer) => ({
   name,
   icon: EntityInitializerIcon,
-});
-
-const dropSpec = (handleDrop: (def: EntityDefinition) => void) => ({
-  accept: DragType.EntityDefinition,
-  drop: handleDrop,
-  collect: (monitor: DropTargetMonitor) => ({
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  }),
 });

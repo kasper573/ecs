@@ -1,19 +1,13 @@
 import styled from "styled-components";
 import { TreeItem } from "@material-ui/lab";
-import {
-  DragSourceMonitor,
-  DropTargetMonitor,
-  useDrag,
-  useDrop,
-} from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
-import { DragType } from "../types/DragType";
 import { MaybeMenuItemElements, MenuItemRendererProps } from "../hooks/useMenu";
-import { canMoveLibraryNodeTo } from "../functions/canMoveLibraryNodeTo";
-import { EditorState } from "../types/EditorState";
 import { useStore } from "../store";
+import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
+import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
@@ -40,9 +34,9 @@ export const LibraryTreeItem = ({
   menuItems = noop,
 }: LibraryTreeItemProps) => {
   const store = useStore();
-  const [, drag] = useDrag(dragSpec(node.value));
+  const [, drag] = useDrag(libraryNodeDragSpec(node.value));
   const [{ acceptsDrop }, drop] = useDrop(
-    dropSpec(node.value, handleDrop, () => store.getState().present)
+    libraryNodeDropSpec(node.value, handleDrop, () => store.getState().present)
   );
   const isFolder = node.value.type === "folder";
   const [triggerProps, contextMenu] = useContextMenu((props) =>
@@ -105,51 +99,5 @@ const labelIcons = {
   entity: EntityDefinitionIcon,
   component: ComponentDefinitionIcon,
 };
-
-const dragSpec = (node: DiscriminatedLibraryNode) => ({
-  options: { dropEffect: "move" },
-  type: getDragTypeForNode(node),
-  item: node as unknown,
-  collect: (monitor: DragSourceMonitor) => ({
-    isDragging: monitor.isDragging(),
-    node,
-  }),
-});
-
-const dropSpec = (
-  targetNode: DiscriminatedLibraryNode,
-  handleDrop: (node: DiscriminatedLibraryNode) => void,
-  getEditorState: () => EditorState
-) => ({
-  drop: handleDrop,
-  accept:
-    targetNode.type === "folder"
-      ? [
-          DragType.EntityDefinition,
-          DragType.ComponentDefinition,
-          DragType.LibraryFolder,
-        ]
-      : [],
-  collect: (monitor: DropTargetMonitor) => ({
-    acceptsDrop:
-      monitor.isOver({ shallow: true }) &&
-      canMoveLibraryNodeTo(
-        getEditorState(),
-        monitor.getItem<DiscriminatedLibraryNode>().nodeId,
-        targetNode.nodeId
-      ),
-  }),
-});
-
-function getDragTypeForNode(node: DiscriminatedLibraryNode) {
-  switch (node.type) {
-    case "component":
-      return DragType.ComponentDefinition;
-    case "entity":
-      return DragType.EntityDefinition;
-    case "folder":
-      return DragType.LibraryFolder;
-  }
-}
 
 const noop = () => [];
