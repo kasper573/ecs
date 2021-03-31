@@ -77,6 +77,7 @@ export const LibraryPanel = () => {
       }
     },
   });
+
   const [folderEvents, folderDialogs] = useCrudDialogs<LibraryFolder>({
     createDialogTitle: "Add folder",
     getItemName: (node) => node.name,
@@ -91,59 +92,66 @@ export const LibraryPanel = () => {
         })
       ),
   });
-  const handleDuplicate = (node: DiscriminatedLibraryNode) => {
+
+  function handleDuplicate(node: DiscriminatedLibraryNode) {
     switch (node.type) {
       case "entity":
         return dispatch(core.actions.duplicateEntityDefinition(node.id));
       case "component":
         return dispatch(core.actions.duplicateComponentDefinition(node.id));
     }
-  };
-  const handleSelect = ({ nodeId }: DiscriminatedLibraryNode) =>
+  }
+
+  function handleSelect({ nodeId }: DiscriminatedLibraryNode) {
     dispatch(core.actions.setSelectedLibraryNode(nodeId));
-  const handleMoveNode = (
+  }
+
+  function handleMoveNode(
     node: DiscriminatedLibraryNode,
     target: DiscriminatedLibraryNode
-  ) => {
+  ) {
     dispatch(
       core.actions.moveLibraryNode({
         id: node.nodeId,
         targetId: target.nodeId,
       })
     );
-  };
+  }
+
   function handleMoveToRoot(node: DiscriminatedLibraryNode) {
     if (canDropToRoot) {
       handleMoveNode(node, rootNode);
     }
   }
 
-  const renderCreateMenuItems = (
+  function renderCreateMenuItems(
     { close }: MenuItemRendererProps,
     parentNodeId?: LibraryNodeId
-  ) => [
-    <MenuItem
-      onClick={combine(close, () => {
-        parentNodeIdRef.current = parentNodeId;
-        folderEvents.onCreateItem();
-      })}
-    >
-      Folder
-    </MenuItem>,
-    <MenuItem
-      onClick={combine(close, () => {
-        parentNodeIdRef.current = parentNodeId;
-        nodeEvents.onCreateItem();
-      })}
-    >
-      Entity
-    </MenuItem>,
-  ];
+  ) {
+    return [
+      <MenuItem
+        onClick={combine(close, () => {
+          parentNodeIdRef.current = parentNodeId;
+          folderEvents.onCreateItem();
+        })}
+      >
+        Folder
+      </MenuItem>,
+      <MenuItem
+        onClick={combine(close, () => {
+          parentNodeIdRef.current = parentNodeId;
+          nodeEvents.onCreateItem();
+        })}
+      >
+        Entity
+      </MenuItem>,
+    ];
+  }
 
-  const getMenuItemsForNode = (
+  function getMenuItemsForNode(
     node: DiscriminatedLibraryNode,
     { close }: MenuItemRendererProps
-  ) => {
+  ) {
     const isFolder = node.type === "folder";
     return [
       <MenuFor
@@ -183,7 +191,7 @@ export const LibraryPanel = () => {
         Delete
       </MenuItem>,
     ];
-  };
+  }
 
   return (
     <Panel ref={dropRoot} name={PanelName.Library}>
