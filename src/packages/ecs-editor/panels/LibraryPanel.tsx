@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { IconButton, MenuItem, Tooltip } from "@material-ui/core";
 import { useDrop } from "react-dnd";
+import styled from "styled-components";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -210,7 +211,7 @@ export const LibraryPanel = () => {
           </MenuFor>
         )}
       </PanelHeader>
-      <LibraryTree
+      <LibraryTreeWithLeftMargin
         selected={selectedNode}
         library={nodes}
         itemProps={{
@@ -222,6 +223,10 @@ export const LibraryPanel = () => {
     </Panel>
   );
 };
+
+const LibraryTreeWithLeftMargin = styled(LibraryTree)`
+  margin-left: ${({ theme }) => theme.spacing(2)}px;
+`;
 
 // Is safe as root node since belonging to the root means to have no parent
 const rootNode = { type: "folder" } as DiscriminatedLibraryNode;

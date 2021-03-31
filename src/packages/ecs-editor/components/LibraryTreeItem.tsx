@@ -12,8 +12,9 @@ import { useEmptyDNDPreview } from "../hooks/useEmptyDNDPreview";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
-  FolderIcon,
   FolderOpenIcon,
+  FolderClosedIcon,
+  FolderIcon,
 } from "./icons";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 
@@ -57,7 +58,7 @@ export const LibraryTreeItem = ({
 
   const LabelIcon = labelIcons[node.value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
-  const expandIcon = isFolder ? <FolderIcon /> : <LabelIcon />;
+  const expandIcon = isFolder ? <FolderClosedIcon /> : <LabelIcon />;
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { ChangeEvent, useMemo, useState } from "react";
-import { TreeView } from "@material-ui/lab";
+import { TreeView, TreeViewProps } from "@material-ui/lab";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
 import { get, set } from "../../ecs-common/nominal";
@@ -12,7 +12,7 @@ export type LibraryTreeProps = {
   onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
   library: DiscriminatedLibraryNode[];
   itemProps?: LibraryTreeItemsProps["itemProps"];
-};
+} & Pick<TreeViewProps, "className" | "style">;
 
 /**
  * Displays a LibraryDefinition as a MUI TreeView.
@@ -22,6 +22,7 @@ export const LibraryTree = ({
   selected,
   onSelectedChange,
   itemProps,
+  ...treeViewProps
 }: LibraryTreeProps) => {
   const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
   const [nodeMap, treeRoots] = useMemo(() => {
@@ -50,6 +51,7 @@ export const LibraryTree = ({
       selected={selected?.nodeId ?? ""}
       onNodeToggle={handleToggle}
       onNodeSelect={handleSelect}
+      {...treeViewProps}
     >
       <LibraryTreeItems nodes={treeRoots} itemProps={itemProps} />
     </TreeView>

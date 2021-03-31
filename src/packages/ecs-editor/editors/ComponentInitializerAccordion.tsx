@@ -9,7 +9,7 @@ import React from "react";
 import styled from "styled-components";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { ExpandAccordionIcon } from "../components/icons";
+import { ExpandIcon } from "../components/icons";
 import { useSelector } from "../store";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import {
@@ -57,7 +57,7 @@ export const ComponentInitializerAccordion = ({
   ]);
   return (
     <Accordion elevation={0}>
-      <AccordionSummary {...toggleProps} expandIcon={<ExpandAccordionIcon />}>
+      <AccordionSummary {...toggleProps} expandIcon={<ExpandIcon />}>
         <Typography>
           {definition.name}
           {!primary && " (Removed)"}
