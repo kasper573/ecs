@@ -17,8 +17,8 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
     e.preventDefault();
     e.stopPropagation();
     setPosition({
-      left: e.clientX - 2,
-      top: e.clientY - 4,
+      left: e.clientX,
+      top: e.clientY,
     });
   };
 

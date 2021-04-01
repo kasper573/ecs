@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { IconButton, MenuItem, Tooltip } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
+import NestedMenuItem from "material-ui-nested-menu-item";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -155,16 +156,12 @@ export const LibraryPanel = () => {
   ) {
     const isFolder = node.type === "folder";
     return [
-      <MenuFor
-        items={(props) =>
-          renderCreateMenuItems(
-            { close: combine(close, props.close)! },
-            isFolder ? node.nodeId : node.parentNodeId
-          )
-        }
-      >
-        {(props) => <MenuItem {...props}>Create</MenuItem>}
-      </MenuFor>,
+      <NestedMenuItem label="Create" parentMenuOpen={true}>
+        {renderCreateMenuItems(
+          { close },
+          isFolder ? node.nodeId : node.parentNodeId
+        )}
+      </NestedMenuItem>,
       <MenuItem
         onClick={(e) => {
           close(e);

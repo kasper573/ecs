@@ -13,6 +13,7 @@
     "lodash.range": "^3.2.0",
     "lodash.uniq": "^4.5.0",
     "lodash.without": "^4.4.0",
+    "material-ui-nested-menu-item": "^1.0.2",
     "material-ui-popup-state": "^1.7.2",
     "react": "^17.0.1",
     "react-dnd": "^14.0.2",
