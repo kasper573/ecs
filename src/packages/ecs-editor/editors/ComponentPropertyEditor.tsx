@@ -1,8 +1,9 @@
-import { TableCell, TableRow, Typography } from "@material-ui/core";
+import { MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
 import { getPropertyValue } from "../../property-bag/getPropertyValue";
 import { resetPropertyValue } from "../../property-bag/resetPropertyValue";
+import { MenuFor } from "../components/MenuFor";
 import { renderPrimitiveEditor } from "./PrimitiveEditor";
 
 export type ComponentPropertyEditorProps = {
@@ -62,13 +63,23 @@ export const ComponentPropertyEditor = ({
   const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
 
   return (
-    <TableRow key={propertyName}>
-      <TableCell>
-        <PropertyName $hasBaseDiff={hasBaseDiff}>{propertyName}</PropertyName>
-        {hasBaseDiff && <button onClick={resetValue}>Reset</button>}
-      </TableCell>
-      <TableCell>{editor}</TableCell>
-    </TableRow>
+    <MenuFor
+      items={[hasBaseDiff && <MenuItem onClick={resetValue}>Reset</MenuItem>]}
+    >
+      {({ onClick: openMenu }) => (
+        <TableRow
+          key={propertyName}
+          onContextMenu={hasBaseDiff ? openMenu : undefined}
+        >
+          <TableCell>
+            <PropertyName $hasBaseDiff={hasBaseDiff}>
+              {propertyName}
+            </PropertyName>
+          </TableCell>
+          <TableCell>{editor}</TableCell>
+        </TableRow>
+      )}
+    </MenuFor>
   );
 };
 
