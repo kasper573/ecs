@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { MouseEvent, PropsWithChildren } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
@@ -16,13 +16,13 @@ import { ScenesPanel } from "../panels/ScenesPanel";
 import { FileMenu } from "../panels/FileMenu";
 import { AppBarContent } from "./AppBarContent";
 
-export type AppBarAndDrawerProps = PropsWithChildren<{}>;
+export type LayoutProps = PropsWithChildren<{}>;
 
 /**
  * A layout component that wraps children in a responsive container that always has an AppBar and Drawer.
  * On desktop the drawer is permanent and on mobile it is toggled.
  */
-export const AppBarAndDrawer = ({ children }: AppBarAndDrawerProps) => {
+export const Layout = ({ children }: LayoutProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -40,7 +40,7 @@ export const AppBarAndDrawer = ({ children }: AppBarAndDrawerProps) => {
   );
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onContextMenu={disableContextMenu}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -136,3 +136,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+
+// Disable any unhandled context menus
+const disableContextMenu = (e: MouseEvent) => e.preventDefault();
