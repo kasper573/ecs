@@ -63,7 +63,7 @@ export const LibraryPanel = () => {
   const showRenameNodeDialog = useDialog((props, node: TypedLibraryNode) => (
     <NameDialog
       {...props}
-      title={`Rename ${node.name}`}
+      title={`Rename "${node.name}"`}
       defaultValue={node.name}
       onSave={(name) => handleRenameNode(node, name)}
     />
