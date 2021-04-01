@@ -1,15 +1,31 @@
 import useHotkeys from "react-use-hotkeys";
 import { ActionCreators } from "redux-undo";
-import { useDispatch } from "../store";
-import { useDeleteDialog } from "../hooks/useDeleteDialog";
+import { useDispatch, useStore } from "../store";
+import { useDialog } from "../hooks/useDialog";
+import {
+  createDeleteAction,
+  DeleteTarget,
+} from "../actions/createDeleteAction";
+import { DeleteDialog } from "./DeleteDialog";
 
 export const Hotkeys = () => {
+  const store = useStore();
   const dispatch = useDispatch();
-  const [askToDelete, deleteDialog] = useDeleteDialog();
 
-  useHotkeys("delete", askToDelete, []);
+  const showDeleteDialog = useDialog((props, [action, name]: DeleteTarget) => (
+    <DeleteDialog {...props} name={name} onDelete={() => dispatch(action)} />
+  ));
+
+  const tryDeleteSelected = () => {
+    const target = createDeleteAction(store.getState().present);
+    if (target) {
+      showDeleteDialog(target);
+    }
+  };
+
+  useHotkeys("delete", tryDeleteSelected, []);
   useHotkeys("control+z", () => dispatch(ActionCreators.undo()), []);
   useHotkeys("control+shift+z", () => dispatch(ActionCreators.redo()), []);
 
-  return deleteDialog;
+  return null;
 };

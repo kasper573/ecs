@@ -10,13 +10,15 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { uuid } from "../../ecs-common/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
 import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
-import { useDispatch, useSelector } from "../store";
+import { useDispatch, useSelector, useStore } from "../store";
 import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
 import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
+import { useDialog } from "../hooks/useDialog";
+import { DeleteDialog } from "../components/DeleteDialog";
+import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -26,6 +28,7 @@ export type EntityInitializerEditorProps = {
 export const EntityInitializerEditor = ({
   value: entityInitializer,
 }: EntityInitializerEditorProps) => {
+  const store = useStore();
   const dispatch = useDispatch();
   const entityDefinition = useSelector((state) =>
     selectEntityDefinition(state, entityInitializer.definitionId)
@@ -101,8 +104,20 @@ export const EntityInitializerEditor = ({
     [entityInitializer.id, dispatch]
   );
 
-  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent
+  const askToDeleteComponent = useDialog(
+    (props, initializer: ComponentInitializer) => {
+      const definition = selectComponentDefinition(
+        store.getState().present,
+        initializer?.definitionId
+      );
+      return (
+        <DeleteDialog
+          {...props}
+          onDelete={() => removeComponent(initializer)}
+          name={definition?.name ?? ""}
+        />
+      );
+    }
   );
 
   return (
@@ -125,7 +140,6 @@ export const EntityInitializerEditor = ({
       <DropBox spec={componentDefinitionDropSpec(addComponent)}>
         <Typography>Drop to add component</Typography>
       </DropBox>
-      {deleteDialog}
     </>
   );
 };

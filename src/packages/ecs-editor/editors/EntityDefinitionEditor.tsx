@@ -10,11 +10,13 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
-import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";
-import { useDispatch } from "../store";
+import { useDispatch, useStore } from "../store";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
 import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
+import { useDialog } from "../hooks/useDialog";
+import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
+import { DeleteDialog } from "../components/DeleteDialog";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -24,6 +26,7 @@ export type EntityDefinitionEditorProps = {
 export const EntityDefinitionEditor = ({
   value: entityDefinition,
 }: EntityDefinitionEditorProps) => {
+  const store = useStore();
   const dispatch = useDispatch();
 
   const addComponent = useCallback(
@@ -79,8 +82,20 @@ export const EntityDefinitionEditor = ({
     [entityDefinition.id, dispatch]
   );
 
-  const [deleteDialog, askToDeleteComponent] = useDeleteComponentDialog(
-    removeComponent
+  const askToDeleteComponent = useDialog(
+    (props, initializer: ComponentInitializer) => {
+      const definition = selectComponentDefinition(
+        store.getState().present,
+        initializer?.definitionId
+      );
+      return (
+        <DeleteDialog
+          {...props}
+          onDelete={() => removeComponent(initializer)}
+          name={definition?.name ?? ""}
+        />
+      );
+    }
   );
 
   return (
@@ -101,7 +116,6 @@ export const EntityDefinitionEditor = ({
       <DropBox spec={componentDefinitionDropSpec(addComponent)}>
         <Typography>Drop to add component</Typography>
       </DropBox>
-      {deleteDialog}
     </>
   );
 };
