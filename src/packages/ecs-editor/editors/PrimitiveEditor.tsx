@@ -17,6 +17,7 @@ export const renderPrimitiveEditor = ({
   if (isType(type, ZodTypes.boolean)) {
     return (
       <Switch
+        size="small"
         checked={value as boolean}
         onChange={(e) => onChange(e.target.checked)}
       />
@@ -25,6 +26,7 @@ export const renderPrimitiveEditor = ({
   if (isType(type, ZodTypes.number)) {
     return (
       <TextField
+        size="small"
         value={value ?? "0"}
         type="number"
         onChange={(e) => onChange(parseFloat(e.currentTarget.value))}
@@ -42,6 +44,7 @@ export const renderPrimitiveEditor = ({
   if (isType(type, ZodTypes.string)) {
     return (
       <TextField
+        size="small"
         value={value ?? ""}
         onChange={(e) => onChange(e.currentTarget.value)}
       />

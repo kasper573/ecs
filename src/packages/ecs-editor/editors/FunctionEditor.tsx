@@ -38,6 +38,7 @@ export const FunctionEditor = ({
 
   return (
     <TextField
+      size="small"
       multiline
       error={!isValid}
       value={dirtyJs}
