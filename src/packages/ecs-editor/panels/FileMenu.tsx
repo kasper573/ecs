@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { PanelHeader } from "../components/PanelHeader";
+import { Button, Dialog, MenuItem } from "@material-ui/core";
 import { SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
@@ -10,21 +10,20 @@ import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
+import { MenuFor } from "../components/MenuFor";
+import { useDialog } from "../hooks/useDialog";
+import { combine } from "../../ecs-common/combine";
 
-export const SystemsPanel = () => {
+export const FileMenu = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systems = useSelector(selectListOfSystemDefinition);
   const nativeComponents = useContext(NativeComponentsContext);
   const dispatch = useDispatch();
 
-  const [{ showRenameDialog, showDeleteDialog }, createButton] = useCrudDialogs(
+  const [{ showCreateDialog }] = useCrudDialogs<SystemDefinition>(
     "system",
     (system) => system.name,
-    {
-      create: handleCreate,
-      rename: handleRename,
-      remove: handleDelete,
-    }
+    { create: handleCreate }
   );
 
   function handleCreate(name: string) {
@@ -33,18 +32,8 @@ export const SystemsPanel = () => {
     addNativeComponentsForSystem(system);
   }
 
-  function handleRename(system: SystemDefinition, name: string) {
-    dispatch(
-      core.actions.renameSystemDefinition({ systemId: system.id, name })
-    );
-  }
-
   function handleSelected(system: SystemDefinition) {
     dispatch(core.actions.setSelectedSystemDefinition(system.id));
-  }
-
-  function handleDelete(system: SystemDefinition) {
-    dispatch(core.actions.deleteSystemDefinition(system.id));
   }
 
   function addNativeComponentsForSystem(system: SystemDefinition) {
@@ -61,19 +50,42 @@ export const SystemsPanel = () => {
     }
   }
 
+  const showSystemDialog = useDialog((props) => {
+    const close = () =>
+      props.onClose ? props.onClose({}, "backdropClick") : undefined;
+    return (
+      <Dialog {...props} fullWidth maxWidth="xs">
+        <CrudList
+          active={selectedSystem}
+          items={systems}
+          getItemProps={getItemProps}
+          getItemKey={getItemKey}
+          onSelectItem={combine(handleSelected, close)}
+        />
+      </Dialog>
+    );
+  });
+
   return (
-    <>
-      <PanelHeader title="Systems">{createButton}</PanelHeader>
-      <CrudList
-        active={selectedSystem}
-        items={systems}
-        onSelectItem={handleSelected}
-        getItemProps={getItemProps}
-        getItemKey={getItemKey}
-        onUpdateItem={showRenameDialog}
-        onDeleteItem={showDeleteDialog}
-      />
-    </>
+    <MenuFor
+      items={[
+        <MenuItem onClick={showCreateDialog}>New system</MenuItem>,
+        systems.length > 0 && (
+          <MenuItem onClick={showSystemDialog}>Select system</MenuItem>
+        ),
+      ]}
+    >
+      {(props) => (
+        <Button
+          aria-label="File"
+          color="primary"
+          variant="contained"
+          {...props}
+        >
+          File
+        </Button>
+      )}
+    </MenuFor>
   );
 };
 

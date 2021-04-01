@@ -7,11 +7,8 @@ import {
 } from "@material-ui/core";
 import { PanelContainer } from "../components/PanelContainer";
 import { AppBarAndDrawer } from "../components/AppBarAndDrawer";
-import { AppBar } from "../components/AppBar";
 import { RuntimePanel } from "../panels/RuntimePanel";
-import { ScenesPanel } from "../panels/ScenesPanel";
 import { LibraryPanel } from "../panels/LibraryPanel";
-import { SystemsPanel } from "../panels/SystemsPanel";
 import { InstancesPanel } from "../panels/InstancesPanel";
 import { InspectorPanel } from "../panels/InspectorPanel";
 import { Hotkeys } from "../components/Hotkeys";
@@ -37,10 +34,9 @@ export const Editor = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <GlobalStyle />
-        <AppBarAndDrawer appBar={<AppBar />} drawer={<SystemsPanel />}>
+        <AppBarAndDrawer>
           <PanelContainer>
             <RuntimePanel />
-            <ScenesPanel />
             <InspectorPanel />
             <InstancesPanel />
             <LibraryPanel />

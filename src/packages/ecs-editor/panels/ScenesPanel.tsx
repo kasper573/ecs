@@ -1,10 +1,8 @@
-import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector } from "../store";
 import { SceneIcon } from "../icons";
 import { CrudList } from "../components/CrudList";
 import { core } from "../core";
-import { Panel } from "../components/Panel";
 import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { selectListOfSceneDefinition } from "../selectors/selectListOfSceneDefinition";
@@ -55,12 +53,10 @@ export const ScenesPanel = () => {
   }
 
   return (
-    <Panel name={PanelName.Scenes}>
-      <PanelHeader title={PanelName.Scenes}>
-        {selectedSystem && createButton}
-      </PanelHeader>
+    <>
+      <PanelHeader title="Scenes">{selectedSystem && createButton}</PanelHeader>
       <CrudList
-        title={PanelName.Scenes}
+        title="Scenes"
         active={selectedScene}
         items={scenes}
         getItemProps={getItemProps}
@@ -70,7 +66,7 @@ export const ScenesPanel = () => {
         onDeleteItem={showDeleteDialog}
         onUpdateItem={showRenameDialog}
       />
-    </Panel>
+    </>
   );
 };
 

@@ -47,7 +47,7 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
     menuItems = defined(menuItemsConfig({ close: handleClose }));
   }
 
-  const menu = (
+  const menu = menuItems.length > 0 && (
     <Menu
       open={!!position}
       onClose={handleClose as MenuProps["onClose"]} // Need to override since MenuProps["onClose"] is poorly defined

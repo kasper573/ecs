@@ -1,6 +1,5 @@
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren } from "react";
 import AppBar from "@material-ui/core/AppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -13,27 +12,17 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
+import { ScenesPanel } from "../panels/ScenesPanel";
+import { FileMenu } from "../panels/FileMenu";
+import { AppBarContent } from "./AppBarContent";
 
-export type AppBarAndDrawerProps = PropsWithChildren<{
-  /**
-   * Content for the AppBar
-   */
-  appBar: ReactNode;
-  /**
-   * Content for the Drawer
-   */
-  drawer: ReactNode;
-}>;
+export type AppBarAndDrawerProps = PropsWithChildren<{}>;
 
 /**
  * A layout component that wraps children in a responsive container that always has an AppBar and Drawer.
  * On desktop the drawer is permanent and on mobile it is toggled.
  */
-export const AppBarAndDrawer = ({
-  appBar: appBarContent,
-  drawer: drawerContent,
-  children,
-}: AppBarAndDrawerProps) => {
+export const AppBarAndDrawer = ({ children }: AppBarAndDrawerProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -42,15 +31,16 @@ export const AppBarAndDrawer = ({
 
   const drawer = (
     <div>
-      <div className={classes.toolbarSpacing} />
+      <div className={classes.toolbarSpacing}>
+        <FileMenu />
+      </div>
       <Divider />
-      {drawerContent}
+      <ScenesPanel />
     </div>
   );
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -62,7 +52,7 @@ export const AppBarAndDrawer = ({
           >
             <MenuIcon />
           </IconButton>
-          {appBarContent}
+          <AppBarContent />
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
@@ -131,7 +121,10 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     // necessary for content to be below app bar
-    toolbarSpacing: theme.mixins.toolbar,
+    toolbarSpacing: {
+      ...theme.mixins.toolbar,
+      padding: theme.spacing(2),
+    },
     drawerPaper: {
       width: drawerWidth,
     },

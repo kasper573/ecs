@@ -15,11 +15,11 @@ export const PanelContainer = styled.div`
   flex: 1;
   overflow: hidden;
   gap: ${panelSpacing}px ${panelSpacing}px;
-  grid-template-columns: 300px auto 300px 300px;
+  grid-template-columns: auto 300px 300px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "${panels.Scenes} ${panels.Runtime} ${panels.Instances} ${panels.Inspector}"
-    "${panels.Scenes} ${panels.Runtime} ${panels.Instances} ${panels.Library}"
+    "${panels.Runtime} ${panels.Instances} ${panels.Inspector}"
+    "${panels.Runtime} ${panels.Instances} ${panels.Library}"
   ;
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
@@ -29,7 +29,6 @@ export const PanelContainer = styled.div`
       "${panels.Instances}"
       "${panels.Inspector}"
       "${panels.Library}"
-      "${panels.Scenes}"
     ;
   },
 `;
