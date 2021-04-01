@@ -1,38 +1,65 @@
 import { IconButton, Tooltip } from "@material-ui/core";
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import { PanelHeader } from "../components/PanelHeader";
 import { AddIcon, SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { CrudList } from "../components/CrudList";
-import { omit } from "../../ecs-common/omit";
 import { core } from "../core";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
+import { useDialog } from "../hooks/useDialog";
+import { NameDialog } from "../components/NameDialog";
+import { DeleteDialog } from "../components/DeleteDialog";
 
 export const SystemsPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systems = useSelector(selectListOfSystemDefinition);
   const nativeComponents = useContext(NativeComponentsContext);
   const dispatch = useDispatch();
-  const [systemEvents, systemDialogs] = useCrudDialogs<SystemDefinition>({
-    createDialogTitle: "Add system",
-    getItemName: (item) => item.name,
-    onCreateItem: (name) => {
-      const system: SystemDefinition = { id: uuid(), name };
-      dispatch(core.actions.createSystemDefinition(system));
-      addNativeComponentsForSystem(system);
-    },
-    onRenameItem: (system, name) =>
-      dispatch(
-        core.actions.renameSystemDefinition({ systemId: system.id, name })
-      ),
-    onDeleteItem: (system) =>
-      dispatch(core.actions.deleteSystemDefinition(system.id)),
-  });
+
+  const showCreateDialog = useDialog((props) => (
+    <NameDialog {...props} title={`New system`} onSave={handleCreate} />
+  ));
+
+  const showRenameDialog = useDialog((props, system: SystemDefinition) => (
+    <NameDialog
+      {...props}
+      title={`Rename ${system.name}`}
+      defaultValue={system.name}
+      onSave={(name) => handleRename(system, name)}
+    />
+  ));
+
+  const showDeleteDialog = useDialog((props, system: SystemDefinition) => (
+    <DeleteDialog
+      {...props}
+      name={system.name}
+      onDelete={() => handleDelete(system)}
+    />
+  ));
+
+  function handleCreate(name: string) {
+    const system: SystemDefinition = { id: uuid(), name };
+    dispatch(core.actions.createSystemDefinition(system));
+    addNativeComponentsForSystem(system);
+  }
+
+  function handleRename(system: SystemDefinition, name: string) {
+    dispatch(
+      core.actions.renameSystemDefinition({ systemId: system.id, name })
+    );
+  }
+
+  function handleSelected(system: SystemDefinition) {
+    dispatch(core.actions.setSelectedSystemDefinition(system.id));
+  }
+
+  function handleDelete(system: SystemDefinition) {
+    dispatch(core.actions.deleteSystemDefinition(system.id));
+  }
 
   function addNativeComponentsForSystem(system: SystemDefinition) {
     for (const nativeComponentName of Object.keys(nativeComponents)) {
@@ -48,20 +75,14 @@ export const SystemsPanel = () => {
     }
   }
 
-  const handleSystemSelected = useCallback(
-    (system) => dispatch(core.actions.setSelectedSystemDefinition(system.id)),
-    [dispatch]
-  );
-
   return (
     <>
-      {systemDialogs}
       <PanelHeader title="Systems">
-        <Tooltip title="Add system">
+        <Tooltip title="New system">
           <IconButton
             edge="end"
-            aria-label="add system"
-            onClick={systemEvents.onCreateItem}
+            aria-label="New system"
+            onClick={showCreateDialog}
           >
             <AddIcon />
           </IconButton>
@@ -70,10 +91,11 @@ export const SystemsPanel = () => {
       <CrudList
         active={selectedSystem}
         items={systems}
-        onSelectItem={handleSystemSelected}
+        onSelectItem={handleSelected}
         getItemProps={getItemProps}
         getItemKey={getItemKey}
-        {...omit(systemEvents, "onCreateItem")}
+        onUpdateItem={showRenameDialog}
+        onDeleteItem={showDeleteDialog}
       />
     </>
   );
