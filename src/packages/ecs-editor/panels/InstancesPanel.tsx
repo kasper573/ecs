@@ -1,4 +1,3 @@
-import React, { useCallback } from "react";
 import { Typography } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
@@ -8,49 +7,62 @@ import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
 import { CrudList } from "../components/CrudList";
 import { EntityInitializerIcon } from "../icons";
-import { omit } from "../../ecs-common/omit";
 import { Panel } from "../components/Panel";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
+import { useDialog } from "../hooks/useDialog";
+import { NameDialog } from "../components/NameDialog";
+import { DeleteDialog } from "../components/DeleteDialog";
 
 export const InstancesPanel = () => {
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
   const store = useStore();
-  const [
-    entityInitializerEvents,
-    entityInitializerDialogs,
-  ] = useCrudDialogs<EntityInitializer>({
-    createDialogTitle: "Initialize entity",
-    getItemName: (item) => item.name,
-    onCreateItem: () => {},
-    onRenameItem: (entity, name) =>
-      dispatch(
-        core.actions.renameEntityInitializer({
-          entityId: entity.id,
-          name,
-        })
-      ),
-    onDeleteItem: (entity) =>
-      dispatch(core.actions.deleteEntityInitializer(entity.id)),
-  });
-  const handleDuplicate = useCallback(
-    (entityInitializer: EntityInitializer) =>
-      dispatch(core.actions.duplicateEntityInitializer(entityInitializer.id)),
-    [dispatch]
-  );
-  const handleNodeSelected = useCallback(
-    (entityInitializer: EntityInitializer) =>
-      dispatch(core.actions.setSelectedEntityInitializer(entityInitializer.id)),
-    [dispatch]
-  );
-  function initializeDefinition(entityDefinition: EntityDefinition) {
+
+  const showRenameDialog = useDialog((props, entity: EntityInitializer) => (
+    <NameDialog
+      {...props}
+      title={`Rename ${entity.name}`}
+      defaultValue={entity.name}
+      onSave={(name) => handleRename(entity, name)}
+    />
+  ));
+
+  const showDeleteDialog = useDialog((props, entity: EntityInitializer) => (
+    <DeleteDialog
+      {...props}
+      name={entity.name}
+      onDelete={() => handleDelete(entity)}
+    />
+  ));
+
+  function handleDelete(entityInitializer: EntityInitializer) {
+    dispatch(core.actions.deleteEntityInitializer(entityInitializer.id));
+  }
+
+  function handleDuplicate(entityInitializer: EntityInitializer) {
+    dispatch(core.actions.duplicateEntityInitializer(entityInitializer.id));
+  }
+
+  function handleSelected(entityInitializer: EntityInitializer) {
+    dispatch(core.actions.setSelectedEntityInitializer(entityInitializer.id));
+  }
+
+  function handleRename(entity: EntityInitializer, name: string) {
+    dispatch(
+      core.actions.renameEntityInitializer({
+        entityId: entity.id,
+        name,
+      })
+    );
+  }
+
+  function handleInitialize(entityDefinition: EntityDefinition) {
     const { system, scene } = store.getState().present.selection;
     dispatch(
       core.actions.createEntityInitializer({
@@ -66,24 +78,20 @@ export const InstancesPanel = () => {
 
   return (
     <Panel name={PanelName.Instances}>
-      {entityInitializerDialogs}
       <PanelHeader title={PanelName.Instances}>
-        <CreateEntityInitializerButton
-          onCreate={(entityDefinition) =>
-            initializeDefinition(entityDefinition)
-          }
-        />
+        <CreateEntityInitializerButton onCreate={handleInitialize} />
       </PanelHeader>
       <CrudList
         active={selectedEntity}
         items={entities}
         getItemProps={getItemProps}
         getItemKey={getItemKey}
-        onSelectItem={handleNodeSelected}
+        onSelectItem={handleSelected}
         onDuplicateItem={handleDuplicate}
-        {...omit(entityInitializerEvents, "onCreateItem")}
+        onUpdateItem={showRenameDialog}
+        onDeleteItem={showDeleteDialog}
       />
-      <DropBox spec={entityDefinitionDropSpec(initializeDefinition)}>
+      <DropBox spec={entityDefinitionDropSpec(handleInitialize)}>
         <Typography>Drop to create instance</Typography>
       </DropBox>
     </Panel>
