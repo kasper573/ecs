@@ -25,7 +25,7 @@ export const AppBar = () => {
   const ThemeToggleIcon = themeToggleIcons[themeType];
   const themeToggleTooltip = themeToggleTooltips[themeType];
 
-  const [showSaveDialog, saveDialog] = useDialog((props) => (
+  const showSaveDialog = useDialog((props) => (
     <SimpleDialog title="Save" {...props}>
       {props.open && <pre>{JSON.stringify(ecs, null, 2)}</pre>}
     </SimpleDialog>
@@ -53,7 +53,6 @@ export const AppBar = () => {
           </IconButton>
         </Tooltip>
       </Actions>
-      {saveDialog}
     </>
   );
 };

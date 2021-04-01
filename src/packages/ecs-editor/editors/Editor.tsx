@@ -21,6 +21,7 @@ import { darkTheme } from "../fixtures/darkTheme";
 import { selectThemeType } from "../selectors/selectThemeType";
 import { GlobalStyle } from "../components/GlobalStyle";
 import { DragLayer } from "../components/DragLayer";
+import { Dialogs } from "../hooks/useDialog";
 
 /**
  * Renders controls to CRUD systems, scenes, entities, components and properties.
@@ -47,6 +48,7 @@ export const Editor = () => {
           <Hotkeys />
         </AppBarAndDrawer>
         <DragLayer />
+        <Dialogs />
       </MuiThemeProvider>
     </StyledThemeProvider>
   );

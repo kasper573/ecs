@@ -1,4 +1,3 @@
-import React, { useRef } from "react";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
@@ -9,21 +8,21 @@ import { selectListOfLibraryNode } from "../selectors/selectListOfLibraryNode";
 import { LibraryTree } from "../components/LibraryTree";
 import { core } from "../core";
 import { Panel } from "../components/Panel";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
 import { AddIcon } from "../icons";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { createLibraryMenuFactory } from "../functions/createLibraryMenuFactory";
+import { useDialog } from "../hooks/useDialog";
+import { NameDialog } from "../components/NameDialog";
+import { DeleteDialog } from "../components/DeleteDialog";
 
 export const LibraryPanel = () => {
-  const parentNodeIdRef = useRef<LibraryNodeId>();
   const store = useStore();
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
@@ -38,75 +37,111 @@ export const LibraryPanel = () => {
     )
   );
 
-  const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
-    createDialogTitle: "Add entity",
-    getItemName: (node) => node.name,
-    onCreateItem: (name) =>
-      dispatch(
-        core.actions.createEntityDefinition({
-          nodeId: uuid(),
-          id: uuid(),
-          systemId: selectedSystem?.id!,
-          parentNodeId: parentNodeIdRef.current,
-          name,
-          components: [],
-        })
-      ),
-    onRenameItem: (target, name) => {
-      switch (target.type) {
-        case "entity":
-          return dispatch(
-            core.actions.renameEntityDefinition({ id: target.id, name })
-          );
-        case "component":
-          return dispatch(
-            core.actions.renameComponentDefinition({ id: target.id, name })
-          );
-        case "folder":
-          return dispatch(
-            core.actions.renameLibraryFolder({ id: target.id, name })
-          );
-      }
-    },
-    onDeleteItem: (node) => {
-      switch (node.type) {
-        case "entity":
-          return dispatch(core.actions.deleteEntityDefinition(node.id));
-        case "component":
-          return dispatch(core.actions.deleteComponentDefinition(node.id));
-        case "folder":
-          return dispatch(core.actions.deleteLibraryFolder(node.id));
-      }
-    },
-  });
+  const showCreateFolderDialog = useDialog(
+    (props, parentNodeId?: LibraryNodeId) => (
+      <NameDialog
+        {...props}
+        title="New folder"
+        onSave={(name) => handleCreateFolder(name, parentNodeId)}
+      />
+    )
+  );
 
-  const [folderEvents, folderDialogs] = useCrudDialogs<LibraryFolder>({
-    createDialogTitle: "Add folder",
-    getItemName: (node) => node.name,
-    onCreateItem: (name) =>
-      dispatch(
-        core.actions.createLibraryFolder({
-          nodeId: uuid(),
-          id: uuid(),
-          systemId: selectedSystem?.id!,
-          parentNodeId: parentNodeIdRef.current,
-          name,
-        })
-      ),
-  });
+  const showCreateEntityDialog = useDialog(
+    (props, parentNodeId?: LibraryNodeId) => (
+      <NameDialog
+        {...props}
+        title="New entity"
+        onSave={(name) => handleCreateEntity(name, parentNodeId)}
+      />
+    )
+  );
+
+  const showRenameNodeDialog = useDialog(
+    (props, node: DiscriminatedLibraryNode) => (
+      <NameDialog
+        {...props}
+        title={`Rename ${node.name}`}
+        defaultValue={node.name}
+        onSave={(name) => handleRenameNode(node, name)}
+      />
+    )
+  );
+
+  const showDeleteNodeDialog = useDialog(
+    (props, node: DiscriminatedLibraryNode) => (
+      <DeleteDialog
+        {...props}
+        name={node.name}
+        onDelete={() => handleDeleteNode(node)}
+      />
+    )
+  );
 
   const menuItemFactory = createLibraryMenuFactory(
-    parentNodeIdRef,
-    folderEvents.onCreateItem,
-    nodeEvents.onCreateItem,
-    nodeEvents.onUpdateItem,
+    showCreateFolderDialog,
+    showCreateEntityDialog,
+    showRenameNodeDialog,
     handleDuplicate,
-    nodeEvents.onDeleteItem
+    showDeleteNodeDialog
   );
 
   const [rootContextMenuProps, rootContextMenu] = useContextMenu(
     menuItemFactory.common
   );
+
+  function handleCreateFolder(name: string, parentNodeId?: LibraryNodeId) {
+    dispatch(
+      core.actions.createLibraryFolder({
+        nodeId: uuid(),
+        id: uuid(),
+        systemId: selectedSystem?.id!,
+        parentNodeId,
+        name,
+      })
+    );
+  }
+
+  function handleCreateEntity(name: string, parentNodeId?: LibraryNodeId) {
+    dispatch(
+      core.actions.createEntityDefinition({
+        nodeId: uuid(),
+        id: uuid(),
+        systemId: selectedSystem?.id!,
+        parentNodeId,
+        name,
+        components: [],
+      })
+    );
+  }
+
+  function handleRenameNode(target: DiscriminatedLibraryNode, name: string) {
+    switch (target.type) {
+      case "entity":
+        return dispatch(
+          core.actions.renameEntityDefinition({ id: target.id, name })
+        );
+      case "component":
+        return dispatch(
+          core.actions.renameComponentDefinition({ id: target.id, name })
+        );
+      case "folder":
+        return dispatch(
+          core.actions.renameLibraryFolder({ id: target.id, name })
+        );
+    }
+  }
+
+  function handleDeleteNode(node: DiscriminatedLibraryNode) {
+    switch (node.type) {
+      case "entity":
+        return dispatch(core.actions.deleteEntityDefinition(node.id));
+      case "component":
+        return dispatch(core.actions.deleteComponentDefinition(node.id));
+      case "folder":
+        return dispatch(core.actions.deleteLibraryFolder(node.id));
+    }
+  }
 
   function handleDuplicate(node: DiscriminatedLibraryNode) {
     switch (node.type) {
@@ -141,8 +176,6 @@ export const LibraryPanel = () => {
 
   return (
     <Panel ref={rootDrop} name={PanelName.Library} {...rootContextMenuProps}>
-      {nodeDialogs}
-      {folderDialogs}
       {rootContextMenu}
       <PanelHeader title="Library">
         {selectedSystem && (

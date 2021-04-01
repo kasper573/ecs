@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 import { MenuItem } from "@material-ui/core";
 import NestedMenuItem from "material-ui-nested-menu-item";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
@@ -8,9 +8,8 @@ import { combine } from "../../ecs-common/combine";
 import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
 
 export const createLibraryMenuFactory = (
-  parentNodeIdRef: MutableRefObject<LibraryNodeId | undefined>,
-  onCreateFolder: () => void,
-  onCreateEntity: () => void,
+  onCreateFolder: (parentNodeId?: LibraryNodeId) => void,
+  onCreateEntity: (parentNodeId?: LibraryNodeId) => void,
   onRenameNode: (node: DiscriminatedLibraryNode) => void,
   onDuplicateNode: (node: DiscriminatedLibraryNode) => void,
   onDeleteNode: (node: DiscriminatedLibraryNode) => void
@@ -20,20 +19,10 @@ export const createLibraryMenuFactory = (
     parentNodeId?: LibraryNodeId
   ) {
     return [
-      <MenuItem
-        onClick={combine(close, () => {
-          parentNodeIdRef.current = parentNodeId;
-          onCreateFolder();
-        })}
-      >
+      <MenuItem onClick={combine(close, () => onCreateFolder(parentNodeId))}>
         Folder
       </MenuItem>,
-      <MenuItem
-        onClick={combine(close, () => {
-          parentNodeIdRef.current = parentNodeId;
-          onCreateEntity();
-        })}
-      >
+      <MenuItem onClick={combine(close, () => onCreateEntity(parentNodeId))}>
         Entity
       </MenuItem>,
     ];
