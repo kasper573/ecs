@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Dialog, MenuItem } from "@material-ui/core";
+import { Button, Dialog, DialogTitle, MenuItem } from "@material-ui/core";
 import { SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
@@ -55,6 +55,7 @@ export const FileMenu = () => {
       props.onClose ? props.onClose({}, "backdropClick") : undefined;
     return (
       <Dialog {...props} fullWidth maxWidth="xs">
+        <DialogTitle>Select system</DialogTitle>
         <CrudList
           active={selectedSystem}
           items={systems}
