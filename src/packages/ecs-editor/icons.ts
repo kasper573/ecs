@@ -14,6 +14,7 @@ export {
   Extension as EntityDefinitionIcon,
   Receipt as EntityInitializerIcon,
   Room as SceneIcon,
+  Settings as DevToolsIcon,
   Settings as ComponentDefinitionIcon,
   Delete as DeleteIcon,
   Edit as EditIcon,
