@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   createDeleteAction,
   DeleteTarget,
-} from "../functions/createDeleteAction";
+} from "../actions/createDeleteAction";
 import { useDispatch, useStore } from "../store";
 import { DeleteDialog } from "../components/DeleteDialog";
 

@@ -5,6 +5,7 @@ import { selectLibraryNode } from "../selectors/selectLibraryNode";
 import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
+import { createDeleteLibraryNodeAction } from "./createDeleteLibraryNodeAction";
 
 export type DeleteTarget = [
   PayloadAction<unknown>,
@@ -44,19 +45,12 @@ export const createDeleteAction = (
       }
       switch (inspected.type) {
         case "libraryNode":
-          const n = selectLibraryNode(state, inspected.id);
-          if (!n) {
+          const node = selectLibraryNode(state, inspected.id);
+          if (!node) {
             return;
           }
-          switch (n.type) {
-            case "entity":
-              return [core.actions.deleteEntityDefinition(n.id), n.name];
-            case "component":
-              return [core.actions.deleteComponentDefinition(n.id), n.name];
-            case "folder":
-              return [core.actions.deleteLibraryFolder(n.id), n.name];
-          }
-          break;
+          const action = createDeleteLibraryNodeAction(node);
+          return [action, node.name];
         case "entityInitializer":
           return [
             core.actions.deleteEntityInitializer(inspected.id),

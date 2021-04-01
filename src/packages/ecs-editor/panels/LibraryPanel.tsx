@@ -21,6 +21,9 @@ import { createLibraryMenuFactory } from "../functions/createLibraryMenuFactory"
 import { useDialog } from "../hooks/useDialog";
 import { NameDialog } from "../components/NameDialog";
 import { DeleteDialog } from "../components/DeleteDialog";
+import { createRenameLibraryNodeAction } from "../actions/createRenameLibraryNodeAction";
+import { createDeleteLibraryNodeAction } from "../actions/createDeleteLibraryNodeAction";
+import { createDuplicateLibraryNodeAction } from "../actions/createDuplicateLibraryNodeAction";
 
 export const LibraryPanel = () => {
   const store = useStore();
@@ -112,39 +115,17 @@ export const LibraryPanel = () => {
   }
 
   function handleRenameNode(target: TypedLibraryNode, name: string) {
-    switch (target.type) {
-      case "entity":
-        return dispatch(
-          core.actions.renameEntityDefinition({ id: target.id, name })
-        );
-      case "component":
-        return dispatch(
-          core.actions.renameComponentDefinition({ id: target.id, name })
-        );
-      case "folder":
-        return dispatch(
-          core.actions.renameLibraryFolder({ id: target.id, name })
-        );
-    }
+    dispatch(createRenameLibraryNodeAction(target, name));
   }
 
   function handleDeleteNode(node: TypedLibraryNode) {
-    switch (node.type) {
-      case "entity":
-        return dispatch(core.actions.deleteEntityDefinition(node.id));
-      case "component":
-        return dispatch(core.actions.deleteComponentDefinition(node.id));
-      case "folder":
-        return dispatch(core.actions.deleteLibraryFolder(node.id));
-    }
+    dispatch(createDeleteLibraryNodeAction(node));
   }
 
   function handleDuplicate(node: TypedLibraryNode) {
-    switch (node.type) {
-      case "entity":
-        return dispatch(core.actions.duplicateEntityDefinition(node.id));
-      case "component":
-        return dispatch(core.actions.duplicateComponentDefinition(node.id));
+    const action = createDuplicateLibraryNodeAction(node);
+    if (action) {
+      dispatch(action);
     }
   }
 
