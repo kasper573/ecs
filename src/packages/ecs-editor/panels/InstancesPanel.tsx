@@ -14,9 +14,7 @@ import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition"
 import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
-import { useDialog } from "../hooks/useDialog";
-import { NameDialog } from "../components/NameDialog";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { useCrudDialogs } from "../hooks/useCrudDialogs";
 
 export const InstancesPanel = () => {
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
@@ -24,22 +22,14 @@ export const InstancesPanel = () => {
   const dispatch = useDispatch();
   const store = useStore();
 
-  const showRenameDialog = useDialog((props, entity: EntityInitializer) => (
-    <NameDialog
-      {...props}
-      title={`Rename ${entity.name}`}
-      defaultValue={entity.name}
-      onSave={(name) => handleRename(entity, name)}
-    />
-  ));
-
-  const showDeleteDialog = useDialog((props, entity: EntityInitializer) => (
-    <DeleteDialog
-      {...props}
-      name={entity.name}
-      onDelete={() => handleDelete(entity)}
-    />
-  ));
+  const [{ showRenameDialog, showDeleteDialog, createTitle }] = useCrudDialogs(
+    "instance",
+    (instance) => instance.name,
+    {
+      rename: handleRename,
+      remove: handleDelete,
+    }
+  );
 
   function handleDelete(entityInitializer: EntityInitializer) {
     dispatch(core.actions.deleteEntityInitializer(entityInitializer.id));
@@ -79,7 +69,10 @@ export const InstancesPanel = () => {
   return (
     <Panel name={PanelName.Instances}>
       <PanelHeader title={PanelName.Instances}>
-        <CreateEntityInitializerButton onCreate={handleInitialize} />
+        <CreateEntityInitializerButton
+          title={createTitle}
+          onCreate={handleInitialize}
+        />
       </PanelHeader>
       <CrudList
         active={selectedEntity}

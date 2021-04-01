@@ -1,8 +1,7 @@
-import { IconButton, Tooltip } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector } from "../store";
-import { AddIcon, SceneIcon } from "../icons";
+import { SceneIcon } from "../icons";
 import { CrudList } from "../components/CrudList";
 import { core } from "../core";
 import { Panel } from "../components/Panel";
@@ -11,9 +10,7 @@ import { uuid } from "../../ecs-common/uuid";
 import { selectListOfSceneDefinition } from "../selectors/selectListOfSceneDefinition";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
-import { useDialog } from "../hooks/useDialog";
-import { NameDialog } from "../components/NameDialog";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { useCrudDialogs } from "../hooks/useCrudDialogs";
 
 export const ScenesPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
@@ -21,26 +18,15 @@ export const ScenesPanel = () => {
   const scenes = useSelector(selectListOfSceneDefinition);
   const dispatch = useDispatch();
 
-  const showCreateDialog = useDialog((props) => (
-    <NameDialog {...props} title="New scene" onSave={handleCreate} />
-  ));
-
-  const showRenameDialog = useDialog((props, scene: SceneDefinition) => (
-    <NameDialog
-      {...props}
-      title={`Rename ${scene.name}`}
-      defaultValue={scene.name}
-      onSave={(name) => handleRename(scene, name)}
-    />
-  ));
-
-  const showDeleteDialog = useDialog((props, scene: SceneDefinition) => (
-    <DeleteDialog
-      {...props}
-      name={scene.name}
-      onDelete={() => handleDelete(scene)}
-    />
-  ));
+  const [{ showRenameDialog, showDeleteDialog }, createButton] = useCrudDialogs(
+    "scene",
+    (scene) => scene.name,
+    {
+      create: handleCreate,
+      rename: handleRename,
+      remove: handleDelete,
+    }
+  );
 
   function handleCreate(name: string) {
     dispatch(
@@ -71,17 +57,7 @@ export const ScenesPanel = () => {
   return (
     <Panel name={PanelName.Scenes}>
       <PanelHeader title={PanelName.Scenes}>
-        {selectedSystem && (
-          <Tooltip title="New scene">
-            <IconButton
-              edge="end"
-              aria-label="New scene"
-              onClick={showCreateDialog}
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+        {selectedSystem && createButton}
       </PanelHeader>
       <CrudList
         title={PanelName.Scenes}

@@ -11,10 +11,12 @@ import { AddIcon } from "../icons";
 import { CommonPopper } from "./CommonPopper";
 
 export type CreateEntityInitializerButtonProps = {
+  title: string;
   onCreate: (selected: EntityDefinition) => void;
 };
 
 export const CreateEntityInitializerButton = ({
+  title,
   onCreate,
 }: CreateEntityInitializerButtonProps) => {
   const { system, scene } = useSelector(selectEditorSelection);
@@ -28,12 +30,8 @@ export const CreateEntityInitializerButton = ({
   }
   return (
     <>
-      <Tooltip title="Instantiate entity">
-        <IconButton
-          edge="end"
-          aria-label="Instantiate entity"
-          {...bindToggle(popupState)}
-        >
+      <Tooltip title={title}>
+        <IconButton edge="end" aria-label={title} {...bindToggle(popupState)}>
           <AddIcon />
         </IconButton>
       </Tooltip>

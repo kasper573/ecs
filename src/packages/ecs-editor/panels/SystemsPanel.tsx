@@ -1,7 +1,6 @@
-import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useContext } from "react";
 import { PanelHeader } from "../components/PanelHeader";
-import { AddIcon, SystemIcon } from "../icons";
+import { SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { CrudList } from "../components/CrudList";
@@ -10,9 +9,7 @@ import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition"
 import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { useDialog } from "../hooks/useDialog";
-import { NameDialog } from "../components/NameDialog";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { useCrudDialogs } from "../hooks/useCrudDialogs";
 
 export const SystemsPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
@@ -20,26 +17,15 @@ export const SystemsPanel = () => {
   const nativeComponents = useContext(NativeComponentsContext);
   const dispatch = useDispatch();
 
-  const showCreateDialog = useDialog((props) => (
-    <NameDialog {...props} title={`New system`} onSave={handleCreate} />
-  ));
-
-  const showRenameDialog = useDialog((props, system: SystemDefinition) => (
-    <NameDialog
-      {...props}
-      title={`Rename ${system.name}`}
-      defaultValue={system.name}
-      onSave={(name) => handleRename(system, name)}
-    />
-  ));
-
-  const showDeleteDialog = useDialog((props, system: SystemDefinition) => (
-    <DeleteDialog
-      {...props}
-      name={system.name}
-      onDelete={() => handleDelete(system)}
-    />
-  ));
+  const [{ showRenameDialog, showDeleteDialog }, createButton] = useCrudDialogs(
+    "system",
+    (system) => system.name,
+    {
+      create: handleCreate,
+      rename: handleRename,
+      remove: handleDelete,
+    }
+  );
 
   function handleCreate(name: string) {
     const system: SystemDefinition = { id: uuid(), name };
@@ -77,17 +63,7 @@ export const SystemsPanel = () => {
 
   return (
     <>
-      <PanelHeader title="Systems">
-        <Tooltip title="New system">
-          <IconButton
-            edge="end"
-            aria-label="New system"
-            onClick={showCreateDialog}
-          >
-            <AddIcon />
-          </IconButton>
-        </Tooltip>
-      </PanelHeader>
+      <PanelHeader title="Systems">{createButton}</PanelHeader>
       <CrudList
         active={selectedSystem}
         items={systems}
