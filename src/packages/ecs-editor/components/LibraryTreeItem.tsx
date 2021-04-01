@@ -3,7 +3,7 @@ import { TreeItem } from "@material-ui/lab";
 import { useDrag, useDrop } from "react-dnd";
 import { LibraryTreeNode } from "../types/LibraryTreeNode";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MaybeMenuItemElements, MenuItemRendererProps } from "../hooks/useMenu";
 import { useStore } from "../store";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
@@ -20,12 +20,9 @@ import { LibraryTreeItems } from "./LibraryTreeItems";
 
 export type LibraryTreeItemProps = {
   node: LibraryTreeNode;
-  onMoveNode?: (
-    node: DiscriminatedLibraryNode,
-    target: DiscriminatedLibraryNode
-  ) => void;
+  onMoveNode?: (node: TypedLibraryNode, target: TypedLibraryNode) => void;
   menuItems?: (
-    node: DiscriminatedLibraryNode,
+    node: TypedLibraryNode,
     props: MenuItemRendererProps
   ) => MaybeMenuItemElements;
 };
@@ -50,7 +47,7 @@ export const LibraryTreeItem = ({
     drop(el);
   }
 
-  function handleDrop(draggedNode: DiscriminatedLibraryNode) {
+  function handleDrop(draggedNode: TypedLibraryNode) {
     if (canDrop) {
       onMoveNode(draggedNode, node.value);
     }

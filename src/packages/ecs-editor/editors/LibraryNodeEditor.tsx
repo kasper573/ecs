@@ -1,10 +1,10 @@
-import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { ComponentDefinitionEditor } from "./ComponentDefinitionEditor";
 import { EntityDefinitionEditor } from "./EntityDefinitionEditor";
 import { LibraryFolderEditor } from "./LibraryFolderEditor";
 
 export type LibraryNodeEditorProps = {
-  value: DiscriminatedLibraryNode;
+  value: TypedLibraryNode;
 };
 
 export const LibraryNodeEditor = ({ value }: LibraryNodeEditorProps) => {

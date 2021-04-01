@@ -2,7 +2,7 @@ import React from "react";
 import { MenuItem } from "@material-ui/core";
 import NestedMenuItem from "material-ui-nested-menu-item";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
-import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { combine } from "../../ecs-common/combine";
 import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
@@ -10,9 +10,9 @@ import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
 export const createLibraryMenuFactory = (
   onCreateFolder: (parentNodeId?: LibraryNodeId) => void,
   onCreateEntity: (parentNodeId?: LibraryNodeId) => void,
-  onRenameNode: (node: DiscriminatedLibraryNode) => void,
-  onDuplicateNode: (node: DiscriminatedLibraryNode) => void,
-  onDeleteNode: (node: DiscriminatedLibraryNode) => void
+  onRenameNode: (node: TypedLibraryNode) => void,
+  onDuplicateNode: (node: TypedLibraryNode) => void,
+  onDeleteNode: (node: TypedLibraryNode) => void
 ) => {
   function getCreateMenuItems(
     { close }: MenuItemRendererProps,
@@ -40,7 +40,7 @@ export const createLibraryMenuFactory = (
   }
 
   function getMenuItemsForNode(
-    node: DiscriminatedLibraryNode,
+    node: TypedLibraryNode,
     { close }: MenuItemRendererProps
   ) {
     const isFolder = node.type === "folder";

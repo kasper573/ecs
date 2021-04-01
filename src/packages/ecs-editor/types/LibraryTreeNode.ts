@@ -1,4 +1,4 @@
 import { TreeNode } from "./TreeNode";
-import { DiscriminatedLibraryNode } from "./DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "./TypedLibraryNode";
 
-export type LibraryTreeNode = TreeNode<DiscriminatedLibraryNode>;
+export type LibraryTreeNode = TreeNode<TypedLibraryNode>;

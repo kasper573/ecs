@@ -11,7 +11,7 @@ import { Panel } from "../components/Panel";
 import { uuid } from "../../ecs-common/uuid";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
-import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
 import { AddIcon } from "../icons";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
@@ -57,26 +57,22 @@ export const LibraryPanel = () => {
     )
   );
 
-  const showRenameNodeDialog = useDialog(
-    (props, node: DiscriminatedLibraryNode) => (
-      <NameDialog
-        {...props}
-        title={`Rename ${node.name}`}
-        defaultValue={node.name}
-        onSave={(name) => handleRenameNode(node, name)}
-      />
-    )
-  );
+  const showRenameNodeDialog = useDialog((props, node: TypedLibraryNode) => (
+    <NameDialog
+      {...props}
+      title={`Rename ${node.name}`}
+      defaultValue={node.name}
+      onSave={(name) => handleRenameNode(node, name)}
+    />
+  ));
 
-  const showDeleteNodeDialog = useDialog(
-    (props, node: DiscriminatedLibraryNode) => (
-      <DeleteDialog
-        {...props}
-        name={node.name}
-        onDelete={() => handleDeleteNode(node)}
-      />
-    )
-  );
+  const showDeleteNodeDialog = useDialog((props, node: TypedLibraryNode) => (
+    <DeleteDialog
+      {...props}
+      name={node.name}
+      onDelete={() => handleDeleteNode(node)}
+    />
+  ));
 
   const menuItemFactory = createLibraryMenuFactory(
     showCreateFolderDialog,
@@ -115,7 +111,7 @@ export const LibraryPanel = () => {
     );
   }
 
-  function handleRenameNode(target: DiscriminatedLibraryNode, name: string) {
+  function handleRenameNode(target: TypedLibraryNode, name: string) {
     switch (target.type) {
       case "entity":
         return dispatch(
@@ -132,7 +128,7 @@ export const LibraryPanel = () => {
     }
   }
 
-  function handleDeleteNode(node: DiscriminatedLibraryNode) {
+  function handleDeleteNode(node: TypedLibraryNode) {
     switch (node.type) {
       case "entity":
         return dispatch(core.actions.deleteEntityDefinition(node.id));
@@ -143,7 +139,7 @@ export const LibraryPanel = () => {
     }
   }
 
-  function handleDuplicate(node: DiscriminatedLibraryNode) {
+  function handleDuplicate(node: TypedLibraryNode) {
     switch (node.type) {
       case "entity":
         return dispatch(core.actions.duplicateEntityDefinition(node.id));
@@ -152,14 +148,11 @@ export const LibraryPanel = () => {
     }
   }
 
-  function handleSelect({ nodeId }: DiscriminatedLibraryNode) {
+  function handleSelect({ nodeId }: TypedLibraryNode) {
     dispatch(core.actions.setSelectedLibraryNode(nodeId));
   }
 
-  function handleMoveNode(
-    node: DiscriminatedLibraryNode,
-    target: DiscriminatedLibraryNode
-  ) {
+  function handleMoveNode(node: TypedLibraryNode, target: TypedLibraryNode) {
     dispatch(
       core.actions.moveLibraryNode({
         id: node.nodeId,
@@ -168,7 +161,7 @@ export const LibraryPanel = () => {
     );
   }
 
-  function handleMoveToRoot(node: DiscriminatedLibraryNode) {
+  function handleMoveToRoot(node: TypedLibraryNode) {
     if (canDropToRoot) {
       handleMoveNode(node, rootNode);
     }
@@ -208,4 +201,4 @@ const LibraryTreeWithLeftMargin = styled(LibraryTree)`
 `;
 
 // Is safe as root node since belonging to the root means to have no parent
-const rootNode = { type: "folder" } as DiscriminatedLibraryNode;
+const rootNode = { type: "folder" } as TypedLibraryNode;

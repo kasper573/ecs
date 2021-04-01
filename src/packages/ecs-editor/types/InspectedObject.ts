@@ -1,5 +1,5 @@
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { DiscriminatedLibraryNode } from "./DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "./TypedLibraryNode";
 
 /**
  * The object that InspectedValue resolves into.
@@ -8,7 +8,7 @@ export type InspectedObject = InspectedEntityInitializer | InspectedLibraryNode;
 
 type InspectedLibraryNode = {
   type: "libraryNode";
-  object: DiscriminatedLibraryNode;
+  object: TypedLibraryNode;
 };
 
 type InspectedEntityInitializer = {

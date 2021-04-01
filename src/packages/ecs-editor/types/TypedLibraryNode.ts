@@ -2,7 +2,7 @@ import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition"
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 
-export type DiscriminatedLibraryNode =
+export type TypedLibraryNode =
   | LibraryNodeType<EntityDefinition, "entity">
   | LibraryNodeType<ComponentDefinition, "component">
   | LibraryNodeType<LibraryFolder, "folder">;

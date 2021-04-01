@@ -3,14 +3,14 @@ import { TreeView, TreeViewProps } from "@material-ui/lab";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
 import { get, set } from "../../ecs-common/nominal";
-import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
+import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { LibraryTreeItems, LibraryTreeItemsProps } from "./LibraryTreeItems";
 
 export type LibraryTreeProps = {
-  selected?: DiscriminatedLibraryNode;
-  onSelectedChange: (newSelected: DiscriminatedLibraryNode) => void;
-  library: DiscriminatedLibraryNode[];
+  selected?: TypedLibraryNode;
+  onSelectedChange: (newSelected: TypedLibraryNode) => void;
+  library: TypedLibraryNode[];
   itemProps?: LibraryTreeItemsProps["itemProps"];
 } & Pick<TreeViewProps, "className" | "style">;
 
@@ -28,7 +28,7 @@ export const LibraryTree = ({
   const [nodeMap, treeRoots] = useMemo(() => {
     const map = library.reduce(
       (map, node) => set(map, node.nodeId, node),
-      {} as Record<LibraryNodeId, DiscriminatedLibraryNode>
+      {} as Record<LibraryNodeId, TypedLibraryNode>
     );
     return [
       map,
