@@ -21,9 +21,17 @@ export const PanelContainer = styled.div`
     "${panels.Runtime} ${panels.Instances} ${panels.Inspector}"
     "${panels.Runtime} ${panels.Instances} ${panels.Library}"
   ;
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "${panels.Runtime} ${panels.Inspector}"
+      "${panels.Instances} ${panels.Library}"
+    ;
+  }
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
-    grid-template-rows: auto auto auto auto auto;
+    grid-template-rows: 33vh 33vh 33vh 33vh;
     grid-template-areas:
       "${panels.Runtime}"
       "${panels.Instances}"
