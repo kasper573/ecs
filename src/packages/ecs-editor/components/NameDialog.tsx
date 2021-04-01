@@ -17,7 +17,7 @@ export type NameDialogProps = Pick<DialogProps, "open" | "onClose"> & {
   /**
    * The default value of the TextField in the dialog.
    */
-  defaultValue: string;
+  defaultValue?: string;
   /**
    * Called when the dialog wants to save the entered name.
    * @param newValue The value of the TextField
@@ -32,7 +32,7 @@ export type NameDialogProps = Pick<DialogProps, "open" | "onClose"> & {
 export const NameDialog = ({
   open,
   title,
-  defaultValue,
+  defaultValue = "",
   onClose = noop,
   onSave,
   ...dialogProps
@@ -71,13 +71,8 @@ export const NameDialog = ({
   }, [open, defaultValue]);
 
   return (
-    <Dialog
-      {...dialogProps}
-      open={open}
-      onClose={onClose}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+    <Dialog {...dialogProps} open={open} onClose={onClose}>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <TextField
           value={value}
@@ -87,7 +82,6 @@ export const NameDialog = ({
           onKeyUp={handleKeyUp}
           autoFocus
           margin="dense"
-          id="name"
           label="Name"
           type="text"
           fullWidth

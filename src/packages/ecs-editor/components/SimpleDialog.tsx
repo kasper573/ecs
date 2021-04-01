@@ -27,8 +27,8 @@ export const SimpleDialog = ({
 }: SimpleDialogProps) => {
   const manualClose = () => onClose({}, "backdropClick");
   return (
-    <Dialog {...dialogProps} onClose={onClose} aria-labelledby="dialog-title">
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
+    <Dialog {...dialogProps} onClose={onClose}>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={manualClose} color="primary">

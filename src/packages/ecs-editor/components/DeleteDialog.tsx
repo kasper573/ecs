@@ -35,12 +35,8 @@ export const DeleteDialog = ({
     onDelete();
   };
   return (
-    <Dialog
-      {...dialogProps}
-      onClose={onClose}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Delete "{name}"</DialogTitle>
+    <Dialog {...dialogProps} onClose={onClose}>
+      <DialogTitle>Delete "{name}"</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Are you sure you want to delete "{name}"
