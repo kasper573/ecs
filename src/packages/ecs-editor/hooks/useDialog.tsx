@@ -1,8 +1,7 @@
 import EventEmitter from "events";
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 import {
   createContext,
-  ReactElement,
   useCallback,
   useContext,
   useEffect,
@@ -31,8 +30,7 @@ export function useDialog<Args extends unknown[]>(
 
   const open = useCallback(
     (...args: Args) => {
-      events.emit("add", id, componentRef.current);
-      events.emit("open", id, ...args);
+      events.emit("add", id, componentRef.current, ...args);
     },
     [events, componentRef, id]
   );
@@ -58,8 +56,8 @@ export const Dialogs = () => {
       [id]: { ...state[id], ...update },
     }));
   }
-  function add(id: DialogId, component: DialogComponent) {
-    updateDialog(id, { component });
+  function add(id: DialogId, component: DialogComponent, ...args: unknown[]) {
+    updateDialog(id, { isOpen: true, component, args });
   }
   function remove(id: DialogId) {
     setState((current) => {
@@ -99,10 +97,10 @@ type DialogId = string;
 type DialogComponent<Args extends any[] = unknown[]> = (
   props: Pick<DialogProps, "open" | "onClose">,
   ...args: Args
-) => ReactElement;
+) => ReactNode;
 
 type DialogEvents<Args extends any[] = unknown[]> = TypedEmitter<{
-  add: (id: DialogId, dialog: DialogComponent<Args>) => void;
+  add: (id: DialogId, dialog: DialogComponent<Args>, ...args: Args) => void;
   remove: (id: DialogId) => void;
   open: (id: DialogId, ...args: Args) => void;
   close: (id: DialogId) => void;
