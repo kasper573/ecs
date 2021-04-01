@@ -6,6 +6,7 @@ import {
   createDeleteAction,
   DeleteTarget,
 } from "../actions/createDeleteAction";
+import { isInputEvent } from "../functions/isInputEvent";
 import { DeleteDialog } from "./DeleteDialog";
 
 export const Hotkeys = () => {
@@ -16,7 +17,11 @@ export const Hotkeys = () => {
     <DeleteDialog {...props} name={name} onDelete={() => dispatch(action)} />
   ));
 
-  const tryDeleteSelected = () => {
+  const tryDeleteSelected = (e: KeyboardEvent) => {
+    if (isInputEvent(e)) {
+      // Ignore deletes in input elements
+      return;
+    }
     const target = createDeleteAction(store.getState().present);
     if (target) {
       showDeleteDialog(target);
