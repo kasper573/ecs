@@ -7,7 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from "@material-ui/core";
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 export type NameDialogProps = Pick<DialogProps, "open" | "onClose"> & {
   /**
@@ -48,13 +48,10 @@ export const NameDialog = ({
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) =>
     setValue(e.currentTarget.value);
 
-  const handleKeyUp = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
-      saveAndClose();
-    }
-  };
+  const saveAndClose = (e: SyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-  const saveAndClose = () => {
     if (!value.trim()) {
       setError("You must enter a name");
       return;
@@ -72,29 +69,30 @@ export const NameDialog = ({
 
   return (
     <Dialog {...dialogProps} open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <TextField
-          value={value}
-          error={!!error}
-          helperText={error}
-          onChange={handleValueChange}
-          onKeyUp={handleKeyUp}
-          autoFocus
-          margin="dense"
-          label="Name"
-          type="text"
-          fullWidth
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={manualClose} color="secondary">
-          Cancel
-        </Button>
-        <Button onClick={saveAndClose} color="primary">
-          Save
-        </Button>
-      </DialogActions>
+      <form onSubmit={saveAndClose}>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent>
+          <TextField
+            value={value}
+            error={!!error}
+            helperText={error}
+            onChange={handleValueChange}
+            autoFocus
+            margin="dense"
+            label="Name"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={manualClose} color="secondary">
+            Cancel
+          </Button>
+          <Button type="submit" onClick={saveAndClose} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
