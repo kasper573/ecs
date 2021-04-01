@@ -4,7 +4,7 @@ import { TextSystem } from "../../ecs-react/TextSystem";
 import { useSelector } from "../store";
 import { useSystemSync } from "../hooks/useSystemSync";
 import { useSceneSync } from "../hooks/useSceneSync";
-import { ResetIcon } from "../components/icons";
+import { ResetIcon } from "../icons";
 import { FlatPanel } from "../components/FlatPanel";
 import { Panel } from "../components/Panel";
 import { PanelName } from "../types/PanelName";

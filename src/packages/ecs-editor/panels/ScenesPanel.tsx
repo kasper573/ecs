@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector } from "../store";
-import { AddIcon, SceneIcon } from "../components/icons";
+import { AddIcon, SceneIcon } from "../icons";
 import { CrudList } from "../components/CrudList";
 import { core } from "../core";
 import { omit } from "../../ecs-common/omit";

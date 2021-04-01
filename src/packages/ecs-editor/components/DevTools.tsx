@@ -5,7 +5,7 @@ import { useDispatch } from "../store";
 import { core } from "../core";
 import { mockEditorState } from "../functions/mockEditorState";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { GenerateIcon } from "./icons";
+import { GenerateIcon } from "../icons";
 
 export const DevTools = () => {
   const [mockSize, setMockSize] = useState(10);

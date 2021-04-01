@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import React, { useCallback, useContext } from "react";
 import { PanelHeader } from "../components/PanelHeader";
-import { AddIcon, SystemIcon } from "../components/icons";
+import { AddIcon, SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { CrudList } from "../components/CrudList";

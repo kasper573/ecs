@@ -7,7 +7,7 @@ import { uuid } from "../../ecs-common/uuid";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
-import { EntityDefinitionIcon } from "../components/icons";
+import { EntityDefinitionIcon } from "../icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { useDeleteComponentDialog } from "../hooks/useDeleteComponentDialog";

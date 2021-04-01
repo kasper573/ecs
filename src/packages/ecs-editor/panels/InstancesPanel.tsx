@@ -7,7 +7,7 @@ import { core } from "../core";
 import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
 import { CrudList } from "../components/CrudList";
-import { EntityInitializerIcon } from "../components/icons";
+import { EntityInitializerIcon } from "../icons";
 import { omit } from "../../ecs-common/omit";
 import { Panel } from "../components/Panel";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";

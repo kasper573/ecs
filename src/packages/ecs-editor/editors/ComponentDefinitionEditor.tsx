@@ -2,7 +2,7 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
-import { ComponentDefinitionIcon } from "../components/icons";
+import { ComponentDefinitionIcon } from "../icons";
 
 export type ComponentDefinitionEditorProps = {
   value: ComponentDefinition;

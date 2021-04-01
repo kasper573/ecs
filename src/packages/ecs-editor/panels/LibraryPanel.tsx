@@ -15,7 +15,7 @@ import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSyste
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
-import { AddIcon } from "../components/icons";
+import { AddIcon } from "../icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { combine } from "../../ecs-common/combine";
 import { MenuItemRendererProps } from "../hooks/useMenu";

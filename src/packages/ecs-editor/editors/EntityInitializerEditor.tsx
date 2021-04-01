@@ -3,7 +3,7 @@ import { Typography } from "@material-ui/core";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../types/PanelName";
-import { EntityInitializerIcon } from "../components/icons";
+import { EntityInitializerIcon } from "../icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";

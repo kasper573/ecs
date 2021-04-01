@@ -7,8 +7,8 @@ import { useSelector } from "../store";
 import { selectEditorSelection } from "../selectors/selectEditorSelection";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { AddIcon } from "../icons";
 import { CommonPopper } from "./CommonPopper";
-import { AddIcon } from "./icons";
 
 export type CreateEntityInitializerButtonProps = {
   onCreate: (selected: EntityDefinition) => void;

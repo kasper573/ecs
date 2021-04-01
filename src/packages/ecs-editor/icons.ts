@@ -6,7 +6,7 @@ import {
   ExpandMore as ExpandIcon,
   Folder as FolderIcon,
 } from "@material-ui/icons";
-import { createIconWithMarginIcon } from "./IconWithMarginIcon";
+import { createIconWithMarginIcon } from "./components/IconWithMarginIcon";
 
 export {
   Label as PropertyIcon,

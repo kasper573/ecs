@@ -11,8 +11,8 @@ import { useDialog } from "../hooks/useDialog";
 import { selectECS } from "../selectors/selectECS";
 import { core } from "../core";
 import { selectThemeType } from "../selectors/selectThemeType";
+import { DarkThemeIcon, LightThemeIcon, SaveIcon } from "../icons";
 import { EditorTitle } from "./EditorTitle";
-import { DarkThemeIcon, LightThemeIcon, SaveIcon } from "./icons";
 import { SimpleDialog } from "./SimpleDialog";
 import { DevTools } from "./DevTools";
 

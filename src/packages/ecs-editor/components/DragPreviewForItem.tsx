@@ -3,12 +3,12 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { DNDType } from "../dnd/DNDType";
-import { DragPreview } from "./DragPreview";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
   FolderIcon,
-} from "./icons";
+} from "../icons";
+import { DragPreview } from "./DragPreview";
 
 export type DragPreviewForItemProps = {
   type: DNDType;

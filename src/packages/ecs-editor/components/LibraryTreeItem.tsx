@@ -15,7 +15,7 @@ import {
   FolderOpenIcon,
   FolderClosedIcon,
   FolderIcon,
-} from "./icons";
+} from "../icons";
 import { LibraryTreeItems } from "./LibraryTreeItems";
 
 export type LibraryTreeItemProps = {
