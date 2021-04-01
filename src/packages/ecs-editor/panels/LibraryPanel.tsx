@@ -22,6 +22,7 @@ import { combine } from "../../ecs-common/combine";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
+import { useContextMenu } from "../hooks/useContextMenu";
 
 export const LibraryPanel = () => {
   const parentNodeIdRef = useRef<LibraryNodeId>();
@@ -30,12 +31,15 @@ export const LibraryPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
-  const [{ canDrop: canDropToRoot }, dropRoot] = useDrop(
+  const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
     libraryNodeDropSpec(
       rootNode,
       handleMoveToRoot,
       () => store.getState().present
     )
+  );
+  const [rootContextMenuProps, rootContextMenu] = useContextMenu(
+    getCommonMenuItems
   );
 
   const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
@@ -126,7 +130,7 @@ export const LibraryPanel = () => {
     }
   }
 
-  function renderCreateMenuItems(
+  function getCreateMenuItems(
     { close }: MenuItemRendererProps,
     parentNodeId?: LibraryNodeId
   ) {
@@ -150,18 +154,27 @@ export const LibraryPanel = () => {
     ];
   }
 
+  function getCommonMenuItems(
+    { close }: MenuItemRendererProps,
+    parentNodeId?: LibraryNodeId
+  ) {
+    return [
+      <NestedMenuItem label="New" parentMenuOpen={true}>
+        {getCreateMenuItems({ close }, parentNodeId)}
+      </NestedMenuItem>,
+    ];
+  }
+
   function getMenuItemsForNode(
     node: DiscriminatedLibraryNode,
     { close }: MenuItemRendererProps
   ) {
     const isFolder = node.type === "folder";
     return [
-      <NestedMenuItem label="Create" parentMenuOpen={true}>
-        {renderCreateMenuItems(
-          { close },
-          isFolder ? node.nodeId : node.parentNodeId
-        )}
-      </NestedMenuItem>,
+      ...getCommonMenuItems(
+        { close },
+        isFolder ? node.nodeId : node.parentNodeId
+      ),
       <MenuItem
         onClick={(e) => {
           close(e);
@@ -192,15 +205,16 @@ export const LibraryPanel = () => {
   }
 
   return (
-    <Panel ref={dropRoot} name={PanelName.Library}>
+    <Panel ref={rootDrop} name={PanelName.Library} {...rootContextMenuProps}>
       {nodeDialogs}
       {folderDialogs}
+      {rootContextMenu}
       <PanelHeader title="Library">
         {selectedSystem && (
-          <MenuFor items={renderCreateMenuItems}>
+          <MenuFor items={getCreateMenuItems}>
             {(props) => (
-              <Tooltip title="Create">
-                <IconButton edge="end" aria-label="create" {...props}>
+              <Tooltip title="New">
+                <IconButton edge="end" aria-label="New" {...props}>
                   <AddIcon />
                 </IconButton>
               </Tooltip>
