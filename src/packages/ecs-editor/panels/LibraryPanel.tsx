@@ -1,8 +1,7 @@
 import React, { useRef } from "react";
-import { IconButton, MenuItem, Tooltip } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
-import NestedMenuItem from "material-ui-nested-menu-item";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -18,11 +17,10 @@ import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
 import { AddIcon } from "../icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
-import { combine } from "../../ecs-common/combine";
-import { MenuItemRendererProps } from "../hooks/useMenu";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 import { useContextMenu } from "../hooks/useContextMenu";
+import { createLibraryMenuFactory } from "../functions/createLibraryMenuFactory";
 
 export const LibraryPanel = () => {
   const parentNodeIdRef = useRef<LibraryNodeId>();
@@ -31,15 +29,13 @@ export const LibraryPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
+
   const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
     libraryNodeDropSpec(
       rootNode,
       handleMoveToRoot,
       () => store.getState().present
     )
-  );
-  const [rootContextMenuProps, rootContextMenu] = useContextMenu(
-    getCommonMenuItems
   );
 
   const [nodeEvents, nodeDialogs] = useCrudDialogs<DiscriminatedLibraryNode>({
@@ -99,6 +95,19 @@ export const LibraryPanel = () => {
       ),
   });
 
+  const menuItemFactory = createLibraryMenuFactory(
+    parentNodeIdRef,
+    folderEvents.onCreateItem,
+    nodeEvents.onCreateItem,
+    nodeEvents.onUpdateItem,
+    handleDuplicate,
+    nodeEvents.onDeleteItem
+  );
+
+  const [rootContextMenuProps, rootContextMenu] = useContextMenu(
+    menuItemFactory.common
+  );
+
   function handleDuplicate(node: DiscriminatedLibraryNode) {
     switch (node.type) {
       case "entity":
@@ -130,80 +139,6 @@ export const LibraryPanel = () => {
     }
   }
 
-  function getCreateMenuItems(
-    { close }: MenuItemRendererProps,
-    parentNodeId?: LibraryNodeId
-  ) {
-    return [
-      <MenuItem
-        onClick={combine(close, () => {
-          parentNodeIdRef.current = parentNodeId;
-          folderEvents.onCreateItem();
-        })}
-      >
-        Folder
-      </MenuItem>,
-      <MenuItem
-        onClick={combine(close, () => {
-          parentNodeIdRef.current = parentNodeId;
-          nodeEvents.onCreateItem();
-        })}
-      >
-        Entity
-      </MenuItem>,
-    ];
-  }
-
-  function getCommonMenuItems(
-    { close }: MenuItemRendererProps,
-    parentNodeId?: LibraryNodeId
-  ) {
-    return [
-      <NestedMenuItem label="New" parentMenuOpen={true}>
-        {getCreateMenuItems({ close }, parentNodeId)}
-      </NestedMenuItem>,
-    ];
-  }
-
-  function getMenuItemsForNode(
-    node: DiscriminatedLibraryNode,
-    { close }: MenuItemRendererProps
-  ) {
-    const isFolder = node.type === "folder";
-    return [
-      ...getCommonMenuItems(
-        { close },
-        isFolder ? node.nodeId : node.parentNodeId
-      ),
-      <MenuItem
-        onClick={(e) => {
-          close(e);
-          nodeEvents.onUpdateItem(node);
-        }}
-      >
-        Rename
-      </MenuItem>,
-      !isFolder && (
-        <MenuItem
-          onClick={(e) => {
-            close(e);
-            handleDuplicate(node);
-          }}
-        >
-          Duplicate
-        </MenuItem>
-      ),
-      <MenuItem
-        onClick={(e) => {
-          close(e);
-          nodeEvents.onDeleteItem(node);
-        }}
-      >
-        Delete
-      </MenuItem>,
-    ];
-  }
-
   return (
     <Panel ref={rootDrop} name={PanelName.Library} {...rootContextMenuProps}>
       {nodeDialogs}
@@ -211,7 +146,7 @@ export const LibraryPanel = () => {
       {rootContextMenu}
       <PanelHeader title="Library">
         {selectedSystem && (
-          <MenuFor items={getCreateMenuItems}>
+          <MenuFor items={menuItemFactory.create}>
             {(props) => (
               <Tooltip title="New">
                 <IconButton edge="end" aria-label="New" {...props}>
@@ -226,7 +161,7 @@ export const LibraryPanel = () => {
         selected={selectedNode}
         library={nodes}
         itemProps={{
-          menuItems: getMenuItemsForNode,
+          menuItems: menuItemFactory.node,
           onMoveNode: handleMoveNode,
         }}
         onSelectedChange={handleSelect}
