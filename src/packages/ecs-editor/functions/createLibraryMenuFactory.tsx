@@ -5,6 +5,7 @@ import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { DiscriminatedLibraryNode } from "../types/DiscriminatedLibraryNode";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { combine } from "../../ecs-common/combine";
+import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
 
 export const createLibraryMenuFactory = (
   parentNodeIdRef: MutableRefObject<LibraryNodeId | undefined>,
@@ -44,7 +45,7 @@ export const createLibraryMenuFactory = (
   ) {
     return [
       <NestedMenuItem label="New" parentMenuOpen={true}>
-        {getCreateMenuItems({ close }, parentNodeId)}
+        {getCreateMenuItems({ close }, parentNodeId).map(cloneWithIndexAsKey)}
       </NestedMenuItem>,
     ];
   }
