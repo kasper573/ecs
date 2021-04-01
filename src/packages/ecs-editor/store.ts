@@ -5,13 +5,15 @@ import {
   useSelector as useReduxSelector,
   useStore as useReduxStore,
 } from "react-redux";
-import undoable, { StateWithHistory } from "redux-undo";
+import undoable, { excludeAction, StateWithHistory } from "redux-undo";
 import { EditorState } from "./types/EditorState";
-import { core } from "./core";
+import { core, noUndoActions } from "./core";
 
 export const createStore = (initialState: EditorState) =>
   configureStore<EditorRootState>({
-    reducer: undoable(core.reducer),
+    reducer: undoable(core.reducer, {
+      filter: excludeAction(["@@INIT", ...noUndoActions]),
+    }),
     preloadedState: {
       past: [],
       present: initialState,

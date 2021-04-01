@@ -78,3 +78,11 @@ export const core = createSlice({
   },
   extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
 });
+
+export const noUndoActions = ([
+  "setSelectedEntityInitializer",
+  "setSelectedLibraryNode",
+  "setSelectedSceneDefinition",
+  "setSelectedSystemDefinition",
+  "setThemeType",
+] as Array<keyof typeof core.actions>).map((name) => `${core.name}/${name}`);
