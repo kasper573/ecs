@@ -51,6 +51,7 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
     <Menu
       open={!!position}
       onClose={handleClose as MenuProps["onClose"]} // Need to override since MenuProps["onClose"] is poorly defined
+      onContextMenu={handleClose}
       anchorReference="anchorPosition"
       anchorPosition={position}
     >
