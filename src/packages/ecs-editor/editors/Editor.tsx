@@ -5,18 +5,18 @@ import {
   CssBaseline,
   MuiThemeProvider,
 } from "@material-ui/core";
-import { PanelContainer } from "../components/PanelContainer";
-import { Layout } from "../components/Layout";
-import { RuntimePanel } from "../panels/RuntimePanel";
-import { LibraryPanel } from "../panels/LibraryPanel";
-import { InstancesPanel } from "../panels/InstancesPanel";
-import { InspectorPanel } from "../panels/InspectorPanel";
+import { PanelContainer } from "../layout/PanelContainer";
+import { Layout } from "../layout/Layout";
+import { RuntimePanel } from "../layout/RuntimePanel";
+import { LibraryPanel } from "../layout/LibraryPanel";
+import { InstancesPanel } from "../layout/InstancesPanel";
+import { InspectorPanel } from "../layout/InspectorPanel";
 import { Hotkeys } from "../components/Hotkeys";
 import { useSelector } from "../store";
 import { lightTheme } from "../fixtures/lightTheme";
 import { darkTheme } from "../fixtures/darkTheme";
 import { selectThemeType } from "../selectors/selectThemeType";
-import { GlobalStyle } from "../components/GlobalStyle";
+import { GlobalStyle } from "../layout/GlobalStyle";
 import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
 

@@ -12,8 +12,8 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
-import { ScenesPanel } from "../panels/ScenesPanel";
-import { FileMenu } from "../panels/FileMenu";
+import { ScenesPanel } from "./ScenesPanel";
+import { FileMenu } from "./FileMenu";
 import { AppBarContent } from "./AppBarContent";
 
 export type LayoutProps = PropsWithChildren<{}>;

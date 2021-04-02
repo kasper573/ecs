@@ -3,6 +3,7 @@ import {
   IconButton,
   ListItemSecondaryAction,
   Tooltip,
+  Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { usePopupState } from "material-ui-popup-state/hooks";
@@ -20,9 +21,8 @@ import {
 } from "../icons";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { EditorTitle } from "./EditorTitle";
-import { DevTools } from "./DevTools";
-import { CommonPopper } from "./CommonPopper";
+import { DevTools } from "../components/DevTools";
+import { CommonPopper } from "../components/CommonPopper";
 
 export const AppBarContent = () => {
   const dispatch = useDispatch();
@@ -113,6 +113,13 @@ const DevToolsButton = () => {
     </>
   );
 };
+
+export const EditorTitle = styled(Typography).attrs({
+  component: "span",
+  noWrap: true,
+})`
+  margin-right: ${({ theme }) => theme.spacing(1.5)}px;
+`;
 
 const Actions = styled(ListItemSecondaryAction)`
   display: flex;
