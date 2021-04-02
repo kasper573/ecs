@@ -1,6 +1,7 @@
 import { uniq } from "lodash";
 import { Entity } from "../ecs/Entity";
 import { ComponentInstance } from "../ecs/Component";
+import { getPropertyDefaults } from "../property-bag/getPropertyDefaults";
 import { createComponentProperties } from "./functions/createComponentProperties";
 import { EntityDefinition } from "./types/EntityDefinition";
 import { ComponentConstructorMap } from "./types/ComponentConstructorMap";
@@ -39,13 +40,14 @@ export class RedefinableEntity extends Entity {
       const base = baseInitializers.find((c) => c.id === primary.id);
       const initializer = (primary ?? base)!;
 
+      const Component = componentConstructors.get(initializer.definitionId);
+      if (!Component) {
+        throw new Error(
+          `No Component with definitionId "${initializer.definitionId}" exists`
+        );
+      }
+
       if (!component) {
-        const Component = componentConstructors.get(initializer.definitionId);
-        if (!Component) {
-          throw new Error(
-            `No Component with definitionId "${initializer.definitionId}" exists`
-          );
-        }
         component = new Component();
         this.components.push(component);
       }
@@ -63,6 +65,7 @@ export class RedefinableEntity extends Entity {
       component.__primaryProperties = primary.properties;
       component.configure({
         id: initializer.id,
+        ...getPropertyDefaults(Component.propertyInfos),
         ...(base ? createComponentProperties(base.properties) : undefined),
         ...createComponentProperties(primary.properties),
       });

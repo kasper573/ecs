@@ -534,6 +534,115 @@ describe("updating a System instance using ECSDefinition", () => {
     updateSystem(system, ecs2, nativeComponents);
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
+
+  it("can reset component properties in entity initializer", () => {
+    const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const componentInitializer: Omit<ComponentInitializer, "properties"> = {
+      id: uid(),
+      definitionId: componentDefinition.id,
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({ isActive: false }),
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({ isActive: true }),
+        },
+      ],
+    };
+    const entity2: typeof entity1 = {
+      ...entity1,
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({}),
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityDefinition], [componentDefinition], [entity1]);
+    const ecs2 = mockECS([entityDefinition], [componentDefinition], [entity2]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(true);
+
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+  });
+
+  it("can reset component properties that has defaults in entity initializer", () => {
+    const nativeComponentsWithDefault = {
+      foo: Component.extend({
+        isActive: { type: zod.boolean(), defaultValue: true },
+      }),
+    };
+    const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const componentInitializer: Omit<ComponentInitializer, "properties"> = {
+      id: uid(),
+      definitionId: componentDefinition.id,
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({}),
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({ isActive: false }),
+        },
+      ],
+    };
+    const entity2: typeof entity1 = {
+      ...entity1,
+      components: [
+        {
+          ...componentInitializer,
+          properties: createComponentPropertiesDefinition({}),
+        },
+      ],
+    };
+    const ecs1 = mockECS([entityDefinition], [componentDefinition], [entity1]);
+    const ecs2 = mockECS([entityDefinition], [componentDefinition], [entity2]);
+
+    const system = createSystem(ecs1, nativeComponentsWithDefault);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+
+    updateSystem(system, ecs2, nativeComponentsWithDefault);
+    expect(system.entities[0].components[0].isActive).toBe(true);
+  });
 });
 
 const emptyECS: ECSDefinition = {
