@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
 import { getPropertyValue } from "../../property-bag/getPropertyValue";
 import { resetPropertyValue } from "../../property-bag/resetPropertyValue";
-import { MenuFor } from "../components/MenuFor";
+import { useMenu } from "../hooks/useMenu";
 import { renderPrimitiveEditor } from "./PrimitiveEditor";
 
 export type ComponentPropertyEditorProps = {
@@ -25,11 +25,6 @@ export const ComponentPropertyEditor = ({
   onUpdate,
   onReset,
 }: ComponentPropertyEditorProps) => {
-  if (propertyInfo.hidden) {
-    // This property has opted out of being editable
-    return null;
-  }
-
   const baseValue = getPropertyValue(
     baseProperties,
     propertyInfo,
@@ -49,11 +44,6 @@ export const ComponentPropertyEditor = ({
     onChange: onUpdate,
   });
 
-  if (!editor) {
-    // No editor available for this type
-    return null;
-  }
-
   const resetValue = () => {
     const updatedProperties = { ...primaryProperties };
     resetPropertyValue(updatedProperties, propertyInfo, propertyName);
@@ -62,24 +52,26 @@ export const ComponentPropertyEditor = ({
 
   const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
 
+  const [openMenu, menu] = useMenu([
+    hasBaseDiff && <MenuItem onClick={resetValue}>Reset</MenuItem>,
+  ]);
+
+  if (!editor || propertyInfo.hidden) {
+    // No editor available for this type,
+    // or this property has opted out of being editable
+    return null;
+  }
+
   return (
-    <MenuFor
-      items={[hasBaseDiff && <MenuItem onClick={resetValue}>Reset</MenuItem>]}
-    >
-      {({ onClick: openMenu }) => (
-        <TableRow
-          key={propertyName}
-          onContextMenu={hasBaseDiff ? openMenu : undefined}
-        >
-          <TableCell>
-            <PropertyName $hasBaseDiff={hasBaseDiff}>
-              {propertyName}
-            </PropertyName>
-          </TableCell>
-          <TableCell>{editor}</TableCell>
-        </TableRow>
-      )}
-    </MenuFor>
+    <>
+      <TableRow key={propertyName} onContextMenu={openMenu}>
+        <TableCell>
+          <PropertyName $hasBaseDiff={hasBaseDiff}>{propertyName}</PropertyName>
+        </TableCell>
+        <TableCell>{editor}</TableCell>
+      </TableRow>
+      {menu}
+    </>
   );
 };
 
