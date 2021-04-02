@@ -4,7 +4,11 @@ import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
 import { getPropertyValue } from "../../property-bag/getPropertyValue";
 import { resetPropertyValue } from "../../property-bag/resetPropertyValue";
 import { useMenu } from "../hooks/useMenu";
-import { renderPrimitiveEditor } from "./PrimitiveEditor";
+import { propertySupportsDeclarative } from "../../property-bag/propertySupportsDeclarative";
+import { isPropertyDeclarative } from "../../property-bag/isPropertyDeclarative";
+import { getPropertyDeclaration } from "../../property-bag/getPropertyDeclaration";
+import { getPrimitiveEditor } from "./PrimitiveEditor";
+import { FunctionEditor } from "./FunctionEditor";
 
 export type ComponentPropertyEditorProps = {
   hasBase: boolean;
@@ -38,11 +42,18 @@ export const ComponentPropertyEditor = ({
     baseValue
   );
 
-  const editor = renderPrimitiveEditor({
-    type: propertyInfo.type,
-    value: primaryValue,
-    onChange: onUpdate,
-  });
+  const isDeclarative = isPropertyDeclarative(
+    primaryProperties,
+    propertyInfo,
+    propertyName
+  );
+
+  const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
+
+  const PrimitiveEditor = getPrimitiveEditor(propertyInfo.type);
+
+  const setDeclarative = (toDeclarative: boolean) =>
+    onUpdate(toDeclarative ? () => {} : propertyInfo.defaultValue);
 
   const resetValue = () => {
     const updatedProperties = { ...primaryProperties };
@@ -50,13 +61,16 @@ export const ComponentPropertyEditor = ({
     onReset(updatedProperties);
   };
 
-  const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
-
   const [openMenu, menu] = useMenu([
     hasBaseDiff && <MenuItem onClick={resetValue}>Reset</MenuItem>,
+    propertySupportsDeclarative(propertyInfo) && (
+      <MenuItem onClick={() => setDeclarative(!isDeclarative)}>
+        {isDeclarative ? "Make imperative" : "Make declarative"}
+      </MenuItem>
+    ),
   ]);
 
-  if (!editor || propertyInfo.hidden) {
+  if (!PrimitiveEditor || propertyInfo.hidden) {
     // No editor available for this type,
     // or this property has opted out of being editable
     return null;
@@ -68,7 +82,20 @@ export const ComponentPropertyEditor = ({
         <TableCell>
           <PropertyName $hasBaseDiff={hasBaseDiff}>{propertyName}</PropertyName>
         </TableCell>
-        <TableCell>{editor}</TableCell>
+        <TableCell>
+          {isDeclarative ? (
+            <FunctionEditor
+              value={getPropertyDeclaration(
+                primaryProperties,
+                propertyInfo,
+                propertyName
+              )}
+              onChange={onUpdate}
+            />
+          ) : (
+            <PrimitiveEditor value={primaryValue} onChange={onUpdate} />
+          )}
+        </TableCell>
       </TableRow>
       {menu}
     </>
