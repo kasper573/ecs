@@ -14,7 +14,8 @@ export const DragLayer = () => {
       isDragging: monitor.isDragging(),
     })
   );
-  if (!isDragging || !currentOffset) {
+  const isKnownType = Object.values(DNDType).includes(itemType as DNDType);
+  if (!isKnownType || !isDragging || !currentOffset) {
     return null;
   }
   return (
