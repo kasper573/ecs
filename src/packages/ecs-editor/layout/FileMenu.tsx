@@ -30,6 +30,7 @@ export const FileMenu = () => {
     const system: SystemDefinition = { id: uuid(), name };
     dispatch(core.actions.createSystemDefinition(system));
     addNativeComponentsForSystem(system);
+    dispatch(core.actions.setSelectedSystemDefinition(system.id));
   }
 
   function handleSelected(system: SystemDefinition) {
