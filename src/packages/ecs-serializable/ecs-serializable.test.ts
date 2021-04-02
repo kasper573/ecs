@@ -517,13 +517,10 @@ describe("updating a System instance using ECSDefinition", () => {
     };
     const entity2: typeof entity1 = {
       ...entity1,
-      components: [
-        {
-          id: uid(),
-          properties: createComponentPropertiesDefinition({ isActive: true }),
-          definitionId: component.id,
-        },
-      ],
+      components: entity1.components.map((comp) => ({
+        ...comp,
+        properties: createComponentPropertiesDefinition({ isActive: true }),
+      })),
     };
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
