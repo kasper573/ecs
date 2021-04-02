@@ -12,10 +12,14 @@ export type UseMenuItemsConfig = MenuItemRenderer | MaybeMenuItemElements;
 
 export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
   const [position, setPosition] = useState<{ left: number; top: number }>();
+  let menuItems;
 
   const handleTrigger: MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!shouldShowMenu()) {
+      return;
+    }
     setPosition({
       left: e.clientX,
       top: e.clientY,
@@ -28,7 +32,7 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
     setPosition(undefined);
   };
 
-  let menuItems;
+  const shouldShowMenu = () => menuItems.length > 0;
 
   if (Array.isArray(menuItemsConfig)) {
     // Item array style configuration automates close callback calls.
@@ -47,7 +51,7 @@ export const useMenu = (menuItemsConfig: UseMenuItemsConfig) => {
     menuItems = defined(menuItemsConfig({ close: handleClose }));
   }
 
-  const menu = menuItems.length > 0 && (
+  const menu = shouldShowMenu() && (
     <Menu
       open={!!position}
       onClose={handleClose as MenuProps["onClose"]} // Need to override since MenuProps["onClose"] is poorly defined
