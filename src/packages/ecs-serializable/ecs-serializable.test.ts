@@ -643,6 +643,53 @@ describe("updating a System instance using ECSDefinition", () => {
     updateSystem(system, ecs2, nativeComponentsWithDefault);
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
+
+  it("entity has the same number of components before and after update when not changing components", () => {
+    const component: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity A",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: entityDefinition.name,
+      definitionId: entityDefinition.id,
+      components: [
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({ isActive: false }),
+          definitionId: component.id,
+        },
+        {
+          id: uid(),
+          properties: createComponentPropertiesDefinition({ isActive: true }),
+          definitionId: component.id,
+        },
+      ],
+    };
+    const entity2: typeof entity1 = {
+      ...entity1,
+      components: entity1.components.map((comp) => ({
+        ...comp,
+        properties: createComponentPropertiesDefinition({}),
+      })),
+    };
+    const ecs1 = mockECS([entityDefinition], [component], [entity1]);
+    const ecs2 = mockECS([entityDefinition], [component], [entity2]);
+
+    const system = createSystem(ecs1, nativeComponents);
+    const componentCount1 = system.entities[0].components.length;
+    updateSystem(system, ecs2, nativeComponents);
+    const componentCount2 = system.entities[0].components.length;
+    expect(componentCount1).toBe(componentCount2);
+  });
 });
 
 const emptyECS: ECSDefinition = {

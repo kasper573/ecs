@@ -64,10 +64,10 @@ export class RedefinableEntity extends Entity {
       component.__baseProperties = base?.properties;
       component.__primaryProperties = primary.properties;
       component.configure({
-        id: initializer.id,
         ...getPropertyDefaults(Component.propertyInfos),
         ...(base ? createComponentProperties(base.properties) : undefined),
         ...createComponentProperties(primary.properties),
+        id: initializer.id,
       });
     }
   }
