@@ -2,12 +2,12 @@ import { ReactElement } from "react";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { DNDType } from "../dnd/DNDType";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
   FolderIcon,
 } from "../icons";
+import { DNDType } from "./DNDType";
 import { DragPreview } from "./DragPreview";
 
 export type DragPreviewForItemProps = {

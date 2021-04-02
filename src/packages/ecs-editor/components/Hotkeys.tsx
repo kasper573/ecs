@@ -7,7 +7,7 @@ import {
   DeleteTarget,
 } from "../actions/createDeleteAction";
 import { isInputEvent } from "../functions/isInputEvent";
-import { DeleteDialog } from "./DeleteDialog";
+import { DeleteDialog } from "../dialogs/DeleteDialog";
 
 export const Hotkeys = () => {
   const store = useStore();

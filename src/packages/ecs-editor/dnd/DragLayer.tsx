@@ -2,7 +2,7 @@ import { useDragLayer } from "react-dnd";
 import styled from "styled-components";
 import { XYCoord } from "react-dnd/dist/types/types/monitors";
 import { zIndex } from "../zIndex";
-import { DNDType } from "../dnd/DNDType";
+import { DNDType } from "./DNDType";
 import { DragPreviewForItem } from "./DragPreviewForItem";
 
 export const DragLayer = () => {

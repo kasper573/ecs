@@ -7,7 +7,7 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { useSelector } from "../store";
 import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
 import { AddIcon } from "../icons";
-import { CommonPopper } from "./CommonPopper";
+import { CommonPopper } from "../components/CommonPopper";
 
 export type SelectComponentDefinitionButtonProps = {
   onSelected: (selected: ComponentDefinition) => void;

@@ -17,7 +17,7 @@ import { lightTheme } from "../fixtures/lightTheme";
 import { darkTheme } from "../fixtures/darkTheme";
 import { selectThemeType } from "../selectors/selectThemeType";
 import { GlobalStyle } from "../components/GlobalStyle";
-import { DragLayer } from "../components/DragLayer";
+import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
 
 /**

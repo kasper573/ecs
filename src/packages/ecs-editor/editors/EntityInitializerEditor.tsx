@@ -5,7 +5,7 @@ import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../types/PanelName";
 import { EntityInitializerIcon } from "../icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
-import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
+import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
@@ -17,7 +17,7 @@ import { core } from "../core";
 import { DropBox } from "../components/DropBox";
 import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
 import { useDialog } from "../hooks/useDialog";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 

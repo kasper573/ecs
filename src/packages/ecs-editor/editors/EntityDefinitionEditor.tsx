@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Typography } from "@material-ui/core";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { SelectComponentDefinitionButton } from "../components/SelectComponentDefinitionButton";
+import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { PanelHeader } from "../components/PanelHeader";
@@ -16,7 +16,7 @@ import { DropBox } from "../components/DropBox";
 import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec";
 import { useDialog } from "../hooks/useDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {

@@ -8,7 +8,7 @@ import { selectEditorSelection } from "../selectors/selectEditorSelection";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { AddIcon } from "../icons";
-import { CommonPopper } from "./CommonPopper";
+import { CommonPopper } from "../components/CommonPopper";
 
 export type CreateEntityInitializerButtonProps = {
   title: string;

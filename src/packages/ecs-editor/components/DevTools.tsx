@@ -8,7 +8,7 @@ import { NativeComponentsContext } from "../NativeComponentsContext";
 import { GenerateIcon, SaveIcon } from "../icons";
 import { useDialog } from "../hooks/useDialog";
 import { selectECS } from "../selectors/selectECS";
-import { SimpleDialog } from "./SimpleDialog";
+import { SimpleDialog } from "../dialogs/SimpleDialog";
 
 export const DevTools = forwardRef<HTMLDivElement>(
   (props: HTMLAttributes<HTMLDivElement>, ref) => {

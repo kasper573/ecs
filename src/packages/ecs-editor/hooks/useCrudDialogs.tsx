@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from "@material-ui/core";
-import { NameDialog } from "../components/NameDialog";
-import { DeleteDialog } from "../components/DeleteDialog";
+import { NameDialog } from "../dialogs/NameDialog";
+import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { AddIcon } from "../icons";
 import { useDialog } from "./useDialog";
 

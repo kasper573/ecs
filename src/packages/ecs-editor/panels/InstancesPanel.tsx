@@ -1,7 +1,7 @@
 import { Typography } from "@material-ui/core";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
-import { CreateEntityInitializerButton } from "../components/CreateEntityInitializerButton";
+import { CreateEntityInitializerButton } from "../buttons/CreateEntityInitializerButton";
 import { core } from "../core";
 import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
