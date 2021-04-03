@@ -18,13 +18,12 @@ export class BridgeRepairEquipment extends Entity {
   }
 
   constructor() {
-    super();
-    const name = "repair kit";
+    super([], "repair kit");
     this.components.push(
-      new Collectable().configure({ name }),
+      new Collectable(),
       new Describable({
         description: () =>
-          `There's a ${name} conveniently laying on the ground.`,
+          `There's a ${this.name} conveniently laying on the ground.`,
       }),
       new Interactive({
         action: "Repair bridge",
