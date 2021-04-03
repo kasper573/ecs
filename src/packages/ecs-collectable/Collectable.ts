@@ -11,7 +11,7 @@ export class Collectable extends Interactive.extend({
   name: { type: zod.string(), defaultValue: "" },
   isActive: { ...componentProperties.isActive, hidden: true },
   action: { ...interactiveProperties.action, hidden: true },
-  perform: { ...interactiveProperties.perform, hidden: true },
+  effect: { ...interactiveProperties.effect, hidden: true },
 }) {
   get sceneManager() {
     return this.entity.system.modules.resolveType(SceneManager);
@@ -29,7 +29,7 @@ export class Collectable extends Interactive.extend({
     super({
       isActive: () => !this.isCollected,
       action: () => `Pick up ${this.name}`,
-      perform: () => {
+      effect: () => {
         this.inventory.push(this.entity);
         for (const scene of Object.values(this.sceneManager.scenes)) {
           scene.remove(this.entity);

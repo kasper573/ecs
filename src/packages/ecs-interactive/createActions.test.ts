@@ -15,7 +15,7 @@ test("actions can have results", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        perform: () => "Bar",
+        effect: () => "Bar",
       }),
     ]),
   ]);
@@ -29,7 +29,7 @@ test("actions can have side effects", () => {
     new Entity([
       new Interactive({
         action: "Foo",
-        perform: () => {
+        effect: () => {
           sideEffect = "Bar";
         },
       }),
@@ -60,7 +60,7 @@ test("components get updated after actions perform", () => {
       }),
       new Interactive({
         action: "Foo",
-        perform: () => {},
+        effect: () => {},
       }),
     ]),
   ]);

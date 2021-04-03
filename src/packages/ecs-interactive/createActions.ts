@@ -15,7 +15,7 @@ export const createActions = (system: System) => {
         actions.push(
           wrapAction(system, {
             name,
-            perform: () => component.perform() || undefined,
+            perform: () => component.effect,
           })
         );
       }

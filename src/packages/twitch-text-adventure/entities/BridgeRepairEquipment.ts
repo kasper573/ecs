@@ -33,7 +33,7 @@ export class BridgeRepairEquipment extends Entity {
           this.sceneManager.sceneId === "cliff" &&
           !!this.bridge &&
           this.bridge.state !== "sturdy",
-        perform: () => {
+        effect: () => {
           if (this.bridge) {
             this.bridge.state = "sturdy";
             return "You repaired the bridge.";

@@ -27,7 +27,7 @@ it("Cancels active poll on every new poll", () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => "Foo",
+          effect: () => "Foo",
         }),
       ]),
     ],
@@ -51,11 +51,11 @@ test("Poll answers is equal to the system actions", () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => "Foo",
+          effect: () => "Foo",
         }),
         new Interactive({
           action: "Bar",
-          perform: () => "Bar",
+          effect: () => "Bar",
         }),
       ]),
     ],
@@ -72,7 +72,7 @@ test("Selected answer will perform the corresponding action", async () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => {
+          effect: () => {
             didPerform = true;
           },
         }),
@@ -92,7 +92,7 @@ test("Selecting an invalid answer will not perform any action", async () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => {
+          effect: () => {
             didPerform = true;
           },
         }),
@@ -119,7 +119,7 @@ test("Poll result won't be used if system has been detached", async () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => "Foo",
+          effect: () => "Foo",
         }),
       ]),
     ],
@@ -145,7 +145,7 @@ test("Poll result can choose to prevent recursion", async () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => {
+          effect: () => {
             count++;
           },
         }),
@@ -169,7 +169,7 @@ test("Poll result can be numeric or options object", async () => {
       new Entity([
         new Interactive({
           action: "Foo",
-          perform: () => {
+          effect: () => {
             performs++;
           },
         }),

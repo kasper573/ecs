@@ -21,7 +21,7 @@ export class Bridge extends Entity {
       new Interactive({
         action: "Cross the bridge",
         isActive: () => this.sceneManager.sceneId === "cliff",
-        perform: () => {
+        effect: () => {
           if (this.state === "sturdy") {
             this.sceneManager.sceneId = "otherSide";
           } else if (this.state === "fragile") {
@@ -35,7 +35,7 @@ export class Bridge extends Entity {
       new Interactive({
         action: "Proceed",
         isActive: () => this.sceneManager.sceneId === "bridge",
-        perform: () => {
+        effect: () => {
           if (this.state === "sturdy") {
             this.sceneManager.sceneId = "otherSide";
           } else {
@@ -48,7 +48,7 @@ export class Bridge extends Entity {
       new Interactive({
         action: "Go back",
         isActive: () => this.sceneManager.sceneId === "bridge",
-        perform: () => {
+        effect: () => {
           this.sceneManager.sceneId = "cliff";
         },
       }),

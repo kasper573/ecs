@@ -18,7 +18,7 @@ export class Ladder extends Entity {
       new Interactive({
         action: "Climb ladder",
         isActive: () => Lighter.isLit(this.system),
-        perform: () => {
+        effect: () => {
           this.sceneManager.sceneId = "cliff";
         },
       })

@@ -35,7 +35,7 @@ export class PunchingBag extends Entity {
       new Interactive({
         action: "Punch bag",
         isActive: () => !this.isBroken,
-        perform: () => {
+        effect: () => {
           const { punchResult } = describeBagState(this.hp, maxHealth);
           this.punch();
           return punchResult;

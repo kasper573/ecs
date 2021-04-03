@@ -31,7 +31,7 @@ export class Lighter extends Entity {
       new Interactive({
         isActive: () => this.sceneManager.sceneId === "pit",
         action: () => this.actionText,
-        perform: () => this.toggle(),
+        effect: () => this.toggle(),
       })
     );
   }
