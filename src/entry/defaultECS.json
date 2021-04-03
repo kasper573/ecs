@@ -50,6 +50,25 @@
           "properties": {}
         }
       ]
+    },
+    "6728d0ca-7a9f-4748-887e-771eae289fbf": {
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
+      "id": "6728d0ca-7a9f-4748-887e-771eae289fbf",
+      "name": "Unripe Apple",
+      "definitionId": "95c75a22-1cb9-4008-9513-0eda7f92e71f",
+      "components": [
+        {
+          "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
+          "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
+          "properties": {}
+        },
+        {
+          "id": "228a5967-62e5-47e2-b2ee-284baf8a1bd3",
+          "definitionId": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
+          "properties": {}
+        }
+      ]
     }
   },
   "entityDefinitions": {
@@ -63,7 +82,9 @@
           "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
           "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
           "properties": {
-            "description": "You see an apple"
+            "description": {
+              "code": "({entity}) => `You see an ${entity.name}`"
+            }
           }
         },
         {
