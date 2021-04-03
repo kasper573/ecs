@@ -37,6 +37,14 @@ export const updateSystem = (
   sceneManager.setEntities(
     getEntitiesByScene(values(ecs.entityInitializers), memory.entityInstances)
   );
+  for (const sceneDefinition of values(ecs.scenes)) {
+    const targetScene = sceneManager.scenes[sceneDefinition.id];
+    if (targetScene) {
+      targetScene.name = sceneDefinition.name;
+    } else {
+      console.warn("Could not find scene instance", sceneDefinition.id);
+    }
+  }
 };
 
 const getEntitiesByScene = (
