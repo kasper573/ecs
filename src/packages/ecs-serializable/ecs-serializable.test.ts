@@ -37,8 +37,8 @@ const nativeComponents = {
   foo: Foo,
 };
 
-describe("instantiating a System using ECSDefinition", () => {
-  it("succeeds when using one entity", () => {
+describe("creating a deserialized system", () => {
+  it("can instantiate an entity", () => {
     const entity: Omit<EntityDefinition, "systemId"> = {
       name: "Entity A",
       nodeId: uid(),
@@ -50,7 +50,7 @@ describe("instantiating a System using ECSDefinition", () => {
     expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
-  it("succeeds when using one component", () => {
+  it("can instantiate a component", () => {
     const component: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -73,7 +73,7 @@ describe("instantiating a System using ECSDefinition", () => {
     expect(system.entities[0].components[0]).toBeInstanceOf(Foo);
   });
 
-  it("succeeds when using a component with options", () => {
+  it("can instantiate a component with properties", () => {
     const component: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -96,7 +96,7 @@ describe("instantiating a System using ECSDefinition", () => {
     expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
-  it("succeeds when using two entities with different ids", () => {
+  it("can instantiate two entities with different ids", () => {
     const entity1: Omit<EntityDefinition, "systemId"> = {
       nodeId: uid(),
       name: "Entity A",
@@ -143,7 +143,7 @@ describe("instantiating a System using ECSDefinition", () => {
     expect(() => createSystem(ecs, nativeComponents)).toThrow();
   });
 
-  it("succeeds when using two components with different ids", () => {
+  it("can instantiate two components with different ids", () => {
     const component1: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -194,7 +194,7 @@ describe("instantiating a System using ECSDefinition", () => {
   });
 });
 
-describe("updating a System instance using ECSDefinition", () => {
+describe("updating a deserialized system", () => {
   it("can add entity constructor", () => {
     const entity: Omit<EntityDefinition, "systemId"> = {
       name: "Entity A",
