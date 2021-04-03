@@ -14,7 +14,6 @@ import {
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
 import { createComponentPropertiesDefinition } from "./functions/createComponentPropertiesDefinition";
-import { inheritComponentInitializer } from "./functions/inheritComponentInitializer";
 import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
@@ -733,7 +732,7 @@ const mockECS = (
       name: `entity${index}`,
       id: `initializer${index}` as EntityInitializerId,
       definitionId: id,
-      components: components.map(inheritComponentInitializer),
+      components: [],
     }));
   }
 

@@ -32,11 +32,12 @@ export class RedefinableEntity extends Entity {
     }
 
     // Add or update component initializers
-    for (const primary of primaryInitializers) {
-      let component = this.components.find((comp) => comp.id === primary.id);
-
-      const base = baseInitializers.find((c) => c.id === primary.id);
+    for (const initializerId of initializerIds) {
+      const primary = primaryInitializers.find((i) => i.id === initializerId);
+      const base = baseInitializers.find((i) => i.id === initializerId);
       const initializer = (primary ?? base)!;
+
+      let component = this.components.find((comp) => comp.id === initializerId);
 
       const Component = memory.componentConstructors.get(
         initializer.definitionId
@@ -61,12 +62,14 @@ export class RedefinableEntity extends Entity {
         const oldBaseValue = pm.base && pm.base[propertyName];
         const oldPrimaryValue = pm.primary && pm.primary[propertyName];
         const newBaseValue = base ? base.properties[propertyName] : undefined;
-        const newPrimaryValue = primary.properties[propertyName];
+        const newPrimaryValue = primary
+          ? primary.properties[propertyName]
+          : undefined;
         if (
           newBaseValue !== oldBaseValue ||
           newPrimaryValue !== oldPrimaryValue
         ) {
-          if (primary.properties.hasOwnProperty(propertyName)) {
+          if (primary?.properties.hasOwnProperty(propertyName)) {
             // New primary value
             component.configure({
               [propertyName]: createComponentProperty(newPrimaryValue),
@@ -86,7 +89,7 @@ export class RedefinableEntity extends Entity {
       // Memorize new properties for comparison next update
       memory.componentProperties.set(initializer.id, {
         base: base?.properties,
-        primary: primary.properties,
+        primary: primary?.properties,
       });
     }
   }
