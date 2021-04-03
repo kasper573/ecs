@@ -10,13 +10,19 @@ import { EntityInitializerIcon } from "../icons";
 import { Panel } from "../components/Panel";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import {
+  EntityDefinition,
+  EntityDefinitionId,
+} from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
+import { get } from "../../ecs-common/nominal";
+import { selectECS } from "../selectors/selectECS";
 
 export const InstancesPanel = () => {
+  const { entityDefinitions } = useSelector(selectECS);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
@@ -77,7 +83,7 @@ export const InstancesPanel = () => {
       <CrudList
         active={selectedEntity}
         items={entities}
-        getItemProps={getItemProps}
+        getItemProps={(item) => getItemProps(item, entityDefinitions)}
         getItemKey={getItemKey}
         onSelectItem={handleSelected}
         onDuplicateItem={handleDuplicate}
@@ -93,7 +99,15 @@ export const InstancesPanel = () => {
 
 const getItemKey = ({ id }: EntityInitializer) => id;
 
-const getItemProps = ({ name }: EntityInitializer) => ({
-  name,
-  icon: EntityInitializerIcon,
-});
+const getItemProps = (
+  { name, definitionId }: EntityInitializer,
+  definitions: Record<EntityDefinitionId, EntityDefinition>
+) => {
+  const definitionName = get(definitions, definitionId)?.name;
+  const displayName =
+    definitionName === name ? name : `${name} (${definitionName})`;
+  return {
+    name: displayName,
+    icon: EntityInitializerIcon,
+  };
+};
