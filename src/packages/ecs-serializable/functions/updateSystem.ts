@@ -25,18 +25,12 @@ export const updateSystem = (
     system.modules.push(memory);
   }
 
-  commitComponents(
-    values(ecs.componentDefinitions),
-    nativeComponents,
-    memory.componentConstructors
-  );
+  commitComponents(values(ecs.componentDefinitions), nativeComponents, memory);
 
   commitEntities(
     values(ecs.entityDefinitions),
     values(ecs.entityInitializers),
-    memory.componentConstructors,
-    memory.entityConstructors,
-    memory.entityInstances
+    memory
   );
 
   const sceneManager = system.modules.resolveType(SceneManager);

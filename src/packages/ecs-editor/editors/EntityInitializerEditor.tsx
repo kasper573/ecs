@@ -19,6 +19,7 @@ import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec"
 import { useDialog } from "../hooks/useDialog";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
+import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -55,14 +56,32 @@ export const EntityInitializerEditor = ({
     [entityInitializer.id, dispatch]
   );
 
-  const updateProperties = useCallback(
-    (component: ComponentInitializer) =>
+  const updateProperty = useCallback(
+    (
+      component: ComponentInitializer,
+      propertyName: string,
+      propertyValue: ComponentPropertyValueDefinition
+    ) =>
       dispatch(
-        core.actions.updateComponentProperties({
+        core.actions.setComponentInitializerProperty({
           target: "initializer",
           id: entityInitializer.id,
           componentId: component.id,
-          properties: component.properties,
+          propertyName,
+          propertyValue,
+        })
+      ),
+    [entityInitializer.id, dispatch]
+  );
+
+  const resetProperty = useCallback(
+    (component: ComponentInitializer, propertyName: string) =>
+      dispatch(
+        core.actions.resetComponentInitializerProperty({
+          target: "initializer",
+          id: entityInitializer.id,
+          componentId: component.id,
+          propertyName,
         })
       ),
     [entityInitializer.id, dispatch]
@@ -132,7 +151,8 @@ export const EntityInitializerEditor = ({
       <ComponentInitializerList
         baseItems={entityDefinition.components}
         primaryItems={entityInitializer.components}
-        onUpdate={updateProperties}
+        onUpdate={updateProperty}
+        onReset={resetProperty}
         onDuplicate={duplicateComponent}
         onRemove={askToDeleteComponent}
         onRestore={restoreComponent}

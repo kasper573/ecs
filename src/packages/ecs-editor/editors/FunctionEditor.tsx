@@ -1,22 +1,17 @@
 import { TextField } from "@material-ui/core";
 import { useEffect, useMemo, useState } from "react";
-import {
-  deserializeJS,
-  serializeJS,
-} from "../../ecs-serializable/jsSerializer";
+import { deserializeJS } from "../../ecs-serializable/jsSerializer";
 import { useAsRef } from "../../ecs-common/useAsRef";
 
 export const FunctionEditor = ({
-  value: inputFunction,
+  value: inputJs,
   onChange,
 }: {
-  value: Function;
-  onChange: (updated: Function) => void;
+  value: string;
+  onChange: (updated: string) => void;
 }) => {
-  const inputJs = useMemo(() => serializeJS(inputFunction), [inputFunction]);
   const [dirtyJs, setDirtyJs] = useState(inputJs);
-  const parsedFunction = useMemo(() => tryParseFunction(dirtyJs), [dirtyJs]);
-  const isValid = !!parsedFunction;
+  const isValid = useMemo(() => !!tryParseFunction(dirtyJs), [dirtyJs]);
 
   // Update dirty js whenever the input js changes
   useEffect(() => setDirtyJs(inputJs), [inputJs]);
@@ -25,14 +20,13 @@ export const FunctionEditor = ({
   const ref = useAsRef({
     onChange,
     inputJs,
-    parsedFunction,
   });
 
   // Emit a change whenever a new valid function is available
   useEffect(() => {
-    const { inputJs, onChange, parsedFunction } = ref.current;
+    const { inputJs, onChange } = ref.current;
     if (isValid && dirtyJs !== inputJs) {
-      onChange(parsedFunction);
+      onChange(dirtyJs);
     }
   }, [dirtyJs, isValid, ref]);
 
@@ -47,7 +41,7 @@ export const FunctionEditor = ({
   );
 };
 
-const tryParseFunction = (js: string) => {
+const tryParseFunction = (js: string): Function | undefined => {
   try {
     const parsed = deserializeJS(js);
     return typeof parsed === "function" ? parsed : undefined;

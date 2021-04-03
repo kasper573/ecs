@@ -23,12 +23,12 @@
         {
           "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
           "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
-          "properties": "{}"
+          "properties": {}
         },
         {
           "id": "228a5967-62e5-47e2-b2ee-284baf8a1bd3",
           "definitionId": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
-          "properties": "{}"
+          "properties": {}
         }
       ]
     },
@@ -42,12 +42,12 @@
         {
           "id": "abe409f6-593e-4e87-a2e2-5d4fa6dd0ec1",
           "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
-          "properties": "{}"
+          "properties": {}
         },
         {
           "id": "69e04e0c-35ba-44da-9c33-1e9a162a668f",
           "definitionId": "e0aca893-61d5-4329-b3af-b21e918c958f",
-          "properties": "{}"
+          "properties": {}
         }
       ]
     }
@@ -62,12 +62,16 @@
         {
           "id": "b54d238d-eb30-468f-91a8-b0d37eba3099",
           "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
-          "properties": "{\"description\":\"You see an apple\"}"
+          "properties": {
+            "description": "You see an apple"
+          }
         },
         {
           "id": "228a5967-62e5-47e2-b2ee-284baf8a1bd3",
           "definitionId": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
-          "properties": "{\"name\":\"apple\"}"
+          "properties": {
+            "name": "apple"
+          }
         }
       ],
       "type": "entity"
@@ -81,12 +85,19 @@
         {
           "id": "abe409f6-593e-4e87-a2e2-5d4fa6dd0ec1",
           "definitionId": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
-          "properties": "{\"description\":\"You see a sparkling campfire\"}"
+          "properties": {
+            "description": "You see a sparkling campfire"
+          }
         },
         {
           "id": "69e04e0c-35ba-44da-9c33-1e9a162a668f",
           "definitionId": "e0aca893-61d5-4329-b3af-b21e918c958f",
-          "properties": "{\"action\":\"Sit down\",\"perform\":() =\u003E \"You feel warm\"}"
+          "properties": {
+            "action": "Sit down",
+            "perform": {
+              "code": "() => \"You feel warm\""
+            }
+          }
         }
       ],
       "type": "entity"

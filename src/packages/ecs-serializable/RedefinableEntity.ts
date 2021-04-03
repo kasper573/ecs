@@ -1,19 +1,17 @@
 import { uniq } from "lodash";
 import { Entity } from "../ecs/Entity";
-import { ComponentInstance } from "../ecs/Component";
-import { getPropertyDefaults } from "../property-bag/getPropertyDefaults";
-import { createComponentProperties } from "./functions/createComponentProperties";
+import { keys } from "../ecs-common/nominal";
 import { EntityDefinition } from "./types/EntityDefinition";
-import { ComponentConstructorMap } from "./types/ComponentConstructorMap";
 import { EntityInitializer } from "./types/EntityInitializer";
 import { ComponentInitializerId } from "./types/ComponentInitializer";
-import { ComponentPropertiesDefinition } from "./types/ComponentPropertiesDefinition";
+import { DeserializationMemory } from "./DeserializationMemory";
+import { createComponentProperty } from "./functions/createComponentProperty";
 
 export class RedefinableEntity extends Entity {
   define(
-    componentConstructors: ComponentConstructorMap,
     definition: EntityDefinition,
-    initializer: EntityInitializer
+    initializer: EntityInitializer,
+    memory: DeserializationMemory
   ) {
     this.name = initializer.name;
 
@@ -26,54 +24,70 @@ export class RedefinableEntity extends Entity {
 
     // Remove expired component initializers
     for (const component of this.components) {
-      if (!initializerIds.includes(component.id as ComponentInitializerId)) {
+      const id = component.id as ComponentInitializerId;
+      if (!initializerIds.includes(id)) {
         this.components.remove(component);
+        memory.componentProperties.delete(id);
       }
     }
 
     // Add or update component initializers
     for (const primary of primaryInitializers) {
-      let component:
-        | ComponentInstanceWithMemory
-        | undefined = this.components.find((comp) => comp.id === primary.id);
+      let component = this.components.find((comp) => comp.id === primary.id);
 
       const base = baseInitializers.find((c) => c.id === primary.id);
       const initializer = (primary ?? base)!;
 
-      const Component = componentConstructors.get(initializer.definitionId);
+      const Component = memory.componentConstructors.get(
+        initializer.definitionId
+      );
       if (!Component) {
         throw new Error(
           `No Component with definitionId "${initializer.definitionId}" exists`
         );
       }
 
+      // Instantiate component
       if (!component) {
         component = new Component();
+        component.configure({ id: initializer.id });
         this.components.push(component);
       }
 
-      // Ignore unchanged properties
-      const didPropertiesChange =
-        base?.properties !== component.__baseProperties ||
-        primary.properties !== component.__primaryProperties;
-      if (!didPropertiesChange) {
-        continue;
+      // Determine which properties have been changed
+      const allPropertyNames = keys(Component.propertyInfos);
+      const pm = memory.componentProperties.get(initializer.id) ?? {};
+      for (const propertyName of allPropertyNames) {
+        const oldBaseValue = pm.base && pm.base[propertyName];
+        const oldPrimaryValue = pm.primary && pm.primary[propertyName];
+        const newBaseValue = base ? base.properties[propertyName] : undefined;
+        const newPrimaryValue = primary.properties[propertyName];
+        if (
+          newBaseValue !== oldBaseValue ||
+          newPrimaryValue !== oldPrimaryValue
+        ) {
+          if (primary.properties.hasOwnProperty(propertyName)) {
+            // New primary value
+            component.configure({
+              [propertyName]: createComponentProperty(newPrimaryValue),
+            });
+          } else if (base?.properties.hasOwnProperty(propertyName)) {
+            // New base value
+            component.configure({
+              [propertyName]: createComponentProperty(newBaseValue),
+            });
+          } else {
+            // Primary and base have both been removed, reset to default
+            component.reset(propertyName);
+          }
+        }
       }
 
-      // Apply new properties
-      component.__baseProperties = base?.properties;
-      component.__primaryProperties = primary.properties;
-      component.configure({
-        ...getPropertyDefaults(Component.propertyInfos),
-        ...(base ? createComponentProperties(base.properties) : undefined),
-        ...createComponentProperties(primary.properties),
-        id: initializer.id,
+      // Memorize new properties for comparison next update
+      memory.componentProperties.set(initializer.id, {
+        base: base?.properties,
+        primary: primary.properties,
       });
     }
   }
 }
-
-type ComponentInstanceWithMemory = ComponentInstance & {
-  __baseProperties?: ComponentPropertiesDefinition;
-  __primaryProperties?: ComponentPropertiesDefinition;
-};

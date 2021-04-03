@@ -1,11 +1,21 @@
-import { ComponentPropertiesDefinition } from "../types/ComponentPropertiesDefinition";
-import { deserializeJS } from "../jsSerializer";
+import {
+  ComponentProperties,
+  ComponentPropertiesDefinition,
+} from "../types/ComponentPropertiesDefinition";
+import { createComponentProperty } from "./createComponentProperty";
 
 /**
  * Returns the props object for the specified ComponentOptionsDefinition
  */
 export const createComponentProperties = <
-  Options extends Record<string, unknown>
+  Properties extends ComponentProperties
 >(
   definition: ComponentPropertiesDefinition
-) => deserializeJS(definition) as Options;
+) =>
+  Object.keys(definition).reduce(
+    (properties, propertyName) => ({
+      ...properties,
+      [propertyName]: createComponentProperty(definition[propertyName]),
+    }),
+    {} as Properties
+  );

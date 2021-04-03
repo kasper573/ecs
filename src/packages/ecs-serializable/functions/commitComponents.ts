@@ -1,7 +1,7 @@
 import { without } from "lodash";
-import { ComponentConstructorMap } from "../types/ComponentConstructorMap";
 import { ComponentDefinition } from "../types/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
+import { DeserializationMemory } from "../DeserializationMemory";
 import { defineComponent } from "./defineComponent";
 
 /**
@@ -10,18 +10,18 @@ import { defineComponent } from "./defineComponent";
 export const commitComponents = (
   definitions: ComponentDefinition[],
   nativeComponents: NativeComponents,
-  componentMap: ComponentConstructorMap
+  memory: DeserializationMemory
 ) => {
-  const definedIds = Array.from(componentMap.keys());
+  const definedIds = Array.from(memory.componentConstructors.keys());
   const currentIds = definitions.map((d) => d.id);
   const removedIds = without(definedIds, ...currentIds);
   for (const id of removedIds) {
-    if (componentMap.has(id)) {
-      componentMap.delete(id);
+    if (memory.componentConstructors.has(id)) {
+      memory.componentConstructors.delete(id);
     }
   }
   for (const definition of definitions) {
-    componentMap.set(
+    memory.componentConstructors.set(
       definition.id,
       defineComponent(definition, nativeComponents)
     );

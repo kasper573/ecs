@@ -1,6 +1,16 @@
-import { serializeJS } from "../jsSerializer";
-import { ComponentPropertiesDefinition } from "../types/ComponentPropertiesDefinition";
+import {
+  ComponentProperties,
+  ComponentPropertiesDefinition,
+} from "../types/ComponentPropertiesDefinition";
+import { createComponentPropertyDefinition } from "./createComponentPropertyDefinition";
 
 export const createComponentPropertiesDefinition = (
-  props: Record<string, unknown>
-) => serializeJS(props) as ComponentPropertiesDefinition;
+  props: ComponentProperties
+) =>
+  Object.keys(props).reduce(
+    (definition, propertyName) => ({
+      ...definition,
+      [propertyName]: createComponentPropertyDefinition(props[propertyName]),
+    }),
+    {} as ComponentPropertiesDefinition
+  );

@@ -17,6 +17,7 @@ import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec"
 import { useDialog } from "../hooks/useDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
+import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -45,14 +46,32 @@ export const EntityDefinitionEditor = ({
     [entityDefinition.id, dispatch]
   );
 
-  const updateProperties = useCallback(
-    (component: ComponentInitializer) =>
+  const updateProperty = useCallback(
+    (
+      component: ComponentInitializer,
+      propertyName: string,
+      propertyValue: ComponentPropertyValueDefinition
+    ) =>
       dispatch(
-        core.actions.updateComponentProperties({
+        core.actions.setComponentInitializerProperty({
           target: "definition",
           id: entityDefinition.id,
           componentId: component.id,
-          properties: component.properties,
+          propertyName,
+          propertyValue,
+        })
+      ),
+    [entityDefinition.id, dispatch]
+  );
+
+  const resetProperty = useCallback(
+    (component: ComponentInitializer, propertyName: string) =>
+      dispatch(
+        core.actions.resetComponentInitializerProperty({
+          target: "definition",
+          id: entityDefinition.id,
+          componentId: component.id,
+          propertyName,
         })
       ),
     [entityDefinition.id, dispatch]
@@ -110,7 +129,8 @@ export const EntityDefinitionEditor = ({
       <ComponentInitializerList
         primaryItems={entityDefinition.components}
         onRemove={askToDeleteComponent}
-        onUpdate={updateProperties}
+        onUpdate={updateProperty}
+        onReset={resetProperty}
         onDuplicate={duplicateComponent}
       />
       <DropBox spec={componentDefinitionDropSpec(addComponent)}>
