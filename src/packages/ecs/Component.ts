@@ -32,7 +32,16 @@ export const componentProperties = {
   },
 };
 
-export const Component = createPropertyBag(componentProperties);
+export const Component = createPropertyBag(
+  componentProperties,
+  "Component",
+  undefined,
+  (component) => ({
+    component,
+    entity: component.entity,
+    system: component.entity?.system,
+  })
+);
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export type Component = typeof Component;

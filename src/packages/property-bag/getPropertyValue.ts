@@ -3,6 +3,7 @@ import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
 import { isPropertyDeclarative } from "./isPropertyDeclarative";
 import { getPropertyDeclaration } from "./getPropertyDeclaration";
+import { PropertyDeclarationContext } from "./types/PropertyDeclarationContext";
 
 export const getPropertyValue = <
   Properties extends PropertyInfoRecord<any, Types>,
@@ -12,13 +13,14 @@ export const getPropertyValue = <
   values: Partial<ResolvablePropertyValuesFor<Properties>>,
   info: Properties[Name],
   name: Name,
+  context: PropertyDeclarationContext,
   defaultValue = info.defaultValue
 ): PropertyValueFor<Properties, Name> => {
   if (isPropertyDeclarative(values, info, name)) {
     const declaration = getPropertyDeclaration(values, info, name);
 
     try {
-      return declaration();
+      return declaration(context);
     } catch (e) {
       console.error(
         `Error while resolving declarative property "${name}": "${e.message}"`

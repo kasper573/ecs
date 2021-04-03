@@ -1,4 +1,5 @@
 import { keys } from "../ecs-common/nominal";
+import { noRecursion } from "../ecs-common/noRecursion";
 import { PropertyBagMethods } from "./types/PropertyBagMethods";
 import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";
@@ -6,21 +7,30 @@ import { setPropertyValues } from "./setPropertyValues";
 import { resetPropertyValue } from "./resetPropertyValue";
 import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor";
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
+import { PropertyBagInstance } from "./types/PropertyBagInstance";
 
 class Root {
   static propertyInfos = {};
 }
 
-export const createPropertyBag = <
+type AllProps<
   DirectProperties extends PropertyInfoRecord<any, any>,
   Base extends PropertyBag<{}>
+> = DirectProperties & (Base extends PropertyBag<infer P> ? P : never);
+
+export const createPropertyBag = <
+  DirectProperties extends PropertyInfoRecord<any, any>,
+  Base extends PropertyBag<{}>,
+  DeclarationContext
 >(
   directProperties: DirectProperties,
   displayName: string = "",
-  baseBag?: Base
+  baseBag?: Base,
+  getPropertyDeclarationContext: (
+    bag: PropertyBagInstance<AllProps<DirectProperties, Base>>
+  ) => DeclarationContext = (bag) => (bag as unknown) as DeclarationContext
 ) => {
-  type BaseProperties = Base extends PropertyBag<infer P> ? P : never;
-  type Properties = DirectProperties & BaseProperties;
+  type Properties = AllProps<DirectProperties, Base>;
   const base = baseBag ?? Root;
   const propertyInfos = { ...base.propertyInfos, ...directProperties };
 
@@ -33,11 +43,20 @@ export const createPropertyBag = <
 
     constructor(values: Partial<ResolvablePropertyValuesFor<Properties>> = {}) {
       super();
+      const getContext = () =>
+        getPropertyDeclarationContext(
+          this as PropertyBagInstance<AllProps<DirectProperties, Base>>
+        );
       keys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
           configurable: true,
           get: () =>
-            getPropertyValue(this.propertyValues, propertyInfos[name], name),
+            getPropertyValue(
+              this.propertyValues,
+              propertyInfos[name],
+              name,
+              noRecursion(getContext)
+            ),
         });
       });
       this.configure(values);
@@ -56,7 +75,12 @@ export const createPropertyBag = <
       extensionProperties: ExtensionProperties,
       extensionName?: string
     ) {
-      return createPropertyBag(extensionProperties, extensionName, Bag);
+      return createPropertyBag(
+        extensionProperties,
+        extensionName,
+        Bag,
+        getPropertyDeclarationContext as any
+      );
     }
   } as unknown) as PropertyBag<Properties>;
 
