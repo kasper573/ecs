@@ -1,27 +1,27 @@
 import { MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
-import { getPropertyValue } from "../../property-bag/getPropertyValue";
-import { resetPropertyValue } from "../../property-bag/resetPropertyValue";
 import { useMenu } from "../hooks/useMenu";
 import { propertySupportsDeclarative } from "../../property-bag/propertySupportsDeclarative";
-import { isPropertyDeclarative } from "../../property-bag/isPropertyDeclarative";
-import { getPropertyDeclaration } from "../../property-bag/getPropertyDeclaration";
-import { getPrimitiveEditor } from "./PrimitiveEditor";
-import { FunctionEditor } from "./FunctionEditor";
+import {
+  ComponentPropertiesDefinition,
+  ComponentPropertyValue,
+  ComponentPropertyValueDefinition,
+} from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { createComponentPropertyDefinition } from "../../ecs-serializable/functions/createComponentPropertyDefinition";
+import { isFunctionDefinition } from "../../ecs-serializable/functions/isFunctionDefinition";
+import { renderComponentPropertyValueEditor } from "./ComponentPropertyValueEditor";
 
 export type ComponentPropertyEditorProps = {
-  hasBase: boolean;
-  baseProperties: Record<string, unknown>;
-  primaryProperties: Record<string, unknown>;
+  baseProperties?: ComponentPropertiesDefinition;
+  primaryProperties: ComponentPropertiesDefinition;
   propertyName: string;
-  propertyInfo: PropertyInfo<unknown>;
-  onUpdate: (newValue: unknown) => void;
-  onReset: (updatedPrimaryProperties: Record<string, unknown>) => void;
+  propertyInfo: PropertyInfo<ComponentPropertyValue>;
+  onUpdate: (newValue: ComponentPropertyValueDefinition) => void;
+  onReset: () => void;
 };
 
 export const ComponentPropertyEditor = ({
-  hasBase,
   baseProperties,
   primaryProperties,
   propertyName,
@@ -29,48 +29,42 @@ export const ComponentPropertyEditor = ({
   onUpdate,
   onReset,
 }: ComponentPropertyEditorProps) => {
-  const baseValue = getPropertyValue(
-    baseProperties,
-    propertyInfo,
-    propertyName
-  );
+  const value = primaryProperties.hasOwnProperty(propertyName)
+    ? primaryProperties[propertyName]
+    : baseProperties?.hasOwnProperty(propertyName)
+    ? baseProperties[propertyName]
+    : createComponentPropertyDefinition(propertyInfo.defaultValue);
 
-  const primaryValue = getPropertyValue(
-    primaryProperties,
-    propertyInfo,
-    propertyName,
-    baseValue
-  );
+  const supportsDeclarative = propertySupportsDeclarative(propertyInfo);
 
-  const isDeclarative = isPropertyDeclarative(
-    primaryProperties,
-    propertyInfo,
-    propertyName
-  );
+  const isDeclarative = supportsDeclarative && isFunctionDefinition(value);
 
-  const hasBaseDiff = hasBase && primaryProperties.hasOwnProperty(propertyName);
-
-  const PrimitiveEditor = getPrimitiveEditor(propertyInfo.type);
+  const hasBaseDiff =
+    !!baseProperties && primaryProperties.hasOwnProperty(propertyName);
 
   const setDeclarative = (toDeclarative: boolean) =>
-    onUpdate(toDeclarative ? () => {} : propertyInfo.defaultValue);
-
-  const resetValue = () => {
-    const updatedProperties = { ...primaryProperties };
-    resetPropertyValue(updatedProperties, propertyInfo, propertyName);
-    onReset(updatedProperties);
-  };
+    onUpdate(
+      createComponentPropertyDefinition(
+        toDeclarative ? () => {} : propertyInfo.defaultValue
+      )
+    );
 
   const [openMenu, menu] = useMenu([
-    hasBaseDiff && <MenuItem onClick={resetValue}>Reset</MenuItem>,
-    propertySupportsDeclarative(propertyInfo) && (
+    hasBaseDiff && <MenuItem onClick={onReset}>Reset</MenuItem>,
+    supportsDeclarative && (
       <MenuItem onClick={() => setDeclarative(!isDeclarative)}>
         {isDeclarative ? "Make imperative" : "Make declarative"}
       </MenuItem>
     ),
   ]);
 
-  if (!PrimitiveEditor || propertyInfo.hidden) {
+  const valueEditor = renderComponentPropertyValueEditor({
+    value,
+    info: propertyInfo,
+    onChange: onUpdate,
+  });
+
+  if (!valueEditor || propertyInfo.hidden) {
     // No editor available for this type,
     // or this property has opted out of being editable
     return null;
@@ -82,20 +76,7 @@ export const ComponentPropertyEditor = ({
         <TableCell>
           <PropertyName $hasBaseDiff={hasBaseDiff}>{propertyName}</PropertyName>
         </TableCell>
-        <TableCell>
-          {isDeclarative ? (
-            <FunctionEditor
-              value={getPropertyDeclaration(
-                primaryProperties,
-                propertyInfo,
-                propertyName
-              )}
-              onChange={onUpdate}
-            />
-          ) : (
-            <PrimitiveEditor value={primaryValue} onChange={onUpdate} />
-          )}
-        </TableCell>
+        <TableCell>{valueEditor}</TableCell>
       </TableRow>
       {menu}
     </>

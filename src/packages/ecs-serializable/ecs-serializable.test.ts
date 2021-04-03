@@ -2,6 +2,7 @@ import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
 import { set } from "../ecs-common/nominal";
+import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { createSystem } from "./functions/createSystem";
 import {
   EntityInitializer,
@@ -641,7 +642,11 @@ describe("updating a System instance using ECSDefinition", () => {
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
-  it("entity has the same number of components before and after update when not changing components", () => {
+  it("updating a component property only changes that specific property", () => {
+    const Foo = Component.extend({
+      text: { type: zod.string(), defaultValue: "" },
+    });
+    const nativeComponents = { foo: Foo };
     const component: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -661,11 +666,6 @@ describe("updating a System instance using ECSDefinition", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({ isActive: false }),
-          definitionId: component.id,
-        },
-        {
-          id: uid(),
           properties: createComponentPropertiesDefinition({ isActive: true }),
           definitionId: component.id,
         },
@@ -675,17 +675,17 @@ describe("updating a System instance using ECSDefinition", () => {
       ...entity1,
       components: entity1.components.map((comp) => ({
         ...comp,
-        properties: createComponentPropertiesDefinition({}),
+        properties: createComponentPropertiesDefinition({ isActive: false }),
       })),
     };
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
 
     const system = createSystem(ecs1, nativeComponents);
-    const componentCount1 = system.entities[0].components.length;
+    const instance = system.entities[0].components[0] as InstanceOf<typeof Foo>;
+    instance.configure({ text: "hello" });
     updateSystem(system, ecs2, nativeComponents);
-    const componentCount2 = system.entities[0].components.length;
-    expect(componentCount1).toBe(componentCount2);
+    expect(instance.text).toBe("hello");
   });
 });
 

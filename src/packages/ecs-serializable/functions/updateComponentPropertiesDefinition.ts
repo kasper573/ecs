@@ -1,6 +1,7 @@
-import { ComponentPropertiesDefinition } from "../types/ComponentPropertiesDefinition";
-import { createComponentProperties } from "./createComponentProperties";
-import { createComponentPropertiesDefinition } from "./createComponentPropertiesDefinition";
+import {
+  ComponentPropertiesDefinition,
+  ComponentPropertyValueDefinition,
+} from "../types/ComponentPropertiesDefinition";
 
 /**
  * Updates a specific option
@@ -8,9 +9,8 @@ import { createComponentPropertiesDefinition } from "./createComponentProperties
 export const updateComponentPropertiesDefinition = (
   definition: ComponentPropertiesDefinition,
   optionName: string,
-  optionValue: unknown
-) => {
-  const props = createComponentProperties<{}>(definition);
-  const updatedOptions = { ...props, [optionName]: optionValue };
-  return createComponentPropertiesDefinition(updatedOptions);
-};
+  optionValue: ComponentPropertyValueDefinition
+): ComponentPropertiesDefinition => ({
+  ...definition,
+  [optionName]: optionValue,
+});

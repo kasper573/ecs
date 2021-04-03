@@ -23,7 +23,7 @@
         {
           "id": "uuid2",
           "definitionId": "uuid0",
-          "properties": "{}"
+          "properties": {}
         }
       ]
     }
@@ -50,7 +50,7 @@
           {
             "id": "uuid2",
             "definitionId": "uuid0",
-            "properties": "{\"fn\":() => 2}"
+            "properties": { "fn": "() => 2" }
           }
         ],
         "name": "Entity A"
