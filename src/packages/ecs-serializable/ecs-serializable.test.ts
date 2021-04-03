@@ -47,6 +47,23 @@ describe("creating a deserialized system", () => {
     expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
+  it("can name an entity", () => {
+    const definition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      definitionId: definition.id,
+      name: "Initial",
+      components: [],
+    };
+    const system = mockSystem([definition], [], [entity1]);
+    expect(system.entities[0].name).toBe("Initial");
+  });
+
   it("can instantiate a component", () => {
     const component: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
@@ -274,6 +291,31 @@ describe("creating a deserialized system", () => {
 });
 
 describe("updating a deserialized system", () => {
+  it("can rename an entity", () => {
+    const definition: Omit<EntityDefinition, "systemId"> = {
+      name: "Entity",
+      nodeId: uid(),
+      id: uid(),
+      components: [],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      definitionId: definition.id,
+      name: "Initial",
+      components: [],
+    };
+    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      ...entity1,
+      name: "Updated",
+    };
+    const ecs1 = mockECS([definition], [], [entity1]);
+    const ecs2 = mockECS([definition], [], [entity2]);
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].name).toBe("Initial");
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].name).toBe("Updated");
+  });
+
   it("can add entity constructor", () => {
     const entity: Omit<EntityDefinition, "systemId"> = {
       name: "Entity A",
