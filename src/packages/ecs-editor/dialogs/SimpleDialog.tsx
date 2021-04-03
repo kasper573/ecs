@@ -6,15 +6,12 @@ import {
   DialogProps,
   DialogTitle,
 } from "@material-ui/core";
-import { PropsWithChildren } from "react";
+import { ReactNode } from "react";
+import styled from "styled-components";
 
-export type SimpleDialogProps = Pick<DialogProps, "open" | "onClose"> &
-  PropsWithChildren<{
-    /**
-     * The dialog title
-     */
-    title: string;
-  }>;
+export type SimpleDialogProps = Omit<DialogProps, "title"> & {
+  title: ReactNode;
+};
 
 /**
  * A dialog with a title and a single close button that displays children as content.
@@ -28,7 +25,7 @@ export const SimpleDialog = ({
   const manualClose = () => onClose({}, "backdropClick");
   return (
     <Dialog {...dialogProps} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
+      <RelativeTitle>{title}</RelativeTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={manualClose} color="primary">
@@ -38,3 +35,7 @@ export const SimpleDialog = ({
     </Dialog>
   );
 };
+
+const RelativeTitle = styled(DialogTitle)`
+  position: relative;
+`;
