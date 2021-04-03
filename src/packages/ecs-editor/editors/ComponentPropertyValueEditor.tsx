@@ -9,10 +9,6 @@ import {
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
 import { propertySupportsDeclarative } from "../../property-bag/propertySupportsDeclarative";
 import { isFunctionDefinition } from "../../ecs-serializable/functions/isFunctionDefinition";
-import {
-  deserializeJS,
-  serializeJS,
-} from "../../ecs-serializable/jsSerializer";
 import { FunctionEditor } from "./FunctionEditor";
 
 export type ComponentPropertyValueEditorProps = {
@@ -34,8 +30,8 @@ export const renderComponentPropertyValueEditor = ({
       emptyFunc) as ComponentPropertyFunctionDefinition;
     return (
       <FunctionEditor
-        value={deserializeJS(valueAsFunc.code)}
-        onChange={(func) => onChange({ code: serializeJS(func) })}
+        value={valueAsFunc.code}
+        onChange={(code) => onChange({ code })}
       />
     );
   }
