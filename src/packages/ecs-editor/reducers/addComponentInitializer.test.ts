@@ -1,7 +1,6 @@
 import { mockEditorState } from "../functions/mockEditorState";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { uuid } from "../../ecs-common/uuid";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { values } from "../../ecs-common/nominal";
 import { core } from "../core";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
@@ -19,7 +18,7 @@ test("adding a component to an entity definition adds a copy of that component t
   const addedComponent: ComponentInitializer = {
     id: uuid(),
     definitionId,
-    properties: createComponentPropertiesDefinition({}),
+    properties: {},
   };
   const nextState = addComponentInitializer(
     state,

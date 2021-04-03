@@ -9,7 +9,6 @@ import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { useDispatch, useStore } from "../store";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
@@ -39,7 +38,7 @@ export const EntityDefinitionEditor = ({
           component: {
             definitionId: component.id,
             id: uuid(),
-            properties: createComponentPropertiesDefinition({}),
+            properties: {},
           },
         })
       ),

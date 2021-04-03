@@ -13,13 +13,13 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { createComponentPropertiesDefinition } from "./functions/createComponentPropertiesDefinition";
 import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { updateSystem } from "./functions/updateSystem";
 import { ComponentInitializer } from "./types/ComponentInitializer";
+import { createComponentPropertyDefinition } from "./functions/createComponentPropertyDefinition";
 
 class Foo extends Component.extend({
   text: {
@@ -68,7 +68,7 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: component.id,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -91,7 +91,7 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: component.id,
-          properties: createComponentPropertiesDefinition({ fn: () => 2 }),
+          properties: { fn: createComponentPropertyDefinition(() => 2) },
         },
       ],
     };
@@ -167,12 +167,12 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: component1.id,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
         {
           id: uid(),
           definitionId: component2.id,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -189,7 +189,7 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: "bogus" as ComponentDefinitionId,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -251,9 +251,9 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: componentDefinition.id,
-          properties: createComponentPropertiesDefinition({
-            isActive: () => false,
-          }),
+          properties: {
+            isActive: createComponentPropertyDefinition(() => false),
+          },
         },
       ],
     };
@@ -407,7 +407,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
           definitionId: component.id,
         },
       ],
@@ -440,7 +440,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
           definitionId: component.id,
         },
       ],
@@ -464,7 +464,7 @@ describe("updating a deserialized system", () => {
     };
     const componentInitializer: ComponentInitializer = {
       id: uid(),
-      properties: createComponentPropertiesDefinition({}),
+      properties: {},
       definitionId: componentDefinition.id,
     };
     const entity1: Omit<EntityDefinition, "systemId"> = {
@@ -474,7 +474,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({ isActive: false }),
+          properties: { isActive: false },
         },
       ],
     };
@@ -483,7 +483,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({ isActive: true }),
+          properties: { isActive: true },
         },
       ],
     };
@@ -522,7 +522,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
           definitionId: component.id,
         },
       ],
@@ -561,7 +561,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
           definitionId: component.id,
         },
       ],
@@ -596,7 +596,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({ isActive: false }),
+          properties: { isActive: false },
           definitionId: component.id,
         },
       ],
@@ -605,7 +605,7 @@ describe("updating a deserialized system", () => {
       ...entity1,
       components: entity1.components.map((comp) => ({
         ...comp,
-        properties: createComponentPropertiesDefinition({ isActive: true }),
+        properties: { isActive: true },
       })),
     };
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
@@ -636,7 +636,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({ isActive: false }),
+          properties: { isActive: false },
         },
       ],
     };
@@ -647,7 +647,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({ isActive: true }),
+          properties: { isActive: true },
         },
       ],
     };
@@ -656,7 +656,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -693,7 +693,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -704,7 +704,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({ isActive: false }),
+          properties: { isActive: false },
         },
       ],
     };
@@ -713,7 +713,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           ...componentInitializer,
-          properties: createComponentPropertiesDefinition({}),
+          properties: {},
         },
       ],
     };
@@ -751,7 +751,7 @@ describe("updating a deserialized system", () => {
       components: [
         {
           id: uid(),
-          properties: createComponentPropertiesDefinition({ isActive: true }),
+          properties: { isActive: true },
           definitionId: component.id,
         },
       ],
@@ -760,7 +760,7 @@ describe("updating a deserialized system", () => {
       ...entity1,
       components: entity1.components.map((comp) => ({
         ...comp,
-        properties: createComponentPropertiesDefinition({ isActive: false }),
+        properties: { isActive: false },
       })),
     };
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
@@ -828,9 +828,9 @@ describe("updating a deserialized system", () => {
         {
           id: uid(),
           definitionId: cDef.id,
-          properties: createComponentPropertiesDefinition({
-            isActive: () => false,
-          }),
+          properties: {
+            isActive: createComponentPropertyDefinition(() => false),
+          },
         },
       ],
     };

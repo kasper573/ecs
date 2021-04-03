@@ -8,7 +8,6 @@ import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -49,7 +48,7 @@ export const EntityInitializerEditor = ({
           component: {
             definitionId: definition.id,
             id: uuid(),
-            properties: createComponentPropertiesDefinition({}),
+            properties: {},
           },
         })
       ),

@@ -9,7 +9,6 @@ import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { set, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
@@ -152,11 +151,11 @@ const mockComponentInitializer = (
 ): ComponentInitializer => ({
   id: id(`component-initializer${index}`),
   definitionId: definition.id,
-  properties: createComponentPropertiesDefinition({
+  properties: {
     foo: 123,
     bar: "hello",
     baz: true,
-  }),
+  },
 });
 
 const mockScene = (

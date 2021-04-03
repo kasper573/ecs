@@ -1,5 +1,4 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { createComponentPropertiesDefinition } from "../../ecs-serializable/functions/createComponentPropertiesDefinition";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { get, values } from "../../ecs-common/nominal";
 import { uuid } from "../../ecs-common/uuid";
@@ -18,7 +17,7 @@ test("creating an entity initializer copies all components from definition (with
 
   const initializerComponent: ComponentInitializer = {
     definitionId: componentDefinition.id,
-    properties: createComponentPropertiesDefinition({ foo: 123 }),
+    properties: { foo: 123 },
     id: uuid(),
   };
 
@@ -50,6 +49,6 @@ test("creating an entity initializer copies all components from definition (with
   // But should also copy the components in the definition
   expect(updatedEntityInitializer?.components).toContainEqual({
     ...definitionComponent,
-    properties: createComponentPropertiesDefinition({}),
+    properties: {},
   });
 });
