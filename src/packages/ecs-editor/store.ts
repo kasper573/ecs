@@ -13,6 +13,7 @@ export const createStore = (initialState: EditorState) =>
   configureStore<EditorRootState>({
     reducer: undoable(core.reducer, {
       filter: excludeAction(["@@INIT", ...noUndoActions]),
+      limit: 30,
     }),
     preloadedState: {
       past: [],
