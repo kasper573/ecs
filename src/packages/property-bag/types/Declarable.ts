@@ -1,6 +1,8 @@
 // NOTE we avoid distributivity by wrapping T in []
 // https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types
 
+import { IfContains } from "./IfContains";
+
 export type Declarable<T, DeclarationContext> = [T] extends [
   (...args: any) => any
 ]
@@ -17,5 +19,3 @@ export type Declarable<T, DeclarationContext> = [T] extends [
 export type Declarative<DeclarationContext, T> = (
   context: DeclarationContext
 ) => T;
-
-type IfContains<T, S, A, B> = Extract<T, S> extends S ? A : B;

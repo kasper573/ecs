@@ -18,7 +18,6 @@ export const componentProperties = {
     // Instance id, used as relationship between components
     // in entity definitions and entity initializers
     type: zod.string().optional(),
-    defaultValue: undefined,
     hidden: true,
   },
   entity: {

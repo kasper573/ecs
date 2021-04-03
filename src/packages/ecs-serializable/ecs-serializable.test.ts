@@ -22,14 +22,8 @@ import { ComponentInitializer } from "./types/ComponentInitializer";
 import { createComponentPropertyDefinition } from "./functions/createComponentPropertyDefinition";
 
 class Foo extends Component.extend({
-  text: {
-    type: zod.string().optional(),
-    defaultValue: undefined,
-  },
-  fn: {
-    type: zod.function(zod.tuple([]), zod.number()).optional(),
-    defaultValue: undefined,
-  },
+  text: { type: zod.string().optional() },
+  fn: { type: zod.function(zod.tuple([]), zod.number()).optional() },
 }) {
   calculate(x: number) {
     return this.fn ? this.fn() * x : 0;

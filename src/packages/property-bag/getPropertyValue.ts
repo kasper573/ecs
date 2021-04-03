@@ -25,10 +25,10 @@ export const getPropertyValue = <
       console.error(
         `Error while resolving declarative property "${name}": "${e.message}"`
       );
-      return defaultValue;
+      return defaultValue as PropertyValueFor<Properties, Name>;
     }
   }
   return values.hasOwnProperty(name)
     ? (values[name] as PropertyValueFor<Properties, Name>)
-    : defaultValue;
+    : (defaultValue as PropertyValueFor<Properties, Name>);
 };
