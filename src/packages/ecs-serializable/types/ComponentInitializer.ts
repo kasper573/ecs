@@ -5,7 +5,10 @@ export type ComponentInitializerId = Nominal<string, "ComponentInitializerId">;
 
 export type ComponentInitializer = {
   /**
-   * uuid
+   * Locally unique id.
+   * Almost universally unique, but is reused across entity instances.
+   * Example: Two EntityInitializers referencing the same
+   * EntityDefinition will have ComponentInitializers that share ids.
    */
   id: ComponentInitializerId;
   /**

@@ -6,17 +6,18 @@ import { EntityInitializer } from "./types/EntityInitializer";
 import { ComponentInitializerId } from "./types/ComponentInitializer";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
+import { getComponentInstanceId } from "./types/ComponentInstancePropertyMap";
 
 export class RedefinableEntity extends Entity {
   define(
-    definition: EntityDefinition,
-    initializer: EntityInitializer,
+    entityDefinition: EntityDefinition,
+    entityInitializer: EntityInitializer,
     memory: DeserializationMemory
   ) {
-    this.name = initializer.name;
+    this.name = entityInitializer.name;
 
-    const baseInitializers = definition.components;
-    const primaryInitializers = initializer.components;
+    const baseInitializers = entityDefinition.components;
+    const primaryInitializers = entityInitializer.components;
     const initializerIds = uniq([
       ...baseInitializers.map((c) => c.id),
       ...primaryInitializers.map((c) => c.id),
@@ -27,7 +28,9 @@ export class RedefinableEntity extends Entity {
       const id = component.id as ComponentInitializerId;
       if (!initializerIds.includes(id)) {
         this.components.remove(component);
-        memory.componentProperties.delete(id);
+        memory.componentProperties.delete(
+          getComponentInstanceId(entityInitializer.id, id)
+        );
       }
     }
 
@@ -35,29 +38,33 @@ export class RedefinableEntity extends Entity {
     for (const initializerId of initializerIds) {
       const primary = primaryInitializers.find((i) => i.id === initializerId);
       const base = baseInitializers.find((i) => i.id === initializerId);
-      const initializer = (primary ?? base)!;
+      const componentInitializer = (primary ?? base)!;
 
       let component = this.components.find((comp) => comp.id === initializerId);
 
       const Component = memory.componentConstructors.get(
-        initializer.definitionId
+        componentInitializer.definitionId
       );
       if (!Component) {
         throw new Error(
-          `No Component with definitionId "${initializer.definitionId}" exists`
+          `No Component with definitionId "${componentInitializer.definitionId}" exists`
         );
       }
 
       // Instantiate component
       if (!component) {
         component = new Component();
-        component.configure({ id: initializer.id });
+        component.configure({ id: componentInitializer.id });
         this.components.push(component);
       }
 
       // Determine which properties have been changed
+      const componentInstanceId = getComponentInstanceId(
+        entityInitializer.id,
+        componentInitializer.id
+      );
       const allPropertyNames = keys(Component.propertyInfos);
-      const pm = memory.componentProperties.get(initializer.id) ?? {};
+      const pm = memory.componentProperties.get(componentInstanceId) ?? {};
       for (const propertyName of allPropertyNames) {
         const oldBaseValue = pm.base && pm.base[propertyName];
         const oldPrimaryValue = pm.primary && pm.primary[propertyName];
@@ -87,7 +94,7 @@ export class RedefinableEntity extends Entity {
       }
 
       // Memorize new properties for comparison next update
-      memory.componentProperties.set(initializer.id, {
+      memory.componentProperties.set(componentInstanceId, {
         base: base?.properties,
         primary: primary?.properties,
       });

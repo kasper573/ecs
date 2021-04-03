@@ -22,6 +22,10 @@ import { updateSystem } from "./functions/updateSystem";
 import { ComponentInitializer } from "./types/ComponentInitializer";
 
 class Foo extends Component.extend({
+  text: {
+    type: zod.string().optional(),
+    defaultValue: undefined,
+  },
   fn: {
     type: zod.function(zod.tuple([]), zod.number()).optional(),
     defaultValue: undefined,
@@ -192,7 +196,7 @@ describe("creating a deserialized system", () => {
     expect(() => mockSystem([entity], [])).toThrow();
   });
 
-  test("two entities of the same definition inherit components and their properties", () => {
+  test("two entities of the same definition inherit components and imperative properties", () => {
     const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -207,7 +211,7 @@ describe("creating a deserialized system", () => {
         {
           id: uid(),
           definitionId: componentDefinition.id,
-          properties: { isActive: true },
+          properties: { isActive: false },
         },
       ],
     };
@@ -228,8 +232,50 @@ describe("creating a deserialized system", () => {
       [componentDefinition],
       [entity1, entity2]
     );
-    expect(system.entities[0].components[0].isActive).toBe(true);
-    expect(system.entities[1].components[0].isActive).toBe(true);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
+  });
+
+  test("two entities of the same definition inherit components and declarative properties", () => {
+    const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
+      name: "Entity",
+      id: uid(),
+      components: [
+        {
+          id: uid(),
+          definitionId: componentDefinition.id,
+          properties: createComponentPropertiesDefinition({
+            isActive: () => false,
+          }),
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 1",
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 2",
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const system = mockSystem(
+      [entityDefinition],
+      [componentDefinition],
+      [entity1, entity2]
+    );
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 });
 
@@ -725,6 +771,88 @@ describe("updating a deserialized system", () => {
     instance.configure({ text: "hello" });
     updateSystem(system, ecs2, nativeComponents);
     expect(instance.text).toBe("hello");
+  });
+
+  test("adding a second entity of an existing definition inherit components and imperative properties", () => {
+    const cDef: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const eDef: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
+      name: "Entity",
+      id: uid(),
+      components: [
+        {
+          id: uid(),
+          definitionId: cDef.id,
+          properties: { isActive: false },
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 1",
+      definitionId: eDef.id,
+      components: [],
+    };
+    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 2",
+      definitionId: eDef.id,
+      components: [],
+    };
+    const ecs1 = mockECS([eDef], [cDef], [entity1]);
+    const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
+  });
+
+  test("adding a second entity of an existing definition inherit components and declarative properties", () => {
+    const cDef: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const eDef: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
+      name: "Entity",
+      id: uid(),
+      components: [
+        {
+          id: uid(),
+          definitionId: cDef.id,
+          properties: createComponentPropertiesDefinition({
+            isActive: () => false,
+          }),
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 1",
+      definitionId: eDef.id,
+      components: [],
+    };
+    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 2",
+      definitionId: eDef.id,
+      components: [],
+    };
+    const ecs1 = mockECS([eDef], [cDef], [entity1]);
+    const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
+    const system = createSystem(ecs1, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    updateSystem(system, ecs2, nativeComponents);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 });
 
