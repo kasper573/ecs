@@ -1,11 +1,12 @@
-import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./types/DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
 
 export const setPropertyValues = <
-  Properties extends PropertyInfoRecord<any, any>
+  Properties extends PropertyInfoRecord<any, any>,
+  DeclarationContext
 >(
-  values: Partial<ResolvablePropertyValuesFor<Properties>>,
-  updates: Partial<ResolvablePropertyValuesFor<Properties>>
+  values: Partial<DeclarablePropertyValuesFor<Properties, DeclarationContext>>,
+  updates: Partial<DeclarablePropertyValuesFor<Properties, DeclarationContext>>
 ): void => {
   Object.assign(values, updates);
 };

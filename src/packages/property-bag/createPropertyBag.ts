@@ -5,7 +5,7 @@ import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";
 import { setPropertyValues } from "./setPropertyValues";
 import { resetPropertyValue } from "./resetPropertyValue";
-import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./types/DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
 import { PropertyBagInstance } from "./types/PropertyBagInstance";
 
@@ -15,37 +15,51 @@ class Root {
 
 type AllProps<
   DirectProperties extends PropertyInfoRecord<any, any>,
-  Base extends PropertyBag<{}>
-> = DirectProperties & (Base extends PropertyBag<infer P> ? P : never);
+  Base extends PropertyBag<{}, DeclarationContext>,
+  DeclarationContext
+> = DirectProperties &
+  (Base extends PropertyBag<infer P, DeclarationContext> ? P : never);
 
 export const createPropertyBag = <
   DirectProperties extends PropertyInfoRecord<any, any>,
-  Base extends PropertyBag<{}>,
+  Base extends PropertyBag<{}, DeclarationContext>,
   DeclarationContext
 >(
   directProperties: DirectProperties,
   displayName: string = "",
   baseBag?: Base,
   getPropertyDeclarationContext: (
-    bag: PropertyBagInstance<AllProps<DirectProperties, Base>>
+    bag: PropertyBagInstance<
+      AllProps<DirectProperties, Base, DeclarationContext>,
+      DeclarationContext
+    >
   ) => DeclarationContext = (bag) => (bag as unknown) as DeclarationContext
 ) => {
-  type Properties = AllProps<DirectProperties, Base>;
+  type Properties = AllProps<DirectProperties, Base, DeclarationContext>;
   const base = baseBag ?? Root;
   const propertyInfos = { ...base.propertyInfos, ...directProperties };
 
-  const Bag = (class extends base implements PropertyBagMethods<Properties> {
+  const Bag = (class
+    extends base
+    implements PropertyBagMethods<Properties, DeclarationContext> {
     static displayName = displayName;
     static propertyInfos = propertyInfos;
     private readonly propertyValues: Partial<
-      ResolvablePropertyValuesFor<Properties>
+      DeclarablePropertyValuesFor<Properties, DeclarationContext>
     > = {};
 
-    constructor(values: Partial<ResolvablePropertyValuesFor<Properties>> = {}) {
+    constructor(
+      values: Partial<
+        DeclarablePropertyValuesFor<Properties, DeclarationContext>
+      > = {}
+    ) {
       super();
       const getContext = () =>
         getPropertyDeclarationContext(
-          this as PropertyBagInstance<AllProps<DirectProperties, Base>>
+          this as PropertyBagInstance<
+            AllProps<DirectProperties, Base, DeclarationContext>,
+            DeclarationContext
+          >
         );
       keys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
@@ -55,14 +69,21 @@ export const createPropertyBag = <
               this.propertyValues,
               propertyInfos[name],
               name,
-              noRecursion(getContext)
+              // We assume context is resolved, it's more helpful to pretend that it's
+              // always resolved than to have a precise type definition and have to always guard against undefined.
+              // You should not be using recursive contexts.
+              noRecursion(getContext)!
             ),
         });
       });
       this.configure(values);
     }
 
-    configure(values: Partial<ResolvablePropertyValuesFor<Properties>>) {
+    configure(
+      values: Partial<
+        DeclarablePropertyValuesFor<Properties, DeclarationContext>
+      >
+    ) {
       setPropertyValues(this.propertyValues, values);
       return this;
     }
@@ -82,7 +103,7 @@ export const createPropertyBag = <
         getPropertyDeclarationContext as any
       );
     }
-  } as unknown) as PropertyBag<Properties>;
+  } as unknown) as PropertyBag<Properties, DeclarationContext>;
 
   return Bag;
 };

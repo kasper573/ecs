@@ -4,10 +4,12 @@ import { PropertyValuesFor } from "./PropertyValuesFor";
 import { PropertyInfoRecord } from "./PropertyInfoRecord";
 
 export type PropertyBagInstance<
-  Properties extends PropertyInfoRecord<any, any>
-> = PropertyValuesFor<Properties> & PropertyBagMethods<Properties>;
+  Properties extends PropertyInfoRecord<any, any>,
+  DeclarationContext
+> = PropertyValuesFor<Properties> &
+  PropertyBagMethods<Properties, DeclarationContext>;
 
-export type InstanceOf<T extends PropertyBag<any>> = T extends new (
+export type InstanceOf<T extends PropertyBag<any, any>> = T extends new (
   ...args: any[]
 ) => infer I
   ? I

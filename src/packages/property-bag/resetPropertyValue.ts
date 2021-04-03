@@ -1,11 +1,12 @@
-import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./types/DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
 
 export const resetPropertyValue = <
   Properties extends PropertyInfoRecord<any, any>,
-  Name extends keyof Properties
+  Name extends keyof Properties,
+  DeclarationContext
 >(
-  values: Partial<ResolvablePropertyValuesFor<Properties>>,
+  values: Partial<DeclarablePropertyValuesFor<Properties, DeclarationContext>>,
   info: Properties[Name],
   name: Name
 ) => {

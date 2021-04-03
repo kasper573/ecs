@@ -1,19 +1,19 @@
 import { PropertyValueFor } from "./types/PropertyValueFor";
-import { ResolvablePropertyValuesFor } from "./types/ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./types/DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./types/PropertyInfoRecord";
 import { isPropertyDeclarative } from "./isPropertyDeclarative";
 import { getPropertyDeclaration } from "./getPropertyDeclaration";
-import { PropertyDeclarationContext } from "./types/PropertyDeclarationContext";
 
 export const getPropertyValue = <
   Properties extends PropertyInfoRecord<any, Types>,
   Name extends keyof Properties,
-  Types
+  Types,
+  DeclarationContext
 >(
-  values: Partial<ResolvablePropertyValuesFor<Properties>>,
+  values: Partial<DeclarablePropertyValuesFor<Properties, DeclarationContext>>,
   info: Properties[Name],
   name: Name,
-  context: PropertyDeclarationContext,
+  context: DeclarationContext,
   defaultValue = info.defaultValue
 ): PropertyValueFor<Properties, Name> => {
   if (isPropertyDeclarative(values, info, name)) {

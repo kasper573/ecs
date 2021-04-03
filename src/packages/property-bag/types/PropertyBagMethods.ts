@@ -1,10 +1,13 @@
-import { ResolvablePropertyValuesFor } from "./ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./PropertyInfoRecord";
 
 export interface PropertyBagMethods<
-  Properties extends PropertyInfoRecord<any, any>
+  Properties extends PropertyInfoRecord<any, any>,
+  DeclarationContext
 > {
   reset<Name extends keyof Properties>(name: Name): void;
 
-  configure(values: Partial<ResolvablePropertyValuesFor<Properties>>): this;
+  configure(
+    values: Partial<DeclarablePropertyValuesFor<Properties, DeclarationContext>>
+  ): this;
 }

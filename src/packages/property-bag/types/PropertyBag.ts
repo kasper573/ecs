@@ -1,17 +1,20 @@
 import { PropertyBagInstance } from "./PropertyBagInstance";
-import { ResolvablePropertyValuesFor } from "./ResolvablePropertyValuesFor";
+import { DeclarablePropertyValuesFor } from "./DeclarablePropertyValuesFor";
 import { PropertyInfoRecord } from "./PropertyInfoRecord";
 
 export type PropertyBag<
-  Properties extends PropertyInfoRecord<string, unknown>
+  Properties extends PropertyInfoRecord<string, unknown>,
+  DeclarationContext
 > = {
   new (
-    values?: Partial<ResolvablePropertyValuesFor<Properties>>
-  ): PropertyBagInstance<Properties>;
+    values?: Partial<
+      DeclarablePropertyValuesFor<Properties, DeclarationContext>
+    >
+  ): PropertyBagInstance<Properties, DeclarationContext>;
   propertyInfos: Properties;
   displayName: string;
   extend<ExtensionProperties extends PropertyInfoRecord<any, any>>(
     extensionProperties: ExtensionProperties,
     extensionName?: string
-  ): PropertyBag<ExtensionProperties & Properties>;
+  ): PropertyBag<ExtensionProperties & Properties, DeclarationContext>;
 };

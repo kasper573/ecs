@@ -1,5 +1,4 @@
 import * as zod from "zod";
-import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { Entity } from "./Entity";
 import { Component } from "./Component";
 import { System } from "./System";
@@ -7,8 +6,7 @@ import { System } from "./System";
 test("declarative component property can derive from their associated entity", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: (({ entity }: { entity: Entity }) =>
-        `Derived from ${entity.name}`) as any,
+      text: ({ entity }) => `Derived from ${entity.name}`,
     });
 
   const componentA = createComponent();
@@ -24,14 +22,13 @@ test("declarative component property can derive from their associated entity", (
 test("declarative component property can derive from their associated component", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: (({ component }: { component: InstanceOf<typeof TestComponent> }) =>
-        `Derived from ${component.name}`) as any,
+      text: ({ component }) => `Derived from ${component.id}`,
     });
 
   const componentA = createComponent();
-  componentA.configure({ name: "component A" });
+  componentA.configure({ id: "component A" });
   const componentB = createComponent();
-  componentB.configure({ name: "component B" });
+  componentB.configure({ id: "component B" });
 
   expect(componentA.text).toEqual("Derived from component A");
   expect(componentB.text).toEqual("Derived from component B");
@@ -40,8 +37,7 @@ test("declarative component property can derive from their associated component"
 test("declarative component property can derive from their associated system", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: (({ system }: { system: System }) =>
-        `Derived ${system.modules.length}`) as any,
+      text: ({ system }) => `Derived ${system.modules.length}`,
     });
 
   const componentA = createComponent();
@@ -61,6 +57,5 @@ test("declarative component property can derive from their associated system", (
 });
 
 const TestComponent = Component.extend({
-  name: { type: zod.string(), defaultValue: "" },
   text: { type: zod.string(), defaultValue: "" },
 });
