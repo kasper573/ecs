@@ -20,17 +20,17 @@ import {
 export type ComponentInitializerAccordionProps = {
   base?: ComponentInitializer;
   primary?: ComponentInitializer;
-  onUpdate: ComponentInitializerEditorProps["onChange"];
   onDuplicate?: (selected: ComponentInitializer) => void;
   onRestore?: (selected: ComponentInitializer) => void;
   onRemove?: (selected: ComponentInitializer) => void;
-};
+} & Pick<ComponentInitializerEditorProps, "onUpdate" | "onReset">;
 
 export const ComponentInitializerAccordion = ({
   base,
   primary,
   onDuplicate,
   onUpdate,
+  onReset,
   onRemove = noop,
   onRestore = noop,
 }: ComponentInitializerAccordionProps) => {
@@ -70,7 +70,8 @@ export const ComponentInitializerAccordion = ({
             base={base}
             primary={primary}
             definition={definition}
-            onChange={onUpdate}
+            onUpdate={onUpdate}
+            onReset={onReset}
           />
         </AccordionDetails>
       )}

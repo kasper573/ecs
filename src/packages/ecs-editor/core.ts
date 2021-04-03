@@ -17,7 +17,7 @@ import { setSelectedLibraryNode } from "./reducers/setSelectedLibraryNode";
 import { deleteComponentInitializer } from "./reducers/deleteComponentInitializer";
 import { deleteEntityDefinition } from "./reducers/deleteEntityDefinition";
 import { addComponentInitializer } from "./reducers/addComponentInitializer";
-import { updateComponentProperties } from "./reducers/updateComponentProperties";
+import { setComponentInitializerProperty } from "./reducers/setComponentInitializerProperty";
 import { deleteLibraryFolder } from "./reducers/deleteLibraryFolder";
 import { deleteComponentDefinition } from "./reducers/deleteComponentDefinition";
 import { setEditorState } from "./reducers/setEditorState";
@@ -34,6 +34,7 @@ import { duplicateComponentInitializer } from "./reducers/duplicateComponentInit
 import { createLibraryFolder } from "./reducers/createLibraryFolder";
 import { setThemeType } from "./reducers/setThemeType";
 import { moveLibraryNode } from "./reducers/moveLibraryNode";
+import { resetComponentInitializerProperty } from "./reducers/resetComponentInitializerProperty";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -68,7 +69,8 @@ export const core = createSlice({
     renameComponentDefinition,
     deleteComponentDefinition,
     addComponentInitializer,
-    updateComponentProperties,
+    setComponentInitializerProperty,
+    resetComponentInitializerProperty,
     deleteComponentInitializer,
     duplicateComponentInitializer,
     createComponentDefinition,
