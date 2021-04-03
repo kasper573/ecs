@@ -1,3 +1,4 @@
+import { without } from "lodash";
 import { Entity } from "../ecs/Entity";
 import { SystemModule } from "../ecs/SystemModule";
 import { System } from "../ecs/System";
@@ -19,16 +20,25 @@ export class SceneManager<SceneId extends keyof any> implements SystemModule {
   }
 
   setEntities(sceneEntities: Record<SceneId, Entity[]>) {
-    const sceneIds = Object.keys(sceneEntities) as SceneId[];
-    this.scenes = sceneIds.reduce(
-      (scenes, sceneId) => ({
-        ...scenes,
-        [sceneId]: new Scene(...sceneEntities[sceneId]),
-      }),
-      {} as Record<SceneId, Scene>
-    );
+    const currentIds = Object.keys(sceneEntities) as SceneId[];
+    for (const sceneId of currentIds) {
+      const scene = this.scenes[sceneId];
+      const entities = sceneEntities[sceneId];
+      if (scene) {
+        const removed = without(scene, ...entities);
+        const added = without(entities, ...scene);
+        if (removed.length) {
+          scene.remove(...removed);
+        }
+        if (added.length) {
+          scene.push(...added);
+        }
+      } else {
+        this.scenes[sceneId] = new Scene(...entities);
+      }
+    }
     if (!this.scene) {
-      this.sceneId = sceneIds[0];
+      this.sceneId = currentIds[0];
     }
   }
 }
