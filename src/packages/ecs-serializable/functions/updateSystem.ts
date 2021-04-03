@@ -10,6 +10,7 @@ import { Entity } from "../../ecs/Entity";
 import { SceneDefinitionId } from "../types/SceneDefinition";
 import { commitEntities } from "./commitEntities";
 import { commitComponents } from "./commitComponents";
+import { commitScenes } from "./commitScenes";
 
 /**
  * Updates a System instance with the specified ECSDefinition
@@ -34,20 +35,16 @@ export const updateSystem = (
   );
 
   const sceneManager = system.modules.resolveType(SceneManager);
+  commitScenes(values(ecs.scenes), sceneManager);
   sceneManager.setEntities(
-    getEntitiesByScene(values(ecs.entityInitializers), memory.entityInstances)
+    getEntityInstancesByScene(
+      values(ecs.entityInitializers),
+      memory.entityInstances
+    )
   );
-  for (const sceneDefinition of values(ecs.scenes)) {
-    const targetScene = sceneManager.scenes[sceneDefinition.id];
-    if (targetScene) {
-      targetScene.name = sceneDefinition.name;
-    } else {
-      console.warn("Could not find scene instance", sceneDefinition.id);
-    }
-  }
 };
 
-const getEntitiesByScene = (
+const getEntityInstancesByScene = (
   entityInitializerList: EntityInitializer[],
   entityInstances: EntityInstanceMap
 ) =>
