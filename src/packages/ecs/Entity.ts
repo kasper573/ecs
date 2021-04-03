@@ -6,11 +6,13 @@ import { connectObservableArray } from "./connectObservableArray";
 
 export class Entity {
   system: System = trustedUndefined();
-  name: string = "";
 
   readonly components = new Container<ComponentInstance>();
 
-  constructor(components?: readonly ComponentInstance[]) {
+  constructor(
+    components?: readonly ComponentInstance[],
+    public name: string = ""
+  ) {
     connectObservableArray(this.components, (added, removed) => {
       added.forEach((component) => component.configure({ entity: this }));
       removed.forEach((component) =>
