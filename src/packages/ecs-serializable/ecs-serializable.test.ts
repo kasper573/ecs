@@ -191,6 +191,46 @@ describe("creating a deserialized system", () => {
     };
     expect(() => mockSystem([entity], [])).toThrow();
   });
+
+  test("two entities of the same definition inherit components and their properties", () => {
+    const componentDefinition: Omit<ComponentDefinition, "systemId"> = {
+      nodeId: uid(),
+      id: uid(),
+      name: "Foo",
+      nativeComponent: "foo",
+    };
+    const entityDefinition: Omit<EntityDefinition, "systemId"> = {
+      nodeId: uid(),
+      name: "Entity",
+      id: uid(),
+      components: [
+        {
+          id: uid(),
+          definitionId: componentDefinition.id,
+          properties: { isActive: true },
+        },
+      ],
+    };
+    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 1",
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+      id: uid(),
+      name: "Entity 2",
+      definitionId: entityDefinition.id,
+      components: [],
+    };
+    const system = mockSystem(
+      [entityDefinition],
+      [componentDefinition],
+      [entity1, entity2]
+    );
+    expect(system.entities[0].components[0].isActive).toBe(true);
+    expect(system.entities[1].components[0].isActive).toBe(true);
+  });
 });
 
 describe("updating a deserialized system", () => {
@@ -762,5 +802,10 @@ const mockECS = (
 
 const mockSystem = (
   entities: Array<Omit<EntityDefinition, "systemId">>,
-  components: Array<Omit<ComponentDefinition, "systemId">> = []
-) => createSystem(mockECS(entities, components), nativeComponents);
+  components: Array<Omit<ComponentDefinition, "systemId">> = [],
+  entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
+) =>
+  createSystem(
+    mockECS(entities, components, entityInitializers),
+    nativeComponents
+  );
