@@ -2,7 +2,7 @@ import { without } from "lodash";
 import { Entity } from "../ecs/Entity";
 import { SystemModule } from "../ecs/SystemModule";
 import { System } from "../ecs/System";
-import { keys } from "../ecs-common/nominal";
+import { typedKeys } from "../ecs-common/typedKeys";
 import { Scene } from "./Scene";
 
 export class SceneManager<SceneId extends keyof any> implements SystemModule {
@@ -14,7 +14,7 @@ export class SceneManager<SceneId extends keyof any> implements SystemModule {
 
   constructor(
     sceneEntities: Record<SceneId, Entity[]>,
-    public sceneId: SceneId = keys(sceneEntities)[0]
+    public sceneId: SceneId = typedKeys(sceneEntities)[0]
   ) {
     this.setEntities(sceneEntities);
   }

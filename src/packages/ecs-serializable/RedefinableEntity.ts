@@ -1,6 +1,6 @@
 import { uniq } from "lodash";
 import { Entity } from "../ecs/Entity";
-import { keys } from "../ecs-common/nominal";
+import { typedKeys } from "../ecs-common/typedKeys";
 import { EntityDefinition } from "./types/EntityDefinition";
 import { EntityInitializer } from "./types/EntityInitializer";
 import { ComponentInitializerId } from "./types/ComponentInitializer";
@@ -63,7 +63,7 @@ export class RedefinableEntity extends Entity {
         entityInitializer.id,
         componentInitializer.id
       );
-      const allPropertyNames = keys(Component.propertyInfos);
+      const allPropertyNames = typedKeys(Component.propertyInfos);
       const pm = memory.componentProperties.get(componentInstanceId) ?? {};
       for (const propertyName of allPropertyNames) {
         const oldBaseValue = pm.base && pm.base[propertyName];
