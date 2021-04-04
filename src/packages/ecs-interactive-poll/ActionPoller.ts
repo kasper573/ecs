@@ -1,16 +1,15 @@
 import { CancelablePromise } from "cancelable-promise";
-import { SystemModule } from "../ecs/SystemModule";
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { InteractionResult } from "../ecs-interactive/InteractionResult";
 
-export class ActionPoller implements SystemModule {
-  system?: System;
+export class ActionPoller {
   result?: InteractionResult;
+  private system?: System;
   private pending = false;
   private pollPromise?: CancelablePromise<MixedPollResult>;
   private resultPromise?: Promise<void>;
-  private pollOnUpdate = true;
+  private isPolling = false;
 
   get end() {
     return this.resultPromise ?? Promise.resolve();
@@ -27,15 +26,26 @@ export class ActionPoller implements SystemModule {
 
   constructor(private question: string, private poll: Poll) {}
 
-  update() {
-    if (this.pollOnUpdate) {
-      this.pollForAction();
+  attach(system: System) {
+    this.detach();
+    this.system = system;
+    this.system.events.on("update", this.pollForAction);
+    this.pollForAction();
+  }
+
+  detach() {
+    if (this.system) {
+      this.system.events.off("update", this.pollForAction);
+      this.system = undefined;
     }
   }
 
-  private pollForAction() {
+  pollForAction = () => {
     if (!this.system) {
       throw new Error("Can't poll without system");
+    }
+    if (this.isPolling) {
+      return;
     }
     if (this.pollPromise) {
       this.pollPromise.cancel();
@@ -51,7 +61,7 @@ export class ActionPoller implements SystemModule {
     this.pending = true;
     this.pollPromise = this.poll(this.question, actionNames);
     this.resultPromise = this.pollPromise.then(this.onPollResult);
-  }
+  };
 
   private onPollResult = (mixedResult: MixedPollResult) => {
     if (!this.system) {
@@ -63,10 +73,10 @@ export class ActionPoller implements SystemModule {
     const action = actions[answerIndex];
     if (action) {
       if (preventRecursion) {
-        this.pollOnUpdate = false;
+        this.isPolling = true;
       }
       this.result = action.perform();
-      this.pollOnUpdate = true;
+      this.isPolling = false;
     }
   };
 }

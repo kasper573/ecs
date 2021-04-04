@@ -4,11 +4,6 @@ import { Entity } from "../ecs/Entity";
 import { Interactive } from "../ecs-interactive/Interactive";
 import { ActionPoller } from "./ActionPoller";
 
-test("Can't poll without a system", () => {
-  const poller = new ActionPoller("?", () => noRecursionAnswer(0));
-  expect(() => poller.update()).toThrow();
-});
-
 test("Is ended by default", async () => {
   const poller = new ActionPoller("?", () => noRecursionAnswer(0));
   await expect(poller.end).resolves.toBeUndefined();
@@ -21,20 +16,21 @@ it("Cancels active poll on every new poll", () => {
     promises.push(p);
     return p;
   });
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => "Foo",
-        }),
-      ]),
-    ],
-  });
-  poller.update();
-  poller.update();
-  poller.update();
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => "Foo",
+          }),
+        ]),
+      ],
+    })
+  );
+  poller.pollForAction();
+  poller.pollForAction();
+  poller.pollForAction();
   expect(promises.length).toBe(4);
   expect(promises.filter((p) => p.isCanceled()).length).toBe(3);
 });
@@ -45,40 +41,42 @@ test("Poll answers is equal to the system actions", () => {
     answers = a;
     return noRecursionAnswer(0);
   });
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => "Foo",
-        }),
-        new Interactive({
-          action: "Bar",
-          effect: () => "Bar",
-        }),
-      ]),
-    ],
-  });
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => "Foo",
+          }),
+          new Interactive({
+            action: "Bar",
+            effect: () => "Bar",
+          }),
+        ]),
+      ],
+    })
+  );
   expect(answers).toEqual(["Foo", "Bar"]);
 });
 
 test("Selected answer will perform the corresponding action", async () => {
   let didPerform = false;
   const poller = new ActionPoller("?", () => noRecursionAnswer(0));
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => {
-            didPerform = true;
-          },
-        }),
-      ]),
-    ],
-  });
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => {
+              didPerform = true;
+            },
+          }),
+        ]),
+      ],
+    })
+  );
   await poller.done;
   expect(didPerform).toEqual(true);
 });
@@ -86,19 +84,20 @@ test("Selected answer will perform the corresponding action", async () => {
 test("Selecting an invalid answer will not perform any action", async () => {
   let didPerform = false;
   const poller = new ActionPoller("?", () => noRecursionAnswer(-1));
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => {
-            didPerform = true;
-          },
-        }),
-      ]),
-    ],
-  });
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => {
+              didPerform = true;
+            },
+          }),
+        ]),
+      ],
+    })
+  );
   await poller.done;
   expect(didPerform).toEqual(false);
 });
@@ -109,12 +108,12 @@ test("Poll won't start without system actions available", () => {
     didPollStart = true;
     return noRecursionAnswer(0);
   });
-  new System({ modules: [poller] });
+  poller.attach(new System());
   expect(didPollStart).toEqual(false);
 });
 
 test("Poll result won't be used if system has been detached", async () => {
-  let system = new System({
+  const system = new System({
     entities: [
       new Entity([
         new Interactive({
@@ -125,10 +124,10 @@ test("Poll result won't be used if system has been detached", async () => {
     ],
   });
   const poller = new ActionPoller("?", () => {
-    system.modules.remove(poller);
+    poller.detach();
     return noRecursionAnswer(0);
   });
-  system.modules.push(poller);
+  poller.attach(system);
   await expect(poller.end).rejects.toThrow();
 });
 
@@ -139,19 +138,20 @@ test("Poll result can choose to prevent recursion", async () => {
       Promise.resolve({ answerIndex: 0, preventRecursion: !(count < 3) })
     )
   );
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => {
-            count++;
-          },
-        }),
-      ]),
-    ],
-  });
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => {
+              count++;
+            },
+          }),
+        ]),
+      ],
+    })
+  );
   await poller.done;
   expect(count).toBe(4);
 });
@@ -163,19 +163,20 @@ test("Poll result can be numeric or options object", async () => {
       ? cancelable(Promise.resolve(0))
       : cancelable(Promise.resolve({ answerIndex: 0, preventRecursion: true }))
   );
-  new System({
-    modules: [poller],
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => {
-            performs++;
-          },
-        }),
-      ]),
-    ],
-  });
+  poller.attach(
+    new System({
+      entities: [
+        new Entity([
+          new Interactive({
+            action: "Foo",
+            effect: () => {
+              performs++;
+            },
+          }),
+        ]),
+      ],
+    })
+  );
   await poller.done;
   expect(performs).toBe(2);
 });
