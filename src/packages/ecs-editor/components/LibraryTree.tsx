@@ -24,7 +24,9 @@ export const LibraryTree = ({
   itemProps,
   ...treeViewProps
 }: LibraryTreeProps) => {
-  const [expanded, setExpanded] = useState<LibraryNodeId[]>([]);
+  const [expanded, setExpanded] = useState<LibraryNodeId[]>(() =>
+    getInitialExpandedIds(library)
+  );
   const [nodeMap, treeRoots] = useMemo(() => {
     const map = library.reduce(
       (map, node) => set(map, node.nodeId, node),
@@ -57,3 +59,8 @@ export const LibraryTree = ({
     </TreeView>
   );
 };
+
+const getInitialExpandedIds = (nodes: TypedLibraryNode[]) =>
+  nodes
+    .filter((n) => n.type === "folder" && !n.parentNodeId)
+    .map((n) => n.nodeId);
