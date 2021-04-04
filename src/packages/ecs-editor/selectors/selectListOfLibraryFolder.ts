@@ -1,4 +1,3 @@
-import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
@@ -9,5 +8,7 @@ export const selectListOfLibraryFolder = createMemoizedSelector(
     forSystemId: SystemDefinitionId | undefined = state.selection.system
   ) => [state.ecs.libraryFolders, forSystemId] as const,
   ([libraryFolders, forSystemId]) =>
-    values(libraryFolders).filter((folder) => folder.systemId === forSystemId)
+    Object.values(libraryFolders).filter(
+      (folder) => folder.systemId === forSystemId
+    )
 );

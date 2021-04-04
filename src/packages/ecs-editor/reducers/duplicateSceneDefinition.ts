@@ -1,4 +1,3 @@
-import { values } from "../../ecs-common/nominal";
 import {
   SceneDefinition,
   SceneDefinitionId,
@@ -24,7 +23,7 @@ export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinition
     scenes[duplicateScene.id] = duplicateScene;
 
     // Duplicate entities into new scene
-    for (const entity of values(entityInitializers).filter(
+    for (const entity of Object.values(entityInitializers).filter(
       (def) => def.sceneId === id
     )) {
       const duplicateEntity: EntityInitializer = {

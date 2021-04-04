@@ -1,4 +1,3 @@
-import { values } from "../../ecs-common/nominal";
 import { EditorState } from "../types/EditorState";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
@@ -9,7 +8,7 @@ export const selectListOfComponentDefinition = createMemoizedSelector(
     forSystemId: SystemDefinitionId | undefined = state.selection.system
   ) => [state.ecs.componentDefinitions, forSystemId] as const,
   ([componentDefinitions, forSystemId]) =>
-    values(componentDefinitions).filter(
+    Object.values(componentDefinitions).filter(
       (component) => component.systemId === forSystemId
     )
 );

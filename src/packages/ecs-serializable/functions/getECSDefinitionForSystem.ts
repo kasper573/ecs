@@ -1,4 +1,3 @@
-import { ValueOf, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { SystemDefinitionId } from "../types/SystemDefinition";
 import { createECSDefinition } from "./createECSDefinition";
@@ -39,3 +38,8 @@ const transfer = <K extends keyof ECSDefinition>(
     }
   }
 };
+
+const values = <T extends Record<keyof any, unknown>>(o: T) =>
+  Object.values(o) as ValueOf<T>[];
+
+type ValueOf<T> = T extends Record<keyof any, infer V> ? V : never;

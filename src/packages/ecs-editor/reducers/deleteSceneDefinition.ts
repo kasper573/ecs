@@ -1,4 +1,4 @@
-import { remove, values } from "../../ecs-common/nominal";
+import { remove } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
 import { core } from "../core";
@@ -9,7 +9,7 @@ export const deleteSceneDefinition = createEditorStateReducer<SceneDefinitionId>
     if (!remove(state.ecs.scenes, id)) {
       throw new Error("Could not remove scene");
     }
-    for (const entity of values(state.ecs.entityInitializers).filter(
+    for (const entity of Object.values(state.ecs.entityInitializers).filter(
       (def) => def.sceneId === id
     )) {
       deleteEntityInitializer(

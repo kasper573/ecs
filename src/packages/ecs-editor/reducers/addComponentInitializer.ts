@@ -1,5 +1,4 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { values } from "../../ecs-common/nominal";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
@@ -27,7 +26,7 @@ export const addComponentInitializer = createEditorStateReducer<AddComponentInit
           throw new Error("Could not find entity definition");
         }
         def.components.push(payload.component);
-        for (const init of values(state.ecs.entityInitializers).filter(
+        for (const init of Object.values(state.ecs.entityInitializers).filter(
           (init) => init.definitionId === def.id
         )) {
           init.components.push(inheritComponentInitializer(payload.component));

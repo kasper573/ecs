@@ -1,4 +1,4 @@
-import { remove, values } from "../../ecs-common/nominal";
+import { remove } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentDefinition,
@@ -36,9 +36,9 @@ function* related(
   state: EditorState,
   componentDefinition: ComponentDefinition
 ) {
-  for (const entityDefinition of values(state.ecs.entityDefinitions).filter(
-    (def) => def.systemId === componentDefinition.systemId
-  )) {
+  for (const entityDefinition of Object.values(
+    state.ecs.entityDefinitions
+  ).filter((def) => def.systemId === componentDefinition.systemId)) {
     for (const componentInitializer of entityDefinition.components) {
       if (componentInitializer.definitionId === componentDefinition.id) {
         yield [entityDefinition, componentInitializer] as const;

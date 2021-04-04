@@ -2,7 +2,6 @@ import { System } from "../../ecs/System";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
-import { values } from "../../ecs-common/nominal";
 import { DeserializationMemory } from "../DeserializationMemory";
 import { EntityInstanceMap } from "../types/EntityInstanceMap";
 import { EntityInitializer } from "../types/EntityInitializer";
@@ -26,19 +25,23 @@ export const updateSystem = (
     system.modules.push(memory);
   }
 
-  commitComponents(values(ecs.componentDefinitions), nativeComponents, memory);
+  commitComponents(
+    Object.values(ecs.componentDefinitions),
+    nativeComponents,
+    memory
+  );
 
   commitEntities(
-    values(ecs.entityDefinitions),
-    values(ecs.entityInitializers),
+    Object.values(ecs.entityDefinitions),
+    Object.values(ecs.entityInitializers),
     memory
   );
 
   const sceneManager = system.modules.resolveType(SceneManager);
-  commitScenes(values(ecs.scenes), sceneManager);
+  commitScenes(Object.values(ecs.scenes), sceneManager);
   sceneManager.setEntities(
     getEntityInstancesByScene(
-      values(ecs.entityInitializers),
+      Object.values(ecs.entityInitializers),
       memory.entityInstances
     )
   );

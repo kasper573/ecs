@@ -1,4 +1,4 @@
-import { remove, values } from "../../ecs-common/nominal";
+import { remove } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { LibraryFolderId } from "../../ecs-serializable/types/LibraryFolder";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
@@ -23,13 +23,15 @@ export const deleteLibraryFolder = createEditorStateReducer<LibraryFolderId>(
       const isChild = (n: LibraryNode) => n.parentNodeId === folder.nodeId;
 
       // Queue additional folders for deletion
-      const folderIds = values(state.ecs.libraryFolders)
+      const folderIds = Object.values(state.ecs.libraryFolders)
         .filter(isChild)
         .map((node) => node.id);
       folderIdQueue.push(...folderIds);
 
       // Delete child entity definitions
-      const entities = values(state.ecs.entityDefinitions).filter(isChild);
+      const entities = Object.values(state.ecs.entityDefinitions).filter(
+        isChild
+      );
       for (const entity of entities) {
         deleteEntityDefinition(
           state,
@@ -38,7 +40,9 @@ export const deleteLibraryFolder = createEditorStateReducer<LibraryFolderId>(
       }
 
       // Delete child component definitions
-      const components = values(state.ecs.componentDefinitions).filter(isChild);
+      const components = Object.values(state.ecs.componentDefinitions).filter(
+        isChild
+      );
       for (const component of components) {
         deleteComponentDefinition(
           state,

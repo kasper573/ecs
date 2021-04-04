@@ -1,6 +1,5 @@
 import { mockEditorState } from "../functions/mockEditorState";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { values } from "../../ecs-common/nominal";
 import { uuid } from "../../ecs-common/uuid";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
@@ -8,11 +7,13 @@ import { createEntityInitializer } from "./createEntityInitializer";
 
 test("creating an entity initializer copies all components from definition (without properties)", () => {
   const initialState = mockEditorState();
-  const system = values(initialState.ecs.systems)[0];
+  const system = Object.values(initialState.ecs.systems)[0];
   const selectedECS = getECSDefinitionForSystem(initialState.ecs, system.id);
-  const entityDefinition = values(selectedECS.entityDefinitions)[0];
-  const componentDefinition = values(selectedECS.componentDefinitions)[0];
-  const scene = values(selectedECS.scenes)[0];
+  const entityDefinition = Object.values(selectedECS.entityDefinitions)[0];
+  const componentDefinition = Object.values(
+    selectedECS.componentDefinitions
+  )[0];
+  const scene = Object.values(selectedECS.scenes)[0];
   const definitionComponent = entityDefinition.components[0];
 
   const initializerComponent: ComponentInitializer = {
