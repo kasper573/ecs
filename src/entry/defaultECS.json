@@ -149,7 +149,7 @@
           "definitionId": "e0aca893-61d5-4329-b3af-b21e918c958f",
           "properties": {
             "action": "Sit down",
-            "perform": {
+            "effect": {
               "code": "() => \"You feel warm\""
             }
           }
