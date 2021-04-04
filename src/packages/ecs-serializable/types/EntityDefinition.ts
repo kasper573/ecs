@@ -1,7 +1,7 @@
 import { ComponentInitializer } from "./ComponentInitializer";
 import { LibraryNode } from "./LibraryNode";
 
-export type EntityDefinitionId = Nominal<string, "EntityDefinitionId">;
+export type EntityDefinitionId = NominalString<"EntityDefinitionId">;
 
 export type EntityDefinition = LibraryNode & {
   /**

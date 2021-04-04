@@ -1,6 +1,6 @@
 import { SystemDefinitionId } from "./SystemDefinition";
 
-export type SceneDefinitionId = Nominal<string, "SceneDefinitionId">;
+export type SceneDefinitionId = NominalString<"SceneDefinitionId">;
 
 export type SceneDefinition = {
   /**

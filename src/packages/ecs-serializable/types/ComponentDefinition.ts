@@ -1,7 +1,7 @@
 import { NativeComponentName } from "./NativeComponents";
 import { LibraryNode } from "./LibraryNode";
 
-export type ComponentDefinitionId = Nominal<string, "ComponentDefinitionId">;
+export type ComponentDefinitionId = NominalString<"ComponentDefinitionId">;
 
 export type ComponentDefinition = LibraryNode & {
   /**

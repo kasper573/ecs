@@ -1,6 +1,6 @@
 import { SystemDefinitionId } from "./SystemDefinition";
 
-export type LibraryNodeId = Nominal<string, "LibraryNodeId">;
+export type LibraryNodeId = NominalString<"LibraryNodeId">;
 
 export type LibraryNode = {
   /**
