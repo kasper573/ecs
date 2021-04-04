@@ -9,6 +9,7 @@ test("Can play through optimistic route of story", () => {
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's in perfect shape.
 Actions:
+- View inventory
 - Cross the bridge
 - Pick up repair kit
 - Punch bag`
@@ -22,6 +23,7 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's looking bruised.
 Actions:
+- View inventory
 - Cross the bridge
 - Pick up repair kit
 - Punch bag`
@@ -35,6 +37,7 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's falling apart.
 Actions:
+- View inventory
 - Cross the bridge
 - Pick up repair kit
 - Punch bag`
@@ -48,6 +51,7 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
+- View inventory
 - Cross the bridge
 - Pick up repair kit`
   );
@@ -57,6 +61,7 @@ Actions:
   expect(describeSystem(system)).toEqual(
     `You are standing on the bridge. It seems very unstable.
 Actions:
+- View inventory
 - Proceed
 - Go back`
   );
@@ -67,6 +72,7 @@ Actions:
     `The bridge collapses under your weight. You fall down a pit.
 It is very dark.
 Actions:
+- View inventory
 - Use lighter`
   );
 
@@ -75,6 +81,7 @@ Actions:
   expect(describeSystem(system)).toEqual(
     `You see a ladder.
 Actions:
+- View inventory
 - Climb ladder
 - Stop using lighter`
   );
@@ -86,6 +93,7 @@ Actions:
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
+- View inventory
 - Cross the bridge
 - Pick up repair kit`
   );
@@ -97,6 +105,7 @@ Actions:
 You stand in front of a bridge. It looks broken.
 There's a punching bag. It is broken.
 Actions:
+- View inventory
 - Cross the bridge
 - Repair bridge`
   );
@@ -108,10 +117,15 @@ Actions:
 You stand in front of a bridge. It looks sturdy.
 There's a punching bag. It is broken.
 Actions:
+- View inventory
 - Cross the bridge`
   );
 
   performCommand(system, "Cross the bridge");
 
-  expect(describeSystem(system)).toEqual("You win!");
+  expect(describeSystem(system)).toEqual(
+    `You win!
+Actions:
+- View inventory`
+  );
 });
