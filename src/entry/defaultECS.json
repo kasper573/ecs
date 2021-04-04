@@ -102,6 +102,25 @@
           "properties": {}
         }
       ]
+    },
+    "e2a112c8-609a-4e8f-92e5-b2c72ad45b4c": {
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
+      "id": "e2a112c8-609a-4e8f-92e5-b2c72ad45b4c",
+      "name": "Modules",
+      "definitionId": "1f1d51be-aec3-4f84-9356-6d3431ca687c",
+      "components": [
+        {
+          "id": "ac3ef458-1ba1-48e9-931f-45ecf8b4771a",
+          "definitionId": "f0fbb057-16cb-428f-ba60-e7df531f4d0a",
+          "properties": {}
+        },
+        {
+          "id": "ee01a605-7a87-47c3-9139-cb8130488fde",
+          "definitionId": "db36dc5c-75b9-46e9-8ef6-57ab55c8473b",
+          "properties": {}
+        }
+      ]
     }
   },
   "entityDefinitions": {
@@ -178,6 +197,25 @@
         }
       ],
       "parentNodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698"
+    },
+    "1f1d51be-aec3-4f84-9356-6d3431ca687c": {
+      "nodeId": "bb3cd4c6-0f30-4178-8e2f-fc4352002fb5",
+      "id": "1f1d51be-aec3-4f84-9356-6d3431ca687c",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "parentNodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698",
+      "name": "Modules",
+      "components": [
+        {
+          "definitionId": "f0fbb057-16cb-428f-ba60-e7df531f4d0a",
+          "id": "ac3ef458-1ba1-48e9-931f-45ecf8b4771a",
+          "properties": {}
+        },
+        {
+          "definitionId": "db36dc5c-75b9-46e9-8ef6-57ab55c8473b",
+          "id": "ee01a605-7a87-47c3-9139-cb8130488fde",
+          "properties": {}
+        }
+      ]
     }
   },
   "componentDefinitions": {
