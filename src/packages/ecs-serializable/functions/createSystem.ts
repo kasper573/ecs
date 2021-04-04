@@ -1,5 +1,4 @@
 import { System } from "../../ecs/System";
-import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
@@ -16,7 +15,7 @@ export const createSystem = (
 ): System => {
   const sceneManager = new SceneManager({});
   const system = new System({
-    modules: [sceneManager, new InteractionMemory()],
+    modules: [sceneManager],
     entities: () => sceneManager.scene ?? [],
   });
   updateSystem(system, ecs, memory, nativeComponents);

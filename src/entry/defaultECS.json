@@ -212,6 +212,14 @@
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
       "name": "inventory",
       "nativeComponent": "inventory"
+    },
+    "db36dc5c-75b9-46e9-8ef6-57ab55c8473b": {
+      "nodeId": "bcaae209-7a18-4ada-99e0-de065ef5626c",
+      "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002",
+      "id": "db36dc5c-75b9-46e9-8ef6-57ab55c8473b",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "interactionMemory",
+      "nativeComponent": "interactionMemory"
     }
   },
   "libraryFolders": {

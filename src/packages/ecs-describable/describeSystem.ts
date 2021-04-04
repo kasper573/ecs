@@ -16,7 +16,7 @@ export const describeSystem = (
     ...customDescribers,
   };
   const parts: string[] = [];
-  const memory = system.modules.findType(InteractionMemory);
+  const memory = findSystemComponent(system, InteractionMemory)?.items;
   const lastResult = memory && memory[memory.length - 1];
   if (lastResult) {
     parts.push(lastResult);

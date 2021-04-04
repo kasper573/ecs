@@ -13,6 +13,7 @@ import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponents
 import { createEditorState } from "../packages/ecs-editor/functions/createEditorState";
 import { ECSDefinition } from "../packages/ecs-serializable/types/ECSDefinition";
 import { Inventory } from "../packages/ecs-collectable/Inventory";
+import { InteractionMemory } from "../packages/ecs-interactive/InteractionMemory";
 import defaultECS from "./defaultECS.json";
 
 export const nativeComponents = {
@@ -20,6 +21,7 @@ export const nativeComponents = {
   collectable: Collectable,
   interactive: Interactive,
   inventory: Inventory,
+  interactionMemory: InteractionMemory,
 };
 
 const store = createStore({

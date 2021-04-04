@@ -20,12 +20,13 @@ export const createGame = () => {
     otherSide: [new WinMessage()],
   });
   const inventory = Inventory.create(new Lighter());
-  const inventoryEntity = new Entity([inventory]);
+  const interactionMemory = new InteractionMemory();
+  const utilityEntity = new Entity([inventory, interactionMemory]);
   return new System({
     modules: [sceneManager, new InteractionMemory()],
     entities: () => [
+      utilityEntity,
       ...(sceneManager.scene ?? []),
-      inventoryEntity,
       ...inventory.items,
     ],
   });

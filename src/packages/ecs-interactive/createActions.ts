@@ -1,4 +1,5 @@
 import { System } from "../ecs/System";
+import { findSystemComponent } from "../ecs/findSystemComponent";
 import { Action } from "./Action";
 import { Interactive } from "./Interactive";
 import { InteractionMemory } from "./InteractionMemory";
@@ -36,7 +37,7 @@ const wrapAction = (system: System, { name, perform }: Action): Action => {
         throw new Error("Actions can only be performed once");
       }
       const result = perform();
-      const memory = system.modules.findType(InteractionMemory);
+      const memory = findSystemComponent(system, InteractionMemory)?.items;
       if (memory) {
         memory.push(result);
       }
