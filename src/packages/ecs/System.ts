@@ -1,3 +1,5 @@
+import EventEmitter from "events";
+import TypedEmitter from "typed-emitter";
 import { Entity } from "./Entity";
 import { Container } from "./Container";
 import { SystemModule } from "./SystemModule";
@@ -7,6 +9,7 @@ import { connectObservableArray } from "./connectObservableArray";
 
 export class System {
   readonly modules: Container<SystemModule>;
+  readonly events: TypedEmitter<SystemEvents> = new EventEmitter();
 
   private readonly getEntities: SystemOptions["entities"];
 
@@ -29,6 +32,7 @@ export class System {
         }
       }
     }
+    this.events.emit("update");
   }
 
   constructor(constructorOptions: ConstructorOptions = []) {
@@ -80,4 +84,8 @@ type ConstructorOptions =
 type SystemOptions = {
   modules?: SystemModule[];
   entities: () => readonly Entity[];
+};
+
+type SystemEvents = {
+  update: () => void;
 };
