@@ -12,12 +12,14 @@ import { createStore } from "../packages/ecs-editor/store";
 import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponentsContext";
 import { createEditorState } from "../packages/ecs-editor/functions/createEditorState";
 import { ECSDefinition } from "../packages/ecs-serializable/types/ECSDefinition";
+import { Inventory } from "../packages/ecs-collectable/Inventory";
 import defaultECS from "./defaultECS.json";
 
 export const nativeComponents = {
   describable: Describable,
   collectable: Collectable,
   interactive: Interactive,
+  inventory: Inventory,
 };
 
 const store = createStore({

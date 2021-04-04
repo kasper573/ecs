@@ -1,5 +1,4 @@
 import { System } from "../../ecs/System";
-import { Inventory } from "../../ecs-collectable/Inventory";
 import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
@@ -14,10 +13,9 @@ export const createSystem = (
   nativeComponents: NativeComponents
 ): System => {
   const sceneManager = new SceneManager({});
-  const inventory = new Inventory();
   const system = new System({
-    modules: [sceneManager, inventory, new InteractionMemory()],
-    entities: () => [...(sceneManager.scene ?? []), ...inventory],
+    modules: [sceneManager, new InteractionMemory()],
+    entities: () => sceneManager.scene ?? [],
   });
   updateSystem(system, ecs, nativeComponents);
   return system;

@@ -3,6 +3,7 @@ import { System } from "../../ecs/System";
 import { TextAdventureSM } from "../TextAdventureSM";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
+import { findSystemComponent } from "../../ecs/findSystemComponent";
 
 export type LighterState = "lit" | "unlit";
 
@@ -37,8 +38,8 @@ export class Lighter extends Entity {
   }
 
   static isLit(system: System) {
-    const inventory = system.modules.resolveType(Inventory);
-    const lighter = inventory.findType(Lighter);
+    const inventory = findSystemComponent(system, Inventory);
+    const lighter = inventory?.items.findType(Lighter);
     return lighter ? lighter.isLit : false;
   }
 }

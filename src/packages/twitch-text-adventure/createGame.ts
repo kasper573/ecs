@@ -1,6 +1,7 @@
 import { System } from "../ecs/System";
-import { Inventory } from "../ecs-collectable/Inventory";
 import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
+import { Entity } from "../ecs/Entity";
+import { Inventory } from "../ecs-collectable/Inventory";
 import { Bridge } from "./entities/Bridge";
 import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
 import { Darkness } from "./entities/Darkness";
@@ -18,9 +19,14 @@ export const createGame = () => {
     pit: [new Darkness(), new Ladder()],
     otherSide: [new WinMessage()],
   });
-  const inventory = new Inventory(new Lighter());
+  const inventory = Inventory.create(new Lighter());
+  const inventoryEntity = new Entity([inventory]);
   return new System({
-    modules: [sceneManager, inventory, new InteractionMemory()],
-    entities: () => [...(sceneManager.scene ?? []), ...inventory],
+    modules: [sceneManager, new InteractionMemory()],
+    entities: () => [
+      ...(sceneManager.scene ?? []),
+      inventoryEntity,
+      ...inventory.items,
+    ],
   });
 };

@@ -4,6 +4,7 @@ import { Interactive } from "../../ecs-interactive/Interactive";
 import { TextAdventureSM } from "../TextAdventureSM";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
+import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
@@ -11,7 +12,7 @@ export class BridgeRepairEquipment extends Entity {
     return this.system.modules.resolveType(TextAdventureSM);
   }
   get inventory() {
-    return this.system.modules.resolveType(Inventory);
+    return findSystemComponent(this.system, Inventory);
   }
   get bridge() {
     return this.sceneManager.scene?.findType(Bridge);
@@ -28,7 +29,7 @@ export class BridgeRepairEquipment extends Entity {
       new Interactive({
         action: "Repair bridge",
         isActive: () =>
-          this.inventory.includes(this) &&
+          !!this.inventory?.items.includes(this) &&
           this.sceneManager.sceneId === "cliff" &&
           !!this.bridge &&
           this.bridge.state !== "sturdy",

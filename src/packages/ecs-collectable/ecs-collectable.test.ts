@@ -38,9 +38,14 @@ const setup = () => {
   ]);
   const sceneManager = new SceneManager({ default: [entity] });
   const inventory = new Inventory();
+  const inventoryEntity = new Entity([inventory]);
   const system = new System({
-    modules: [sceneManager, inventory],
-    entities: () => [...(sceneManager.scene ?? []), ...inventory],
+    modules: [sceneManager],
+    entities: () => [
+      ...(sceneManager.scene ?? []),
+      inventoryEntity,
+      ...inventory.items,
+    ],
   });
   const [pickUp] = createActions(system);
   return { entity, system, pickUp, sceneManager };

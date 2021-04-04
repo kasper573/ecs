@@ -1,8 +1,13 @@
-import { Container } from "../ecs/Container";
+import { Component } from "../ecs/Component";
 import { Entity } from "../ecs/Entity";
-import { SystemModule } from "../ecs/SystemModule";
-import { System } from "../ecs/System";
+import { Container } from "../ecs/Container";
 
-export class Inventory extends Container<Entity> implements SystemModule {
-  system?: System;
+export class Inventory extends Component {
+  readonly items = new Container<Entity>();
+
+  static create(...items: Entity[]) {
+    const inv = new Inventory();
+    inv.items.push(...items);
+    return inv;
+  }
 }

@@ -204,6 +204,14 @@
       "name": "interactive",
       "nativeComponent": "interactive",
       "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002"
+    },
+    "f0fbb057-16cb-428f-ba60-e7df531f4d0a": {
+      "nodeId": "b44f9a3f-522c-4900-95c1-3c2532a13937",
+      "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002",
+      "id": "f0fbb057-16cb-428f-ba60-e7df531f4d0a",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "inventory",
+      "nativeComponent": "inventory"
     }
   },
   "libraryFolders": {

@@ -4,6 +4,7 @@ import {
 } from "../ecs-interactive/Interactive";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { componentProperties } from "../ecs/Component";
+import { findSystemComponent } from "../ecs/findSystemComponent";
 import { Inventory } from "./Inventory";
 
 export class Collectable extends Interactive.extend({
@@ -15,20 +16,28 @@ export class Collectable extends Interactive.extend({
     return this.entity.system.modules.resolveType(SceneManager);
   }
 
+  get hasInventory() {
+    return !!this.inventory;
+  }
+
   get inventory() {
-    return this.entity.system.modules.resolveType(Inventory);
+    return findSystemComponent(this.entity.system, Inventory);
   }
 
   get isCollected() {
-    return this.inventory.includes(this.entity);
+    return this.inventory?.items.includes(this.entity);
   }
 
   constructor() {
     super({
-      isActive: () => !this.isCollected,
+      isActive: () => this.hasInventory && !this.isCollected,
       action: ({ entity }) => `Pick up ${entity.name}`,
       effect: ({ entity }) => {
-        this.inventory.push(this.entity);
+        const inv = this.inventory;
+        if (!inv) {
+          return;
+        }
+        inv.items.push(this.entity);
         for (const scene of Object.values(this.sceneManager.scenes)) {
           scene.remove(this.entity);
         }

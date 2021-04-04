@@ -2,7 +2,6 @@ import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Entity } from "../../ecs/Entity";
 import { TextAdventureSM } from "../TextAdventureSM";
-import { Inventory } from "../../ecs-collectable/Inventory";
 
 const maxHealth = 3;
 
@@ -11,9 +10,6 @@ export class PunchingBag extends Entity {
 
   get sceneManager() {
     return this.system.modules.resolveType(TextAdventureSM);
-  }
-  get inventory() {
-    return this.system.modules.resolveType(Inventory);
   }
   get isBroken() {
     return this.hp <= 0;
