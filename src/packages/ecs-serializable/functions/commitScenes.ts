@@ -1,7 +1,7 @@
 import { without } from "lodash";
 import { SceneDefinition, SceneDefinitionId } from "../types/SceneDefinition";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { remove } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { Scene } from "../../ecs-scene-manager/Scene";
 import { typedKeys } from "../../ecs-common/typedKeys";
 
@@ -16,7 +16,7 @@ export const commitScenes = (
   const currentIds = definitions.map((d) => d.id);
   const removedIds = without(definedIds, ...currentIds);
   for (const id of removedIds) {
-    remove(manager.scenes, id);
+    removeNominal(manager.scenes, id);
   }
   for (const definition of definitions) {
     let scene = manager.scenes[definition.id];

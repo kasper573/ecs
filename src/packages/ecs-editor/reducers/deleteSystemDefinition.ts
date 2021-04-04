@@ -1,4 +1,4 @@
-import { remove } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { core } from "../core";
@@ -9,7 +9,7 @@ import { deleteComponentDefinition } from "./deleteComponentDefinition";
 
 export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionId>(
   (state, { payload: id }) => {
-    if (!remove(state.ecs.systems, id)) {
+    if (!removeNominal(state.ecs.systems, id)) {
       throw new Error("Could not delete system");
     }
     // Delete related objects

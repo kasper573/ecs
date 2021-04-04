@@ -1,4 +1,4 @@
-import { remove } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentDefinition,
@@ -28,7 +28,7 @@ export const deleteComponentDefinition = createEditorStateReducer<ComponentDefin
     }
 
     // Remove component definition
-    remove(state.ecs.componentDefinitions, id);
+    removeNominal(state.ecs.componentDefinitions, id);
   }
 );
 

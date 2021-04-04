@@ -1,1 +1,1 @@
-type NominalString<K extends string> = `NominalString<${K}>`;
+type NominalString<Identifier extends string> = `NominalString<${Identifier}>`;

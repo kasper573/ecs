@@ -1,4 +1,4 @@
-import { remove } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
 import { core } from "../core";
@@ -34,6 +34,6 @@ export const deleteEntityDefinition = createEditorStateReducer<EntityDefinitionI
     }
 
     // Delete entity definition
-    remove(state.ecs.entityDefinitions, id);
+    removeNominal(state.ecs.entityDefinitions, id);
   }
 );

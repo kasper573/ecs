@@ -1,4 +1,4 @@
-import { remove } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { LibraryFolderId } from "../../ecs-serializable/types/LibraryFolder";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
@@ -17,7 +17,7 @@ export const deleteLibraryFolder = createEditorStateReducer<LibraryFolderId>(
       }
 
       // Remove folder node
-      remove(state.ecs.libraryFolders, id);
+      removeNominal(state.ecs.libraryFolders, id);
 
       // Find children
       const isChild = (n: LibraryNode) => n.parentNodeId === folder.nodeId;
