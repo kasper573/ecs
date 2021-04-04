@@ -17,14 +17,9 @@ import { commitScenes } from "./commitScenes";
 export const updateSystem = (
   system: System,
   ecs: ECSDefinition,
+  memory: DeserializationMemory,
   nativeComponents: NativeComponents
 ) => {
-  let memory = system.modules.findType(DeserializationMemory);
-  if (!memory) {
-    memory = new DeserializationMemory();
-    system.modules.push(memory);
-  }
-
   commitComponents(
     Object.values(ecs.componentDefinitions),
     nativeComponents,

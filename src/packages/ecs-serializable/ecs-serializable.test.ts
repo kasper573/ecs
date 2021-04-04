@@ -3,7 +3,9 @@ import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
 import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
-import { createSystem } from "./functions/createSystem";
+import { System } from "../ecs/System";
+import { updateSystem as realUpdateSystem } from "./functions/updateSystem";
+import { createSystem as realCreateSystem } from "./functions/createSystem";
 import {
   EntityInitializer,
   EntityInitializerId,
@@ -16,10 +18,11 @@ import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
 import { DeserializationMemory } from "./DeserializationMemory";
-import { updateSystem } from "./functions/updateSystem";
 import { ComponentInitializer } from "./types/ComponentInitializer";
 import { createComponentPropertyDefinition } from "./functions/createComponentPropertyDefinition";
 import { createECSDefinition } from "./functions/createECSDefinition";
+import { ECSDefinition } from "./types/ECSDefinition";
+import { NativeComponents } from "./types/NativeComponents";
 
 class Foo extends Component.extend({
   text: { type: zod.string().optional() },
@@ -174,7 +177,7 @@ describe("creating a deserialized system", () => {
       entityInitializers: { [entity.id]: entity },
     });
 
-    expect(() => createSystem(ecs, nativeComponents)).toThrow();
+    expect(() => createSystem(ecs)).toThrow();
   });
 
   it("can instantiate two components with different ids", () => {
@@ -330,9 +333,9 @@ describe("updating a deserialized system", () => {
     };
     const ecs1 = mockECS([definition], [], [entity1]);
     const ecs2 = mockECS([definition], [], [entity2]);
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].name).toBe("Initial");
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].name).toBe("Updated");
   });
 
@@ -358,12 +361,12 @@ describe("updating a deserialized system", () => {
       systems: { [systemDefinition.id]: systemDefinition },
       scenes: { [sceneDefinition2.id]: sceneDefinition2 },
     });
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     const sm = system.modules.resolveType(SceneManager);
     const scene = Object.values(sm.scenes)[0];
     expect(scene.name).toBe("Initial");
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(scene.name).toBe("Updated");
   });
 
@@ -385,11 +388,11 @@ describe("updating a deserialized system", () => {
       systems: { [systemDefinition.id]: systemDefinition },
       scenes: {},
     });
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     const sm = system.modules.resolveType(SceneManager);
     expect(Object.values(sm.scenes).length).toBe(1);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(Object.values(sm.scenes).length).toBe(0);
   });
 
@@ -404,10 +407,9 @@ describe("updating a deserialized system", () => {
     const ecsWithEntity = createECSDefinition({
       entityDefinitions: { [entity.id]: entity },
     });
-    const system = createSystem(createECSDefinition(), nativeComponents);
-    updateSystem(system, ecsWithEntity, nativeComponents);
-    const memory = system.modules.resolveType(DeserializationMemory);
-    expect(memory.entityConstructors.size).toBe(1);
+    const system = createSystem(createECSDefinition());
+    updateSystem(system, ecsWithEntity);
+    expect(system.memory.entityConstructors.size).toBe(1);
   });
 
   it("can remove entity constructor", () => {
@@ -421,10 +423,9 @@ describe("updating a deserialized system", () => {
     const ecsWithEntity = createECSDefinition({
       entityDefinitions: { [entity.id]: entity },
     });
-    const system = createSystem(ecsWithEntity, nativeComponents);
-    updateSystem(system, createECSDefinition(), nativeComponents);
-    const memory = system.modules.resolveType(DeserializationMemory);
-    expect(memory.entityConstructors.size).toBe(0);
+    const system = createSystem(ecsWithEntity);
+    updateSystem(system, createECSDefinition());
+    expect(system.memory.entityConstructors.size).toBe(0);
   });
 
   it("can add component constructor", () => {
@@ -438,10 +439,9 @@ describe("updating a deserialized system", () => {
     const ecsWithComponent = createECSDefinition({
       componentDefinitions: { [component.id]: component },
     });
-    const system = createSystem(createECSDefinition(), nativeComponents);
-    updateSystem(system, ecsWithComponent, nativeComponents);
-    const memory = system.modules.resolveType(DeserializationMemory);
-    expect(memory.componentConstructors.size).toBe(1);
+    const system = createSystem(createECSDefinition());
+    updateSystem(system, ecsWithComponent);
+    expect(system.memory.componentConstructors.size).toBe(1);
   });
 
   it("can remove component constructor", () => {
@@ -455,10 +455,9 @@ describe("updating a deserialized system", () => {
     const ecsWithComponent = createECSDefinition({
       componentDefinitions: { [component.id]: component },
     });
-    const system = createSystem(ecsWithComponent, nativeComponents);
-    updateSystem(system, createECSDefinition(), nativeComponents);
-    const memory = system.modules.resolveType(DeserializationMemory);
-    expect(memory.componentConstructors.size).toBe(0);
+    const system = createSystem(ecsWithComponent);
+    updateSystem(system, createECSDefinition());
+    expect(system.memory.componentConstructors.size).toBe(0);
   });
 
   it("can add entity instance", () => {
@@ -469,8 +468,8 @@ describe("updating a deserialized system", () => {
       components: [],
     };
     const ecsWithEntity = mockECS([entity]);
-    const system = createSystem(createECSDefinition(), nativeComponents);
-    updateSystem(system, ecsWithEntity, nativeComponents);
+    const system = createSystem(createECSDefinition());
+    updateSystem(system, ecsWithEntity);
     expect(system.entities.length).toBe(1);
   });
 
@@ -482,9 +481,9 @@ describe("updating a deserialized system", () => {
       components: [],
     };
     const ecsWithEntity = mockECS([entity]);
-    const system = createSystem(ecsWithEntity, nativeComponents);
+    const system = createSystem(ecsWithEntity);
     const instanceBeforeUpdate = system.entities[0];
-    updateSystem(system, ecsWithEntity, nativeComponents);
+    updateSystem(system, ecsWithEntity);
     const instanceAfterUpdate = system.entities[0];
     expect(instanceAfterUpdate).toBe(instanceBeforeUpdate);
   });
@@ -497,8 +496,8 @@ describe("updating a deserialized system", () => {
       components: [],
     };
     const ecsWithEntity = mockECS([entity]);
-    const system = createSystem(ecsWithEntity, nativeComponents);
-    updateSystem(system, createECSDefinition(), nativeComponents);
+    const system = createSystem(ecsWithEntity);
+    updateSystem(system, createECSDefinition());
     expect(system.entities.length).toBe(0);
   });
 
@@ -528,10 +527,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityWithoutComponent], []);
     const ecs2 = mockECS([entityWithComponent], [component]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components.length).toBe(0);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components.length).toBe(1);
   });
 
@@ -561,10 +560,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityWithComponent], [component]);
     const ecs2 = mockECS([entityWithoutComponent], []);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components.length).toBe(1);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components.length).toBe(0);
   });
 
@@ -604,10 +603,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entity1], [componentDefinition]);
     const ecs2 = mockECS([entity2], [componentDefinition]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components[0].isActive).toBe(false);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
@@ -643,10 +642,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityDefinition], [], [noComponent]);
     const ecs2 = mockECS([entityDefinition], [component], [hasComponent]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components.length).toBe(0);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components.length).toBe(1);
   });
 
@@ -682,10 +681,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityDefinition], [component], [hasComponent]);
     const ecs2 = mockECS([entityDefinition], [], [noComponent]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components.length).toBe(1);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components.length).toBe(0);
   });
 
@@ -724,10 +723,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components[0].isActive).toBe(false);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
@@ -776,10 +775,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityDefinition], [componentDefinition], [entity1]);
     const ecs2 = mockECS([entityDefinition], [componentDefinition], [entity2]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components[0].isActive).toBe(true);
 
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(false);
   });
 
@@ -836,15 +835,11 @@ describe("updating a deserialized system", () => {
     const system = createSystem(ecs1, nativeComponentsWithDefault);
     expect(system.entities[0].components[0].isActive).toBe(false);
 
-    updateSystem(system, ecs2, nativeComponentsWithDefault);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
   it("updating a component property only changes that specific property", () => {
-    const Foo = Component.extend({
-      text: { type: zod.string(), defaultValue: "" },
-    });
-    const nativeComponents = { foo: Foo };
     const component: Omit<ComponentDefinition, "systemId"> = {
       nodeId: uid(),
       id: uid(),
@@ -879,10 +874,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([entityDefinition], [component], [entity1]);
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
 
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     const instance = system.entities[0].components[0] as InstanceOf<typeof Foo>;
     instance.configure({ text: "hello" });
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(instance.text).toBe("hello");
   });
 
@@ -919,9 +914,9 @@ describe("updating a deserialized system", () => {
     };
     const ecs1 = mockECS([eDef], [cDef], [entity1]);
     const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components[0].isActive).toBe(false);
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(false);
     expect(system.entities[1].components[0].isActive).toBe(false);
   });
@@ -961,9 +956,9 @@ describe("updating a deserialized system", () => {
     };
     const ecs1 = mockECS([eDef], [cDef], [entity1]);
     const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
-    const system = createSystem(ecs1, nativeComponents);
+    const system = createSystem(ecs1);
     expect(system.entities[0].components[0].isActive).toBe(false);
-    updateSystem(system, ecs2, nativeComponents);
+    updateSystem(system, ecs2);
     expect(system.entities[0].components[0].isActive).toBe(false);
     expect(system.entities[1].components[0].isActive).toBe(false);
   });
@@ -1029,8 +1024,23 @@ const mockSystem = (
   entities: Array<Omit<EntityDefinition, "systemId">>,
   components: Array<Omit<ComponentDefinition, "systemId">> = [],
   entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
-) =>
-  createSystem(
-    mockECS(entities, components, entityInitializers),
-    nativeComponents
-  );
+) => createSystem(mockECS(entities, components, entityInitializers));
+
+type SystemWithMemory = System & {
+  memory: DeserializationMemory;
+  nativeComponents: NativeComponents;
+};
+
+const createSystem = (
+  ecs: ECSDefinition,
+  nc: NativeComponents = nativeComponents
+) => {
+  const memory = new DeserializationMemory();
+  const system = realCreateSystem(ecs, memory, nc) as SystemWithMemory;
+  system.nativeComponents = nc;
+  system.memory = memory;
+  return system;
+};
+
+const updateSystem = (system: SystemWithMemory, ecs: ECSDefinition) =>
+  realUpdateSystem(system, ecs, system.memory, system.nativeComponents);
