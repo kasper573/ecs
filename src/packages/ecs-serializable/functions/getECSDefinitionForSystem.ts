@@ -1,4 +1,4 @@
-import { set, ValueOf, values } from "../../ecs-common/nominal";
+import { ValueOf, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { SystemDefinitionId } from "../types/SystemDefinition";
 import { createECSDefinition } from "./createECSDefinition";
@@ -32,7 +32,10 @@ const transfer = <K extends keyof ECSDefinition>(
   const multiRecord = multiECS[key];
   for (const instance of values(multiRecord)) {
     if (shouldTransfer(instance)) {
-      set(singleRecord, (instance.id as unknown) as InstanceId, instance);
+      singleRecord[instance.id as InstanceId] = instance as Exclude<
+        ValueOf<typeof singleECS>,
+        unknown // No clue where this comes from
+      >;
     }
   }
 };

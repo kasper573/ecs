@@ -1,6 +1,6 @@
 import { mockEditorState } from "../functions/mockEditorState";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { get, values } from "../../ecs-common/nominal";
+import { values } from "../../ecs-common/nominal";
 import { uuid } from "../../ecs-common/uuid";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
@@ -36,10 +36,8 @@ test("creating an entity initializer copies all components from definition (with
     payload: entityInitializer,
   });
 
-  const updatedEntityInitializer = get(
-    updatedState.ecs.entityInitializers,
-    entityInitializer.id
-  );
+  const updatedEntityInitializer =
+    updatedState.ecs.entityInitializers[entityInitializer.id];
 
   // Should maintain the component passed in while creating entity
   expect(updatedEntityInitializer?.components).toContainEqual(

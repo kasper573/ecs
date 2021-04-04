@@ -1,7 +1,7 @@
 import { without } from "lodash";
 import { SceneDefinition, SceneDefinitionId } from "../types/SceneDefinition";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { get, keys, remove, set } from "../../ecs-common/nominal";
+import { keys, remove } from "../../ecs-common/nominal";
 import { Scene } from "../../ecs-scene-manager/Scene";
 
 /**
@@ -18,10 +18,10 @@ export const commitScenes = (
     remove(manager.scenes, id);
   }
   for (const definition of definitions) {
-    let scene = get(manager.scenes, definition.id);
+    let scene = manager.scenes[definition.id];
     if (!scene) {
       scene = new Scene();
-      set(manager.scenes, definition.id, scene);
+      manager.scenes[definition.id] = scene;
     }
     scene.name = definition.name;
   }

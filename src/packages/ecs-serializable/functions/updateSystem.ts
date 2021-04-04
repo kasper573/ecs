@@ -2,7 +2,7 @@ import { System } from "../../ecs/System";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
-import { get, set, values } from "../../ecs-common/nominal";
+import { values } from "../../ecs-common/nominal";
 import { DeserializationMemory } from "../DeserializationMemory";
 import { EntityInstanceMap } from "../types/EntityInstanceMap";
 import { EntityInitializer } from "../types/EntityInitializer";
@@ -49,10 +49,10 @@ const getEntityInstancesByScene = (
   entityInstances: EntityInstanceMap
 ) =>
   entityInitializerList.reduce((entitiesByScene, entityInitializer) => {
-    let sceneEntities = get(entitiesByScene, entityInitializer.sceneId);
+    let sceneEntities = entitiesByScene[entityInitializer.sceneId];
     if (!sceneEntities) {
       sceneEntities = [];
-      set(entitiesByScene, entityInitializer.sceneId, sceneEntities);
+      entitiesByScene[entityInitializer.sceneId] = sceneEntities;
     }
     sceneEntities.push(entityInstances.get(entityInitializer.id)!);
     return entitiesByScene;

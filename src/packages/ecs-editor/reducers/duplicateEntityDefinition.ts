@@ -1,4 +1,3 @@
-import { get, set } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   EntityDefinition,
@@ -9,7 +8,7 @@ import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateEntityDefinition = createEditorStateReducer<EntityDefinitionId>(
   (state, { payload: id }) => {
-    const def = get(state.ecs.entityDefinitions, id);
+    const def = state.ecs.entityDefinitions[id];
     if (!def) {
       throw new Error("Could not find entity definition to duplicate");
     }
@@ -20,6 +19,6 @@ export const duplicateEntityDefinition = createEditorStateReducer<EntityDefiniti
       nodeId: uuid(),
       name: duplicateName(def.name),
     };
-    set(state.ecs.entityDefinitions, duplicate.id, duplicate);
+    state.ecs.entityDefinitions[duplicate.id] = duplicate;
   }
 );

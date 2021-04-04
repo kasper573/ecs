@@ -1,4 +1,4 @@
-import { get, remove, values } from "../../ecs-common/nominal";
+import { remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
 import { core } from "../core";
@@ -7,7 +7,7 @@ import { deleteEntityInitializer } from "./deleteEntityInitializer";
 
 export const deleteEntityDefinition = createEditorStateReducer<EntityDefinitionId>(
   (state, { payload: id }) => {
-    const def = get(state.ecs.entityDefinitions, id);
+    const def = state.ecs.entityDefinitions[id];
     if (!def) {
       throw new Error("Could not find entity definition");
     }

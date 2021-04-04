@@ -1,4 +1,4 @@
-import { get, remove, values } from "../../ecs-common/nominal";
+import { remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentDefinition,
@@ -10,7 +10,7 @@ import { deleteComponentInitializer } from "./deleteComponentInitializer";
 
 export const deleteComponentDefinition = createEditorStateReducer<ComponentDefinitionId>(
   (state, { payload: id }) => {
-    const def = get(state.ecs.componentDefinitions, id);
+    const def = state.ecs.componentDefinitions[id];
     if (!def) {
       throw new Error("Could not delete component definition");
     }

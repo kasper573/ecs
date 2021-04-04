@@ -1,4 +1,4 @@
-import { get, remove, values } from "../../ecs-common/nominal";
+import { remove, values } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { LibraryFolderId } from "../../ecs-serializable/types/LibraryFolder";
 import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
@@ -11,7 +11,7 @@ export const deleteLibraryFolder = createEditorStateReducer<LibraryFolderId>(
     const folderIdQueue = [payload];
     while (folderIdQueue.length) {
       const id = folderIdQueue.shift()!;
-      const folder = get(state.ecs.libraryFolders, id);
+      const folder = state.ecs.libraryFolders[id];
       if (!folder) {
         throw new Error("Could not delete folder");
       }

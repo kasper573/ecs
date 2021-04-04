@@ -1,7 +1,6 @@
 import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
-import { set } from "../ecs-common/nominal";
 import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { createSystem } from "./functions/createSystem";
@@ -984,14 +983,14 @@ const mockECS = (
     id: uid(),
     name: "System A",
   };
-  set(ecs.systems, system.id, system);
+  ecs.systems[system.id] = system;
 
   const scene: SceneDefinition = {
     systemId: system.id,
     id: uid(),
     name: "Scene A",
   };
-  set(ecs.scenes, scene.id, scene);
+  ecs.scenes[scene.id] = scene;
 
   if (!entityInitializers) {
     entityInitializers = entityDefinitions.map(({ id, components }, index) => ({
@@ -1003,25 +1002,25 @@ const mockECS = (
   }
 
   entityInitializers.forEach((entity) => {
-    set(ecs.entityInitializers, entity.id, {
+    ecs.entityInitializers[entity.id] = {
       ...entity,
       sceneId: scene.id,
       systemId: system.id,
-    });
+    };
   });
 
   componentDefinitions.forEach((component) => {
-    set(ecs.componentDefinitions, component.id, {
+    ecs.componentDefinitions[component.id] = {
       ...component,
       systemId: system.id,
-    });
+    };
   });
 
   entityDefinitions.forEach((entity) => {
-    set(ecs.entityDefinitions, entity.id, {
+    ecs.entityDefinitions[entity.id] = {
       ...entity,
       systemId: system.id,
-    });
+    };
   });
   return ecs;
 };

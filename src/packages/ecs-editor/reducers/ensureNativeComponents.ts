@@ -1,4 +1,4 @@
-import { set, values } from "../../ecs-common/nominal";
+import { values } from "../../ecs-common/nominal";
 import { uuid } from "../../ecs-common/uuid";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
@@ -27,7 +27,7 @@ export const ensureNativeComponents = createEditorStateReducer<NativeComponents>
           name: nativeComponentName,
           nativeComponent: nativeComponentName,
         };
-        set(componentDefinitions, component.id, component);
+        componentDefinitions[component.id] = component;
       }
     }
   }

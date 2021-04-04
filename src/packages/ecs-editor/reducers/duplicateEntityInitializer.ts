@@ -1,4 +1,3 @@
-import { get, set } from "../../ecs-common/nominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { uuid } from "../../ecs-common/uuid";
 import {
@@ -9,7 +8,7 @@ import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateEntityInitializer = createEditorStateReducer<EntityInitializerId>(
   ({ ecs: { entityInitializers } }, { payload: id }) => {
-    const initializer = get(entityInitializers, id);
+    const initializer = entityInitializers[id];
     if (!initializer) {
       throw new Error("Could not find entity initializer to duplicate");
     }
@@ -18,6 +17,6 @@ export const duplicateEntityInitializer = createEditorStateReducer<EntityInitial
       id: uuid(),
       name: duplicateName(initializer.name),
     };
-    set(entityInitializers, duplicate.id, duplicate);
+    entityInitializers[duplicate.id] = duplicate;
   }
 );
