@@ -1,19 +1,13 @@
 import { set, ValueOf, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { SystemDefinitionId } from "../types/SystemDefinition";
+import { createECSDefinition } from "./createECSDefinition";
 
 export const getECSDefinitionForSystem = (
   multiECS: ECSDefinition,
   systemId: SystemDefinitionId
 ): ECSDefinition => {
-  const singleECS: ECSDefinition = {
-    entityDefinitions: {},
-    componentDefinitions: {},
-    libraryFolders: {},
-    entityInitializers: {},
-    scenes: {},
-    systems: {},
-  };
+  const singleECS = createECSDefinition();
   const belongsToSystem = (o: HasSystemId) => o.systemId === systemId;
   transfer("entityDefinitions", singleECS, multiECS, belongsToSystem);
   transfer("componentDefinitions", singleECS, multiECS, belongsToSystem);
