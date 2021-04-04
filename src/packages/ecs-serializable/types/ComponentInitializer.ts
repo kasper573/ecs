@@ -1,7 +1,7 @@
 import { ComponentDefinitionId } from "./ComponentDefinition";
 import { ComponentPropertiesDefinition } from "./ComponentPropertiesDefinition";
 
-export type ComponentInitializerId = Nominal<string, "ComponentInitializerId">;
+export type ComponentInitializerId = NominalString<"ComponentInitializerId">;
 
 export type ComponentInitializer = {
   /**

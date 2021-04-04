@@ -1,5 +1,4 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { values } from "../../ecs-common/nominal";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { core } from "../core";
 import { deleteComponentInitializer } from "./deleteComponentInitializer";
@@ -7,9 +6,9 @@ import { deleteComponentInitializer } from "./deleteComponentInitializer";
 test("removing a component from an entity definition removes that component from its corresponding entity initializers", () => {
   // Prepare state
   const state = mockEditorState();
-  const targetSystem = values(state.ecs.systems)[0];
+  const targetSystem = Object.values(state.ecs.systems)[0];
   const targetECS = getECSDefinitionForSystem(state.ecs, targetSystem.id);
-  const targetEntity = values(targetECS.entityDefinitions)[0];
+  const targetEntity = Object.values(targetECS.entityDefinitions)[0];
 
   // Perform update
   const removedComponent = targetEntity.components[0];
@@ -23,9 +22,9 @@ test("removing a component from an entity definition removes that component from
   );
 
   // Find all entity initializers that should have been affected
-  const affectedInitializers = values(nextState.ecs.entityInitializers).filter(
-    (entity) => entity.definitionId === targetEntity.id
-  );
+  const affectedInitializers = Object.values(
+    nextState.ecs.entityInitializers
+  ).filter((entity) => entity.definitionId === targetEntity.id);
 
   // Make sure they no longer contain the removed component
   for (const initializer of affectedInitializers) {

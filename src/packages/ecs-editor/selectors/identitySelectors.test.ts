@@ -1,5 +1,4 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { values } from "../../ecs-common/nominal";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
 import { selectECS } from "./selectECS";
@@ -22,9 +21,9 @@ import { selectSelectedLibraryNode } from "./selectSelectedLibraryNode";
 // Suite disabled until createMemoizedSelector has been properly implemented
 describe("selector returns identical values given the same parameters", () => {
   const state = mockEditorState();
-  const cDef = values(state.ecs.componentDefinitions)[0];
-  const eDef = values(state.ecs.entityDefinitions)[0];
-  const system = values(state.ecs.systems)[0];
+  const cDef = Object.values(state.ecs.componentDefinitions)[0];
+  const eDef = Object.values(state.ecs.entityDefinitions)[0];
+  const system = Object.values(state.ecs.systems)[0];
 
   test("selectAll", () => testIdentity(selectAll, state));
   test("selectComponentDefinition", () =>

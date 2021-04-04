@@ -18,7 +18,7 @@ import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { get } from "../../ecs-common/nominal";
+
 import { selectECS } from "../selectors/selectECS";
 
 export const InstancesPanel = () => {
@@ -103,7 +103,7 @@ const getItemProps = (
   { name, definitionId }: EntityInitializer,
   definitions: Record<EntityDefinitionId, EntityDefinition>
 ) => {
-  const definitionName = get(definitions, definitionId)?.name;
+  const definitionName = definitions[definitionId]?.name;
   const displayName =
     definitionName === name ? name : `${name} (${definitionName})`;
   return {

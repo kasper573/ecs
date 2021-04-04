@@ -1,5 +1,5 @@
-import { keys } from "../ecs-common/nominal";
 import { noRecursion } from "../ecs-common/noRecursion";
+import { typedKeys } from "../ecs-common/typedKeys";
 import { PropertyBagMethods } from "./types/PropertyBagMethods";
 import { PropertyBag } from "./types/PropertyBag";
 import { getPropertyValue } from "./getPropertyValue";
@@ -61,7 +61,7 @@ export const createPropertyBag = <
             DeclarationContext
           >
         );
-      keys(directProperties).forEach((name) => {
+      typedKeys(directProperties).forEach((name) => {
         Object.defineProperty(this, name, {
           configurable: true,
           get: () =>

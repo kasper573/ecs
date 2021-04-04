@@ -3,7 +3,7 @@ import { SystemDefinitionId } from "./SystemDefinition";
 import { SceneDefinitionId } from "./SceneDefinition";
 import { ComponentInitializer } from "./ComponentInitializer";
 
-export type EntityInitializerId = Nominal<string, "EntityInitializerId">;
+export type EntityInitializerId = NominalString<"EntityInitializerId">;
 
 export type EntityInitializer = {
   /**

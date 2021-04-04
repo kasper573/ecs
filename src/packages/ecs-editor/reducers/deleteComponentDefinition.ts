@@ -1,4 +1,4 @@
-import { get, remove, values } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import {
   ComponentDefinition,
@@ -10,7 +10,7 @@ import { deleteComponentInitializer } from "./deleteComponentInitializer";
 
 export const deleteComponentDefinition = createEditorStateReducer<ComponentDefinitionId>(
   (state, { payload: id }) => {
-    const def = get(state.ecs.componentDefinitions, id);
+    const def = state.ecs.componentDefinitions[id];
     if (!def) {
       throw new Error("Could not delete component definition");
     }
@@ -28,7 +28,7 @@ export const deleteComponentDefinition = createEditorStateReducer<ComponentDefin
     }
 
     // Remove component definition
-    remove(state.ecs.componentDefinitions, id);
+    removeNominal(state.ecs.componentDefinitions, id);
   }
 );
 
@@ -36,9 +36,9 @@ function* related(
   state: EditorState,
   componentDefinition: ComponentDefinition
 ) {
-  for (const entityDefinition of values(state.ecs.entityDefinitions).filter(
-    (def) => def.systemId === componentDefinition.systemId
-  )) {
+  for (const entityDefinition of Object.values(
+    state.ecs.entityDefinitions
+  ).filter((def) => def.systemId === componentDefinition.systemId)) {
     for (const componentInitializer of entityDefinition.components) {
       if (componentInitializer.definitionId === componentDefinition.id) {
         yield [entityDefinition, componentInitializer] as const;

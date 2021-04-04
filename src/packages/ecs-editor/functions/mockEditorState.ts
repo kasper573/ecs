@@ -10,7 +10,6 @@ import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefin
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { set, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
@@ -32,11 +31,11 @@ export const mockEditorState = (
     mockSystem(ecs, nr, Object.keys(nativeComponents), mockSize)
   );
 
-  const system = values(ecs.systems)[0];
-  const scene = values(ecs.scenes).find(
+  const system = Object.values(ecs.systems)[0];
+  const scene = Object.values(ecs.scenes).find(
     (scene) => scene.systemId === system.id
   );
-  const entity = values(ecs.entityInitializers).find(
+  const entity = Object.values(ecs.entityInitializers).find(
     (init) => init.sceneId === scene?.id
   );
 
@@ -73,7 +72,7 @@ const mockSystem = (
     id: id(`system${nr}`),
     name: `System ${nr}`,
   };
-  set(ecs.systems, system.id, system);
+  ecs.systems[system.id] = system;
   mockLibrary(ecs, system.id, nativeComponentNames, mockSize);
   mock(mockSize).map((nr) => mockScene(ecs, system.id, nr));
 };
@@ -91,7 +90,7 @@ const mockLibrary = (
       id: id(`library-folder-id`),
       name: `Folder ${nr}`,
     };
-    set(ecs.libraryFolders, folder.id, folder);
+    ecs.libraryFolders[folder.id] = folder;
     return folder;
   });
 
@@ -110,14 +109,14 @@ const mockLibrary = (
       nativeComponentNames[nr % nativeComponentNames.length]
     );
     def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
-    set(ecs.componentDefinitions, def.id, def);
+    ecs.componentDefinitions[def.id] = def;
     return def;
   });
 
   mock(mockSize).forEach((nr) => {
     const def = mockEntityDefinition(nr, systemId, componentDefinitions);
     def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
-    set(ecs.entityDefinitions, def.id, def);
+    ecs.entityDefinitions[def.id] = def;
   });
 };
 
@@ -169,8 +168,8 @@ const mockScene = (
     id: id(`scene${nr}`),
     name: `Scene ${nr}`,
   };
-  set(ecs.scenes, scene.id, scene);
-  for (const def of values(systemECS.entityDefinitions)) {
+  ecs.scenes[scene.id] = scene;
+  for (const def of Object.values(systemECS.entityDefinitions)) {
     const init: EntityInitializer = {
       systemId,
       sceneId: scene.id,
@@ -179,7 +178,7 @@ const mockScene = (
       name: def.name,
       components: def.components.map(inheritComponentInitializer),
     };
-    set(ecs.entityInitializers, init.id, init);
+    ecs.entityInitializers[init.id] = init;
   }
 };
 

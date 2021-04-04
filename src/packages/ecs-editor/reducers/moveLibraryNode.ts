@@ -3,7 +3,6 @@ import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { values } from "../../ecs-common/nominal";
 import { canMoveLibraryNodeTo } from "../functions/canMoveLibraryNodeTo";
 
 export const moveLibraryNode = createEditorStateReducer<{
@@ -17,9 +16,9 @@ export const moveLibraryNode = createEditorStateReducer<{
   // Find node to mutate
   const isNode = (node: LibraryNode) => node.nodeId === id;
   const node =
-    values(state.ecs.entityDefinitions).find(isNode) ||
-    values(state.ecs.componentDefinitions).find(isNode) ||
-    values(state.ecs.libraryFolders).find(isNode);
+    Object.values(state.ecs.entityDefinitions).find(isNode) ||
+    Object.values(state.ecs.componentDefinitions).find(isNode) ||
+    Object.values(state.ecs.libraryFolders).find(isNode);
   if (!node) {
     throw new Error("Could not find library node to move");
   }

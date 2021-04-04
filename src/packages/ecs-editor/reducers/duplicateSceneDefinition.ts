@@ -1,4 +1,3 @@
-import { get, set, values } from "../../ecs-common/nominal";
 import {
   SceneDefinition,
   SceneDefinitionId,
@@ -10,7 +9,7 @@ import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinitionId>(
   ({ ecs: { scenes, entityInitializers } }, { payload: id }) => {
-    const scene = get(scenes, id);
+    const scene = scenes[id];
     if (!scene) {
       throw new Error("Could not find scene to duplicate");
     }
@@ -21,10 +20,10 @@ export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinition
       id: uuid(),
       name: duplicateName(scene.name),
     };
-    set(scenes, duplicateScene.id, duplicateScene);
+    scenes[duplicateScene.id] = duplicateScene;
 
     // Duplicate entities into new scene
-    for (const entity of values(entityInitializers).filter(
+    for (const entity of Object.values(entityInitializers).filter(
       (def) => def.sceneId === id
     )) {
       const duplicateEntity: EntityInitializer = {
@@ -32,7 +31,7 @@ export const duplicateSceneDefinition = createEditorStateReducer<SceneDefinition
         sceneId: duplicateScene.id,
         id: uuid(),
       };
-      set(entityInitializers, duplicateEntity.id, duplicateEntity);
+      entityInitializers[duplicateEntity.id] = duplicateEntity;
     }
   }
 );

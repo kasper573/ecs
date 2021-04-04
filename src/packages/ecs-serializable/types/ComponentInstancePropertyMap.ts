@@ -2,7 +2,7 @@ import { ComponentInitializerId } from "./ComponentInitializer";
 import { ComponentPropertiesDefinition } from "./ComponentPropertiesDefinition";
 import { EntityInitializerId } from "./EntityInitializer";
 
-export type ComponentInstanceId = Nominal<string, "ComponentInstanceId">;
+export type ComponentInstanceId = NominalString<"ComponentInstanceId">;
 
 export type ComponentInstancePropertyMap = Map<
   ComponentInstanceId,

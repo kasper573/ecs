@@ -1,4 +1,4 @@
-import { remove, values } from "../../ecs-common/nominal";
+import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { core } from "../core";
@@ -9,11 +9,11 @@ import { deleteComponentDefinition } from "./deleteComponentDefinition";
 
 export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionId>(
   (state, { payload: id }) => {
-    if (!remove(state.ecs.systems, id)) {
+    if (!removeNominal(state.ecs.systems, id)) {
       throw new Error("Could not delete system");
     }
     // Delete related objects
-    for (const scene of values(state.ecs.scenes).filter(
+    for (const scene of Object.values(state.ecs.scenes).filter(
       (scene) => scene.systemId === id
     )) {
       deleteSceneDefinition(
@@ -21,7 +21,7 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
         core.actions.deleteSceneDefinition(scene.id)
       );
     }
-    for (const def of values(state.ecs.entityDefinitions).filter(
+    for (const def of Object.values(state.ecs.entityDefinitions).filter(
       (def) => def.systemId === id
     )) {
       deleteEntityDefinition(
@@ -29,7 +29,7 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
         core.actions.deleteEntityDefinition(def.id)
       );
     }
-    for (const def of values(state.ecs.componentDefinitions).filter(
+    for (const def of Object.values(state.ecs.componentDefinitions).filter(
       (def) => def.systemId === id
     )) {
       deleteComponentDefinition(
@@ -39,7 +39,7 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
     }
 
     // Delete only root folders because deleteLibraryFolder deletes ancestors already
-    const rootFolders = values(state.ecs.libraryFolders).filter(
+    const rootFolders = Object.values(state.ecs.libraryFolders).filter(
       (folder) => !folder.parentNodeId && folder.systemId === id
     );
     for (const folder of rootFolders) {

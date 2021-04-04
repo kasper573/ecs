@@ -1,14 +1,8 @@
 import { EditorState } from "../types/EditorState";
+import { createECSDefinition } from "../../ecs-serializable/functions/createECSDefinition";
 
 export const createEditorState = (): EditorState => ({
-  ecs: {
-    systems: {},
-    scenes: {},
-    entityInitializers: {},
-    entityDefinitions: {},
-    componentDefinitions: {},
-    libraryFolders: {},
-  },
+  ecs: createECSDefinition(),
   themeType: "dark",
   selection: {},
 });

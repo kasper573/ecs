@@ -1,7 +1,6 @@
 import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component } from "../ecs/Component";
-import { set } from "../ecs-common/nominal";
 import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { createSystem } from "./functions/createSystem";
@@ -14,13 +13,13 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { ECSDefinition } from "./types/ECSDefinition";
 import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { updateSystem } from "./functions/updateSystem";
 import { ComponentInitializer } from "./types/ComponentInitializer";
 import { createComponentPropertyDefinition } from "./functions/createComponentPropertyDefinition";
+import { createECSDefinition } from "./functions/createECSDefinition";
 
 class Foo extends Component.extend({
   text: { type: zod.string().optional() },
@@ -77,10 +76,7 @@ describe("creating a deserialized system", () => {
     };
     const system = createSystem(
       {
-        entityDefinitions: {},
-        libraryFolders: {},
-        componentDefinitions: {},
-        entityInitializers: {},
+        ...createECSDefinition(),
         systems: { [systemDefinition.id]: systemDefinition },
         scenes: { [sceneDefinition.id]: sceneDefinition },
       },
@@ -172,14 +168,11 @@ describe("creating a deserialized system", () => {
       name: "entity",
       components: [],
     };
-    const ecs: ECSDefinition = {
+    const ecs = createECSDefinition({
       systems: { [system.id]: system },
       scenes: { [scene.id]: scene },
       entityInitializers: { [entity.id]: entity },
-      entityDefinitions: {},
-      componentDefinitions: {},
-      libraryFolders: {},
-    };
+    });
 
     expect(() => createSystem(ecs, nativeComponents)).toThrow();
   });
@@ -357,15 +350,14 @@ describe("updating a deserialized system", () => {
       ...sceneDefinition1,
       name: "Updated",
     };
-    const ecs1: ECSDefinition = {
-      ...createEmptyECS(),
+    const ecs1 = createECSDefinition({
       systems: { [systemDefinition.id]: systemDefinition },
       scenes: { [sceneDefinition1.id]: sceneDefinition1 },
-    };
-    const ecs2: ECSDefinition = {
-      ...ecs1,
+    });
+    const ecs2 = createECSDefinition({
+      systems: { [systemDefinition.id]: systemDefinition },
       scenes: { [sceneDefinition2.id]: sceneDefinition2 },
-    };
+    });
     const system = createSystem(ecs1, nativeComponents);
     const sm = system.modules.resolveType(SceneManager);
     const scene = Object.values(sm.scenes)[0];
@@ -385,15 +377,14 @@ describe("updating a deserialized system", () => {
       id: uid(),
       name: "Initial",
     };
-    const ecs1: ECSDefinition = {
-      ...createEmptyECS(),
+    const ecs1 = createECSDefinition({
       systems: { [systemDefinition.id]: systemDefinition },
       scenes: { [sceneDefinition.id]: sceneDefinition },
-    };
-    const ecs2: ECSDefinition = {
-      ...ecs1,
+    });
+    const ecs2 = createECSDefinition({
+      systems: { [systemDefinition.id]: systemDefinition },
       scenes: {},
-    };
+    });
     const system = createSystem(ecs1, nativeComponents);
     const sm = system.modules.resolveType(SceneManager);
     expect(Object.values(sm.scenes).length).toBe(1);
@@ -403,69 +394,69 @@ describe("updating a deserialized system", () => {
   });
 
   it("can add entity constructor", () => {
-    const entity: Omit<EntityDefinition, "systemId"> = {
+    const entity: EntityDefinition = {
+      systemId: uid(),
       name: "Entity A",
       nodeId: uid(),
       id: uid(),
       components: [],
     };
-    const ecsWithEntity = {
-      ...createEmptyECS(),
+    const ecsWithEntity = createECSDefinition({
       entityDefinitions: { [entity.id]: entity },
-    };
-    const system = createSystem(createEmptyECS(), nativeComponents);
+    });
+    const system = createSystem(createECSDefinition(), nativeComponents);
     updateSystem(system, ecsWithEntity, nativeComponents);
     const memory = system.modules.resolveType(DeserializationMemory);
     expect(memory.entityConstructors.size).toBe(1);
   });
 
   it("can remove entity constructor", () => {
-    const entity: Omit<EntityDefinition, "systemId"> = {
+    const entity: EntityDefinition = {
+      systemId: uid(),
       name: "Entity A",
       nodeId: uid(),
       id: uid(),
       components: [],
     };
-    const ecsWithEntity = {
-      ...createEmptyECS(),
+    const ecsWithEntity = createECSDefinition({
       entityDefinitions: { [entity.id]: entity },
-    };
+    });
     const system = createSystem(ecsWithEntity, nativeComponents);
-    updateSystem(system, createEmptyECS(), nativeComponents);
+    updateSystem(system, createECSDefinition(), nativeComponents);
     const memory = system.modules.resolveType(DeserializationMemory);
     expect(memory.entityConstructors.size).toBe(0);
   });
 
   it("can add component constructor", () => {
-    const component: Omit<ComponentDefinition, "systemId"> = {
+    const component: ComponentDefinition = {
+      systemId: uid(),
       nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const ecsWithComponent = {
-      ...createEmptyECS(),
+    const ecsWithComponent = createECSDefinition({
       componentDefinitions: { [component.id]: component },
-    };
-    const system = createSystem(createEmptyECS(), nativeComponents);
+    });
+    const system = createSystem(createECSDefinition(), nativeComponents);
     updateSystem(system, ecsWithComponent, nativeComponents);
     const memory = system.modules.resolveType(DeserializationMemory);
     expect(memory.componentConstructors.size).toBe(1);
   });
 
   it("can remove component constructor", () => {
-    const component: Omit<ComponentDefinition, "systemId"> = {
+    const component: ComponentDefinition = {
+      systemId: uid(),
       nodeId: uid(),
       id: uid(),
       name: "Foo",
       nativeComponent: "foo",
     };
-    const ecsWithComponent = {
-      ...createEmptyECS(),
+    const ecsWithComponent = createECSDefinition({
       componentDefinitions: { [component.id]: component },
-    };
+    });
     const system = createSystem(ecsWithComponent, nativeComponents);
-    updateSystem(system, createEmptyECS(), nativeComponents);
+    updateSystem(system, createECSDefinition(), nativeComponents);
     const memory = system.modules.resolveType(DeserializationMemory);
     expect(memory.componentConstructors.size).toBe(0);
   });
@@ -478,7 +469,7 @@ describe("updating a deserialized system", () => {
       components: [],
     };
     const ecsWithEntity = mockECS([entity]);
-    const system = createSystem(createEmptyECS(), nativeComponents);
+    const system = createSystem(createECSDefinition(), nativeComponents);
     updateSystem(system, ecsWithEntity, nativeComponents);
     expect(system.entities.length).toBe(1);
   });
@@ -507,7 +498,7 @@ describe("updating a deserialized system", () => {
     };
     const ecsWithEntity = mockECS([entity]);
     const system = createSystem(ecsWithEntity, nativeComponents);
-    updateSystem(system, createEmptyECS(), nativeComponents);
+    updateSystem(system, createECSDefinition(), nativeComponents);
     expect(system.entities.length).toBe(0);
   });
 
@@ -978,15 +969,6 @@ describe("updating a deserialized system", () => {
   });
 });
 
-const createEmptyECS = (): ECSDefinition => ({
-  componentDefinitions: {},
-  entityInitializers: {},
-  entityDefinitions: {},
-  systems: {},
-  libraryFolders: {},
-  scenes: {},
-});
-
 let idCounter = 0;
 const uid = <T extends string>() => ("id" + idCounter++) as T;
 
@@ -995,20 +977,20 @@ const mockECS = (
   componentDefinitions: Array<Omit<ComponentDefinition, "systemId">> = [],
   entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
 ) => {
-  const ecs = createEmptyECS();
+  const ecs = createECSDefinition();
 
   const system: SystemDefinition = {
     id: uid(),
     name: "System A",
   };
-  set(ecs.systems, system.id, system);
+  ecs.systems[system.id] = system;
 
   const scene: SceneDefinition = {
     systemId: system.id,
     id: uid(),
     name: "Scene A",
   };
-  set(ecs.scenes, scene.id, scene);
+  ecs.scenes[scene.id] = scene;
 
   if (!entityInitializers) {
     entityInitializers = entityDefinitions.map(({ id, components }, index) => ({
@@ -1020,25 +1002,25 @@ const mockECS = (
   }
 
   entityInitializers.forEach((entity) => {
-    set(ecs.entityInitializers, entity.id, {
+    ecs.entityInitializers[entity.id] = {
       ...entity,
       sceneId: scene.id,
       systemId: system.id,
-    });
+    };
   });
 
   componentDefinitions.forEach((component) => {
-    set(ecs.componentDefinitions, component.id, {
+    ecs.componentDefinitions[component.id] = {
       ...component,
       systemId: system.id,
-    });
+    };
   });
 
   entityDefinitions.forEach((entity) => {
-    set(ecs.entityDefinitions, entity.id, {
+    ecs.entityDefinitions[entity.id] = {
       ...entity,
       systemId: system.id,
-    });
+    };
   });
   return ecs;
 };

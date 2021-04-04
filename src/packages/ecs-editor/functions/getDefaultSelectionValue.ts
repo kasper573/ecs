@@ -3,7 +3,6 @@ import {
   EditorSelectionName,
   EditorSelectionValues,
 } from "../types/EditorSelection";
-import { values } from "../../ecs-common/nominal";
 
 export function getDefaultSelectionValue<
   ObjectName extends EditorSelectionName
@@ -22,10 +21,10 @@ export function getDefaultSelectionValue(
 ): EditorSelectionValues[EditorSelectionName] {
   switch (objectName) {
     case "system":
-      const firstSystem = values(state.ecs.systems)[0];
+      const firstSystem = Object.values(state.ecs.systems)[0];
       return firstSystem?.id;
     case "scene":
-      const scene = values(state.ecs.scenes).find(
+      const scene = Object.values(state.ecs.scenes).find(
         (scene) => scene.systemId === state.selection.system
       );
       return scene && scene.id;

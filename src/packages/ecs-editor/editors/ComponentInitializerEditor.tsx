@@ -2,13 +2,13 @@ import { Table, TableBody } from "@material-ui/core";
 import { useContext } from "react";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { keys } from "../../ecs-common/nominal";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import {
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
 } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
+import { typedKeys } from "../../ecs-common/typedKeys";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
 
 export type ComponentInitializerEditorProps = {
@@ -32,7 +32,7 @@ export const ComponentInitializerEditor = ({
 }: ComponentInitializerEditorProps) => {
   const nativeComponents = useContext(NativeComponentsContext);
   const nativeComponent = nativeComponents[definition.nativeComponent];
-  const propertyNames = keys(nativeComponent.propertyInfos);
+  const propertyNames = typedKeys(nativeComponent.propertyInfos);
   return (
     <Table size="small">
       <TableBody>

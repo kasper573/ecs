@@ -2,7 +2,7 @@ import { ChangeEvent, useMemo, useState } from "react";
 import { TreeView, TreeViewProps } from "@material-ui/lab";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { createLibraryTree } from "../functions/createLibraryTree";
-import { get, set } from "../../ecs-common/nominal";
+
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { LibraryTreeItems, LibraryTreeItemsProps } from "./LibraryTreeItems";
@@ -28,10 +28,10 @@ export const LibraryTree = ({
     getInitialExpandedIds(library)
   );
   const [nodeMap, treeRoots] = useMemo(() => {
-    const map = library.reduce(
-      (map, node) => set(map, node.nodeId, node),
-      {} as Record<LibraryNodeId, TypedLibraryNode>
-    );
+    const map = library.reduce((map, node) => {
+      map[node.nodeId] = node;
+      return map;
+    }, {} as Record<LibraryNodeId, TypedLibraryNode>);
     return [
       map,
       createLibraryTree(library, { compareFn: compareLibraryTreeNodes }),
@@ -43,8 +43,7 @@ export const LibraryTree = ({
 
   const handleSelect = (e: ChangeEvent<{}>, nodeIdStr: string) => {
     const nodeId = nodeIdStr as LibraryNodeId;
-    const node = get(nodeMap, nodeId)!;
-    onSelectedChange(node);
+    onSelectedChange(nodeMap[nodeId]);
   };
 
   return (

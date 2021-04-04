@@ -1,6 +1,6 @@
 import { LibraryNode } from "./LibraryNode";
 
-export type LibraryFolderId = Nominal<string, "LibraryFolderId">;
+export type LibraryFolderId = NominalString<"LibraryFolderId">;
 
 export type LibraryFolder = LibraryNode & {
   /**

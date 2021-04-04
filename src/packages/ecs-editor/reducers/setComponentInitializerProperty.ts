@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { get } from "../../ecs-common/nominal";
+
 import { ComponentInitializerId } from "../../ecs-serializable/types/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
@@ -27,10 +27,10 @@ export const getTargetComponent = (
   let target;
   switch (payload.target) {
     case "initializer":
-      target = get(entityInitializers, payload.id);
+      target = entityInitializers[payload.id];
       break;
     case "definition":
-      target = get(entityDefinitions, payload.id);
+      target = entityDefinitions[payload.id];
       break;
   }
   if (!target) {

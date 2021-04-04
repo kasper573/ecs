@@ -3,7 +3,6 @@ import {
   LibraryNode,
   LibraryNodeId,
 } from "../../ecs-serializable/types/LibraryNode";
-import { values } from "../../ecs-common/nominal";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 
 const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>
@@ -18,17 +17,17 @@ export const selectLibraryNode = createMemoizedSelector(
   selectParams,
   ([entityDefinitions, componentDefinitions, libraryFolders, nodeId]) => {
     const isNode = (node: LibraryNode) => node.nodeId === nodeId;
-    const entity = values(entityDefinitions).find(isNode);
+    const entity = Object.values(entityDefinitions).find(isNode);
     if (entity) {
       return { ...entity, type: "entity" as const };
     }
 
-    const component = values(componentDefinitions).find(isNode);
+    const component = Object.values(componentDefinitions).find(isNode);
     if (component) {
       return { ...component, type: "component" as const };
     }
 
-    const folder = values(libraryFolders).find(isNode);
+    const folder = Object.values(libraryFolders).find(isNode);
     if (folder) {
       return { ...folder, type: "folder" as const };
     }

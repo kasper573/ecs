@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { get } from "../../ecs-common/nominal";
+
 import {
   ComponentInitializer,
   ComponentInitializerId,
@@ -40,11 +40,11 @@ const findComponentInitializer = (
 ) => {
   switch (payload.target) {
     case "initializer":
-      return get(entityInitializers, payload.id)?.components.find(
+      return entityInitializers[payload.id]?.components.find(
         (c) => c.id === payload.componentId
       );
     case "definition":
-      return get(entityDefinitions, payload.id)?.components.find(
+      return entityDefinitions[payload.id]?.components.find(
         (c) => c.id === payload.componentId
       );
   }

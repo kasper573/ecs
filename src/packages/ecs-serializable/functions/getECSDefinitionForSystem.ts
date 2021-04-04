@@ -1,19 +1,12 @@
-import { set, ValueOf, values } from "../../ecs-common/nominal";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { SystemDefinitionId } from "../types/SystemDefinition";
+import { createECSDefinition } from "./createECSDefinition";
 
 export const getECSDefinitionForSystem = (
   multiECS: ECSDefinition,
   systemId: SystemDefinitionId
 ): ECSDefinition => {
-  const singleECS: ECSDefinition = {
-    entityDefinitions: {},
-    componentDefinitions: {},
-    libraryFolders: {},
-    entityInitializers: {},
-    scenes: {},
-    systems: {},
-  };
+  const singleECS = createECSDefinition();
   const belongsToSystem = (o: HasSystemId) => o.systemId === systemId;
   transfer("entityDefinitions", singleECS, multiECS, belongsToSystem);
   transfer("componentDefinitions", singleECS, multiECS, belongsToSystem);
@@ -38,7 +31,15 @@ const transfer = <K extends keyof ECSDefinition>(
   const multiRecord = multiECS[key];
   for (const instance of values(multiRecord)) {
     if (shouldTransfer(instance)) {
-      set(singleRecord, (instance.id as unknown) as InstanceId, instance);
+      singleRecord[instance.id as InstanceId] = instance as Exclude<
+        ValueOf<typeof singleECS>,
+        unknown // No clue where this comes from
+      >;
     }
   }
 };
+
+const values = <T extends Record<keyof any, unknown>>(o: T) =>
+  Object.values(o) as ValueOf<T>[];
+
+type ValueOf<T> = T extends Record<keyof any, infer V> ? V : never;

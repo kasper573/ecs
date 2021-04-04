@@ -1,4 +1,3 @@
-import { set, values } from "../../ecs-common/nominal";
 import { uuid } from "../../ecs-common/uuid";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
@@ -9,8 +8,8 @@ export const ensureNativeComponents = createEditorStateReducer<NativeComponents>
     { ecs: { componentDefinitions, systems } },
     { payload: nativeComponents }
   ) => {
-    const componentDefinitionList = values(componentDefinitions);
-    for (const system of values(systems)) {
+    const componentDefinitionList = Object.values(componentDefinitions);
+    for (const system of Object.values(systems)) {
       for (const nativeComponentName of Object.keys(nativeComponents)) {
         const hasComponent = componentDefinitionList.find(
           (component) =>
@@ -27,7 +26,7 @@ export const ensureNativeComponents = createEditorStateReducer<NativeComponents>
           name: nativeComponentName,
           nativeComponent: nativeComponentName,
         };
-        set(componentDefinitions, component.id, component);
+        componentDefinitions[component.id] = component;
       }
     }
   }
