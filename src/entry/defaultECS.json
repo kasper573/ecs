@@ -128,7 +128,8 @@
           }
         }
       ],
-      "type": "entity"
+      "type": "entity",
+      "parentNodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698"
     },
     "ca55d857-fbb6-4bb5-9c5b-3636eaac3801": {
       "nodeId": "8b5a542e-b4c9-4733-86ef-4295eb0b3ff0",
@@ -154,7 +155,8 @@
           }
         }
       ],
-      "type": "entity"
+      "type": "entity",
+      "parentNodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698"
     },
     "f53c0fe5-c5fc-48e2-b63a-9b133246fc52": {
       "nodeId": "74e23519-3e1b-4df5-8bea-dd6d6c46cfe9",
@@ -174,7 +176,8 @@
             }
           }
         }
-      ]
+      ],
+      "parentNodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698"
     }
   },
   "componentDefinitions": {
@@ -183,22 +186,38 @@
       "id": "1f6a29fe-d4ca-4602-b905-f69ec1c7fcac",
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
       "name": "describable",
-      "nativeComponent": "describable"
+      "nativeComponent": "describable",
+      "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002"
     },
     "fdc683d3-9701-432a-8891-8c9c1a3ee0aa": {
       "nodeId": "62a565a0-5952-430e-9c39-c87354d16263",
       "id": "fdc683d3-9701-432a-8891-8c9c1a3ee0aa",
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
       "name": "collectable",
-      "nativeComponent": "collectable"
+      "nativeComponent": "collectable",
+      "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002"
     },
     "e0aca893-61d5-4329-b3af-b21e918c958f": {
       "nodeId": "61d032ca-63e4-46fd-8caf-6b42380c3afa",
       "id": "e0aca893-61d5-4329-b3af-b21e918c958f",
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
       "name": "interactive",
-      "nativeComponent": "interactive"
+      "nativeComponent": "interactive",
+      "parentNodeId": "ecc8520d-32c1-4675-b983-604f2f885002"
     }
   },
-  "libraryFolders": {}
+  "libraryFolders": {
+    "fd26f7e8-cd69-460c-8879-0bcc88dcb139": {
+      "nodeId": "3f8cae20-349a-4b0f-b1b0-b1a1421a3698",
+      "id": "fd26f7e8-cd69-460c-8879-0bcc88dcb139",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "Entities"
+    },
+    "fb140968-5869-465e-abcc-7e0d56603482": {
+      "nodeId": "ecc8520d-32c1-4675-b983-604f2f885002",
+      "id": "fb140968-5869-465e-abcc-7e0d56603482",
+      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
+      "name": "Components"
+    }
+  }
 }
