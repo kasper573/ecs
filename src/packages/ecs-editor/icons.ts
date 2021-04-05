@@ -13,6 +13,7 @@ export {
   Map as SystemIcon,
   Extension as EntityDefinitionIcon,
   Receipt as EntityInitializerIcon,
+  Menu as MenuIcon,
   Settings as DevToolsIcon,
   Settings as ComponentDefinitionIcon,
   Delete as DeleteIcon,

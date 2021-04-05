@@ -1,6 +1,13 @@
 import React, { useContext } from "react";
-import { Button, Dialog, DialogTitle, MenuItem } from "@material-ui/core";
-import { SystemIcon } from "../icons";
+import {
+  Dialog,
+  DialogTitle,
+  IconButton,
+  IconButtonProps,
+  MenuItem,
+  Tooltip,
+} from "@material-ui/core";
+import { MenuIcon, SystemIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { CrudList } from "../components/CrudList";
@@ -14,7 +21,7 @@ import { MenuFor } from "../components/MenuFor";
 import { useDialog } from "../hooks/useDialog";
 import { combine } from "../../ecs-common/combine";
 
-export const FileMenu = () => {
+export const FileMenu = (buttonProps: IconButtonProps) => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systems = useSelector(selectListOfSystemDefinition);
   const nativeComponents = useContext(NativeComponentsContext);
@@ -78,14 +85,11 @@ export const FileMenu = () => {
       ]}
     >
       {(props) => (
-        <Button
-          aria-label="File"
-          color="primary"
-          variant="contained"
-          {...props}
-        >
-          File
-        </Button>
+        <Tooltip title="File">
+          <IconButton {...props} {...buttonProps}>
+            <MenuIcon />
+          </IconButton>
+        </Tooltip>
       )}
     </MenuFor>
   );

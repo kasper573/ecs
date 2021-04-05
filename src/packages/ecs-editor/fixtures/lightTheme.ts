@@ -68,7 +68,7 @@ export const lightTheme = {
     divider: "rgba(0, 0, 0, 0.12)",
     background: {
       paper: "#fff",
-      default: "#fff",
+      default: "#d8ebf1",
       level2: "#f5f5f5",
       level1: "#fff",
     },
