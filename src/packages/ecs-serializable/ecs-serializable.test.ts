@@ -59,6 +59,38 @@ describe("creating a deserialized system", () => {
     expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
+  it("sets entity.isActive to false when EntityInitializer.isActive is false", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      isActive: false,
+      id: uid(),
+      components: [],
+    };
+    const system = mockSystem([], [], [initializer]);
+    expect(system.allEntities[0].isActive).toBe(false);
+  });
+
+  it("sets entity.isActive to true when EntityInitializer.isActive is true", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      isActive: true,
+      id: uid(),
+      components: [],
+    };
+    const system = mockSystem([], [], [initializer]);
+    expect(system.allEntities[0].isActive).toBe(true);
+  });
+
+  it("entity.isActive defaults to true when EntityInitializer.isActive is undefined", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      id: uid(),
+      components: [],
+    };
+    const system = mockSystem([], [], [initializer]);
+    expect(system.allEntities[0].isActive).toBe(true);
+  });
+
   it("instantiated entity use specified EntityInitializerId as id", () => {
     const initializer: Omit<EntityInitializer, "systemId"> = {
       name: "Entity A",
@@ -326,6 +358,63 @@ describe("creating a deserialized system", () => {
 });
 
 describe("updating a deserialized system", () => {
+  it("sets entity.isActive to false when EntityInitializer.isActive changes from true to false", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      isActive: true,
+      id: uid(),
+      components: [],
+    };
+    const deactivated = {
+      ...initializer,
+      isActive: false,
+    };
+    const ecs1 = mockECS([], [], [initializer]);
+    const ecs2 = mockECS([], [], [deactivated]);
+    const system = createSystem(ecs1);
+    expect(system.allEntities[0].isActive).toBe(true);
+    updateSystem(system, ecs2);
+    expect(system.allEntities[0].isActive).toBe(false);
+  });
+
+  it("sets entity.isActive to true when EntityInitializer.isActive changes from false to true", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      isActive: false,
+      id: uid(),
+      components: [],
+    };
+    const deactivated = {
+      ...initializer,
+      isActive: true,
+    };
+    const ecs1 = mockECS([], [], [initializer]);
+    const ecs2 = mockECS([], [], [deactivated]);
+    const system = createSystem(ecs1);
+    expect(system.allEntities[0].isActive).toBe(false);
+    updateSystem(system, ecs2);
+    expect(system.allEntities[0].isActive).toBe(true);
+  });
+
+  it("stops controlling entity.isActive when EntityInitializer.isActive changes from boolean to undefined", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      isActive: false,
+      id: uid(),
+      components: [],
+    };
+    const deactivated = {
+      ...initializer,
+      isActive: undefined,
+    };
+    const ecs1 = mockECS([], [], [initializer]);
+    const ecs2 = mockECS([], [], [deactivated]);
+    const system = createSystem(ecs1);
+    system.allEntities[0].isActive = true;
+    updateSystem(system, ecs2);
+    expect(system.allEntities[0].isActive).toBe(true);
+  });
+
   it("can change the entity parent", () => {
     const parentA: Omit<EntityInitializer, "systemId"> = {
       name: "Parent A",

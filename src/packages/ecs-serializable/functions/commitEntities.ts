@@ -87,6 +87,9 @@ export const commitEntities = (
       }
       entity.define(init.name, [], init.components, memory);
     }
+    if (init.isActive !== undefined) {
+      entity.isActive = init.isActive;
+    }
   }
 
   // Redefine entity parent-child relationships

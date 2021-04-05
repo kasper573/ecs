@@ -19,8 +19,8 @@ export class System<EntityId extends string = string> {
   /**
    * All entities, active or not
    */
-  private get allEntities() {
-    return Array.from(descendants(this.root, undefined, true));
+  get allEntities() {
+    return Array.from(descendants(this.root, undefined));
   }
 
   dispose() {

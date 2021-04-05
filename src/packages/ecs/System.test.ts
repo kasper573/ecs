@@ -35,6 +35,19 @@ test("inactive leaf entries are not included in system.entities", () => {
   expect(system.entities).toEqual(expect.arrayContaining([a, b]));
 });
 
+test("inactive leaf entries are included in system.allEntities", () => {
+  const c = new Entity([], [], { name: "C" });
+  const b = new Entity([], [], { name: "B" });
+  b.children.push(c);
+  const a = new Entity([], [], { name: "A" });
+  a.children.push(b);
+  c.isActive = false;
+
+  const system = new System(a);
+  expect(system.allEntities.length).toBe(3);
+  expect(system.allEntities).toEqual(expect.arrayContaining([a, b, c]));
+});
+
 test("inactive entry sub trees are not included in system.entities", () => {
   const c = new Entity();
   const b = new Entity();
@@ -46,6 +59,19 @@ test("inactive entry sub trees are not included in system.entities", () => {
   const system = new System(a);
   expect(system.entities.length).toBe(1);
   expect(system.entities).toEqual(expect.arrayContaining([a]));
+});
+
+test("inactive entry sub trees are included in system.allEntities", () => {
+  const c = new Entity();
+  const b = new Entity();
+  b.children.push(c);
+  const a = new Entity();
+  a.children.push(b);
+  b.isActive = false;
+
+  const system = new System(a);
+  expect(system.allEntities.length).toBe(3);
+  expect(system.allEntities).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("components get updated once on system initialization", () => {

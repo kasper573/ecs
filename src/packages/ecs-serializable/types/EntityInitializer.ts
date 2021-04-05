@@ -18,6 +18,10 @@ export type EntityInitializer = {
    */
   name: string;
   /**
+   * Controls Entity.isActive if set to true or false
+   */
+  isActive?: boolean;
+  /**
    * The entity definition this initializer references
    */
   definitionId?: EntityDefinitionId;
