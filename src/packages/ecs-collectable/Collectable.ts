@@ -3,7 +3,6 @@ import {
   interactiveProperties,
 } from "../ecs-interactive/Interactive";
 import { componentProperties } from "../ecs/Component";
-import { findSystemComponent } from "../ecs/findSystemComponent";
 import { Inventory } from "./Inventory";
 
 export class Collectable extends Interactive.extend({
@@ -16,7 +15,7 @@ export class Collectable extends Interactive.extend({
   }
 
   get inventory() {
-    return findSystemComponent(this.entity?.system, Inventory);
+    return this.entity?.system?.entities.findComponent(Inventory);
   }
 
   get isCollected() {

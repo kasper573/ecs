@@ -3,16 +3,15 @@ import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
-import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
   get sceneManager() {
-    return findSystemComponent(this.system, SceneManager);
+    return this.system?.entities.findComponent(SceneManager);
   }
   get inventory() {
-    return findSystemComponent(this.system, Inventory);
+    return this.system?.entities.findComponent(Inventory);
   }
   get bridge() {
     return this.system?.entities.find(

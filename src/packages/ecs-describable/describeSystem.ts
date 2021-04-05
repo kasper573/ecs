@@ -1,7 +1,6 @@
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
-import { findSystemComponent } from "../ecs/findSystemComponent";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
 
@@ -14,7 +13,7 @@ export const describeSystem = (
     ...customDescribers,
   };
   const parts: string[] = [];
-  const memory = findSystemComponent(system, InteractionMemory)?.items;
+  const memory = system.entities.findComponent(InteractionMemory)?.items;
   const lastResult = memory && memory[memory.length - 1];
   if (lastResult) {
     parts.push(lastResult);

@@ -2,7 +2,6 @@ import { Interactive } from "../../ecs-interactive/Interactive";
 import { System } from "../../ecs/System";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
-import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 
 export type LighterState = "lit" | "unlit";
@@ -11,7 +10,7 @@ export class Lighter extends Entity {
   state: LighterState = "unlit";
 
   get sceneManager() {
-    return findSystemComponent(this.system, SceneManager);
+    return this.system?.entities.findComponent(SceneManager);
   }
 
   get actionText() {
@@ -38,7 +37,7 @@ export class Lighter extends Entity {
   }
 
   static isLit(system?: System) {
-    const inventory = findSystemComponent(system, Inventory);
+    const inventory = system?.entities.findComponent(Inventory);
     const lighter = inventory?.items.findType(Lighter);
     return lighter ? lighter.isLit : false;
   }

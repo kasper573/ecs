@@ -1,13 +1,12 @@
 import { Entity } from "../../ecs/Entity";
 import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { Lighter } from "./Lighter";
 
 export class Ladder extends Entity {
   get sceneManager() {
-    return findSystemComponent(this.system, SceneManager);
+    return this.system?.entities.findComponent(SceneManager);
   }
   constructor() {
     super();

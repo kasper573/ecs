@@ -2,7 +2,6 @@ import { InteractionResult } from "../../ecs-interactive/InteractionResult";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { Describable } from "../../ecs-describable/Describable";
 import { Entity } from "../../ecs/Entity";
-import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 
 const fallDown: InteractionResult =
@@ -13,7 +12,7 @@ export type BridgeState = "fragile" | "broken" | "sturdy";
 export class Bridge extends Entity {
   state: BridgeState = "fragile";
   get sceneManager() {
-    return findSystemComponent(this.system, SceneManager);
+    return this.system?.entities.findComponent(SceneManager);
   }
   constructor() {
     super();

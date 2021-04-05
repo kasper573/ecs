@@ -1,12 +1,12 @@
 import { Entity } from "./Entity";
-import { TypeCollection } from "./TypeCollection";
+import { EntityCollection } from "./EntityCollection";
 
 export function descendants<Id extends string>(
   start: Entity<Id>,
   filter: (e: Entity<Id>) => boolean = any,
   includeSelf = false
 ) {
-  const selected = new TypeCollection<Entity<Id>>();
+  const selected = new EntityCollection<Id>();
   const queue = includeSelf ? [start] : [...start.children];
   for (let i = 0; i < queue.length; i++) {
     const next = queue[i];
