@@ -3,7 +3,6 @@ import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
 import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { Scenes } from "../Scenes";
 import { Lighter } from "./Lighter";
 
 export class Ladder extends Entity {
@@ -22,7 +21,7 @@ export class Ladder extends Entity {
         isActive: () => Lighter.isLit(this.system),
         effect: () => {
           if (this.sceneManager) {
-            this.sceneManager.sceneId = Scenes.cliff;
+            this.sceneManager.sceneId = "cliff";
           }
         },
       })

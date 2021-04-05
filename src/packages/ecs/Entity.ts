@@ -1,21 +1,18 @@
-import { removeNominal } from "../ecs-common/removeNominal";
 import { uuid } from "../ecs-common/uuid";
 import { ComponentInstance } from "./Component";
 import { System } from "./System";
 import { Container } from "./Container";
 import { descendants } from "./descendants";
 
-export type EntityId = NominalString<"EntityId">;
-
-export class Entity implements EntityOptions {
+export class Entity<Id extends string = string> implements EntityOptions<Id> {
   isActive: boolean = true;
 
   name: string = "";
-  readonly id: EntityId = uuid();
+  readonly id: Id = uuid();
 
-  private _parent?: Entity;
+  private _parent?: Entity<Id>;
   private _system?: System;
-  private _childrenById = {} as Readonly<Record<EntityId, Entity>>;
+  private _childrenById = {} as Record<Id, Entity<Id>>;
 
   get parent() {
     return this._parent;
@@ -32,11 +29,11 @@ export class Entity implements EntityOptions {
     }
   }
 
-  get childrenById() {
+  get childrenById(): Readonly<Record<Id, Entity<Id>>> {
     return this._childrenById;
   }
 
-  readonly children = new Container<Entity>();
+  readonly children = new Container<Entity<Id>>();
   readonly components = new Container<ComponentInstance>();
   readonly observations: Function[] = [];
 
@@ -53,8 +50,8 @@ export class Entity implements EntityOptions {
 
   constructor(
     components?: ComponentInstance[],
-    children?: Entity[],
-    options: Partial<EntityOptions> = {}
+    children?: Entity<Id>[],
+    options: Partial<EntityOptions<Id>> = {}
   ) {
     this.id = options.id ?? this.id;
     this.name = options.name ?? this.name;
@@ -77,12 +74,12 @@ export class Entity implements EntityOptions {
       }),
 
       this.children.connect((added, removed) => {
-        const updatedMap = { ...this.childrenById };
+        const updatedMap = { ...this._childrenById };
         for (const child of added) {
           updatedMap[child.id] = child;
         }
         for (const child of removed) {
-          removeNominal(updatedMap, child.id);
+          delete updatedMap[child.id];
         }
         this._childrenById = updatedMap;
       }),
@@ -100,7 +97,7 @@ export class Entity implements EntityOptions {
     return this.name;
   }
 
-  private setParent(newParent?: Entity) {
+  private setParent(newParent?: Entity<Id>) {
     if (this.parent) {
       this.parent.children.remove(this);
     }
@@ -109,7 +106,7 @@ export class Entity implements EntityOptions {
   }
 }
 
-export type EntityOptions = {
+export type EntityOptions<Id extends string> = {
   readonly name: string;
-  readonly id: EntityId;
+  readonly id: Id;
 };

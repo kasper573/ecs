@@ -2,13 +2,16 @@ import { uniq } from "lodash";
 import { Entity } from "../ecs/Entity";
 import { typedKeys } from "../ecs-common/typedKeys";
 import { EntityDefinition } from "./types/EntityDefinition";
-import { EntityInitializer } from "./types/EntityInitializer";
+import {
+  EntityInitializer,
+  EntityInitializerId,
+} from "./types/EntityInitializer";
 import { ComponentInitializerId } from "./types/ComponentInitializer";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
 import { getComponentInstanceId } from "./types/ComponentInstancePropertyMap";
 
-export class RedefinableEntity extends Entity {
+export class RedefinableEntity extends Entity<EntityInitializerId> {
   define(
     entityDefinition: EntityDefinition,
     entityInitializer: EntityInitializer,

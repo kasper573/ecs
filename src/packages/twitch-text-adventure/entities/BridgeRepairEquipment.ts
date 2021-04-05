@@ -5,7 +5,6 @@ import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
 import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { Scenes } from "../Scenes";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
@@ -33,7 +32,7 @@ export class BridgeRepairEquipment extends Entity {
         action: "Repair bridge",
         isActive: () =>
           !!this.inventory?.items.includes(this) &&
-          this.sceneManager?.sceneId === Scenes.cliff &&
+          this.sceneManager?.sceneId === "cliff" &&
           this.bridge?.state !== "sturdy",
         effect: () => {
           if (this.bridge) {

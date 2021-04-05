@@ -1,16 +1,16 @@
-import { Entity, EntityId } from "../ecs/Entity";
+import { Entity } from "../ecs/Entity";
 import { Component, componentProperties } from "../ecs/Component";
 
 export class SceneManager extends Component.extend({
   isActive: { ...componentProperties.isActive, hidden: true },
 }) {
-  private activeSceneId?: EntityId;
+  private activeSceneId?: string;
   private activeScene?: Entity;
 
   get sceneId() {
     return this.activeSceneId;
   }
-  set sceneId(value: EntityId | undefined) {
+  set sceneId(value: string | undefined) {
     this.activeSceneId = value;
     this.setActiveScene(
       this.activeSceneId
@@ -53,7 +53,9 @@ export class SceneManager extends Component.extend({
     });
   }
 
-  static create(scenes: Record<string, Entity[]>) {
+  static create<EntityId extends string>(
+    scenes: Record<EntityId, Entity<EntityId>[]>
+  ) {
     const manager = new SceneManager();
     const root = new Entity([manager], [], { name: "SceneManager" });
     for (const entityId in scenes) {

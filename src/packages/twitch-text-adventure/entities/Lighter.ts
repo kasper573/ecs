@@ -4,7 +4,6 @@ import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
 import { findSystemComponent } from "../../ecs/findSystemComponent";
 import { SceneManager } from "../../ecs-scene-manager/SceneManager";
-import { Scenes } from "../Scenes";
 
 export type LighterState = "lit" | "unlit";
 
@@ -31,7 +30,7 @@ export class Lighter extends Entity {
     super();
     this.components.push(
       new Interactive({
-        isActive: () => this.sceneManager?.sceneId === Scenes.pit,
+        isActive: () => this.sceneManager?.sceneId === "pit",
         action: () => this.actionText,
         effect: () => this.toggle(),
       })
