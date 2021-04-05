@@ -1,6 +1,5 @@
 import { Entity, EntityId } from "../ecs/Entity";
 import { Component, componentProperties } from "../ecs/Component";
-import { mountObservableArray } from "../ecs/mountObservableArray";
 
 export class SceneManager extends Component.extend({
   isActive: { ...componentProperties.isActive, hidden: true },
@@ -42,7 +41,7 @@ export class SceneManager extends Component.extend({
     super({
       isActive: true,
       mount: () =>
-        mountObservableArray(this.scenes, (scene) => {
+        this.scenes.mount((scene) => {
           if (!this.activeScene) {
             this.setActiveScene(scene);
           }

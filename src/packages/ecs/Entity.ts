@@ -5,8 +5,6 @@ import { System } from "./System";
 import { Container } from "./Container";
 import { trustedUndefined } from "./trustedUndefined";
 import { descendants } from "./descendants";
-import { mountObservableArray } from "./mountObservableArray";
-import { connectObservableArray } from "./connectObservableArray";
 
 export type EntityId = NominalString<"EntityId">;
 
@@ -58,7 +56,7 @@ export class Entity {
     public name = ""
   ) {
     this.observations = [
-      mountObservableArray(this.components, (component) => {
+      this.components.mount((component) => {
         component.configure({ entity: this });
         const unmountComponent = component.mount();
         return () => {
@@ -69,12 +67,12 @@ export class Entity {
         };
       }),
 
-      mountObservableArray(this.children, (child) => {
+      this.children.mount((child) => {
         child.setParent(this);
         return () => child.setParent(undefined);
       }),
 
-      connectObservableArray(this.children, (added, removed) => {
+      this.children.connect((added, removed) => {
         const updatedMap = { ...this.childrenById };
         for (const child of added) {
           updatedMap[child.id] = child;

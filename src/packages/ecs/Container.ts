@@ -1,4 +1,6 @@
-import { ObservableArray } from "./ObservableArray";
+import { ObservableArray, ObservableArrayEvents } from "./ObservableArray";
+import { connectObservableArray } from "./connectObservableArray";
+import { mountObservableArray, OnMount } from "./mountObservableArray";
 
 export class Container<T> extends ObservableArray<T> {
   remove(...toRemove: T[]) {
@@ -28,6 +30,14 @@ export class Container<T> extends ObservableArray<T> {
 
   clear() {
     this.splice(0, this.length);
+  }
+
+  connect(handleChange: ObservableArrayEvents<T>["change"]) {
+    return connectObservableArray(this, handleChange);
+  }
+
+  mount(onMount: OnMount<T>) {
+    return mountObservableArray(this, onMount);
   }
 }
 

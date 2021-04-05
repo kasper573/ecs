@@ -6,7 +6,6 @@ import {
 } from "../ecs-interactive/Interactive";
 import { Container } from "../ecs/Container";
 import { Describable } from "../ecs-describable/Describable";
-import { mountObservableArray } from "../ecs/mountObservableArray";
 
 export class Inventory extends Interactive.extend({
   isActive: { ...componentProperties.isActive, hidden: true },
@@ -26,7 +25,7 @@ export class Inventory extends Interactive.extend({
           ? `Inventory: ${this.items.map((e) => e.name).join(", ")}`
           : "Your inventory is empty!",
       mount: () =>
-        mountObservableArray(this.items, (item) => {
+        this.items.mount((item) => {
           const displayComponents = item.components.filterType(Describable);
           this.entity.children.push(item); // Move item to inventory sub tree
           item.components.remove(...displayComponents); // Stop displaying item
