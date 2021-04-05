@@ -5,7 +5,7 @@ import { descendants } from "./descendants";
 
 export class System {
   readonly events: TypedEmitter<SystemEvents> = new EventEmitter();
-  readonly root = new Entity();
+  readonly root = new Entity(undefined, undefined, { system: this });
 
   /**
    * Active entities
@@ -37,7 +37,6 @@ export class System {
   }
 
   constructor(...initial: Entity[]) {
-    this.root.system = this;
     this.root.children.push(...initial);
     this.update();
   }

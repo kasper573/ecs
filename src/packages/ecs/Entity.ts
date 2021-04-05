@@ -22,13 +22,6 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     return this._system;
   }
 
-  set system(value: System | undefined) {
-    this._system = value;
-    for (const entity of Array.from(descendants(this))) {
-      entity.system = value;
-    }
-  }
-
   get childrenById(): Readonly<Record<Id, Entity<Id>>> {
     return this._childrenById;
   }
@@ -55,6 +48,7 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
   ) {
     this.id = options.id ?? this.id;
     this.name = options.name ?? this.name;
+    this._system = options.system ?? this._system;
 
     this.observations = [
       this.components.mount((component) => {
@@ -97,16 +91,30 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     return this.name;
   }
 
-  private setParent(newParent?: Entity<Id>) {
+  setParent(newParent?: Entity<Id>) {
+    if (this.parent === newParent) {
+      return;
+    }
     if (this.parent) {
       this.parent.children.remove(this);
     }
     this._parent = newParent;
-    this.system = newParent?.system;
+    if (newParent) {
+      if (!newParent.children.includes(this)) {
+        newParent.children.push(this);
+      }
+    }
+    if (this._system !== newParent?.system) {
+      this._system = newParent?.system;
+      for (const descendant of Array.from(descendants(this))) {
+        descendant._system = this._system;
+      }
+    }
   }
 }
 
 export type EntityOptions<Id extends string> = {
   readonly name: string;
   readonly id: Id;
+  system?: System;
 };

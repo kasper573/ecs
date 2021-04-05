@@ -117,11 +117,11 @@ describe("system reference", () => {
     });
 
     it("is set for added", () => {
-      const a = new Entity();
-      const system = new System(a);
       const b = new Entity();
+      const a = new Entity([], [b]);
+      const system = new System();
       expect(b.system).toBe(undefined);
-      a.children.push(b);
+      system.root.children.push(a);
       expect(b.system).toBe(system);
     });
 
@@ -130,7 +130,7 @@ describe("system reference", () => {
       const a = new Entity([], [b]);
       const system = new System(a);
       expect(b.system).toBe(system);
-      a.children.remove(b);
+      system.root.children.remove(a);
       expect(b.system).toBe(undefined);
     });
   });
