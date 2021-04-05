@@ -44,8 +44,8 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([entity]);
-    expect(system.active.length).toBe(1);
-    expect(system.active[0]).toBeInstanceOf(Entity);
+    expect(system.entities.length).toBe(1);
+    expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
   it("can instantiate an entity without an EntityDefinition", () => {
@@ -55,8 +55,8 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.active.length).toBe(1);
-    expect(system.active[0]).toBeInstanceOf(Entity);
+    expect(system.entities.length).toBe(1);
+    expect(system.entities[0]).toBeInstanceOf(Entity);
   });
 
   it("sets entity.isActive to false when EntityInitializer.isActive is false", () => {
@@ -67,7 +67,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.all[0].isActive).toBe(false);
+    expect(system.root.allDescendants[0].isActive).toBe(false);
   });
 
   it("sets entity.isActive to true when EntityInitializer.isActive is true", () => {
@@ -78,7 +78,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.all[0].isActive).toBe(true);
+    expect(system.root.allDescendants[0].isActive).toBe(true);
   });
 
   it("entity.isActive defaults to true when EntityInitializer.isActive is undefined", () => {
@@ -88,7 +88,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.all[0].isActive).toBe(true);
+    expect(system.root.allDescendants[0].isActive).toBe(true);
   });
 
   it("instantiated entity use specified EntityInitializerId as id", () => {
@@ -98,7 +98,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    const [entity] = system.active;
+    const [entity] = system.entities;
     expect(entity.id).toBe(initializer.id);
   });
 
@@ -116,10 +116,10 @@ describe("creating a deserialized system", () => {
     };
 
     const system = mockSystem([], [], [parent, child]);
-    expect(system.active.length).toBe(2);
+    expect(system.entities.length).toBe(2);
 
-    const parentEntity = system.active.find((e) => e.id === parent.id);
-    const childEntity = system.active.find((e) => e.id === child.id);
+    const parentEntity = system.entities.find((e) => e.id === parent.id);
+    const childEntity = system.entities.find((e) => e.id === child.id);
     expect(childEntity!.parent).toBe(parentEntity);
     expect(parentEntity!.children).toContain(childEntity);
   });
@@ -138,7 +138,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([definition], [], [entity1]);
-    expect(system.active[0].name).toBe("Initial");
+    expect(system.entities[0].name).toBe("Initial");
   });
 
   it("can instantiate a component", () => {
@@ -161,7 +161,7 @@ describe("creating a deserialized system", () => {
       ],
     };
     const system = mockSystem([entity], [component]);
-    expect(system.active[0].components[0]).toBeInstanceOf(Foo);
+    expect(system.entities[0].components[0]).toBeInstanceOf(Foo);
   });
 
   it("can instantiate a component with properties", () => {
@@ -184,7 +184,7 @@ describe("creating a deserialized system", () => {
       ],
     };
     const system = mockSystem([entity], [component]);
-    expect((system.active[0].components[0] as Foo).calculate(5)).toBe(10);
+    expect((system.entities[0].components[0] as Foo).calculate(5)).toBe(10);
   });
 
   it("can instantiate two entities with different ids", () => {
@@ -201,7 +201,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([entity1, entity2]);
-    expect(system.active.length).toBe(2);
+    expect(system.entities.length).toBe(2);
   });
 
   it("throws error when referencing entity definition that doesn't exist", () => {
@@ -255,7 +255,7 @@ describe("creating a deserialized system", () => {
       ],
     };
     const system = mockSystem([entity], [component1, component2]);
-    expect(system.active[0].components.length).toBe(2);
+    expect(system.entities[0].components.length).toBe(2);
   });
 
   it("throws error when referencing component that doesn't exist", () => {
@@ -310,8 +310,8 @@ describe("creating a deserialized system", () => {
       [componentDefinition],
       [entity1, entity2]
     );
-    expect(system.active[0].components[0].isActive).toBe(false);
-    expect(system.active[1].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 
   test("two entities of the same definition inherit components and declarative properties", () => {
@@ -352,8 +352,8 @@ describe("creating a deserialized system", () => {
       [componentDefinition],
       [entity1, entity2]
     );
-    expect(system.active[0].components[0].isActive).toBe(false);
-    expect(system.active[1].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 });
 
@@ -372,9 +372,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    expect(system.all[0].isActive).toBe(true);
+    expect(system.root.allDescendants[0].isActive).toBe(true);
     updateSystem(system, ecs2);
-    expect(system.all[0].isActive).toBe(false);
+    expect(system.root.allDescendants[0].isActive).toBe(false);
   });
 
   it("sets entity.isActive to true when EntityInitializer.isActive changes from false to true", () => {
@@ -391,9 +391,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    expect(system.all[0].isActive).toBe(false);
+    expect(system.root.allDescendants[0].isActive).toBe(false);
     updateSystem(system, ecs2);
-    expect(system.all[0].isActive).toBe(true);
+    expect(system.root.allDescendants[0].isActive).toBe(true);
   });
 
   it("stops controlling entity.isActive when EntityInitializer.isActive changes from boolean to undefined", () => {
@@ -410,9 +410,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    system.all[0].isActive = true;
+    system.root.allDescendants[0].isActive = true;
     updateSystem(system, ecs2);
-    expect(system.all[0].isActive).toBe(true);
+    expect(system.root.allDescendants[0].isActive).toBe(true);
   });
 
   it("can change the entity parent", () => {
@@ -441,9 +441,9 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([], [], [parentA, parentB, childInB]);
 
     const system = createSystem(ecs1);
-    const parentEntityA = system.active.find((e) => e.id === parentA.id);
-    const parentEntityB = system.active.find((e) => e.id === parentB.id);
-    const childEntity = system.active.find((e) => e.id === childInA.id);
+    const parentEntityA = system.entities.find((e) => e.id === parentA.id);
+    const parentEntityB = system.entities.find((e) => e.id === parentB.id);
+    const childEntity = system.entities.find((e) => e.id === childInA.id);
 
     expect(childEntity!.parent).toBe(parentEntityA);
     updateSystem(system, ecs2);
@@ -471,8 +471,8 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([], [], [parent, childInRoot]);
 
     const system = createSystem(ecs1);
-    const parentEntity = system.active.find((e) => e.id === parent.id);
-    const childEntity = system.active.find((e) => e.id === child.id);
+    const parentEntity = system.entities.find((e) => e.id === parent.id);
+    const childEntity = system.entities.find((e) => e.id === child.id);
 
     expect(childEntity!.parent).toBe(parentEntity);
     updateSystem(system, ecs2);
@@ -499,9 +499,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([definition], [], [entity1]);
     const ecs2 = mockECS([definition], [], [entity2]);
     const system = createSystem(ecs1);
-    expect(system.active[0].name).toBe("Initial");
+    expect(system.entities[0].name).toBe("Initial");
     updateSystem(system, ecs2);
-    expect(system.active[0].name).toBe("Updated");
+    expect(system.entities[0].name).toBe("Updated");
   });
 
   it("can add entity constructor", () => {
@@ -578,7 +578,7 @@ describe("updating a deserialized system", () => {
     const ecsWithEntity = mockECS([entity]);
     const system = createSystem(createECSDefinition());
     updateSystem(system, ecsWithEntity);
-    expect(system.active.length).toBe(1);
+    expect(system.entities.length).toBe(1);
   });
 
   it("can maintain entity instances across updates", () => {
@@ -590,9 +590,9 @@ describe("updating a deserialized system", () => {
     };
     const ecsWithEntity = mockECS([entity]);
     const system = createSystem(ecsWithEntity);
-    const instanceBeforeUpdate = system.active[0];
+    const instanceBeforeUpdate = system.entities[0];
     updateSystem(system, ecsWithEntity);
-    const instanceAfterUpdate = system.active[0];
+    const instanceAfterUpdate = system.entities[0];
     expect(instanceAfterUpdate).toBe(instanceBeforeUpdate);
   });
 
@@ -606,7 +606,7 @@ describe("updating a deserialized system", () => {
     const ecsWithEntity = mockECS([entity]);
     const system = createSystem(ecsWithEntity);
     updateSystem(system, createECSDefinition());
-    expect(system.active.length).toBe(0);
+    expect(system.entities.length).toBe(0);
   });
 
   it("can add component to entity definition", () => {
@@ -636,10 +636,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityWithComponent], [component]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components.length).toBe(0);
+    expect(system.entities[0].components.length).toBe(0);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components.length).toBe(1);
+    expect(system.entities[0].components.length).toBe(1);
   });
 
   it("can remove component from entity definition", () => {
@@ -669,10 +669,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityWithoutComponent], []);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components.length).toBe(1);
+    expect(system.entities[0].components.length).toBe(1);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components.length).toBe(0);
+    expect(system.entities[0].components.length).toBe(0);
   });
 
   it("can update component properties in entity definition", () => {
@@ -712,10 +712,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entity2], [componentDefinition]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(true);
+    expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
   it("can add component to entity initializer", () => {
@@ -751,10 +751,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [component], [hasComponent]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components.length).toBe(0);
+    expect(system.entities[0].components.length).toBe(0);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components.length).toBe(1);
+    expect(system.entities[0].components.length).toBe(1);
   });
 
   it("can remove component from entity initializer", () => {
@@ -790,10 +790,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [], [noComponent]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components.length).toBe(1);
+    expect(system.entities[0].components.length).toBe(1);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components.length).toBe(0);
+    expect(system.entities[0].components.length).toBe(0);
   });
 
   it("can update component properties in entity initializer", () => {
@@ -832,10 +832,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(true);
+    expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
   it("can reset component properties in entity initializer", () => {
@@ -884,10 +884,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [componentDefinition], [entity2]);
 
     const system = createSystem(ecs1);
-    expect(system.active[0].components[0].isActive).toBe(true);
+    expect(system.entities[0].components[0].isActive).toBe(true);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
   });
 
   it("can reset component properties that has defaults in entity initializer", () => {
@@ -941,10 +941,10 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [componentDefinition], [entity2]);
 
     const system = createSystem(ecs1, nativeComponentsWithDefault);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
 
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(true);
+    expect(system.entities[0].components[0].isActive).toBe(true);
   });
 
   it("updating a component property only changes that specific property", () => {
@@ -983,7 +983,7 @@ describe("updating a deserialized system", () => {
     const ecs2 = mockECS([entityDefinition], [component], [entity2]);
 
     const system = createSystem(ecs1);
-    const instance = system.active[0].components[0] as InstanceOf<typeof Foo>;
+    const instance = system.entities[0].components[0] as InstanceOf<typeof Foo>;
     instance.configure({ text: "hello" });
     updateSystem(system, ecs2);
     expect(instance.text).toBe("hello");
@@ -1023,10 +1023,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([eDef], [cDef], [entity1]);
     const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
     const system = createSystem(ecs1);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(false);
-    expect(system.active[1].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 
   test("adding a second entity of an existing definition inherit components and declarative properties", () => {
@@ -1065,10 +1065,10 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([eDef], [cDef], [entity1]);
     const ecs2 = mockECS([eDef], [cDef], [entity1, entity2]);
     const system = createSystem(ecs1);
-    expect(system.active[0].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
     updateSystem(system, ecs2);
-    expect(system.active[0].components[0].isActive).toBe(false);
-    expect(system.active[1].components[0].isActive).toBe(false);
+    expect(system.entities[0].components[0].isActive).toBe(false);
+    expect(system.entities[1].components[0].isActive).toBe(false);
   });
 });
 

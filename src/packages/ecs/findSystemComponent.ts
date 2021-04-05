@@ -9,7 +9,7 @@ export function findSystemComponent<C extends Component>(
   if (!system) {
     return;
   }
-  for (const entity of system.active) {
+  for (const entity of system.entities) {
     const inv = entity.components.findType(componentType);
     if (inv) {
       return inv as InstanceOf<C>;

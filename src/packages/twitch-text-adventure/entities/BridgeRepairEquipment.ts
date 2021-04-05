@@ -15,7 +15,7 @@ export class BridgeRepairEquipment extends Entity {
     return findSystemComponent(this.system, Inventory);
   }
   get bridge() {
-    return this.system?.active.find(
+    return this.system?.entities.find(
       (entity): entity is Bridge => entity instanceof Bridge
     );
   }

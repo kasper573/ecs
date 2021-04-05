@@ -1,7 +1,6 @@
 import EventEmitter from "events";
 import TypedEmitter from "typed-emitter";
 import { Entity } from "./Entity";
-import { descendants } from "./descendants";
 
 export class System<EntityId extends string = string> {
   readonly events: TypedEmitter<SystemEvents> = new EventEmitter();
@@ -10,27 +9,20 @@ export class System<EntityId extends string = string> {
   });
 
   /**
-   * Active entities
+   * Semantic shortcut of system.root.activeDescendants
    */
-  get active() {
-    return Array.from(descendants(this.root, (e) => e.isActive));
-  }
-
-  /**
-   * All entities, active or not
-   */
-  get all() {
-    return Array.from(descendants(this.root, undefined));
+  get entities() {
+    return this.root.activeDescendants;
   }
 
   dispose() {
-    for (const entity of this.all) {
+    for (const entity of this.root.allDescendants) {
       entity.dispose();
     }
   }
 
   update() {
-    for (const entity of this.active) {
+    for (const entity of this.root.activeDescendants) {
       for (const component of entity.components) {
         component.update();
       }

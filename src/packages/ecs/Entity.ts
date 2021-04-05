@@ -26,6 +26,14 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     return this._childrenById;
   }
 
+  get activeDescendants() {
+    return Array.from(descendants(this, (e) => e.isActive));
+  }
+
+  get allDescendants() {
+    return Array.from(descendants(this));
+  }
+
   readonly children = new Container<Entity<Id>>();
   readonly components = new Container<ComponentInstance>();
   readonly observations: Function[] = [];
