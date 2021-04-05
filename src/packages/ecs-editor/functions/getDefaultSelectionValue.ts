@@ -23,10 +23,5 @@ export function getDefaultSelectionValue(
     case "system":
       const firstSystem = Object.values(state.ecs.systems)[0];
       return firstSystem?.id;
-    case "scene":
-      const scene = Object.values(state.ecs.scenes).find(
-        (scene) => scene.systemId === state.selection.system
-      );
-      return scene && scene.id;
   }
 }

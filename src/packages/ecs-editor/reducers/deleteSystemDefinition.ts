@@ -2,7 +2,6 @@ import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { core } from "../core";
-import { deleteSceneDefinition } from "./deleteSceneDefinition";
 import { deleteEntityDefinition } from "./deleteEntityDefinition";
 import { deleteLibraryFolder } from "./deleteLibraryFolder";
 import { deleteComponentDefinition } from "./deleteComponentDefinition";
@@ -13,14 +12,6 @@ export const deleteSystemDefinition = createEditorStateReducer<SystemDefinitionI
       throw new Error("Could not delete system");
     }
     // Delete related objects
-    for (const scene of Object.values(state.ecs.scenes).filter(
-      (scene) => scene.systemId === id
-    )) {
-      deleteSceneDefinition(
-        state,
-        core.actions.deleteSceneDefinition(scene.id)
-      );
-    }
     for (const def of Object.values(state.ecs.entityDefinitions).filter(
       (def) => def.systemId === id
     )) {

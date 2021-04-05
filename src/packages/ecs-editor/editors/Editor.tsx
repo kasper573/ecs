@@ -21,7 +21,7 @@ import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
 
 /**
- * Renders controls to CRUD systems, scenes, entities, components and properties.
+ * Renders controls to CRUD systems, entities, components and properties.
  */
 export const Editor = () => {
   const themeType = useSelector(selectThemeType);

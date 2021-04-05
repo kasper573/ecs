@@ -12,7 +12,6 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
-import { ScenesPanel } from "./ScenesPanel";
 import { FileMenu } from "./FileMenu";
 import { AppBarContent } from "./AppBarContent";
 
@@ -35,7 +34,6 @@ export const Layout = ({ children }: LayoutProps) => {
         <FileMenu />
       </div>
       <Divider />
-      <ScenesPanel />
     </div>
   );
 

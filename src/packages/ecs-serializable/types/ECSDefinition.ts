@@ -1,6 +1,5 @@
 import { SystemDefinition, SystemDefinitionId } from "./SystemDefinition";
 import { EntityInitializer, EntityInitializerId } from "./EntityInitializer";
-import { SceneDefinition, SceneDefinitionId } from "./SceneDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./EntityDefinition";
 import { LibraryFolder, LibraryFolderId } from "./LibraryFolder";
 import {
@@ -14,7 +13,6 @@ import {
  */
 export type ECSDefinition = {
   systems: Record<SystemDefinitionId, SystemDefinition>;
-  scenes: Record<SceneDefinitionId, SceneDefinition>;
   entityInitializers: Record<EntityInitializerId, EntityInitializer>;
   entityDefinitions: Record<EntityDefinitionId, EntityDefinition>;
   componentDefinitions: Record<ComponentDefinitionId, ComponentDefinition>;

@@ -1,14 +1,14 @@
 import { EditorState } from "../types/EditorState";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
-import { SceneDefinitionId } from "../../ecs-serializable/types/SceneDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 
 export const selectListOfEntityInitializer = createMemoizedSelector(
   (
     state: EditorState,
-    forSceneId: SceneDefinitionId | undefined = state.selection.scene
-  ) => [state.ecs.entityInitializers, forSceneId] as const,
-  ([entityInitializers, forSceneId]) =>
+    forSystemId: SystemDefinitionId | undefined = state.selection.system
+  ) => [state.ecs.entityInitializers, forSystemId] as const,
+  ([entityInitializers, forSystemId]) =>
     Object.values(entityInitializers).filter(
-      (entity) => entity.sceneId === forSceneId
+      (entity) => entity.systemId === forSystemId
     )
 );

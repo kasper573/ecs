@@ -9,14 +9,10 @@ import { Panel } from "../components/Panel";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { selectHasSystems } from "../selectors/selectHasSystems";
-import { selectHasScenes } from "../selectors/selectHasScenes";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { selectSelectedSceneDefinition } from "../selectors/selectSelectedSceneDefinition";
 
 export const RuntimePanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
-  const selectedScene = useSelector(selectSelectedSceneDefinition);
-  const hasScenes = useSelector(selectHasScenes);
   const hasSystem = useSelector(selectHasSystems);
   const [system, resetSystem] = useSystemSync();
 
@@ -25,15 +21,6 @@ export const RuntimePanel = () => {
       <FlatPanel>
         <Typography>
           {hasSystem ? "Please select a system" : "Please create a system"}
-        </Typography>
-      </FlatPanel>
-    );
-  }
-  if (!selectedScene) {
-    return (
-      <FlatPanel>
-        <Typography>
-          {hasScenes ? "Please select a scene" : "Please create a scene"}
         </Typography>
       </FlatPanel>
     );

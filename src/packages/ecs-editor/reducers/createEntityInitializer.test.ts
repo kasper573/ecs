@@ -13,7 +13,6 @@ test("creating an entity initializer copies all components from definition (with
   const componentDefinition = Object.values(
     selectedECS.componentDefinitions
   )[0];
-  const scene = Object.values(selectedECS.scenes)[0];
   const definitionComponent = entityDefinition.components[0];
 
   const initializerComponent: ComponentInitializer = {
@@ -24,7 +23,6 @@ test("creating an entity initializer copies all components from definition (with
 
   const entityInitializer: EntityInitializer = {
     systemId: system.id,
-    sceneId: scene.id,
     id: uuid(),
     definitionId: entityDefinition.id,
     name: entityDefinition.name,

@@ -14,7 +14,6 @@ import {
   ComponentDefinitionId,
 } from "./types/ComponentDefinition";
 import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { SceneDefinition } from "./types/SceneDefinition";
 import { SystemDefinition } from "./types/SystemDefinition";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { ComponentInitializer } from "./types/ComponentInitializer";
@@ -56,7 +55,7 @@ describe.skip("creating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       definitionId: definition.id,
       name: "Initial",
@@ -134,14 +133,8 @@ describe.skip("creating a deserialized system", () => {
       id: uid(),
       name: "System A",
     };
-    const scene: SceneDefinition = {
-      id: uid(),
-      name: "Scene A",
-      systemId: system.id,
-    };
     const entity: EntityInitializer = {
       id: uid(),
-      sceneId: scene.id,
       systemId: system.id,
       definitionId: "bogus" as EntityDefinitionId,
       name: "entity",
@@ -149,7 +142,6 @@ describe.skip("creating a deserialized system", () => {
     };
     const ecs = createECSDefinition({
       systems: { [system.id]: system },
-      scenes: { [scene.id]: scene },
       entityInitializers: { [entity.id]: entity },
     });
 
@@ -225,13 +217,13 @@ describe.skip("creating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 1",
       definitionId: entityDefinition.id,
       components: [],
     };
-    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity2: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 2",
       definitionId: entityDefinition.id,
@@ -267,13 +259,13 @@ describe.skip("creating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 1",
       definitionId: entityDefinition.id,
       components: [],
     };
-    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity2: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 2",
       definitionId: entityDefinition.id,
@@ -297,13 +289,13 @@ describe.skip("updating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       definitionId: definition.id,
       name: "Initial",
       components: [],
     };
-    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity2: Omit<EntityInitializer, "systemId"> = {
       ...entity1,
       name: "Updated",
     };
@@ -542,7 +534,7 @@ describe.skip("updating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const noComponent: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const noComponent: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -581,7 +573,7 @@ describe.skip("updating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const noComponent: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const noComponent: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -620,7 +612,7 @@ describe.skip("updating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -671,7 +663,7 @@ describe.skip("updating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -728,7 +720,7 @@ describe.skip("updating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -771,7 +763,7 @@ describe.skip("updating a deserialized system", () => {
       id: uid(),
       components: [],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: entityDefinition.name,
       definitionId: entityDefinition.id,
@@ -819,13 +811,13 @@ describe.skip("updating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 1",
       definitionId: eDef.id,
       components: [],
     };
-    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity2: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 2",
       definitionId: eDef.id,
@@ -861,13 +853,13 @@ describe.skip("updating a deserialized system", () => {
         },
       ],
     };
-    const entity1: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity1: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 1",
       definitionId: eDef.id,
       components: [],
     };
-    const entity2: Omit<EntityInitializer, "systemId" | "sceneId"> = {
+    const entity2: Omit<EntityInitializer, "systemId"> = {
       id: uid(),
       name: "Entity 2",
       definitionId: eDef.id,
@@ -889,7 +881,7 @@ const uid = <T extends string>() => ("id" + idCounter++) as T;
 const mockECS = (
   entityDefinitions: Array<Omit<EntityDefinition, "systemId">>,
   componentDefinitions: Array<Omit<ComponentDefinition, "systemId">> = [],
-  entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
+  entityInitializers?: Array<Omit<EntityInitializer, "systemId">>
 ) => {
   const ecs = createECSDefinition();
 
@@ -898,13 +890,6 @@ const mockECS = (
     name: "System A",
   };
   ecs.systems[system.id] = system;
-
-  const scene: SceneDefinition = {
-    systemId: system.id,
-    id: uid(),
-    name: "Scene A",
-  };
-  ecs.scenes[scene.id] = scene;
 
   if (!entityInitializers) {
     entityInitializers = entityDefinitions.map(({ id, components }, index) => ({
@@ -918,7 +903,6 @@ const mockECS = (
   entityInitializers.forEach((entity) => {
     ecs.entityInitializers[entity.id] = {
       ...entity,
-      sceneId: scene.id,
       systemId: system.id,
     };
   });
@@ -942,7 +926,7 @@ const mockECS = (
 const mockSystem = (
   entities: Array<Omit<EntityDefinition, "systemId">>,
   components: Array<Omit<ComponentDefinition, "systemId">> = [],
-  entityInitializers?: Array<Omit<EntityInitializer, "systemId" | "sceneId">>
+  entityInitializers?: Array<Omit<EntityInitializer, "systemId">>
 ) => createSystem(mockECS(entities, components, entityInitializers));
 
 type SystemWithMemory = System & {

@@ -13,7 +13,6 @@ export const getECSDefinitionForSystem = (
   transfer("libraryFolders", singleECS, multiECS, belongsToSystem);
   transfer("entityInitializers", singleECS, multiECS, belongsToSystem);
   transfer("entityDefinitions", singleECS, multiECS, belongsToSystem);
-  transfer("scenes", singleECS, multiECS, belongsToSystem);
   transfer("systems", singleECS, multiECS, ({ id }) => id === systemId);
   return singleECS;
 };

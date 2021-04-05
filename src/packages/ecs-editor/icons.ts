@@ -13,7 +13,6 @@ export {
   Map as SystemIcon,
   Extension as EntityDefinitionIcon,
   Receipt as EntityInitializerIcon,
-  Room as SceneIcon,
   Settings as DevToolsIcon,
   Settings as ComponentDefinitionIcon,
   Delete as DeleteIcon,

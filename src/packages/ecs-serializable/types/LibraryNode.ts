@@ -13,7 +13,7 @@ export type LibraryNode = {
    */
   name: string;
   /**
-   * The id of the system this scene belongs to
+   * The id of the system this node belongs to
    */
   systemId: SystemDefinitionId;
 };

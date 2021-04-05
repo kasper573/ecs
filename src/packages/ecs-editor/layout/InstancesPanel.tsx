@@ -59,11 +59,10 @@ export const InstancesPanel = () => {
   }
 
   function handleInitialize(entityDefinition: EntityDefinition) {
-    const { system, scene } = store.getState().present.selection;
+    const { system } = store.getState().present.selection;
     dispatch(
       core.actions.createEntityInitializer({
         systemId: system!,
-        sceneId: scene!,
         id: uuid(),
         name: entityDefinition.name,
         definitionId: entityDefinition.id,

@@ -6,8 +6,6 @@ const panelSpacing = ({ theme }: { theme: Theme }) => theme.spacing(1);
 
 /**
  * Controls the layout for all editor panels.
- * - Displays the scene to the left and the rest of the panels to the right on desktop.
- * - Displays all panels vertically on mobile.
  * (Expects EditorPanels as children)
  */
 export const PanelContainer = styled.div`

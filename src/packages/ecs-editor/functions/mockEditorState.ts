@@ -5,15 +5,11 @@ import {
   SystemDefinitionId,
 } from "../../ecs-serializable/types/SystemDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
-import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
-import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { Component } from "../../ecs/Component";
 import { createEditorState } from "./createEditorState";
@@ -32,11 +28,8 @@ export const mockEditorState = (
   );
 
   const system = Object.values(ecs.systems)[0];
-  const scene = Object.values(ecs.scenes).find(
-    (scene) => scene.systemId === system.id
-  );
   const entity = Object.values(ecs.entityInitializers).find(
-    (init) => init.sceneId === scene?.id
+    (init) => init.systemId === system?.id
   );
 
   return {
@@ -44,7 +37,6 @@ export const mockEditorState = (
     ecs,
     selection: {
       system: system?.id,
-      scene: scene?.id,
       inspected: entity && {
         type: "entityInitializer",
         id: entity.id,
@@ -74,7 +66,6 @@ const mockSystem = (
   };
   ecs.systems[system.id] = system;
   mockLibrary(ecs, system.id, nativeComponentNames, mockSize);
-  mock(mockSize).map((nr) => mockScene(ecs, system.id, nr));
 };
 
 const mockLibrary = (
@@ -156,31 +147,6 @@ const mockComponentInitializer = (
     baz: true,
   },
 });
-
-const mockScene = (
-  ecs: ECSDefinition,
-  systemId: SystemDefinitionId,
-  nr: number
-) => {
-  const systemECS = getECSDefinitionForSystem(ecs, systemId);
-  const scene: SceneDefinition = {
-    systemId,
-    id: id(`scene${nr}`),
-    name: `Scene ${nr}`,
-  };
-  ecs.scenes[scene.id] = scene;
-  for (const def of Object.values(systemECS.entityDefinitions)) {
-    const init: EntityInitializer = {
-      systemId,
-      sceneId: scene.id,
-      id: id("entity-initializer"),
-      definitionId: def.id,
-      name: def.name,
-      components: def.components.map(inheritComponentInitializer),
-    };
-    ecs.entityInitializers[init.id] = init;
-  }
-};
 
 const mock = (n: number) => range(1, n + 1);
 

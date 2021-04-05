@@ -19,14 +19,14 @@ export const CreateEntityInitializerButton = ({
   title,
   onCreate,
 }: CreateEntityInitializerButtonProps) => {
-  const { system, scene } = useSelector(selectEditorSelection);
+  const { system } = useSelector(selectEditorSelection);
   const entities = useSelector(selectListOfEntityDefinition);
   const popupState = usePopupState({
     variant: "popper",
     popupId: "select-entity-definition",
   });
-  if (!system || !scene) {
-    return null; // Can't create entity without system and scene selected
+  if (!system) {
+    return null; // Can't create entity without system selected
   }
   return (
     <>
