@@ -7,6 +7,13 @@ export const createEntityInitializer = createEditorStateReducer<EntityInitialize
     { ecs: { entityInitializers, entityDefinitions } },
     { payload: initializer }
   ) => {
+    if (!initializer.definitionId) {
+      // Entity without definition
+      entityInitializers[initializer.id] = initializer;
+      return;
+    }
+
+    // Entity with definition
     const definition = entityDefinitions[initializer.definitionId];
     if (!definition) {
       throw new Error(`Referenced entity definition not found`);

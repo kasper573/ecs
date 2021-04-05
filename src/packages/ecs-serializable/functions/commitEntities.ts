@@ -3,6 +3,8 @@ import { without } from "lodash";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { EntityInitializer } from "../types/EntityInitializer";
 import { DeserializationMemory } from "../DeserializationMemory";
+import { RedefinableEntity } from "../RedefinableEntity";
+import { defined } from "../../ecs-common/defined";
 import { defineEntity } from "./defineEntity";
 
 /**
@@ -15,7 +17,7 @@ export const commitEntities = (
 ) => {
   const allDefinitionIds = uniq([
     ...definitions.map((d) => d.id),
-    ...initializers.map((i) => i.definitionId),
+    ...defined(initializers.map((i) => i.definitionId)),
   ]);
 
   // Remove expired entity constructors
@@ -59,12 +61,29 @@ export const commitEntities = (
   // Define new or redefine existing entity instances
   for (const init of initializers) {
     let entity = memory.entityInstances.get(init.id);
-    const definition = definitions.find((def) => def.id === init.definitionId)!;
-    const DefinedEntity = memory.entityConstructors.get(init.definitionId)!;
-    if (!entity) {
-      entity = new DefinedEntity(init.id);
-      memory.entityInstances.set(init.id, entity);
+    if (init.definitionId) {
+      // Instantiate entity using an EntityDefinition
+      const definition = definitions.find(
+        (def) => def.id === init.definitionId
+      )!;
+      const DefinedEntity = memory.entityConstructors.get(init.definitionId)!;
+      if (!entity) {
+        entity = new DefinedEntity(init.id);
+        memory.entityInstances.set(init.id, entity);
+      }
+      entity.define(
+        definition.name,
+        definition.components,
+        init.components,
+        memory
+      );
+    } else {
+      // Instantiate entity without an EntityDefinition
+      if (!entity) {
+        entity = new RedefinableEntity();
+        memory.entityInstances.set(init.id, entity);
+      }
+      entity.define(init.name, [], init.components, memory);
     }
-    entity.define(definition, init, memory);
   }
 };

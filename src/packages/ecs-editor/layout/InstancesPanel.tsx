@@ -102,9 +102,11 @@ const getItemProps = (
   { name, definitionId }: EntityInitializer,
   definitions: Record<EntityDefinitionId, EntityDefinition>
 ) => {
-  const definitionName = definitions[definitionId]?.name;
+  const definitionName = definitionId && definitions[definitionId]?.name;
   const displayName =
-    definitionName === name ? name : `${name} (${definitionName})`;
+    definitionName && definitionName !== name
+      ? `${name} (${definitionName})`
+      : name;
   return {
     name: displayName,
     icon: EntityInitializerIcon,

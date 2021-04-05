@@ -20,7 +20,7 @@ export type EntityInitializer = {
   /**
    * The entity definition this initializer references
    */
-  definitionId: EntityDefinitionId;
+  definitionId?: EntityDefinitionId;
   /**
    * The id of the system this entity belongs to
    */
