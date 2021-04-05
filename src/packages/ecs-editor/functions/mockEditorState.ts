@@ -12,6 +12,9 @@ import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { Component } from "../../ecs/Component";
+import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { createEditorState } from "./createEditorState";
 
 /**
@@ -66,6 +69,7 @@ const mockSystem = (
   };
   ecs.systems[system.id] = system;
   mockLibrary(ecs, system.id, nativeComponentNames, mockSize);
+  mockEntityInitializers(ecs, system.id, mockSize);
 };
 
 const mockLibrary = (
@@ -108,6 +112,26 @@ const mockLibrary = (
     const def = mockEntityDefinition(nr, systemId, componentDefinitions);
     def.parentNodeId = folders[(nr + mockSize - 1) % folders.length].nodeId;
     ecs.entityDefinitions[def.id] = def;
+  });
+};
+
+const mockEntityInitializers = (
+  ecs: ECSDefinition,
+  systemId: SystemDefinitionId,
+  mockSize: number
+) => {
+  const systemECS = getECSDefinitionForSystem(ecs, systemId);
+  mock(mockSize).forEach((n) => {
+    for (const def of Object.values(systemECS.entityDefinitions)) {
+      const init: EntityInitializer = {
+        systemId,
+        id: id("entity-initializer"),
+        definitionId: def.id,
+        name: `${def.name}${n}`,
+        components: def.components.map(inheritComponentInitializer),
+      };
+      ecs.entityInitializers[init.id] = init;
+    }
   });
 };
 
