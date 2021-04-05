@@ -1,11 +1,10 @@
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, ReactElement } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import { Container, ContainerProps } from "@material-ui/core";
 import styled, { CSSObject } from "styled-components";
-import { AppBarContent } from "./AppBarContent";
-import { SystemHeader } from "./SystemHeader";
 
 export type LayoutProps = {
+  appBar: ReactElement;
   children: ContainerProps["children"];
 };
 
@@ -13,16 +12,13 @@ export type LayoutProps = {
  * A layout component that wraps children in a responsive container that always has an AppBar and Drawer.
  * On desktop the drawer is permanent and on mobile it is toggled.
  */
-export const Layout = ({ children }: LayoutProps) => (
+export const Layout = ({ children, appBar }: LayoutProps) => (
   <Root>
     <AppBar position="fixed">
-      <AppBarContainer>
-        <AppBarContent />
-      </AppBarContainer>
+      <AppBarContainer>{appBar}</AppBarContainer>
     </AppBar>
     <Content>
       <ToolbarSpacing />
-      <SystemHeader />
       {children}
     </Content>
   </Root>
