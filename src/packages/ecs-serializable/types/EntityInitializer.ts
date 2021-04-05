@@ -11,6 +11,10 @@ export type EntityInitializer = {
    */
   id: EntityInitializerId;
   /**
+   * uuid
+   */
+  parentId?: EntityInitializerId;
+  /**
    * Used for presentation
    */
   name: string;

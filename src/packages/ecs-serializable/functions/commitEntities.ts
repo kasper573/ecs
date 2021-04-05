@@ -3,6 +3,7 @@ import { without } from "lodash";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { EntityInitializer } from "../types/EntityInitializer";
 import { DeserializationMemory } from "../DeserializationMemory";
+import { EntityId } from "../../ecs/Entity";
 import { defineEntity } from "./defineEntity";
 
 /**
@@ -63,6 +64,7 @@ export const commitEntities = (
     const DefinedEntity = memory.entityConstructors.get(init.definitionId)!;
     if (!entity) {
       entity = new DefinedEntity();
+      entity.id = init.id as EntityId;
       memory.entityInstances.set(init.id, entity);
     }
     entity.define(definition, init, memory);

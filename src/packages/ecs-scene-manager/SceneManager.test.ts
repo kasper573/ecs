@@ -1,63 +1,66 @@
 import { Entity } from "../ecs/Entity";
+import { System } from "../ecs/System";
 import { SceneManager } from "./SceneManager";
-import { Scene } from "./Scene";
 
-test("sceneId defaults to the first scene when not specified", () => {
-  type Scenes = "a" | "b";
-  const scenes = {
-    a: [new Entity()],
-    b: [new Entity()],
-  };
-  const sceneManager = new SceneManager<Scenes>(scenes);
-  expect(sceneManager.sceneId).toBe("a");
+test("sceneId defaults to the id of the first child", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a, b]);
+  new System(root);
+  expect(root.manager.sceneId).toBe(a.id);
 });
 
-test("scene represents the initial sceneId by default", () => {
-  type Scenes = "a" | "b";
-  const scenes = {
-    a: [new Entity()],
-    b: [new Entity()],
-  };
-  const sceneManager = new SceneManager<Scenes>(scenes, "b");
-  expect(sceneManager.scene).toEqual(expect.arrayContaining(scenes.b));
+test("scene defaults to the first child", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a, b]);
+  new System(root);
+  expect(root.manager.scene).toBe(a);
 });
 
 test("scene can be changed by changing sceneId", () => {
-  const scenes = {
-    a: [new Entity()],
-    b: [new Entity()],
-  };
-  const sceneManager = new SceneManager(scenes);
-  sceneManager.sceneId = "b";
-  expect(sceneManager.scene).toEqual(expect.arrayContaining(scenes.b));
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a, b]);
+  new System(root);
+  root.manager.sceneId = b.id;
+  expect(root.manager.scene).toBe(b);
 });
 
-test("updating scenes maintains existing scene instances", () => {
-  const scenes = { a: [new Entity()] };
-  const sceneManager = new SceneManager(scenes);
-  const before = sceneManager.scenes.a;
-  sceneManager.setEntities(scenes);
-  const after = sceneManager.scenes.a;
-  expect(before).toBe(after);
+test("Entity.isActive of active scene is true", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a, b]);
+  new System(root);
+  root.manager.sceneId = a.id;
+  expect(a.isActive).toBe(true);
 });
 
-test("scenes get individual instances", () => {
-  const sceneManager = new SceneManager({ a: [], b: [] });
-  expect(sceneManager.scenes.a).toBeInstanceOf(Scene);
-  expect(sceneManager.scenes.b).toBeInstanceOf(Scene);
-  expect(sceneManager.scenes.a).not.toBe(sceneManager.scenes.b);
+test("Entity.isActive of inactive scene is false", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a, b]);
+  new System(root);
+  root.manager.sceneId = b.id;
+  expect(a.isActive).toBe(false);
 });
 
-test("can add entities to scene", () => {
-  const e1 = new Entity();
-  const e2 = new Entity();
-  const sceneManager = new SceneManager({ a: [e1] });
-  sceneManager.setEntities({ a: [e1, e2] });
-  expect(sceneManager.scenes.a).toEqual(expect.arrayContaining([e1, e2]));
+test("Entity.isActive of unmanaged entity is true", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const root = new Root([a]);
+  new System(root, b);
+  expect(b.isActive).toBe(true);
 });
 
-test("can remove entities from scene", () => {
-  const sceneManager = new SceneManager({ a: [new Entity()] });
-  sceneManager.setEntities({ a: [] });
-  expect(sceneManager.scenes.a).toEqual(expect.arrayContaining([]));
-});
+class Scene extends Entity {
+  constructor(entities: Entity[]) {
+    super([], entities);
+  }
+}
+
+class Root extends Entity {
+  constructor(scenes: Scene[], public manager = new SceneManager()) {
+    super([manager], scenes);
+  }
+}

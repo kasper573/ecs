@@ -25,6 +25,10 @@ export class Container<T> extends ObservableArray<T> {
     }
     return instance;
   }
+
+  clear() {
+    this.splice(0, this.length);
+  }
 }
 
 export type Class<T> = new (...args: any[]) => T;

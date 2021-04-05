@@ -3,7 +3,6 @@ import React from "react";
 import { TextSystem } from "../../ecs-react/TextSystem";
 import { useSelector } from "../store";
 import { useSystemSync } from "../hooks/useSystemSync";
-import { useSceneSync } from "../hooks/useSceneSync";
 import { ResetIcon } from "../icons";
 import { FlatPanel } from "../components/FlatPanel";
 import { Panel } from "../components/Panel";
@@ -20,7 +19,6 @@ export const RuntimePanel = () => {
   const hasScenes = useSelector(selectHasScenes);
   const hasSystem = useSelector(selectHasSystems);
   const [system, resetSystem] = useSystemSync();
-  useSceneSync(system);
 
   if (!selectedSystem) {
     return (

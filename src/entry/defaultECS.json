@@ -5,22 +5,9 @@
       "name": "Game"
     }
   },
-  "scenes": {
-    "a9ea7f60-e974-47bd-9482-4bf960d5b1d6": {
-      "id": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
-      "name": "Room",
-      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599"
-    },
-    "9d8da777-4f74-4e94-94a2-70dd11e9dd3a": {
-      "id": "9d8da777-4f74-4e94-94a2-70dd11e9dd3a",
-      "name": "Cellar",
-      "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599"
-    }
-  },
   "entityInitializers": {
     "060788d9-86ba-4d2b-b27b-1789ba350f74": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
       "id": "060788d9-86ba-4d2b-b27b-1789ba350f74",
       "name": "Apple",
       "definitionId": "95c75a22-1cb9-4008-9513-0eda7f92e71f",
@@ -39,7 +26,6 @@
     },
     "04a5322e-c883-4f40-adc3-bd6933548e39": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
       "id": "04a5322e-c883-4f40-adc3-bd6933548e39",
       "name": "Campfire",
       "definitionId": "ca55d857-fbb6-4bb5-9c5b-3636eaac3801",
@@ -58,7 +44,6 @@
     },
     "6728d0ca-7a9f-4748-887e-771eae289fbf": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
       "id": "6728d0ca-7a9f-4748-887e-771eae289fbf",
       "name": "Unripe Apple",
       "definitionId": "95c75a22-1cb9-4008-9513-0eda7f92e71f",
@@ -77,7 +62,6 @@
     },
     "95c5d200-61be-4356-b8ab-5bc8edd8dd05": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
       "id": "95c5d200-61be-4356-b8ab-5bc8edd8dd05",
       "name": "Cellar",
       "definitionId": "f53c0fe5-c5fc-48e2-b63a-9b133246fc52",
@@ -91,7 +75,6 @@
     },
     "c3171e6c-9b1a-409b-b1b7-623a0d01a8ac": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "9d8da777-4f74-4e94-94a2-70dd11e9dd3a",
       "id": "c3171e6c-9b1a-409b-b1b7-623a0d01a8ac",
       "name": "Room",
       "definitionId": "f53c0fe5-c5fc-48e2-b63a-9b133246fc52",
@@ -105,7 +88,6 @@
     },
     "e2a112c8-609a-4e8f-92e5-b2c72ad45b4c": {
       "systemId": "6a734bf7-26b8-46c8-925f-0d5bfeebf599",
-      "sceneId": "a9ea7f60-e974-47bd-9482-4bf960d5b1d6",
       "id": "e2a112c8-609a-4e8f-92e5-b2c72ad45b4c",
       "name": "Modules",
       "definitionId": "1f1d51be-aec3-4f84-9356-6d3431ca687c",
@@ -189,9 +171,6 @@
           "properties": {
             "action": {
               "code": "({entity}) => `Go to ${entity.name}`"
-            },
-            "effect": {
-              "code": "({ entity, system }) => {\n  const sm = system.modules.find((item) => item.constructor.name === \"SceneManager\");\n  for (const sceneId in sm?.scenes ?? []) {\n    if (sm.scenes[sceneId].name === entity.name) {\n      sm.sceneId = sceneId;\n      return;\n    }\n  }\n  return `Could not find a scene by name \"${entity.name}\"`;\n}"
             }
           }
         }

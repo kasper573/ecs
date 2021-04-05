@@ -1,12 +1,14 @@
 import { Entity } from "../../ecs/Entity";
 import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { TextAdventureSM } from "../TextAdventureSM";
+import { findSystemComponent } from "../../ecs/findSystemComponent";
+import { SceneManager } from "../../ecs-scene-manager/SceneManager";
+import { Scenes } from "../Scenes";
 import { Lighter } from "./Lighter";
 
 export class Ladder extends Entity {
   get sceneManager() {
-    return this.system.modules.resolveType(TextAdventureSM);
+    return findSystemComponent(this.system, SceneManager);
   }
   constructor() {
     super();
@@ -19,7 +21,9 @@ export class Ladder extends Entity {
         action: "Climb ladder",
         isActive: () => Lighter.isLit(this.system),
         effect: () => {
-          this.sceneManager.sceneId = "cliff";
+          if (this.sceneManager) {
+            this.sceneManager.sceneId = Scenes.cliff;
+          }
         },
       })
     );

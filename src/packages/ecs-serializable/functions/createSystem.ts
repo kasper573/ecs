@@ -1,5 +1,4 @@
 import { System } from "../../ecs/System";
-import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { DeserializationMemory } from "../DeserializationMemory";
@@ -13,11 +12,7 @@ export const createSystem = (
   memory: DeserializationMemory,
   nativeComponents: NativeComponents
 ): System => {
-  const sceneManager = new SceneManager({});
-  const system = new System({
-    modules: [sceneManager],
-    entities: () => sceneManager.scene ?? [],
-  });
+  const system = new System();
   updateSystem(system, ecs, memory, nativeComponents);
   return system;
 };

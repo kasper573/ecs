@@ -2,32 +2,25 @@ import { System } from "../ecs/System";
 import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
 import { Entity } from "../ecs/Entity";
 import { Inventory } from "../ecs-collectable/Inventory";
+import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { Bridge } from "./entities/Bridge";
 import { BridgeRepairEquipment } from "./entities/BridgeRepairEquipment";
 import { Darkness } from "./entities/Darkness";
 import { Ladder } from "./entities/Ladder";
 import { WinMessage } from "./entities/WinMessage";
 import { Lighter } from "./entities/Lighter";
-import { TextAdventureSM } from "./TextAdventureSM";
 import { PunchingBag } from "./entities/PunchingBag";
 
 export const createGame = () => {
   const bridge = new Bridge();
-  const sceneManager = new TextAdventureSM({
-    cliff: [bridge, new BridgeRepairEquipment(), new PunchingBag()],
-    bridge: [bridge],
+  const sceneManager = SceneManager.create({
+    cliff: [new BridgeRepairEquipment(), new PunchingBag()],
+    bridge: [],
     pit: [new Darkness(), new Ladder()],
     otherSide: [new WinMessage()],
   });
   const inventory = Inventory.create(new Lighter());
   const interactionMemory = new InteractionMemory();
   const utilityEntity = new Entity([inventory, interactionMemory]);
-  return new System({
-    modules: [sceneManager, new InteractionMemory()],
-    entities: () => [
-      utilityEntity,
-      ...(sceneManager.scene ?? []),
-      ...inventory.items,
-    ],
-  });
+  return new System(bridge, utilityEntity, sceneManager);
 };

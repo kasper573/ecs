@@ -1,8 +1,6 @@
-import { without } from "lodash";
 import { System } from "../ecs/System";
 import { createActions } from "../ecs-interactive/createActions";
 import { InteractionMemory } from "../ecs-interactive/InteractionMemory";
-import { Inventory } from "../ecs-collectable/Inventory";
 import { findSystemComponent } from "../ecs/findSystemComponent";
 import { describeAction } from "./describeAction";
 import { describeEntities } from "./describeEntities";
@@ -21,7 +19,7 @@ export const describeSystem = (
   if (lastResult) {
     parts.push(lastResult);
   }
-  const entitiesDescribed = describeEntities(getVisibleEntities(system));
+  const entitiesDescribed = describeEntities(system.entities);
   if (entitiesDescribed) {
     parts.push(entitiesDescribed);
   }
@@ -31,13 +29,6 @@ export const describeSystem = (
     parts.push(`Actions:\n${actionsDescribed}`);
   }
   return parts.join("\n");
-};
-
-const getVisibleEntities = (system: System) => {
-  const inventory = findSystemComponent(system, Inventory);
-  return inventory
-    ? without(system.entities, ...inventory.items)
-    : system.entities;
 };
 
 const defaultDescribers = { describeAction, describeEntities };

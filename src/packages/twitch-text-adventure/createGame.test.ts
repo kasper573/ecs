@@ -9,8 +9,8 @@ test("Can play through optimistic route of story", () => {
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's in perfect shape.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -23,8 +23,8 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's looking bruised.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -37,8 +37,8 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's falling apart.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -51,8 +51,8 @@ You stand in front of a bridge. It looks fragile.
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Pick up repair kit`
   );
 
@@ -61,9 +61,9 @@ Actions:
   expect(describeSystem(system)).toEqual(
     `You are standing on the bridge. It seems very unstable.
 Actions:
-- View inventory
 - Proceed
-- Go back`
+- Go back
+- View inventory`
   );
 
   performCommand(system, "Proceed");
@@ -82,8 +82,8 @@ Actions:
     `You see a ladder.
 Actions:
 - View inventory
-- Climb ladder
-- Stop using lighter`
+- Stop using lighter
+- Climb ladder`
   );
 
   performCommand(system, "Climb ladder");
@@ -93,8 +93,8 @@ Actions:
 There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Pick up repair kit`
   );
 
@@ -105,8 +105,8 @@ Actions:
 You stand in front of a bridge. It looks broken.
 There's a punching bag. It is broken.
 Actions:
-- View inventory
 - Cross the bridge
+- View inventory
 - Repair bridge`
   );
 
@@ -117,8 +117,8 @@ Actions:
 You stand in front of a bridge. It looks sturdy.
 There's a punching bag. It is broken.
 Actions:
-- View inventory
-- Cross the bridge`
+- Cross the bridge
+- View inventory`
   );
 
   performCommand(system, "Cross the bridge");

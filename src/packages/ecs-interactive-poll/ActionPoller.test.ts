@@ -17,16 +17,14 @@ it("Cancels active poll on every new poll", () => {
     return p;
   });
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => "Foo",
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => "Foo",
+        }),
+      ])
+    )
   );
   poller.pollForAction();
   poller.pollForAction();
@@ -42,20 +40,18 @@ test("Poll answers is equal to the system actions", () => {
     return noRecursionAnswer(0);
   });
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => "Foo",
-          }),
-          new Interactive({
-            action: "Bar",
-            effect: () => "Bar",
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => "Foo",
+        }),
+        new Interactive({
+          action: "Bar",
+          effect: () => "Bar",
+        }),
+      ])
+    )
   );
   expect(answers).toEqual(["Foo", "Bar"]);
 });
@@ -64,18 +60,16 @@ test("Selected answer will perform the corresponding action", async () => {
   let didPerform = false;
   const poller = new ActionPoller("?", () => noRecursionAnswer(0));
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => {
-              didPerform = true;
-            },
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => {
+            didPerform = true;
+          },
+        }),
+      ])
+    )
   );
   await poller.done;
   expect(didPerform).toEqual(true);
@@ -85,18 +79,16 @@ test("Selecting an invalid answer will not perform any action", async () => {
   let didPerform = false;
   const poller = new ActionPoller("?", () => noRecursionAnswer(-1));
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => {
-              didPerform = true;
-            },
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => {
+            didPerform = true;
+          },
+        }),
+      ])
+    )
   );
   await poller.done;
   expect(didPerform).toEqual(false);
@@ -113,16 +105,14 @@ test("Poll won't start without system actions available", () => {
 });
 
 test("Poll result won't be used if system has been detached", async () => {
-  const system = new System({
-    entities: [
-      new Entity([
-        new Interactive({
-          action: "Foo",
-          effect: () => "Foo",
-        }),
-      ]),
-    ],
-  });
+  const system = new System(
+    new Entity([
+      new Interactive({
+        action: "Foo",
+        effect: () => "Foo",
+      }),
+    ])
+  );
   const poller = new ActionPoller("?", () => {
     poller.detach();
     return noRecursionAnswer(0);
@@ -139,18 +129,16 @@ test("Poll result can choose to prevent recursion", async () => {
     )
   );
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => {
-              count++;
-            },
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => {
+            count++;
+          },
+        }),
+      ])
+    )
   );
   await poller.done;
   expect(count).toBe(4);
@@ -164,18 +152,16 @@ test("Poll result can be numeric or options object", async () => {
       : cancelable(Promise.resolve({ answerIndex: 0, preventRecursion: true }))
   );
   poller.attach(
-    new System({
-      entities: [
-        new Entity([
-          new Interactive({
-            action: "Foo",
-            effect: () => {
-              performs++;
-            },
-          }),
-        ]),
-      ],
-    })
+    new System(
+      new Entity([
+        new Interactive({
+          action: "Foo",
+          effect: () => {
+            performs++;
+          },
+        }),
+      ])
+    )
   );
   await poller.done;
   expect(performs).toBe(2);

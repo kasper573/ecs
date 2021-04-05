@@ -2,7 +2,6 @@ import {
   Interactive,
   interactiveProperties,
 } from "../ecs-interactive/Interactive";
-import { SceneManager } from "../ecs-scene-manager/SceneManager";
 import { componentProperties } from "../ecs/Component";
 import { findSystemComponent } from "../ecs/findSystemComponent";
 import { Inventory } from "./Inventory";
@@ -12,10 +11,6 @@ export class Collectable extends Interactive.extend({
   action: { ...interactiveProperties.action, hidden: true },
   effect: { ...interactiveProperties.effect, hidden: true },
 }) {
-  get sceneManager() {
-    return this.entity.system.modules.resolveType(SceneManager);
-  }
-
   get hasInventory() {
     return !!this.inventory;
   }
@@ -34,14 +29,10 @@ export class Collectable extends Interactive.extend({
       action: ({ entity }) => `Pick up ${entity.name}`,
       effect: ({ entity }) => {
         const inv = this.inventory;
-        if (!inv) {
-          return;
+        if (inv) {
+          inv.items.push(this.entity);
+          return `Picked up ${entity.name}.`;
         }
-        inv.items.push(this.entity);
-        for (const scene of Object.values(this.sceneManager.scenes)) {
-          scene.remove(this.entity);
-        }
-        return `Picked up ${entity.name}.`;
       },
     });
   }

@@ -1,25 +1,28 @@
 import { Collectable } from "../../ecs-collectable/Collectable";
 import { Describable } from "../../ecs-describable/Describable";
 import { Interactive } from "../../ecs-interactive/Interactive";
-import { TextAdventureSM } from "../TextAdventureSM";
 import { Inventory } from "../../ecs-collectable/Inventory";
 import { Entity } from "../../ecs/Entity";
 import { findSystemComponent } from "../../ecs/findSystemComponent";
+import { SceneManager } from "../../ecs-scene-manager/SceneManager";
+import { Scenes } from "../Scenes";
 import { Bridge } from "./Bridge";
 
 export class BridgeRepairEquipment extends Entity {
   get sceneManager() {
-    return this.system.modules.resolveType(TextAdventureSM);
+    return findSystemComponent(this.system, SceneManager);
   }
   get inventory() {
     return findSystemComponent(this.system, Inventory);
   }
   get bridge() {
-    return this.sceneManager.scene?.findType(Bridge);
+    return this.system.entities.find(
+      (entity): entity is Bridge => entity instanceof Bridge
+    );
   }
 
   constructor() {
-    super([], "repair kit");
+    super([], [], "repair kit");
     this.components.push(
       new Collectable(),
       new Describable({
@@ -30,9 +33,8 @@ export class BridgeRepairEquipment extends Entity {
         action: "Repair bridge",
         isActive: () =>
           !!this.inventory?.items.includes(this) &&
-          this.sceneManager.sceneId === "cliff" &&
-          !!this.bridge &&
-          this.bridge.state !== "sturdy",
+          this.sceneManager?.sceneId === Scenes.cliff &&
+          this.bridge?.state !== "sturdy",
         effect: () => {
           if (this.bridge) {
             this.bridge.state = "sturdy";
