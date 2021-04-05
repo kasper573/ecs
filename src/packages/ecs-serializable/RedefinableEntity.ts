@@ -14,7 +14,7 @@ export class RedefinableEntity extends Entity {
     entityInitializer: EntityInitializer,
     memory: DeserializationMemory
   ) {
-    this.name = entityInitializer.name;
+    this.name = entityDefinition.name;
 
     const baseInitializers = entityDefinition.components;
     const primaryInitializers = entityInitializer.components;

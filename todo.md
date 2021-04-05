@@ -18,7 +18,6 @@
 
 - [ ] Set up proper monorepo infrastructure
 - [ ] Try to make System entities a Container
-- [ ] Get rid of trustedUndefined
 
 # Nice to have
 

@@ -32,7 +32,7 @@ const setup = () => {
   const entity = new Entity(
     [new Describable({ description: "A visible entity" }), new Collectable()],
     [],
-    "entity"
+    { name: "entity" }
   );
   const system = new System(entity, new Entity([new Inventory()]));
   return { entity, system };

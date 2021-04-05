@@ -22,7 +22,7 @@ export class BridgeRepairEquipment extends Entity {
   }
 
   constructor() {
-    super([], [], "repair kit");
+    super([], [], { name: "repair kit" });
     this.components.push(
       new Collectable(),
       new Describable({

@@ -23,10 +23,10 @@ test("system.entities is a flat list of the entity hierarchy", () => {
 });
 
 test("inactive leaf entries are not included in system.entities", () => {
-  const c = new Entity([], [], "C");
-  const b = new Entity([], [], "B");
+  const c = new Entity([], [], { name: "C" });
+  const b = new Entity([], [], { name: "B" });
   b.children.push(c);
-  const a = new Entity([], [], "A");
+  const a = new Entity([], [], { name: "A" });
   a.children.push(b);
   c.isActive = false;
 

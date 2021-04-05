@@ -37,8 +37,8 @@ test("declarative component property can derive from their associated entity", (
   const componentA = createComponent();
   const componentB = createComponent();
 
-  new Entity([componentA], [], "entity A");
-  new Entity([componentB], [], "entity B");
+  new Entity([componentA], [], { name: "entity A" });
+  new Entity([componentB], [], { name: "entity B" });
 
   expect(componentA.text).toEqual("Derived from entity A");
   expect(componentB.text).toEqual("Derived from entity B");
@@ -69,10 +69,10 @@ test("declarative component property can derive from their associated system", (
     });
 
   const componentA = createComponent();
-  new System(new Entity([componentA], [], "A"));
+  new System(new Entity([componentA], [], { name: "A" }));
 
   const componentB = createComponent();
-  new System(new Entity([componentB], [], "B"));
+  new System(new Entity([componentB], [], { name: "B" }));
 
   expect(componentA.text).toEqual("Derived A");
   expect(componentB.text).toEqual("Derived B");

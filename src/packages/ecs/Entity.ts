@@ -7,11 +7,13 @@ import { descendants } from "./descendants";
 
 export type EntityId = NominalString<"EntityId">;
 
-export class Entity {
-  id: EntityId = uuid();
+export class Entity implements EntityOptions {
   isActive: boolean = true;
 
-  protected _parent?: Entity;
+  name: string = "";
+  readonly id: EntityId = uuid();
+
+  private _parent?: Entity;
   private _system?: System;
   private _childrenById = {} as Readonly<Record<EntityId, Entity>>;
 
@@ -52,8 +54,11 @@ export class Entity {
   constructor(
     components?: ComponentInstance[],
     children?: Entity[],
-    public name = ""
+    options: Partial<EntityOptions> = {}
   ) {
+    this.id = options.id ?? this.id;
+    this.name = options.name ?? this.name;
+
     this.observations = [
       this.components.mount((component) => {
         component.configure({ entity: this });
@@ -103,3 +108,8 @@ export class Entity {
     this.system = newParent?.system;
   }
 }
+
+export type EntityOptions = {
+  readonly name: string;
+  readonly id: EntityId;
+};

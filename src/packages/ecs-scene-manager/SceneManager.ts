@@ -55,10 +55,11 @@ export class SceneManager extends Component.extend({
 
   static create(scenes: Record<string, Entity[]>) {
     const manager = new SceneManager();
-    const root = new Entity([manager], [], "SceneManager");
+    const root = new Entity([manager], [], { name: "SceneManager" });
     for (const entityId in scenes) {
-      const scene = new Entity([], scenes[entityId]);
-      scene.id = entityId as EntityId;
+      const scene = new Entity([], scenes[entityId], {
+        id: entityId as EntityId,
+      });
       root.children.push(scene);
     }
     return root;
