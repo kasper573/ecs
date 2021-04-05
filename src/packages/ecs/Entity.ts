@@ -27,11 +27,11 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
   }
 
   get activeDescendants() {
-    return Array.from(descendants(this, (e) => e.isActive));
+    return descendants(this, (e) => e.isActive);
   }
 
-  get allDescendants() {
-    return Array.from(descendants(this));
+  get descendants() {
+    return descendants(this);
   }
 
   readonly children = new Container<Entity<Id>>();
@@ -114,7 +114,7 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     }
     if (this._system !== newParent?.system) {
       this._system = newParent?.system;
-      for (const descendant of Array.from(descendants(this))) {
+      for (const descendant of this.descendants) {
         descendant._system = this._system;
       }
     }

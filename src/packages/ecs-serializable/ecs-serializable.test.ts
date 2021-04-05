@@ -67,7 +67,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.root.allDescendants[0].isActive).toBe(false);
+    expect(system.root.descendants[0].isActive).toBe(false);
   });
 
   it("sets entity.isActive to true when EntityInitializer.isActive is true", () => {
@@ -78,7 +78,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.root.allDescendants[0].isActive).toBe(true);
+    expect(system.root.descendants[0].isActive).toBe(true);
   });
 
   it("entity.isActive defaults to true when EntityInitializer.isActive is undefined", () => {
@@ -88,7 +88,7 @@ describe("creating a deserialized system", () => {
       components: [],
     };
     const system = mockSystem([], [], [initializer]);
-    expect(system.root.allDescendants[0].isActive).toBe(true);
+    expect(system.root.descendants[0].isActive).toBe(true);
   });
 
   it("instantiated entity use specified EntityInitializerId as id", () => {
@@ -372,9 +372,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    expect(system.root.allDescendants[0].isActive).toBe(true);
+    expect(system.root.descendants[0].isActive).toBe(true);
     updateSystem(system, ecs2);
-    expect(system.root.allDescendants[0].isActive).toBe(false);
+    expect(system.root.descendants[0].isActive).toBe(false);
   });
 
   it("sets entity.isActive to true when EntityInitializer.isActive changes from false to true", () => {
@@ -391,9 +391,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    expect(system.root.allDescendants[0].isActive).toBe(false);
+    expect(system.root.descendants[0].isActive).toBe(false);
     updateSystem(system, ecs2);
-    expect(system.root.allDescendants[0].isActive).toBe(true);
+    expect(system.root.descendants[0].isActive).toBe(true);
   });
 
   it("stops controlling entity.isActive when EntityInitializer.isActive changes from boolean to undefined", () => {
@@ -410,9 +410,9 @@ describe("updating a deserialized system", () => {
     const ecs1 = mockECS([], [], [initializer]);
     const ecs2 = mockECS([], [], [deactivated]);
     const system = createSystem(ecs1);
-    system.root.allDescendants[0].isActive = true;
+    system.root.descendants[0].isActive = true;
     updateSystem(system, ecs2);
-    expect(system.root.allDescendants[0].isActive).toBe(true);
+    expect(system.root.descendants[0].isActive).toBe(true);
   });
 
   it("can change the entity parent", () => {

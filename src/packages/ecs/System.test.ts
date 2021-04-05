@@ -44,8 +44,8 @@ test("inactive leaf entries are included in system.root.allDescendantsEntities",
   c.isActive = false;
 
   const system = new System(a);
-  expect(system.root.allDescendants.length).toBe(3);
-  expect(system.root.allDescendants).toEqual(expect.arrayContaining([a, b, c]));
+  expect(system.root.descendants.length).toBe(3);
+  expect(system.root.descendants).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("inactive entry sub trees are not included in system.entities", () => {
@@ -70,8 +70,8 @@ test("inactive entry sub trees are included in system.root.allDescendantsEntitie
   b.isActive = false;
 
   const system = new System(a);
-  expect(system.root.allDescendants.length).toBe(3);
-  expect(system.root.allDescendants).toEqual(expect.arrayContaining([a, b, c]));
+  expect(system.root.descendants.length).toBe(3);
+  expect(system.root.descendants).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("components get updated once on system initialization", () => {

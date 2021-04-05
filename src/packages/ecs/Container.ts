@@ -1,8 +1,9 @@
-import { ObservableArray, ObservableArrayEvents } from "./ObservableArray";
+import { ObservableArrayEvents } from "./ObservableArray";
 import { connectObservableArray } from "./connectObservableArray";
 import { mountObservableArray, OnMount } from "./mountObservableArray";
+import { TypeCollection } from "./TypeCollection";
 
-export class Container<T> extends ObservableArray<T> {
+export class Container<T> extends TypeCollection<T> {
   remove(...toRemove: T[]) {
     for (const item of toRemove) {
       const index = this.indexOf(item);
@@ -10,22 +11,6 @@ export class Container<T> extends ObservableArray<T> {
         this.splice(index, 1);
       }
     }
-  }
-
-  filterType<C extends T>(type: Class<C>) {
-    return this.filter((item) => item instanceof type) as C[];
-  }
-
-  findType<C extends T>(type: Class<C>) {
-    return this.find((item) => item instanceof type) as C | undefined;
-  }
-
-  resolveType<C extends T>(type: Class<C>) {
-    const instance = this.findType(type);
-    if (!instance) {
-      throw new Error(`Could not resolve instance of ${type.name}`);
-    }
-    return instance;
   }
 
   clear() {
@@ -40,5 +25,3 @@ export class Container<T> extends ObservableArray<T> {
     return mountObservableArray(this, onMount);
   }
 }
-
-export type Class<T> = new (...args: any[]) => T;

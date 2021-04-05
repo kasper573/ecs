@@ -16,13 +16,13 @@ export class System<EntityId extends string = string> {
   }
 
   dispose() {
-    for (const entity of this.root.allDescendants) {
+    for (const entity of this.root.descendants) {
       entity.dispose();
     }
   }
 
   update() {
-    for (const entity of this.root.activeDescendants) {
+    for (const entity of this.entities) {
       for (const component of entity.components) {
         component.update();
       }
