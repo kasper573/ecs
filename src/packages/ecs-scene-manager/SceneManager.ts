@@ -14,7 +14,7 @@ export class SceneManager extends Component.extend({
     this.activeSceneId = value;
     this.setActiveScene(
       this.activeSceneId
-        ? this.entity.childrenById[this.activeSceneId]
+        ? this.entity?.childrenById[this.activeSceneId]
         : undefined
     );
   }
@@ -22,7 +22,7 @@ export class SceneManager extends Component.extend({
     return this.activeScene;
   }
   get scenes() {
-    return this.entity.children;
+    return this.entity?.children;
   }
 
   private setActiveScene(activeScene = this.activeScene) {
@@ -32,8 +32,10 @@ export class SceneManager extends Component.extend({
   }
 
   private updateChildActiveStates() {
-    for (const child of this.entity.children) {
-      child.isActive = child === this.activeScene;
+    if (this.scenes) {
+      for (const child of this.scenes) {
+        child.isActive = child === this.activeScene;
+      }
     }
   }
 
@@ -41,7 +43,7 @@ export class SceneManager extends Component.extend({
     super({
       isActive: true,
       mount: () =>
-        this.scenes.mount((scene) => {
+        this.scenes?.mount((scene) => {
           if (!this.activeScene) {
             this.setActiveScene(scene);
           }

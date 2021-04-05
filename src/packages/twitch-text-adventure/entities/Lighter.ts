@@ -38,7 +38,7 @@ export class Lighter extends Entity {
     );
   }
 
-  static isLit(system: System) {
+  static isLit(system?: System) {
     const inventory = findSystemComponent(system, Inventory);
     const lighter = inventory?.items.findType(Lighter);
     return lighter ? lighter.isLit : false;

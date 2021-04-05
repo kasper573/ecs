@@ -3,9 +3,12 @@ import { System } from "./System";
 import { Component } from "./Component";
 
 export function findSystemComponent<C extends Component>(
-  system: System,
+  system: System | undefined,
   componentType: C
 ) {
+  if (!system) {
+    return;
+  }
   for (const entity of system.entities) {
     const inv = entity.components.findType(componentType);
     if (inv) {

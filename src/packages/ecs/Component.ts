@@ -3,13 +3,14 @@ import { createPropertyBag } from "../property-bag/createPropertyBag";
 import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { PropertyBag } from "../property-bag/types/PropertyBag";
 import { Entity } from "./Entity";
-import { trustedUndefined } from "./trustedUndefined";
 import { System } from "./System";
 
 // We need to define this separately because we have a recursive
 // relationship between Component and Entity and zod can't statically infer those.
-const entitySchema: z.ZodSchema<Entity> = z.lazy(() => z.instanceof(Entity));
-const none = z.union([z.void(), z.undefined()]);
+const entitySchema: z.ZodSchema<Entity | undefined> = z.lazy(() =>
+  z.instanceof(Entity).optional()
+);
+const none = z.void().optional();
 const unmountSchema = z.function(z.tuple([]), none);
 const mountSchema = z.function(z.tuple([]), z.union([none, unmountSchema]));
 
@@ -23,7 +24,6 @@ export const componentProperties = {
   },
   entity: {
     type: entitySchema,
-    defaultValue: trustedUndefined<Entity>(),
     hidden: true,
   },
   isActive: { type: z.boolean(), defaultValue: true },
@@ -58,8 +58,8 @@ export type Component = PropertyBag<
 
 export type ComponentDeclarationContext = {
   component: InstanceOf<Component>;
-  entity: Entity;
-  system: System;
+  entity?: Entity;
+  system?: System;
 };
 
 export type ComponentInstance = InstanceOf<typeof Component>;

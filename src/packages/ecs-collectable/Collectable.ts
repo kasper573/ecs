@@ -16,22 +16,22 @@ export class Collectable extends Interactive.extend({
   }
 
   get inventory() {
-    return findSystemComponent(this.entity.system, Inventory);
+    return findSystemComponent(this.entity?.system, Inventory);
   }
 
   get isCollected() {
-    return this.inventory?.items.includes(this.entity);
+    return this.entity && this.inventory?.items.includes(this.entity);
   }
 
   constructor() {
     super({
       isActive: () => this.hasInventory && !this.isCollected,
-      action: ({ entity }) => `Pick up ${entity.name}`,
+      action: ({ entity }) => `Pick up ${entity?.name}`,
       effect: ({ entity }) => {
         const inv = this.inventory;
-        if (inv) {
+        if (inv && this.entity) {
           inv.items.push(this.entity);
-          return `Picked up ${entity.name}.`;
+          return `Picked up ${entity?.name}.`;
         }
       },
     });

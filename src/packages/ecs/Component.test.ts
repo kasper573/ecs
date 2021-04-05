@@ -31,7 +31,7 @@ test("Component gets unmounted when removed from an entity", () => {
 test("declarative component property can derive from their associated entity", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: ({ entity }) => `Derived from ${entity.name}`,
+      text: ({ entity }) => `Derived from ${entity?.name}`,
     });
 
   const componentA = createComponent();
@@ -63,8 +63,8 @@ test("declarative component property can derive from their associated system", (
   const createComponent = () =>
     new TestComponent().configure({
       text: ({ system }) => {
-        const first = system.entities[0];
-        return `Derived ${first.name}`;
+        const first = system?.entities[0];
+        return `Derived ${first?.name}`;
       },
     });
 

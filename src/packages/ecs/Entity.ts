@@ -3,7 +3,6 @@ import { uuid } from "../ecs-common/uuid";
 import { ComponentInstance } from "./Component";
 import { System } from "./System";
 import { Container } from "./Container";
-import { trustedUndefined } from "./trustedUndefined";
 import { descendants } from "./descendants";
 
 export type EntityId = NominalString<"EntityId">;
@@ -13,7 +12,7 @@ export class Entity {
   isActive: boolean = true;
 
   protected _parent?: Entity;
-  private _system: System = trustedUndefined();
+  private _system?: System;
   private _childrenById = {} as Readonly<Record<EntityId, Entity>>;
 
   get parent() {
@@ -24,7 +23,7 @@ export class Entity {
     return this._system;
   }
 
-  set system(value: System) {
+  set system(value: System | undefined) {
     this._system = value;
     for (const entity of Array.from(descendants(this))) {
       entity.system = value;
@@ -63,7 +62,7 @@ export class Entity {
           if (unmountComponent) {
             unmountComponent();
           }
-          component.configure({ entity: trustedUndefined() });
+          component.configure({ entity: undefined });
         };
       }),
 
@@ -101,6 +100,6 @@ export class Entity {
       this.parent.children.remove(this);
     }
     this._parent = newParent;
-    this.system = newParent?.system ?? trustedUndefined();
+    this.system = newParent?.system;
   }
 }

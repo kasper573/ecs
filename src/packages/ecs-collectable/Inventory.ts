@@ -27,7 +27,7 @@ export class Inventory extends Interactive.extend({
       mount: () =>
         this.items.mount((item) => {
           const displayComponents = item.components.filterType(Describable);
-          this.entity.children.push(item); // Move item to inventory sub tree
+          this.entity?.children.push(item); // Move item to inventory sub tree
           item.components.remove(...displayComponents); // Stop displaying item
           return () => item.components.push(...displayComponents);
         }),
