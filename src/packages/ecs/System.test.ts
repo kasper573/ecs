@@ -6,8 +6,8 @@ test("system entries can be configured by an array of entities", () => {
   const a = new Entity();
   const b = new Entity();
   const system = new System(a, b);
-  expect(system.entities.length).toBe(2);
-  expect(system.entities).toEqual(expect.arrayContaining([a, b]));
+  expect(system.active.length).toBe(2);
+  expect(system.active).toEqual(expect.arrayContaining([a, b]));
 });
 
 test("system.entities is a flat list of the entity hierarchy", () => {
@@ -18,8 +18,8 @@ test("system.entities is a flat list of the entity hierarchy", () => {
   a.children.push(b);
 
   const system = new System(a);
-  expect(system.entities.length).toBe(3);
-  expect(system.entities).toEqual(expect.arrayContaining([a, b, c]));
+  expect(system.active.length).toBe(3);
+  expect(system.active).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("inactive leaf entries are not included in system.entities", () => {
@@ -31,8 +31,8 @@ test("inactive leaf entries are not included in system.entities", () => {
   c.isActive = false;
 
   const system = new System(a);
-  expect(system.entities.length).toBe(2);
-  expect(system.entities).toEqual(expect.arrayContaining([a, b]));
+  expect(system.active.length).toBe(2);
+  expect(system.active).toEqual(expect.arrayContaining([a, b]));
 });
 
 test("inactive leaf entries are included in system.allEntities", () => {
@@ -44,8 +44,8 @@ test("inactive leaf entries are included in system.allEntities", () => {
   c.isActive = false;
 
   const system = new System(a);
-  expect(system.allEntities.length).toBe(3);
-  expect(system.allEntities).toEqual(expect.arrayContaining([a, b, c]));
+  expect(system.all.length).toBe(3);
+  expect(system.all).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("inactive entry sub trees are not included in system.entities", () => {
@@ -57,8 +57,8 @@ test("inactive entry sub trees are not included in system.entities", () => {
   b.isActive = false;
 
   const system = new System(a);
-  expect(system.entities.length).toBe(1);
-  expect(system.entities).toEqual(expect.arrayContaining([a]));
+  expect(system.active.length).toBe(1);
+  expect(system.active).toEqual(expect.arrayContaining([a]));
 });
 
 test("inactive entry sub trees are included in system.allEntities", () => {
@@ -70,8 +70,8 @@ test("inactive entry sub trees are included in system.allEntities", () => {
   b.isActive = false;
 
   const system = new System(a);
-  expect(system.allEntities.length).toBe(3);
-  expect(system.allEntities).toEqual(expect.arrayContaining([a, b, c]));
+  expect(system.all.length).toBe(3);
+  expect(system.all).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("components get updated once on system initialization", () => {

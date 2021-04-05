@@ -63,7 +63,7 @@ test("declarative component property can derive from their associated system", (
   const createComponent = () =>
     new TestComponent().configure({
       text: ({ system }) => {
-        const first = system?.entities[0];
+        const first = system?.active[0];
         return `Derived ${first?.name}`;
       },
     });

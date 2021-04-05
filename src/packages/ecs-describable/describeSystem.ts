@@ -19,7 +19,7 @@ export const describeSystem = (
   if (lastResult) {
     parts.push(lastResult);
   }
-  const entitiesDescribed = describeEntities(system.entities);
+  const entitiesDescribed = describeEntities(system.active);
   if (entitiesDescribed) {
     parts.push(entitiesDescribed);
   }

@@ -6,7 +6,7 @@ import { InteractionMemory } from "./InteractionMemory";
 
 export const createActions = (system: System) => {
   const actions: Action[] = [];
-  for (const entity of system.entities) {
+  for (const entity of system.active) {
     for (const component of entity.components.filterType(Interactive)) {
       if (!component.isActive) {
         continue;

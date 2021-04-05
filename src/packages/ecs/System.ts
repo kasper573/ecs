@@ -12,25 +12,25 @@ export class System<EntityId extends string = string> {
   /**
    * Active entities
    */
-  get entities() {
+  get active() {
     return Array.from(descendants(this.root, (e) => e.isActive));
   }
 
   /**
    * All entities, active or not
    */
-  get allEntities() {
+  get all() {
     return Array.from(descendants(this.root, undefined));
   }
 
   dispose() {
-    for (const entity of this.allEntities) {
+    for (const entity of this.all) {
       entity.dispose();
     }
   }
 
   update() {
-    for (const entity of this.entities) {
+    for (const entity of this.active) {
       for (const component of entity.components) {
         component.update();
       }
