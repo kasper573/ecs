@@ -1,8 +1,8 @@
 import { Entity } from "./Entity";
 
-export function* descendants(
-  start: Entity,
-  filter: (e: Entity) => boolean = any,
+export function* descendants<Id extends string>(
+  start: Entity<Id>,
+  filter: (e: Entity<Id>) => boolean = any,
   includeSelf = false
 ) {
   const queue = includeSelf ? [start] : [...start.children];

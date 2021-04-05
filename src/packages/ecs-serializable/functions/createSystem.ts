@@ -1,7 +1,7 @@
-import { System } from "../../ecs/System";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
 import { DeserializationMemory } from "../DeserializationMemory";
+import { DeserializedSystem } from "../types/DeserializedSystem";
 import { updateSystem } from "./updateSystem";
 
 /**
@@ -11,8 +11,8 @@ export const createSystem = (
   ecs: ECSDefinition,
   memory: DeserializationMemory,
   nativeComponents: NativeComponents
-): System => {
-  const system = new System();
+) => {
+  const system = new DeserializedSystem();
   updateSystem(system, ecs, memory, nativeComponents);
   return system;
 };

@@ -35,8 +35,8 @@ const nativeComponents = {
   foo: Foo,
 };
 
-describe.skip("creating a deserialized system", () => {
-  it("can instantiate an entity", () => {
+describe("creating a deserialized system", () => {
+  it("can instantiate an entity using an EntityDefinition", () => {
     const entity: Omit<EntityDefinition, "systemId"> = {
       name: "Entity A",
       nodeId: uid(),
@@ -46,6 +46,50 @@ describe.skip("creating a deserialized system", () => {
     const system = mockSystem([entity]);
     expect(system.entities.length).toBe(1);
     expect(system.entities[0]).toBeInstanceOf(Entity);
+  });
+
+  it("can instantiate an entity without an EntityDefinition", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      id: uid(),
+      components: [],
+    };
+    const system = mockSystem([], [], [initializer]);
+    expect(system.entities.length).toBe(1);
+    expect(system.entities[0]).toBeInstanceOf(Entity);
+  });
+
+  it("instantiated entity use specified EntityInitializerId as id", () => {
+    const initializer: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      id: uid(),
+      components: [],
+    };
+    const system = mockSystem([], [], [initializer]);
+    const [entity] = system.entities;
+    expect(entity.id).toBe(initializer.id);
+  });
+
+  it("can instantiate an entity with a parent", () => {
+    const parent: Omit<EntityInitializer, "systemId"> = {
+      name: "Entity A",
+      id: uid(),
+      components: [],
+    };
+    const child: Omit<EntityInitializer, "systemId"> = {
+      name: "Child",
+      id: uid(),
+      parentId: parent.id,
+      components: [],
+    };
+
+    const system = mockSystem([], [], [parent, child]);
+    expect(system.entities.length).toBe(2);
+
+    const parentEntity = system.entities.find((e) => e.id === parent.id);
+    const childEntity = system.entities.find((e) => e.id === child.id);
+    expect(childEntity!.parent).toBe(parentEntity);
+    expect(parentEntity!.children).toContain(childEntity);
   });
 
   it("can name an entity instance", () => {
@@ -281,7 +325,71 @@ describe.skip("creating a deserialized system", () => {
   });
 });
 
-describe.skip("updating a deserialized system", () => {
+describe("updating a deserialized system", () => {
+  it("can change the entity parent", () => {
+    const parentA: Omit<EntityInitializer, "systemId"> = {
+      name: "Parent A",
+      id: uid(),
+      components: [],
+    };
+    const parentB: Omit<EntityInitializer, "systemId"> = {
+      name: "Parent B",
+      id: uid(),
+      components: [],
+    };
+    const childInA: Omit<EntityInitializer, "systemId"> = {
+      name: "Child",
+      id: uid(),
+      parentId: parentA.id,
+      components: [],
+    };
+    const childInB: Omit<EntityInitializer, "systemId"> = {
+      ...childInA,
+      parentId: parentB.id,
+    };
+
+    const ecs1 = mockECS([], [], [parentA, parentB, childInA]);
+    const ecs2 = mockECS([], [], [parentA, parentB, childInB]);
+
+    const system = createSystem(ecs1);
+    const parentEntityA = system.entities.find((e) => e.id === parentA.id);
+    const parentEntityB = system.entities.find((e) => e.id === parentB.id);
+    const childEntity = system.entities.find((e) => e.id === childInA.id);
+
+    expect(childEntity!.parent).toBe(parentEntityA);
+    updateSystem(system, ecs2);
+    expect(childEntity!.parent).toBe(parentEntityB);
+  });
+
+  it("removing entity parentId gives the entity the system root as parent", () => {
+    const parent: Omit<EntityInitializer, "systemId"> = {
+      name: "Parent A",
+      id: uid(),
+      components: [],
+    };
+    const child: Omit<EntityInitializer, "systemId"> = {
+      name: "Child",
+      id: uid(),
+      parentId: parent.id,
+      components: [],
+    };
+    const childInRoot: Omit<EntityInitializer, "systemId"> = {
+      ...child,
+      parentId: undefined,
+    };
+
+    const ecs1 = mockECS([], [], [parent, child]);
+    const ecs2 = mockECS([], [], [parent, childInRoot]);
+
+    const system = createSystem(ecs1);
+    const parentEntity = system.entities.find((e) => e.id === parent.id);
+    const childEntity = system.entities.find((e) => e.id === child.id);
+
+    expect(childEntity!.parent).toBe(parentEntity);
+    updateSystem(system, ecs2);
+    expect(childEntity!.parent).toBe(system.root);
+  });
+
   it("can rename an entity instance", () => {
     const definition: Omit<EntityDefinition, "systemId"> = {
       name: "Entity",
@@ -929,7 +1037,7 @@ const mockSystem = (
   entityInitializers?: Array<Omit<EntityInitializer, "systemId">>
 ) => createSystem(mockECS(entities, components, entityInitializers));
 
-type SystemWithMemory = System & {
+type SystemWithMemory = System<EntityInitializerId> & {
   memory: DeserializationMemory;
   nativeComponents: NativeComponents;
 };

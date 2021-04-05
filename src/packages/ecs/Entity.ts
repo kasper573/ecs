@@ -7,8 +7,8 @@ import { descendants } from "./descendants";
 export class Entity<Id extends string = string> implements EntityOptions<Id> {
   isActive: boolean = true;
 
-  name: string = "";
-  readonly id: Id = uuid();
+  name: string;
+  readonly id: Id;
 
   private _parent?: Entity<Id>;
   private _system?: System;
@@ -46,9 +46,9 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     children?: Entity<Id>[],
     options: Partial<EntityOptions<Id>> = {}
   ) {
-    this.id = options.id ?? this.id;
-    this.name = options.name ?? this.name;
-    this._system = options.system ?? this._system;
+    this.id = options.id ?? uuid();
+    this.name = options.name ?? "";
+    this._system = options.system;
 
     this.observations = [
       this.components.mount((component) => {

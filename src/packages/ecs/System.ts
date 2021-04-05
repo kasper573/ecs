@@ -3,9 +3,11 @@ import TypedEmitter from "typed-emitter";
 import { Entity } from "./Entity";
 import { descendants } from "./descendants";
 
-export class System {
+export class System<EntityId extends string = string> {
   readonly events: TypedEmitter<SystemEvents> = new EventEmitter();
-  readonly root = new Entity(undefined, undefined, { system: this });
+  readonly root: Entity<EntityId> = new Entity<EntityId>(undefined, undefined, {
+    system: this,
+  });
 
   /**
    * Active entities
@@ -36,7 +38,7 @@ export class System {
     this.events.emit("update");
   }
 
-  constructor(...initial: Entity[]) {
+  constructor(...initial: Entity<EntityId>[]) {
     this.root.children.push(...initial);
     this.update();
   }

@@ -5,9 +5,6 @@ import { EntityInitializerId } from "../types/EntityInitializer";
 export const defineEntity = (definition: EntityDefinition) =>
   class DefinedEntity extends RedefinableEntity {
     constructor(id: EntityInitializerId) {
-      super([], [], {
-        name: definition.name,
-        id,
-      });
+      super(id, definition.name);
     }
   };

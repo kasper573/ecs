@@ -1,7 +1,5 @@
 import { uniq } from "lodash";
-import { Entity } from "../ecs/Entity";
 import { typedKeys } from "../ecs-common/typedKeys";
-import { EntityInitializerId } from "./types/EntityInitializer";
 import {
   ComponentInitializer,
   ComponentInitializerId,
@@ -9,8 +7,17 @@ import {
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
 import { getComponentInstanceId } from "./types/ComponentInstancePropertyMap";
+import { DeserializedEntity } from "./types/DeserializedEntity";
+import { EntityInitializerId } from "./types/EntityInitializer";
 
-export class RedefinableEntity extends Entity<EntityInitializerId> {
+export class RedefinableEntity extends DeserializedEntity {
+  constructor(id: EntityInitializerId, name?: string) {
+    super([], [], {
+      name: name,
+      id,
+    });
+  }
+
   define(
     name: string,
     baseInitializers: ComponentInitializer[],
