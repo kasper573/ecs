@@ -1,10 +1,10 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { TreeView, TreeViewProps } from "@material-ui/lab";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
-import { createLibraryTree } from "../functions/createLibraryTree";
-
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
+import { CreateTreeOptions } from "../tree/createTree";
+import { useTree } from "../tree/useTree";
 import { LibraryTreeItems, LibraryTreeItemsProps } from "./LibraryTreeItems";
 
 export type LibraryTreeProps = {
@@ -24,19 +24,8 @@ export const LibraryTree = ({
   itemProps,
   ...treeViewProps
 }: LibraryTreeProps) => {
-  const [expanded, setExpanded] = useState<LibraryNodeId[]>(() =>
-    getInitialExpandedIds(library)
-  );
-  const [nodeMap, treeRoots] = useMemo(() => {
-    const map = library.reduce((map, node) => {
-      map[node.nodeId] = node;
-      return map;
-    }, {} as Record<LibraryNodeId, TypedLibraryNode>);
-    return [
-      map,
-      createLibraryTree(library, { compareFn: compareLibraryTreeNodes }),
-    ] as const;
-  }, [library]);
+  const [expanded, setExpanded] = useState(() => getInitialExpanded(library));
+  const [nodeMap, treeRoots] = useTree(library, treeOptions);
 
   const handleToggle = (e: ChangeEvent<{}>, nodeIds: string[]) =>
     setExpanded(nodeIds as LibraryNodeId[]);
@@ -59,7 +48,13 @@ export const LibraryTree = ({
   );
 };
 
-const getInitialExpandedIds = (nodes: TypedLibraryNode[]) =>
+const treeOptions: CreateTreeOptions<TypedLibraryNode, LibraryNodeId> = {
+  compareFn: compareLibraryTreeNodes,
+  getId: (node) => node.nodeId,
+  getParentId: (node) => node.parentNodeId,
+};
+
+const getInitialExpanded = (nodes: TypedLibraryNode[]) =>
   nodes
     .filter((n) => n.type === "folder" && !n.parentNodeId)
     .map((n) => n.nodeId);
