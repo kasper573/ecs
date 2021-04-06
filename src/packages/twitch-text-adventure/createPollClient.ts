@@ -1,4 +1,4 @@
-import { TwitchPollChatbot } from "../twitch-poll-chatbot/TwitchPollChatbot";
+import { TwitchPollChatbot } from "./TwitchPollChatbot";
 
 export const createPollClient = () =>
   new TwitchPollChatbot({

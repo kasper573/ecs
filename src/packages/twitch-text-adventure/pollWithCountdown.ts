@@ -1,5 +1,5 @@
 import { CancelablePromise } from "cancelable-promise";
-import { TwitchPollChatbot } from "../twitch-poll-chatbot/TwitchPollChatbot";
+import { TwitchPollChatbot } from "./TwitchPollChatbot";
 import { Countdown } from "./Countdown";
 
 export const pollChatbotWithCountdown = (

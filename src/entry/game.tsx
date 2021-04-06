@@ -6,7 +6,7 @@ import { createGame } from "../packages/twitch-text-adventure/createGame";
 import { createTMIClient } from "../packages/twitch-text-adventure/createTMIClient";
 import { createPollClient } from "../packages/twitch-text-adventure/createPollClient";
 import { Countdown } from "../packages/twitch-text-adventure/Countdown";
-import { ActionPoller } from "../packages/ecs-interactive-poll/ActionPoller";
+import { ActionPoller } from "../packages/twitch-text-adventure/ActionPoller";
 import { pollChatbotWithCountdown } from "../packages/twitch-text-adventure/pollWithCountdown";
 
 const system = createGame();
