@@ -30,7 +30,6 @@ export class System<EntityId extends string = string> {
 
   setContext(propertyName: string, value: unknown) {
     this.context[propertyName] = value;
-    this.update();
   }
 
   update() {
