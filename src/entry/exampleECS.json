@@ -6,7 +6,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "Describable",
       "nativeComponent": "Describable",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
     "453881e9-eca8-40ca-80d6-6403c55059a3": {
       "nodeId": "9619a992-3804-4176-a3e7-cf454f87a236",
@@ -14,7 +14,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "Collectable",
       "nativeComponent": "Collectable",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
     "f462ef05-dc38-4749-bcb9-3d2277cb70af": {
       "nodeId": "753d0c83-1ec5-4f3b-a702-bbfab56a8dbf",
@@ -22,7 +22,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "Interactive",
       "nativeComponent": "Interactive",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
     "4904c475-04f9-437f-9d69-f2e1e6c3d544": {
       "nodeId": "1e23542e-5528-4372-b475-cf43120ec243",
@@ -30,7 +30,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "Inventory",
       "nativeComponent": "Inventory",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
     "cc60bced-7ddb-427d-9d22-c13c96762edd": {
       "nodeId": "64ada116-c87a-45b3-9392-8f2a2b91fe07",
@@ -38,7 +38,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "InteractionMemory",
       "nativeComponent": "InteractionMemory",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
     "1faec8b0-5c57-4020-8589-59e3aa358582": {
       "nodeId": "78b47c3e-a1a9-44e6-9d65-376163d4dbb1",
@@ -46,7 +46,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "SceneManager",
       "nativeComponent": "SceneManager",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "65e3e889-5634-431e-93eb-03b80747e3cc"
     },
     "ded3157a-1d7e-4920-90ae-63c8baf68242": {
       "nodeId": "82bddcab-800e-49cd-b707-8d6a4c1dc109",
@@ -54,7 +54,7 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "name": "SceneSwitch",
       "nativeComponent": "SceneSwitch",
-      "parentNodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9"
+      "parentNodeId": "65e3e889-5634-431e-93eb-03b80747e3cc"
     }
   },
   "entityInitializers": {
@@ -164,7 +164,7 @@
       "nodeId": "f95e0276-ea4c-4d7d-a90b-592f15722972",
       "id": "d4a4cc3f-04e5-4e4f-98d7-8929d3f9aeb5",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "parentNodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b",
       "name": "Modules",
       "components": [
         {
@@ -183,7 +183,6 @@
       "nodeId": "9e8b5fe3-ca51-4675-b2b6-cb66276a5b5f",
       "id": "72ac7e5c-a161-4d12-b097-18175a1befa3",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "parentNodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
       "name": "Apple",
       "components": [
         {
@@ -204,7 +203,7 @@
       "nodeId": "87f9a80b-c872-4439-9706-2faebe3f5e3b",
       "id": "8ffaa23c-37f7-4ea6-8f25-d30461055622",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "parentNodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
+      "parentNodeId": "65e3e889-5634-431e-93eb-03b80747e3cc",
       "name": "Scenes",
       "components": [
         {
@@ -218,7 +217,7 @@
       "nodeId": "3014e417-59a9-4b54-aa81-6f301b4efc52",
       "id": "da67fda2-0480-4396-aee7-6a174b1d6d98",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "parentNodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
+      "parentNodeId": "65e3e889-5634-431e-93eb-03b80747e3cc",
       "name": "Scene",
       "components": []
     },
@@ -226,7 +225,7 @@
       "nodeId": "d80b46f8-e058-45b5-9eba-b9e2bace056f",
       "id": "7dbdaa96-d3da-4021-bd9e-77df44874a2f",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "parentNodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b",
       "name": "Warp",
       "components": [
         {
@@ -244,17 +243,25 @@
     }
   },
   "libraryFolders": {
-    "290e7237-0a19-472d-8e17-32d7429eb6ee": {
-      "nodeId": "829db720-f923-4ad7-a011-ff7e75e7f9d7",
-      "id": "290e7237-0a19-472d-8e17-32d7429eb6ee",
+    "2384f89f-6e55-4eaa-8b25-8da8de169186": {
+      "nodeId": "d520a376-1155-47b8-a91d-476746a9e4d6",
+      "id": "2384f89f-6e55-4eaa-8b25-8da8de169186",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "name": "Entities"
+      "name": "Packages"
     },
-    "e2367948-2098-4759-878e-874cd813e938": {
-      "nodeId": "1a6b441a-4366-49b3-b842-0524d4be9fe9",
-      "id": "e2367948-2098-4759-878e-874cd813e938",
+    "1a20649d-797d-4295-8c4a-a0f5244ed317": {
+      "nodeId": "04c26659-9966-4c4d-9106-2f8da464c81b",
+      "id": "1a20649d-797d-4295-8c4a-a0f5244ed317",
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
-      "name": "Components"
+      "parentNodeId": "d520a376-1155-47b8-a91d-476746a9e4d6",
+      "name": "TextAdventure"
+    },
+    "5e8504b2-5dbe-4c1e-8743-3cc14cc404d2": {
+      "nodeId": "65e3e889-5634-431e-93eb-03b80747e3cc",
+      "id": "5e8504b2-5dbe-4c1e-8743-3cc14cc404d2",
+      "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
+      "parentNodeId": "d520a376-1155-47b8-a91d-476746a9e4d6",
+      "name": "SceneManager"
     }
   }
 }
