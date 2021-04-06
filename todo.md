@@ -1,88 +1,70 @@
-# Immediate tasks
+# Abstract
 
-- [ ] Create basic editor to allow prototyping stories
-- [ ] Add readme to each package describing what each does and how to use it
-- [ ] Refactor twitch-text-adventure to be a service instead of a single game
-- [ ] Improved twitch poll implementation (twitch extension, pubsub?, or https://poll.ma.pe/)
-- [ ] Syntax based actions instead of select from list
-- [ ] (Stretch goal) Refactor everything to FP
-- [ ] (Stretch goal) Reimplement ECS using react components that don't render but only
-      emit state via context, then use that state and render text in top level
+- Replace NativeComponents solution with serializable JS/TS (or something?)
+- Persisting object definitions
+- Sandbox user submitted scripts
+- Script editor (monaco?)
 
-# Polish
+# Tasks
 
-- [ ] Instead of performing the voted action immediately, programmatically
-      type the action string into the console input while playing keypress sounds
+- Implement create empty object action ui
+- entity isActive editor sync
 
-# Refactor
+- Update Collectable to use an Entity that has Inventory component as target.
+  (Make entity instances draggable and component properties drop zones)
 
-- [ ] Set up proper monorepo infrastructure
-- [ ] Try to make System entities a Container
+- Create DescribableRenderer component in ecs-describable and add to default ECS instead of having a hardcoded renderer in the editor
+  Create DescribableRenderer that has ignore list, which inventory should be added to. Fully decoupled.
+
+- Implement create definition for instance action
+- Implement apply prop diff to definition action
+- Implement apply instance diff to definition action
+- Scope support for tree views
+
+- Property bag refactor/removal
+
+  - Situational component properties (define what this means before you start working. Will need property overloads).
+  - Improve type definitions
+  - New property-bag feature, overrides: Allow partial extend for base properties (but still require full info for new props)
+    (This will replace the custom property overrides solution in ie. Collectable.ts)
+  - Replace with component class + reflection: reflect-metadata, https://github.com/Brunodev09/runtime-reflection-typescript
+
+- Dynamic content window
+  (allow arbitrary content to be opened in the content window, ie. entity instance/definition, component definition)
+
+- Allow adding custom components
+  - By defining properties in editor
+  - By adding a single file script with a Component.extends
+  - By adding multiple files hosted on server
+  - implement inspector for ComponentDefinition
 
 # Nice to have
 
-- [ ] Create some folder structure for multiple stories
-- [ ] Have a look at ECS projects on NPM and see I could use one of them
-- [ ] Add runtime check to disallow creating of entities when deriving entities from system state
+- Localization
+- Implement "Apply to definition" action for each component property
+- Copy paste objects and component properties (separate duplicate into copy and paste actions)
+- Implement multi select (Inspector should support editing shared elements of selections)
+- Implement duplicate system action
+- Find or create type safe wrapper for react-dnd
+- Have a look at ECS projects on NPM and see I could use one of them:
+  - https://ecsy.io/
+  - https://github.com/nidorx/ecs-lib
+  - https://nova-engine.github.io/ecs/
+  - https://javelin.games/ecs/
 
-# Other ECS projects
+# Refactor
 
-- https://ecsy.io/
-- https://github.com/nidorx/ecs-lib
-- https://nova-engine.github.io/ecs/
-- https://javelin.games/ecs/
+- Rename defaultECS to exampleECS
+- Refactor/simplify/improve mock functions for ecs-serializable unit tests
+- Cover more (all!) test cases in ecs-serializable
+- replace zod (zod doesn't support readonly)
+- ComponentInitializerId should also be universally unique
+- Get rid of / simplify CridList/CrudListItem into CommonList/CommonListItem
+  (replace hard coded menu items with menuItems prop, just like TreeView)
+- Explore hook categorization ("rendering hooks" vs "behavior hooks")
+  Should I stop using rendering hooks in favor of event controlled components (ie. passing in an EventEmitter to control state)
 
-# Long term tasks
+# Bugs
 
-- [x] Text adventure game
-- [x] Text adventure game + Twitch votes
-- [ ] Text adventure game + Twitch votes + Multiplayer aspect (ie. jackbox.tv)
-      (Before we can do this we need ideas on what the viewers can do when connecting to game)
-- [ ] Go write a nice story and build the game
-- [ ] More game mechanics
-
-# Twitch integration notes
-
-- [ ] App should be able to signal twitch to start a vote given parameters: 1 Question, X Answers
-- [ ] App should be able to receive vote results: Nr. of votes / question
-- [ ] (Stretch goal) Viewers can input their own answers and then the community votes for which one to select
-
-# Nostalgic task history
-
-- [x] Rename Traits to Components
-- [x] Stop using singleton pattern for entities
-- [x] Create class based EntityContainer/ComponentContainer abstraction
-- [x] Extract application code from engine (move to separate folder)
-- [x] Reconsider folder structure of the engine
-- [x] Remove System.effect, return it from performCommand, let useSystem store it in react state
-- [x] Refactor all new Component usages to use Interactive
-- [x] Move all interactivity to ecs-interactive
-- [x] Rename ecs-text to ecs-describable
-- [x] Don't use loose strings for scene ids
-- [x] Rename World to System
-- [x] entity.getComponents(system).resolveType(Describable).describe(entity, system);
-      should be entity.resolveComponent<Describable>.description
-- [x] Separate stateful and stateless entities
-- [x] Remove name from entity, let it be state for entities that need it
-- [x] Options object for Entity constructor
-- [x] Entity Component Container should be read only
-- [x] System should have specific Entity types
-- [x] Entities should resolve components specific for the SystemState
-- [x] Collectable should look for Describables on the same entity and disable them instead of reimplementing Describable.
-      (To achieve this components need lifecycle and mount events)
-- [x] Rename Effect to InteractionResult
-- [x] Component options cleanup
-- [x] Rename action apply
-- [x] Move scene code to separate package
-- [x] System.sceneId should be generic type to allow type safe Enum workflow
-- [x] Create unit tests for SystemModule/System connection
-- [x] Create unit tests for Entity/Component connection
-- [x] Create unit tests for ObservableArray
-- [x] Stateless system (make Inventory a module)
-- [x] Show number of votes next to action.
-- [x] Show action number instead of dash (-)
-- [x] Display instruction on how to vote
-- [x] Write unit tests for engine
-- [x] Enable test coverage
-- [x] Twitch votes integration (chat bot)
-- [x] Write tests for poll/chatbot code
+- NestedMenuItem package breaks auto focus for fields in dialogs opened by the menu item
+- redux-undo sometimes undos way too much. Repro: delete campfire, undo.
