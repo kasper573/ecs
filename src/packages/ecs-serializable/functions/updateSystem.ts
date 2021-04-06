@@ -26,4 +26,6 @@ export const updateSystem = (
     memory,
     system.root
   );
+
+  system.update();
 };

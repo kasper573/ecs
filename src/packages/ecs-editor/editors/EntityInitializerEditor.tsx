@@ -33,11 +33,6 @@ export const EntityInitializerEditor = ({
   const entityDefinition = useSelector((state) =>
     selectEntityDefinition(state, entityInitializer.definitionId)
   );
-  if (!entityDefinition) {
-    throw new Error(
-      "Can't edit entity initializer without entity definition available"
-    );
-  }
 
   const addComponent = useCallback(
     (definition: ComponentDefinition) =>
@@ -148,7 +143,7 @@ export const EntityInitializerEditor = ({
         name={entityInitializer.name}
       />
       <ComponentInitializerList
-        baseItems={entityDefinition.components}
+        baseItems={entityDefinition?.components}
         primaryItems={entityInitializer.components}
         onUpdate={updateProperty}
         onReset={resetProperty}

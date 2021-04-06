@@ -52,7 +52,7 @@ export const InstancesPanel = () => {
 
   const menuItemFactory = createEntityInitializerMenuFactory(
     Object.values(entityDefinitions),
-    () => {},
+    handleInitializeEmpty,
     handleInitialize,
     showRenameDialog,
     handleDuplicate,
@@ -84,8 +84,12 @@ export const InstancesPanel = () => {
     );
   }
 
+  function handleInitializeEmpty(parentId?: EntityInitializerId) {
+    handleInitialize(undefined, parentId);
+  }
+
   function handleInitialize(
-    entityDefinition: EntityDefinition,
+    entityDefinition?: EntityDefinition,
     parentId?: EntityInitializerId
   ) {
     const { system } = store.getState().present.selection;
@@ -94,8 +98,8 @@ export const InstancesPanel = () => {
         systemId: system!,
         id: uuid(),
         parentId,
-        name: entityDefinition.name,
-        definitionId: entityDefinition.id,
+        name: entityDefinition?.name ?? "Empty",
+        definitionId: entityDefinition?.id,
         components: [],
       })
     );
