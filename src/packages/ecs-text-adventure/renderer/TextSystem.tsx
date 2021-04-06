@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect, useReducer } from "react";
 import { performCommand } from "../interactive/performCommand";
 import {
   describeSystem,
@@ -6,7 +6,6 @@ import {
 } from "../describable/describeSystem";
 import { System } from "../../ecs/System";
 import { Console, ConsoleProps } from "./Console";
-import { useSystem } from "./useSystem";
 
 export type TextSystemProps = Omit<ConsoleProps, "onCommand"> &
   PropsWithChildren<{
@@ -20,7 +19,13 @@ export const TextSystem = ({
   children,
   ...consoleProps
 }: TextSystemProps) => {
-  useSystem(system);
+  const [, refresh] = useReducer((n) => n + 1, 0);
+  useEffect(() => {
+    system?.events.on("update", refresh);
+    return () => {
+      system?.events.off("update", refresh);
+    };
+  }, [system]);
   return (
     <Console
       onCommand={(command) => performCommand(system, command)}
