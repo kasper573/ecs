@@ -13,4 +13,5 @@ export const describeEntity = (entity: Entity): readonly string[] =>
   entity.components
     .filterType(Describable)
     .filter((component) => component.isActive)
-    .map((component) => component.description);
+    .map((component) => component.description.trim())
+    .filter((description) => !!description);
