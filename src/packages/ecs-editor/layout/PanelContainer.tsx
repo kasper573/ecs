@@ -29,7 +29,7 @@ export const PanelContainer = styled.div`
   }
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
-    grid-template-rows: 33vh 33vh 33vh 33vh;
+    grid-template-rows: 220px 220px 220px 220px;
     grid-template-areas:
       "${panels.Runtime}"
       "${panels.Hierarchy}"
