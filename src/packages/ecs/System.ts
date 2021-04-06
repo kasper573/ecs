@@ -23,13 +23,9 @@ export class System<EntityId extends string = string> {
   }
 
   getContext<T>(propertyName: string) {
-    const hasContext = this.context.hasOwnProperty(propertyName);
-    if (!hasContext) {
-      console.warn(
-        `Tried to access undefined system context property "${propertyName}"`
-      );
-    }
-    return hasContext ? (this.context[propertyName] as T) : undefined;
+    return this.context.hasOwnProperty(propertyName)
+      ? (this.context[propertyName] as T)
+      : undefined;
   }
 
   setContext(propertyName: string, value: unknown) {
