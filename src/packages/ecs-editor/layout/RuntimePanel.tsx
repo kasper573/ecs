@@ -1,6 +1,6 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
-import { TextSystem } from "../../ecs-react/TextSystem";
+import { TextSystem } from "../../ecs-text-adventure/renderer/TextSystem";
 import { useSystemSync } from "../hooks/useSystemSync";
 import { ResetIcon } from "../icons";
 import { FlatPanel } from "../components/FlatPanel";

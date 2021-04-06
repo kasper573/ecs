@@ -13,7 +13,7 @@
 - Update Collectable to use an Entity that has Inventory component as target.
   (Make entity instances draggable and component properties drop zones)
 
-- Create DescribableRenderer component in ecs-describable and add to default ECS instead of having a hardcoded renderer in the editor
+- Create DescribableRenderer component in describable and add to default ECS instead of having a hardcoded renderer in the editor
   Create DescribableRenderer that has ignore list, which inventory should be added to. Fully decoupled.
 
 - Implement create definition for instance action

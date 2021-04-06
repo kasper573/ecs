@@ -2,7 +2,7 @@ import * as zod from "zod";
 import {
   Interactive,
   interactiveProperties,
-} from "../ecs-interactive/Interactive";
+} from "../ecs-text-adventure/interactive/Interactive";
 import { SceneManager } from "./SceneManager";
 
 export class SceneSwitch extends Interactive.extend({

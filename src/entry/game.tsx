@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom";
 import React from "react";
-import { Game } from "../packages/twitch-text-adventure/react/Game";
+import { Game } from "../packages/example-game/Game";
 import reportWebVitals from "../reportWebVitals";
-import { createGame } from "../packages/twitch-text-adventure/createGame";
-import { createTMIClient } from "../packages/twitch-text-adventure/createTMIClient";
-import { createPollClient } from "../packages/twitch-text-adventure/createPollClient";
-import { Countdown } from "../packages/twitch-text-adventure/Countdown";
-import { ActionPoller } from "../packages/twitch-text-adventure/ActionPoller";
-import { pollChatbotWithCountdown } from "../packages/twitch-text-adventure/pollWithCountdown";
+import { createGame } from "../packages/example-game/createGame";
+import { createTMIClient } from "../packages/example-game/createTMIClient";
+import { createPollClient } from "../packages/example-game/createPollClient";
+import { Countdown } from "../packages/example-game/Countdown";
+import { ActionPoller } from "../packages/example-game/ActionPoller";
+import { pollChatbotWithCountdown } from "../packages/example-game/pollWithCountdown";
 
 const system = createGame();
 const tmiClient = createTMIClient();
