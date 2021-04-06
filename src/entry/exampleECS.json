@@ -8,6 +8,14 @@
       "nativeComponent": "Describable",
       "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
     },
+    "b0c3d8da-20fd-42e8-accc-3ca429da55b6": {
+      "nodeId": "dc1042b5-1bc6-4382-a8eb-15b556385dac",
+      "id": "b0c3d8da-20fd-42e8-accc-3ca429da55b6",
+      "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
+      "name": "TextAdventureRenderer",
+      "nativeComponent": "TextAdventureRenderer",
+      "parentNodeId": "04c26659-9966-4c4d-9106-2f8da464c81b"
+    },
     "453881e9-eca8-40ca-80d6-6403c55059a3": {
       "nodeId": "9619a992-3804-4176-a3e7-cf454f87a236",
       "id": "453881e9-eca8-40ca-80d6-6403c55059a3",
@@ -72,6 +80,11 @@
         {
           "id": "e42a4294-84b0-46ae-b330-dae2b9cbcdbc",
           "definitionId": "4904c475-04f9-437f-9d69-f2e1e6c3d544",
+          "properties": {}
+        },
+        {
+          "id": "73716209-53be-4bbd-b240-bdd0e3e48274",
+          "definitionId": "b0c3d8da-20fd-42e8-accc-3ca429da55b6",
           "properties": {}
         }
       ]
@@ -176,6 +189,13 @@
           "definitionId": "4904c475-04f9-437f-9d69-f2e1e6c3d544",
           "id": "e42a4294-84b0-46ae-b330-dae2b9cbcdbc",
           "properties": {}
+        },
+        {
+          "definitionId": "b0c3d8da-20fd-42e8-accc-3ca429da55b6",
+          "id": "73716209-53be-4bbd-b240-bdd0e3e48274",
+          "properties": {
+            "isActive": true
+          }
         }
       ]
     },

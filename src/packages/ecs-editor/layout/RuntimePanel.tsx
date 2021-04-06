@@ -1,12 +1,12 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import React from "react";
-import { TextSystem } from "../../ecs-text-adventure/renderer/TextSystem";
 import { useSystemSync } from "../hooks/useSystemSync";
 import { ResetIcon } from "../icons";
 import { FlatPanel } from "../components/FlatPanel";
 import { Panel } from "../components/Panel";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
+import { RenderTarget } from "../components/RenderTarget";
 
 export const RuntimePanel = () => {
   const [system, resetSystem] = useSystemSync();
@@ -28,7 +28,7 @@ export const RuntimePanel = () => {
           </IconButton>
         </Tooltip>
       </PanelHeader>
-      <TextSystem system={system} />
+      <RenderTarget system={system} />
     </Panel>
   );
 };

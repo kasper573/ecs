@@ -16,6 +16,7 @@ import { Inventory } from "../packages/ecs-text-adventure/collectable/Inventory"
 import { InteractionMemory } from "../packages/ecs-text-adventure/interactive/InteractionMemory";
 import { SceneManager } from "../packages/ecs-scene-manager/SceneManager";
 import { SceneSwitch } from "../packages/ecs-scene-manager/SceneSwitch";
+import { TextAdventureRenderer } from "../packages/ecs-text-adventure/renderer/TextAdventureRenderer";
 import exampleECS from "./exampleECS.json";
 
 export const nativeComponents = {
@@ -26,6 +27,7 @@ export const nativeComponents = {
   InteractionMemory,
   SceneManager,
   SceneSwitch,
+  TextAdventureRenderer,
 };
 
 const store = createStore({

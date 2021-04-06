@@ -3,6 +3,7 @@ import TypedEmitter from "typed-emitter";
 import { Entity } from "./Entity";
 
 export class System<EntityId extends string = string> {
+  private context: Record<string, unknown> = {};
   readonly events: TypedEmitter<SystemEvents> = new EventEmitter();
   readonly root: Entity<EntityId> = new Entity<EntityId>(undefined, undefined, {
     system: this,
@@ -19,6 +20,21 @@ export class System<EntityId extends string = string> {
     for (const entity of this.root.descendants) {
       entity.dispose();
     }
+  }
+
+  getContext<T>(propertyName: string) {
+    const hasContext = this.context.hasOwnProperty(propertyName);
+    if (!hasContext) {
+      console.warn(
+        `Tried to access undefined system context property "${propertyName}"`
+      );
+    }
+    return hasContext ? (this.context[propertyName] as T) : undefined;
+  }
+
+  setContext(propertyName: string, value: unknown) {
+    this.context[propertyName] = value;
+    this.update();
   }
 
   update() {
