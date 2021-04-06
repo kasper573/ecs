@@ -4,8 +4,18 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 
 export const deleteEntityInitializer = createEditorStateReducer<EntityInitializerId>(
   ({ ecs: { entityInitializers } }, { payload: id }) => {
-    if (!removeNominal(entityInitializers, id)) {
-      throw new Error("Could not remove entity");
+    const idQueue = [id];
+    while (idQueue.length) {
+      const id = idQueue.shift()!;
+      const entity = entityInitializers[id];
+      if (!entity) {
+        throw new Error("Could not delete entity");
+      }
+      removeNominal(entityInitializers, id);
+      const childIds = Object.values(entityInitializers)
+        .filter((e) => e.parentId === id)
+        .map((e) => e.id);
+      idQueue.push(...childIds);
     }
   }
 );
