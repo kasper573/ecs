@@ -15,11 +15,11 @@ import { CommonTreeItemList } from "./CommonTreeItemList";
 
 export type CommonTreeItemProps<T, Id extends string> = {
   node: TreeNode<T>;
-  onMoveNode?: (source: T, destination: T) => void;
+  onMoveNode?: (source: T, destination?: T) => void;
   menuItems?: (value: T, props: MenuItemRendererProps) => MaybeMenuItemElements;
   dragSpec: (value: T) => DragSourceHookSpec<T, unknown, {}>;
   dropSpec: (
-    value: T,
+    target: T | undefined,
     onDrop: (dropped: T) => void
   ) => DropTargetHookSpec<T, unknown, { canDrop: boolean }>;
   getNodeId: (value: T) => Id;

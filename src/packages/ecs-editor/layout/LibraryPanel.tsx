@@ -1,5 +1,4 @@
 import { IconButton, Tooltip } from "@material-ui/core";
-import { useDrop } from "react-dnd";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -41,14 +40,6 @@ export const LibraryPanel = () => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
   const nodes = useSelector(selectListOfLibraryNode);
-
-  const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
-    libraryNodeDropSpec(
-      rootNode,
-      handleMoveToRoot,
-      () => store.getState().present
-    )
-  );
 
   const showCreateFolderDialog = useDialog(
     (props, parentNodeId?: LibraryNodeId) => (
@@ -143,23 +134,17 @@ export const LibraryPanel = () => {
     dispatch(core.actions.setSelectedLibraryNode(nodeId));
   }
 
-  function handleMoveNode(node: TypedLibraryNode, target: TypedLibraryNode) {
+  function handleMoveNode(node: TypedLibraryNode, target?: TypedLibraryNode) {
     dispatch(
       core.actions.moveLibraryNode({
         id: node.nodeId,
-        targetId: target.nodeId,
+        targetId: target?.nodeId,
       })
     );
   }
 
-  function handleMoveToRoot(node: TypedLibraryNode) {
-    if (canDropToRoot) {
-      handleMoveNode(node, rootNode);
-    }
-  }
-
   return (
-    <Panel ref={rootDrop} name={PanelName.Library} {...rootContextMenuProps}>
+    <Panel name={PanelName.Library} {...rootContextMenuProps}>
       {rootContextMenu}
       <PanelHeader title="Library">
         {selectedSystem && (
@@ -192,9 +177,6 @@ export const LibraryPanel = () => {
     </Panel>
   );
 };
-
-// Is safe as root node since belonging to the root means to have no parent
-const rootNode = { type: "folder" } as TypedLibraryNode;
 
 function getItemProps({ value }: TreeNode<TypedLibraryNode>) {
   const isFolder = value.type === "folder";

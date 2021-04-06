@@ -9,7 +9,7 @@ import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
 
 export const moveLibraryNode = createEditorStateReducer<{
   id: LibraryNodeId;
-  targetId: LibraryNodeId;
+  targetId?: LibraryNodeId;
 }>((state, { payload: { id, targetId } }) => {
   const folders = Object.values(state.ecs.libraryFolders);
   if (!canMoveNodeTo(folders, id, targetId, treeOptions)) {

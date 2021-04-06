@@ -32,4 +32,6 @@ const PanelContent = styled.div`
   // to panel content regardless of scroll position
   position: relative;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
 `;

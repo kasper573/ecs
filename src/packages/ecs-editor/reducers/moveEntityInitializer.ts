@@ -8,7 +8,7 @@ import {
 
 export const moveEntityInitializer = createEditorStateReducer<{
   id: EntityInitializerId;
-  targetId: EntityInitializerId;
+  targetId?: EntityInitializerId;
 }>(({ ecs: { entityInitializers } }, { payload: { id, targetId } }) => {
   const list = Object.values(entityInitializers);
   if (!canMoveNodeTo(list, id, targetId, treeOptions)) {

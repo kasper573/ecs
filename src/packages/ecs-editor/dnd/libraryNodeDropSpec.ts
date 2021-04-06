@@ -8,13 +8,14 @@ import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { DNDType } from "./DNDType";
 
 export const libraryNodeDropSpec = (
-  targetNode: TypedLibraryNode,
+  targetNode: TypedLibraryNode | undefined,
   handleDrop: (node: TypedLibraryNode) => void,
   getEditorState: () => EditorState
 ) => ({
   drop: handleDrop,
+  // Can move library items to root or to folders
   accept:
-    targetNode.type === "folder"
+    !targetNode || targetNode.type === "folder"
       ? [
           DNDType.EntityDefinition,
           DNDType.ComponentDefinition,
@@ -29,7 +30,7 @@ export const libraryNodeDropSpec = (
       ? canMoveNodeTo(
           Object.values(getEditorState().ecs.libraryFolders),
           draggedNodeId,
-          targetNode.nodeId,
+          targetNode?.nodeId,
           treeOptions
         )
       : false;

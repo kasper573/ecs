@@ -9,7 +9,7 @@ import {
 import { DNDType } from "./DNDType";
 
 export const entityInitializerDropSpec = (
-  targetNode: EntityInitializer,
+  targetNode: EntityInitializer | undefined,
   handleDrop: (node: EntityInitializer) => void,
   getEditorState: () => EditorState
 ) => ({
@@ -22,7 +22,7 @@ export const entityInitializerDropSpec = (
       ? canMoveNodeTo(
           Object.values(getEditorState().ecs.entityInitializers),
           draggedNodeId,
-          targetNode.id,
+          targetNode?.id,
           treeOptions
         )
       : false;

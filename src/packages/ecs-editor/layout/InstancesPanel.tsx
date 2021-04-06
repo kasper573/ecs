@@ -1,5 +1,4 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
-import { useDrop } from "react-dnd";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { core } from "../core";
@@ -41,14 +40,6 @@ export const InstancesPanel = () => {
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
   const store = useStore();
-
-  const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
-    entityInitializerDropSpec(
-      rootNode,
-      handleMoveToRoot,
-      () => store.getState().present
-    )
-  );
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "instance",
@@ -112,24 +103,18 @@ export const InstancesPanel = () => {
 
   function handleMoveEntity(
     entity: EntityInitializer,
-    target: EntityInitializer
+    target?: EntityInitializer
   ) {
     dispatch(
       core.actions.moveEntityInitializer({
         id: entity.id,
-        targetId: target.id,
+        targetId: target?.id,
       })
     );
   }
 
-  function handleMoveToRoot(entity: EntityInitializer) {
-    if (canDropToRoot) {
-      handleMoveEntity(entity, rootNode);
-    }
-  }
-
   return (
-    <Panel ref={rootDrop} name={PanelName.Instances} {...rootContextMenuProps}>
+    <Panel name={PanelName.Instances} {...rootContextMenuProps}>
       {rootContextMenu}
       <PanelHeader title={PanelName.Instances}>
         <MenuFor items={menuItemFactory.create}>
@@ -160,16 +145,14 @@ export const InstancesPanel = () => {
               () => store.getState().present
             ),
         }}
-      />
-      <DropBox spec={entityDefinitionDropSpec(handleInitialize)}>
-        <Typography>Drop to create instance</Typography>
-      </DropBox>
+      >
+        <DropBox spec={entityDefinitionDropSpec(handleInitialize)}>
+          <Typography>Drop to create instance</Typography>
+        </DropBox>
+      </CommonTreeView>
     </Panel>
   );
 };
-
-// Is safe as root node since belonging to the root means to have no parent
-const rootNode = {} as EntityInitializer;
 
 function getItemProps(
   { value: { name, definitionId }, children }: TreeNode<EntityInitializer>,
