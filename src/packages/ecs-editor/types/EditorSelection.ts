@@ -1,5 +1,4 @@
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { SceneDefinition } from "../../ecs-serializable/types/SceneDefinition";
 import { InspectedValue } from "./InspectedValue";
 import { InspectedObject } from "./InspectedObject";
 
@@ -10,7 +9,6 @@ export type EditorSelectionValues = Partial<EditorSelectionValuesDefined>;
 
 export type EditorSelectionValuesDefined = {
   system: SystemDefinition["id"];
-  scene: SceneDefinition["id"];
   inspected: InspectedValue;
 };
 
@@ -22,7 +20,6 @@ export type EditorSelectionObjects = {
   // Makes sure we use the same keys as EditorSelection
   [K in keyof EditorSelectionValues]: {
     system: SystemDefinition;
-    scene: SceneDefinition;
     inspected: InspectedObject;
   }[K];
 };
@@ -38,6 +35,5 @@ export type EditorSelectionName = keyof EditorSelectionValues;
  */
 export const editorSelectionOrder: EditorSelectionName[] = [
   "system",
-  "scene",
   "inspected",
 ];

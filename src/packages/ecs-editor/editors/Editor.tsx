@@ -5,12 +5,7 @@ import {
   CssBaseline,
   MuiThemeProvider,
 } from "@material-ui/core";
-import { PanelContainer } from "../layout/PanelContainer";
 import { Layout } from "../layout/Layout";
-import { RuntimePanel } from "../layout/RuntimePanel";
-import { LibraryPanel } from "../layout/LibraryPanel";
-import { InstancesPanel } from "../layout/InstancesPanel";
-import { InspectorPanel } from "../layout/InspectorPanel";
 import { Hotkeys } from "../components/Hotkeys";
 import { useSelector } from "../store";
 import { lightTheme } from "../fixtures/lightTheme";
@@ -19,9 +14,11 @@ import { selectThemeType } from "../selectors/selectThemeType";
 import { GlobalStyle } from "../layout/GlobalStyle";
 import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
+import { AppBarContent } from "../layout/AppBarContent";
+import { Content } from "../layout/Content";
 
 /**
- * Renders controls to CRUD systems, scenes, entities, components and properties.
+ * Renders controls to CRUD systems, entities, components and properties.
  */
 export const Editor = () => {
   const themeType = useSelector(selectThemeType);
@@ -34,17 +31,12 @@ export const Editor = () => {
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <GlobalStyle />
-        <Layout>
-          <PanelContainer>
-            <RuntimePanel />
-            <InspectorPanel />
-            <InstancesPanel />
-            <LibraryPanel />
-          </PanelContainer>
-          <Hotkeys />
+        <Layout appBar={<AppBarContent />}>
+          <Content />
         </Layout>
         <DragLayer />
         <Dialogs />
+        <Hotkeys />
       </MuiThemeProvider>
     </StyledThemeProvider>
   );

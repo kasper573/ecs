@@ -2,42 +2,76 @@ import { Entity } from "./Entity";
 import { System } from "./System";
 import { Component } from "./Component";
 
-describe("system entries can be configured", () => {
-  test("by an array of entities", () => {
-    const entities = [new Entity()];
-    const system = new System(entities);
-    expect(system.entities).toBe(entities);
-  });
-  describe("by a config object", () => {
-    test("where config.entities is undefined", () => {
-      const system = new System({});
-      expect(system.entities).toEqual([]);
-    });
-    test("where config.entities is an array of entities", () => {
-      const entities = [new Entity()];
-      const system = new System({ entities });
-      expect(system.entities).toBe(entities);
-    });
-    test("where config.entities is a function that returns entities", () => {
-      const entities = [new Entity()];
-      const system = new System({ entities: () => entities });
-      expect(system.entities).toBe(entities);
-    });
-  });
+test("system entries can be configured by an array of entities", () => {
+  const a = new Entity();
+  const b = new Entity();
+  const system = new System(a, b);
+  expect(system.entities.length).toBe(2);
+  expect(system.entities).toEqual(expect.arrayContaining([a, b]));
 });
 
-test("system entities resolution can be derivative", () => {
-  const entities = {
-    a: [new Entity()],
-    b: [new Entity()],
-  };
-  let state: keyof typeof entities = "a";
-  const system = new System({
-    entities: () => entities[state],
-  });
-  expect(system.entities).toBe(entities.a);
-  state = "b";
-  expect(system.entities).toBe(entities.b);
+test("system.entities is a flat list of the entity hierarchy", () => {
+  const c = new Entity();
+  const b = new Entity();
+  b.children.push(c);
+  const a = new Entity();
+  a.children.push(b);
+
+  const system = new System(a);
+  expect(system.entities.length).toBe(3);
+  expect(system.entities).toEqual(expect.arrayContaining([a, b, c]));
+});
+
+test("inactive leaf entries are not included in system.entities", () => {
+  const c = new Entity([], [], { name: "C" });
+  const b = new Entity([], [], { name: "B" });
+  b.children.push(c);
+  const a = new Entity([], [], { name: "A" });
+  a.children.push(b);
+  c.isActive = false;
+
+  const system = new System(a);
+  expect(system.entities.length).toBe(2);
+  expect(system.entities).toEqual(expect.arrayContaining([a, b]));
+});
+
+test("inactive leaf entries are included in system.root.allDescendantsEntities", () => {
+  const c = new Entity([], [], { name: "C" });
+  const b = new Entity([], [], { name: "B" });
+  b.children.push(c);
+  const a = new Entity([], [], { name: "A" });
+  a.children.push(b);
+  c.isActive = false;
+
+  const system = new System(a);
+  expect(system.root.descendants.length).toBe(3);
+  expect(system.root.descendants).toEqual(expect.arrayContaining([a, b, c]));
+});
+
+test("inactive entry sub trees are not included in system.entities", () => {
+  const c = new Entity();
+  const b = new Entity();
+  b.children.push(c);
+  const a = new Entity();
+  a.children.push(b);
+  b.isActive = false;
+
+  const system = new System(a);
+  expect(system.entities.length).toBe(1);
+  expect(system.entities).toEqual(expect.arrayContaining([a]));
+});
+
+test("inactive entry sub trees are included in system.root.allDescendantsEntities", () => {
+  const c = new Entity();
+  const b = new Entity();
+  b.children.push(c);
+  const a = new Entity();
+  a.children.push(b);
+  b.isActive = false;
+
+  const system = new System(a);
+  expect(system.root.descendants.length).toBe(3);
+  expect(system.root.descendants).toEqual(expect.arrayContaining([a, b, c]));
 });
 
 test("components get updated once on system initialization", () => {
@@ -48,9 +82,82 @@ test("components get updated once on system initialization", () => {
         componentUpdates++;
       },
     });
-  new System([
+  new System(
     new Entity([createComponent(), createComponent()]),
-    new Entity([createComponent(), createComponent()]),
-  ]);
+    new Entity([createComponent(), createComponent()])
+  );
   expect(componentUpdates).toBe(4);
+});
+
+test("components get updated once per system update", () => {
+  let componentUpdates = 0;
+  const createComponent = () =>
+    new Component({
+      update: () => {
+        componentUpdates++;
+      },
+    });
+  const system = new System(
+    new Entity([createComponent(), createComponent()]),
+    new Entity([createComponent(), createComponent()])
+  );
+  componentUpdates = 0;
+  system.update();
+  expect(componentUpdates).toBe(4);
+});
+
+describe("system reference", () => {
+  describe("for root entities", () => {
+    it("is set for initializers", () => {
+      const a = new Entity();
+      const b = new Entity();
+      const system = new System(a, b);
+      expect(a.system).toBe(system);
+      expect(b.system).toBe(system);
+    });
+
+    it("is set for added", () => {
+      const system = new System();
+      const a = new Entity();
+      expect(a.system).toBe(undefined);
+      system.root.children.push(a);
+      expect(a.system).toBe(system);
+    });
+
+    it("is unset for removed", () => {
+      const a = new Entity();
+      const system = new System(a);
+      expect(a.system).toBe(system);
+      system.root.children.remove(a);
+      expect(a.system).toBe(undefined);
+    });
+  });
+
+  describe("for sub tree entities", () => {
+    it("is set for initializers", () => {
+      const b = new Entity();
+      const a = new Entity([], [b]);
+      const system = new System(a);
+      expect(a.system).toBe(system);
+      expect(b.system).toBe(system);
+    });
+
+    it("is set for added", () => {
+      const b = new Entity();
+      const a = new Entity([], [b]);
+      const system = new System();
+      expect(b.system).toBe(undefined);
+      system.root.children.push(a);
+      expect(b.system).toBe(system);
+    });
+
+    it("is unset for removed", () => {
+      const b = new Entity();
+      const a = new Entity([], [b]);
+      const system = new System(a);
+      expect(b.system).toBe(system);
+      system.root.children.remove(a);
+      expect(b.system).toBe(undefined);
+    });
+  });
 });

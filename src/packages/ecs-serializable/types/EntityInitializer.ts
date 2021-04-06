@@ -1,6 +1,5 @@
 import { EntityDefinitionId } from "./EntityDefinition";
 import { SystemDefinitionId } from "./SystemDefinition";
-import { SceneDefinitionId } from "./SceneDefinition";
 import { ComponentInitializer } from "./ComponentInitializer";
 
 export type EntityInitializerId = NominalString<"EntityInitializerId">;
@@ -11,21 +10,25 @@ export type EntityInitializer = {
    */
   id: EntityInitializerId;
   /**
+   * uuid
+   */
+  parentId?: EntityInitializerId;
+  /**
    * Used for presentation
    */
   name: string;
   /**
+   * Controls Entity.isActive if set to true or false
+   */
+  isActive?: boolean;
+  /**
    * The entity definition this initializer references
    */
-  definitionId: EntityDefinitionId;
+  definitionId?: EntityDefinitionId;
   /**
    * The id of the system this entity belongs to
    */
   systemId: SystemDefinitionId;
-  /**
-   * The id of the scene this entity belongs to
-   */
-  sceneId: SceneDefinitionId;
   /**
    * Components specific for this entity initializer.
    * If an entity initializer wants to override the components of an entity definition,

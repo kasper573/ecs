@@ -1,33 +1,39 @@
-import * as zod from "zod";
+import * as z from "zod";
 import { createPropertyBag } from "../property-bag/createPropertyBag";
 import { InstanceOf } from "../property-bag/types/PropertyBagInstance";
 import { PropertyBag } from "../property-bag/types/PropertyBag";
 import { Entity } from "./Entity";
-import { trustedUndefined } from "./trustedUndefined";
 import { System } from "./System";
 
 // We need to define this separately because we have a recursive
 // relationship between Component and Entity and zod can't statically infer those.
-const entitySchema: zod.ZodSchema<Entity> = zod.lazy(() =>
-  zod.instanceof(Entity)
+const entitySchema: z.ZodSchema<Entity | undefined> = z.lazy(() =>
+  z.instanceof(Entity).optional()
 );
+const none = z.void().optional();
+const unmountSchema = z.function(z.tuple([]), none);
+const mountSchema = z.function(z.tuple([]), z.union([none, unmountSchema]));
 
 export const componentProperties = {
   id: {
     // (Used only by ecs-serializable)
     // Instance id, used as relationship between components
     // in entity definitions and entity initializers
-    type: zod.string().optional(),
+    type: z.string().optional(),
     hidden: true,
   },
   entity: {
     type: entitySchema,
-    defaultValue: trustedUndefined<Entity>(),
     hidden: true,
   },
-  isActive: { type: zod.boolean(), defaultValue: true },
+  isActive: { type: z.boolean(), defaultValue: true },
   update: {
-    type: zod.function(zod.tuple([]), zod.union([zod.void(), zod.undefined()])),
+    type: z.function(z.tuple([]), z.union([z.void(), z.undefined()])),
+    defaultValue: () => {},
+    hidden: true,
+  },
+  mount: {
+    type: mountSchema,
     defaultValue: () => {},
     hidden: true,
   },
@@ -52,8 +58,8 @@ export type Component = PropertyBag<
 
 export type ComponentDeclarationContext = {
   component: InstanceOf<Component>;
-  entity: Entity;
-  system: System;
+  entity?: Entity;
+  system?: System;
 };
 
 export type ComponentInstance = InstanceOf<typeof Component>;

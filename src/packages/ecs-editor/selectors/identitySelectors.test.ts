@@ -4,7 +4,6 @@ import { selectComponentDefinition } from "./selectComponentDefinition";
 import { selectECS } from "./selectECS";
 import { selectEditorSelection } from "./selectEditorSelection";
 import { selectEntityDefinition } from "./selectEntityDefinition";
-import { selectHasScenes } from "./selectHasScenes";
 import { selectHasSystems } from "./selectHasSystems";
 import { selectInspectedObject } from "./selectInspectedObject";
 import { selectLibraryNode } from "./selectLibraryNode";
@@ -12,10 +11,8 @@ import { selectListOfComponentDefinition } from "./selectListOfComponentDefiniti
 import { selectListOfEntityDefinition } from "./selectListOfEntityDefinition";
 import { selectListOfLibraryFolder } from "./selectListOfLibraryFolder";
 import { selectListOfLibraryNode } from "./selectListOfLibraryNode";
-import { selectListOfSceneDefinition } from "./selectListOfSceneDefinition";
 import { selectSelectedEntityInitializer } from "./selectSelectedEntityInitializer";
 import { selectSelectedSystemDefinition } from "./selectSelectedSystemDefinition";
-import { selectSelectedSceneDefinition } from "./selectSelectedSceneDefinition";
 import { selectSelectedLibraryNode } from "./selectSelectedLibraryNode";
 
 // Suite disabled until createMemoizedSelector has been properly implemented
@@ -33,8 +30,6 @@ describe("selector returns identical values given the same parameters", () => {
     testIdentity(selectEditorSelection, state));
   test("selectEntityDefinition", () =>
     testIdentity(selectEntityDefinition, state, eDef.id));
-  test("selectHasScenes", () =>
-    testIdentity(selectHasScenes, state, system.id));
   test("selectHasSystems", () => testIdentity(selectHasSystems, state));
   test("selectInspectedObject", () =>
     testIdentity(selectInspectedObject, state));
@@ -48,14 +43,10 @@ describe("selector returns identical values given the same parameters", () => {
     testIdentity(selectListOfLibraryFolder, state, system.id));
   test("selectListOfLibraryNode", () =>
     testIdentity(selectListOfLibraryNode, state, system.id));
-  test("selectListOfSceneDefinition", () =>
-    testIdentity(selectListOfSceneDefinition, state, system.id));
   test("selectSelectedEntityInitializer", () =>
     testIdentity(selectSelectedEntityInitializer, state));
   test("selectSelectedLibraryNode", () =>
     testIdentity(selectSelectedLibraryNode, state));
-  test("selectSelectedSceneDefinition", () =>
-    testIdentity(selectSelectedSceneDefinition, state));
   test("selectSelectedSystemDefinition", () =>
     testIdentity(selectSelectedSystemDefinition, state));
 });

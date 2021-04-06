@@ -10,6 +10,7 @@ There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's in perfect shape.
 Actions:
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -23,6 +24,7 @@ There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's looking bruised.
 Actions:
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -36,6 +38,7 @@ There's a repair kit conveniently laying on the ground.
 There's a punching bag. It's falling apart.
 Actions:
 - Cross the bridge
+- View inventory
 - Pick up repair kit
 - Punch bag`
   );
@@ -49,6 +52,7 @@ There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
 - Cross the bridge
+- View inventory
 - Pick up repair kit`
   );
 
@@ -58,7 +62,8 @@ Actions:
     `You are standing on the bridge. It seems very unstable.
 Actions:
 - Proceed
-- Go back`
+- Go back
+- View inventory`
   );
 
   performCommand(system, "Proceed");
@@ -67,6 +72,7 @@ Actions:
     `The bridge collapses under your weight. You fall down a pit.
 It is very dark.
 Actions:
+- View inventory
 - Use lighter`
   );
 
@@ -75,8 +81,9 @@ Actions:
   expect(describeSystem(system)).toEqual(
     `You see a ladder.
 Actions:
-- Climb ladder
-- Stop using lighter`
+- View inventory
+- Stop using lighter
+- Climb ladder`
   );
 
   performCommand(system, "Climb ladder");
@@ -87,6 +94,7 @@ There's a repair kit conveniently laying on the ground.
 There's a punching bag. It is broken.
 Actions:
 - Cross the bridge
+- View inventory
 - Pick up repair kit`
   );
 
@@ -98,6 +106,7 @@ You stand in front of a bridge. It looks broken.
 There's a punching bag. It is broken.
 Actions:
 - Cross the bridge
+- View inventory
 - Repair bridge`
   );
 
@@ -108,10 +117,15 @@ Actions:
 You stand in front of a bridge. It looks sturdy.
 There's a punching bag. It is broken.
 Actions:
-- Cross the bridge`
+- Cross the bridge
+- View inventory`
   );
 
   performCommand(system, "Cross the bridge");
 
-  expect(describeSystem(system)).toEqual("You win!");
+  expect(describeSystem(system)).toEqual(
+    `You win!
+Actions:
+- View inventory`
+  );
 });

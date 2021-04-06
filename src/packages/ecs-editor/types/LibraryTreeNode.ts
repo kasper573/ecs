@@ -1,4 +1,4 @@
-import { TreeNode } from "./TreeNode";
+import { TreeNode } from "../tree/TreeNode";
 import { TypedLibraryNode } from "./TypedLibraryNode";
 
 export type LibraryTreeNode = TreeNode<TypedLibraryNode>;

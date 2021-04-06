@@ -36,7 +36,7 @@ const wrapAction = (system: System, { name, perform }: Action): Action => {
         throw new Error("Actions can only be performed once");
       }
       const result = perform();
-      const memory = system.modules.findType(InteractionMemory);
+      const memory = system.entities.findComponent(InteractionMemory)?.items;
       if (memory) {
         memory.push(result);
       }

@@ -13,7 +13,7 @@ test("Describable entities are presented as text", () => {
   const entity = new Entity([
     new Describable({ description: "A visible entity" }),
   ]);
-  expect(describeSystem(new System([entity]))).toEqual("A visible entity");
+  expect(describeSystem(new System(entity))).toEqual("A visible entity");
 });
 
 test("Actions are presented as a text list", () => {
@@ -21,7 +21,7 @@ test("Actions are presented as a text list", () => {
     new Interactive({ action: "Foo" }),
     new Interactive({ action: "Bar" }),
   ]);
-  expect(describeSystem(new System([entity]))).toEqual(`Actions:
+  expect(describeSystem(new System(entity))).toEqual(`Actions:
 - Foo
 - Bar`);
 });
@@ -31,7 +31,7 @@ test("Interaction results are presented as a text above all other text output", 
     new Interactive({ action: "Foo" }),
     new Interactive({ action: "Bar" }),
   ]);
-  expect(describeSystem(new System([entity]))).toEqual(`Actions:
+  expect(describeSystem(new System(entity))).toEqual(`Actions:
 - Foo
 - Bar`);
 });

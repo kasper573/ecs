@@ -14,7 +14,6 @@ type SelectedObjectOption<K extends keyof EditorSelectionValues> = {
 
 type SetSelectedObjectPayload =
   | SelectedObjectOption<"system">
-  | SelectedObjectOption<"scene">
   | SelectedObjectOption<"inspected">;
 
 export const setSelectedObjectAction = createAction<SetSelectedObjectPayload>(

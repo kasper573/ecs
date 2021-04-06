@@ -1,23 +1,31 @@
 import { uniq } from "lodash";
-import { Entity } from "../ecs/Entity";
 import { typedKeys } from "../ecs-common/typedKeys";
-import { EntityDefinition } from "./types/EntityDefinition";
-import { EntityInitializer } from "./types/EntityInitializer";
-import { ComponentInitializerId } from "./types/ComponentInitializer";
+import {
+  ComponentInitializer,
+  ComponentInitializerId,
+} from "./types/ComponentInitializer";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
 import { getComponentInstanceId } from "./types/ComponentInstancePropertyMap";
+import { DeserializedEntity } from "./types/DeserializedEntity";
+import { EntityInitializerId } from "./types/EntityInitializer";
 
-export class RedefinableEntity extends Entity {
+export class RedefinableEntity extends DeserializedEntity {
+  constructor(id: EntityInitializerId, name?: string) {
+    super([], [], {
+      name: name,
+      id,
+    });
+  }
+
   define(
-    entityDefinition: EntityDefinition,
-    entityInitializer: EntityInitializer,
+    name: string,
+    baseInitializers: ComponentInitializer[],
+    primaryInitializers: ComponentInitializer[],
     memory: DeserializationMemory
   ) {
-    this.name = entityInitializer.name;
+    this.name = name;
 
-    const baseInitializers = entityDefinition.components;
-    const primaryInitializers = entityInitializer.components;
     const initializerIds = uniq([
       ...baseInitializers.map((c) => c.id),
       ...primaryInitializers.map((c) => c.id),
@@ -28,9 +36,7 @@ export class RedefinableEntity extends Entity {
       const id = component.id as ComponentInitializerId;
       if (!initializerIds.includes(id)) {
         this.components.remove(component);
-        memory.componentProperties.delete(
-          getComponentInstanceId(entityInitializer.id, id)
-        );
+        memory.componentProperties.delete(getComponentInstanceId(this.id, id));
       }
     }
 
@@ -60,7 +66,7 @@ export class RedefinableEntity extends Entity {
 
       // Determine which properties have been changed
       const componentInstanceId = getComponentInstanceId(
-        entityInitializer.id,
+        this.id,
         componentInitializer.id
       );
       const allPropertyNames = typedKeys(Component.propertyInfos);

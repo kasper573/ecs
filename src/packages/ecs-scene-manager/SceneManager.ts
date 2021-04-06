@@ -1,44 +1,69 @@
-import { without } from "lodash";
 import { Entity } from "../ecs/Entity";
-import { SystemModule } from "../ecs/SystemModule";
-import { System } from "../ecs/System";
-import { typedKeys } from "../ecs-common/typedKeys";
-import { Scene } from "./Scene";
+import { Component, componentProperties } from "../ecs/Component";
 
-export class SceneManager<SceneId extends keyof any> implements SystemModule {
-  system?: System;
-  scenes = {} as Record<SceneId, Scene>;
+export class SceneManager extends Component.extend({
+  isActive: { ...componentProperties.isActive, hidden: true },
+}) {
+  private activeSceneId?: string;
+  private activeScene?: Entity;
+
+  get sceneId() {
+    return this.activeSceneId;
+  }
+  set sceneId(value: string | undefined) {
+    this.activeSceneId = value;
+    this.setActiveScene(
+      this.activeSceneId
+        ? this.entity?.childrenById[this.activeSceneId]
+        : undefined
+    );
+  }
   get scene() {
-    return this.scenes[this.sceneId];
+    return this.activeScene;
+  }
+  get scenes() {
+    return this.entity?.children;
   }
 
-  constructor(
-    sceneEntities: Record<SceneId, Entity[]>,
-    public sceneId: SceneId = typedKeys(sceneEntities)[0]
-  ) {
-    this.setEntities(sceneEntities);
+  private setActiveScene(activeScene = this.activeScene) {
+    this.activeScene = activeScene;
+    this.activeSceneId = activeScene ? activeScene.id : undefined;
+    this.updateChildActiveStates();
   }
 
-  setEntities(sceneEntities: Record<SceneId, Entity[]>) {
-    const currentIds = Object.keys(sceneEntities) as SceneId[];
-    for (const sceneId of currentIds) {
-      const scene = this.scenes[sceneId];
-      const entities = sceneEntities[sceneId];
-      if (scene) {
-        const removed = without(scene, ...entities);
-        const added = without(entities, ...scene);
-        if (removed.length) {
-          scene.remove(...removed);
-        }
-        if (added.length) {
-          scene.push(...added);
-        }
-      } else {
-        this.scenes[sceneId] = new Scene(...entities);
+  private updateChildActiveStates() {
+    if (this.scenes) {
+      for (const child of this.scenes) {
+        child.isActive = child === this.activeScene;
       }
     }
-    if (!this.scene) {
-      this.sceneId = currentIds[0];
+  }
+
+  constructor() {
+    super({
+      isActive: true,
+      mount: () =>
+        this.scenes?.mount((scene) => {
+          if (!this.activeScene) {
+            this.setActiveScene(scene);
+          }
+          scene.isActive = scene === this.activeScene;
+          return () => (scene.isActive = true);
+        }),
+    });
+  }
+
+  static create<EntityId extends string>(
+    scenes: Record<EntityId, Entity<EntityId>[]>
+  ) {
+    const manager = new SceneManager();
+    const root = new Entity([manager], [], { name: "SceneManager" });
+    for (const entityId in scenes) {
+      const scene = new Entity([], scenes[entityId], {
+        id: entityId as EntityId,
+      });
+      root.children.push(scene);
     }
+    return root;
   }
 }

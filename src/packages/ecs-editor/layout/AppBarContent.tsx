@@ -1,80 +1,24 @@
 import React from "react";
-import {
-  IconButton,
-  ListItemSecondaryAction,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
+import { IconButton, Toolbar as MuiToolbar, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
-import { usePopupState } from "material-ui-popup-state/hooks";
-import { bindPopper, bindToggle } from "material-ui-popup-state";
 import { useDispatch, useSelector } from "../store";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { core } from "../core";
 import { selectThemeType } from "../selectors/selectThemeType";
-import {
-  DarkThemeIcon,
-  DeleteIcon,
-  DevToolsIcon,
-  EditIcon,
-  LightThemeIcon,
-} from "../icons";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { DevTools } from "../components/DevTools";
-import { CommonPopper } from "../components/CommonPopper";
+import { DarkThemeIcon, LightThemeIcon } from "../icons";
+import { FileMenu } from "./FileMenu";
+import { DevToolsButton } from "./DevToolsButton";
 
 export const AppBarContent = () => {
   const dispatch = useDispatch();
-  const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const themeType = useSelector(selectThemeType);
   const nextThemeType = themeType === "light" ? "dark" : "light";
   const ThemeToggleIcon = themeToggleIcons[themeType];
   const themeToggleTooltip = themeToggleTooltips[themeType];
-
-  const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
-    "system",
-    (system) => system.name,
-    { rename: handleSystemRename, remove: handleSystemDelete }
-  );
-
-  function handleSystemRename(system: SystemDefinition, name: string) {
-    dispatch(
-      core.actions.renameSystemDefinition({ systemId: system.id, name })
-    );
-  }
-
-  function handleSystemDelete(system: SystemDefinition) {
-    dispatch(core.actions.deleteSystemDefinition(system.id));
-  }
-
   const toggleTheme = () => dispatch(core.actions.setThemeType(nextThemeType));
 
   return (
-    <>
-      <EditorTitle>
-        {selectedSystem ? selectedSystem.name : "No system selected"}
-      </EditorTitle>
-      {selectedSystem && (
-        <>
-          <Tooltip title="Rename system">
-            <IconButton
-              aria-label="Rename system"
-              onClick={() => showRenameDialog(selectedSystem)}
-            >
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete system">
-            <IconButton
-              aria-label="Delete system"
-              onClick={() => showDeleteDialog(selectedSystem)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </>
-      )}
+    <Toolbar>
+      <FileMenu edge="start" />
       <Actions>
         <DevToolsButton />
         <Tooltip title={themeToggleTooltip}>
@@ -87,41 +31,18 @@ export const AppBarContent = () => {
           </IconButton>
         </Tooltip>
       </Actions>
-    </>
+    </Toolbar>
   );
 };
 
-const DevToolsButton = () => {
-  const popupState = usePopupState({
-    variant: "popper",
-    popupId: "select-component-definition",
-  });
-  return (
-    <>
-      <Tooltip title="Developer tools">
-        <IconButton aria-label="Developer tools" {...bindToggle(popupState)}>
-          <DevToolsIcon />
-        </IconButton>
-      </Tooltip>
-      <CommonPopper
-        disablePortal
-        {...bindPopper(popupState)}
-        onClickAway={popupState.close}
-      >
-        <DevTools />
-      </CommonPopper>
-    </>
-  );
-};
-
-export const EditorTitle = styled(Typography).attrs({
-  component: "span",
-  noWrap: true,
-})`
-  margin-right: ${({ theme }) => theme.spacing(1.5)}px;
+const Toolbar = styled(MuiToolbar).attrs({ disableGutters: true })`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 `;
 
-const Actions = styled(ListItemSecondaryAction)`
+const Actions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;

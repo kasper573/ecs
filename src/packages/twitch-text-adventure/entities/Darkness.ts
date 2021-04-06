@@ -10,8 +10,8 @@ export class Darkness extends Entity {
       new Describable({
         description: "It is very dark.",
         isActive: () => {
-          const inventory = this.system.modules.resolveType(Inventory);
-          const lighter = inventory.findType(Lighter);
+          const inventory = this.system?.entities.findComponent(Inventory);
+          const lighter = inventory?.items.findType(Lighter);
           return !lighter || !lighter.isLit;
         },
       })

@@ -19,17 +19,10 @@ tmiClient.connect();
 const countdown = new Countdown();
 countdown.onInterval(1000, render);
 
-system.modules.push(
-  new ActionPoller("What now?", (question, answers) =>
-    pollChatbotWithCountdown(
-      pollClient,
-      countdown,
-      question,
-      answers,
-      30 * 1000
-    )
-  )
+const actionPoller = new ActionPoller("What now?", (question, answers) =>
+  pollChatbotWithCountdown(pollClient, countdown, question, answers, 30 * 1000)
 );
+actionPoller.attach(system);
 
 function render() {
   ReactDOM.render(

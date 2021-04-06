@@ -5,8 +5,10 @@ import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition"
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
+  EntityInitializerIcon,
   FolderIcon,
 } from "../icons";
+import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { DNDType } from "./DNDType";
 import { DragPreview } from "./DragPreview";
 
@@ -36,5 +38,8 @@ export function DragPreviewForItem({
     case DNDType.LibraryFolder:
       const libraryFolder = item as LibraryFolder;
       return <DragPreview icon={FolderIcon} name={libraryFolder.name} />;
+    case DNDType.EntityInitializer:
+      const entity = item as EntityInitializer;
+      return <DragPreview icon={EntityInitializerIcon} name={entity.name} />;
   }
 }

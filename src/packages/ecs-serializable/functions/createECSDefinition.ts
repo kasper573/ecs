@@ -3,7 +3,6 @@ import {
   ComponentDefinition,
   ComponentDefinitionId,
 } from "../types/ComponentDefinition";
-import { SceneDefinition, SceneDefinitionId } from "../types/SceneDefinition";
 import { LibraryFolder, LibraryFolderId } from "../types/LibraryFolder";
 import {
   SystemDefinition,
@@ -45,7 +44,6 @@ export const createECSDefinition = (
     LibraryFolderId,
     LibraryFolder
   >,
-  scenes: (defaults.scenes ?? {}) as Record<SceneDefinitionId, SceneDefinition>,
 });
 
 type ECSDefinitionDefaults = {

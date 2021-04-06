@@ -1,9 +1,7 @@
 import { getDefaultSelectionValue } from "../functions/getDefaultSelectionValue";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-
 import { core } from "../core";
 import { setSelectedSystemDefinition } from "./setSelectedSystemDefinition";
-import { setSelectedSceneDefinition } from "./setSelectedSceneDefinition";
 
 /**
  * Ensures selection for objects that has a default available.
@@ -11,20 +9,11 @@ import { setSelectedSceneDefinition } from "./setSelectedSceneDefinition";
 export const ensureSelection = createEditorStateReducer((state) => {
   const { ecs, selection } = state;
   const selectedSystem = selection.system && ecs.systems[selection.system];
-  const selectedScene = selection.scene && ecs.scenes[selection.scene];
   if (!selectedSystem) {
     setSelectedSystemDefinition(
       state,
       core.actions.setSelectedSystemDefinition(
         getDefaultSelectionValue(state, "system")
-      )
-    );
-  }
-  if (!selectedScene) {
-    setSelectedSceneDefinition(
-      state,
-      core.actions.setSelectedSceneDefinition(
-        getDefaultSelectionValue(state, "scene")
       )
     );
   }

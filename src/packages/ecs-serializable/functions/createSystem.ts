@@ -1,9 +1,7 @@
-import { System } from "../../ecs/System";
-import { Inventory } from "../../ecs-collectable/Inventory";
-import { InteractionMemory } from "../../ecs-interactive/InteractionMemory";
-import { SceneManager } from "../../ecs-scene-manager/SceneManager";
 import { NativeComponents } from "../types/NativeComponents";
 import { ECSDefinition } from "../types/ECSDefinition";
+import { DeserializationMemory } from "../DeserializationMemory";
+import { DeserializedSystem } from "../types/DeserializedSystem";
 import { updateSystem } from "./updateSystem";
 
 /**
@@ -11,14 +9,10 @@ import { updateSystem } from "./updateSystem";
  */
 export const createSystem = (
   ecs: ECSDefinition,
+  memory: DeserializationMemory,
   nativeComponents: NativeComponents
-): System => {
-  const sceneManager = new SceneManager({});
-  const inventory = new Inventory();
-  const system = new System({
-    modules: [sceneManager, inventory, new InteractionMemory()],
-    entities: () => [...(sceneManager.scene ?? []), ...inventory],
-  });
-  updateSystem(system, ecs, nativeComponents);
+) => {
+  const system = new DeserializedSystem();
+  updateSystem(system, ecs, memory, nativeComponents);
   return system;
 };

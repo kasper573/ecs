@@ -3,17 +3,42 @@ import { Entity } from "./Entity";
 import { Component } from "./Component";
 import { System } from "./System";
 
+test("Component gets mounted when added to an entity", () => {
+  let mounted = false;
+  const component = new Component().configure({
+    mount: () => {
+      mounted = true;
+    },
+  });
+
+  new Entity([component]);
+  expect(mounted).toEqual(true);
+});
+
+test("Component gets unmounted when removed from an entity", () => {
+  let unmounted = false;
+  const component = new Component().configure({
+    mount: () => () => {
+      unmounted = true;
+    },
+  });
+
+  const entity = new Entity([component]);
+  entity.components.remove(component);
+  expect(unmounted).toEqual(true);
+});
+
 test("declarative component property can derive from their associated entity", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: ({ entity }) => `Derived from ${entity.name}`,
+      text: ({ entity }) => `Derived from ${entity?.name}`,
     });
 
   const componentA = createComponent();
   const componentB = createComponent();
 
-  new Entity([componentA], "entity A");
-  new Entity([componentB], "entity B");
+  new Entity([componentA], [], { name: "entity A" });
+  new Entity([componentB], [], { name: "entity B" });
 
   expect(componentA.text).toEqual("Derived from entity A");
   expect(componentB.text).toEqual("Derived from entity B");
@@ -37,23 +62,20 @@ test("declarative component property can derive from their associated component"
 test("declarative component property can derive from their associated system", () => {
   const createComponent = () =>
     new TestComponent().configure({
-      text: ({ system }) => `Derived ${system.modules.length}`,
+      text: ({ system }) => {
+        const first = system?.entities[0];
+        return `Derived ${first?.name}`;
+      },
     });
 
   const componentA = createComponent();
-  new System({
-    entities: [new Entity([componentA])],
-    modules: [{}],
-  });
+  new System(new Entity([componentA], [], { name: "A" }));
 
   const componentB = createComponent();
-  new System({
-    entities: [new Entity([componentB])],
-    modules: [{}, {}],
-  });
+  new System(new Entity([componentB], [], { name: "B" }));
 
-  expect(componentA.text).toEqual("Derived 1");
-  expect(componentB.text).toEqual("Derived 2");
+  expect(componentA.text).toEqual("Derived A");
+  expect(componentB.text).toEqual("Derived B");
 });
 
 const TestComponent = Component.extend({

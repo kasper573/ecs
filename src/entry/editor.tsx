@@ -12,17 +12,25 @@ import { createStore } from "../packages/ecs-editor/store";
 import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponentsContext";
 import { createEditorState } from "../packages/ecs-editor/functions/createEditorState";
 import { ECSDefinition } from "../packages/ecs-serializable/types/ECSDefinition";
-import defaultECS from "./defaultECS.json";
+import { Inventory } from "../packages/ecs-collectable/Inventory";
+import { InteractionMemory } from "../packages/ecs-interactive/InteractionMemory";
+import { SceneManager } from "../packages/ecs-scene-manager/SceneManager";
+import { SceneSwitch } from "../packages/ecs-scene-manager/SceneSwitch";
+import exampleECS from "./exampleECS.json";
 
 export const nativeComponents = {
-  describable: Describable,
-  collectable: Collectable,
-  interactive: Interactive,
+  Describable,
+  Collectable,
+  Interactive,
+  Inventory,
+  InteractionMemory,
+  SceneManager,
+  SceneSwitch,
 };
 
 const store = createStore({
   ...createEditorState(),
-  ecs: (defaultECS as unknown) as ECSDefinition,
+  ecs: (exampleECS as unknown) as ECSDefinition,
 });
 
 function render() {

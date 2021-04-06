@@ -3,6 +3,9 @@ import { without } from "lodash";
 import { EntityDefinition } from "../types/EntityDefinition";
 import { EntityInitializer } from "../types/EntityInitializer";
 import { DeserializationMemory } from "../DeserializationMemory";
+import { RedefinableEntity } from "../RedefinableEntity";
+import { defined } from "../../ecs-common/defined";
+import { DeserializedEntity } from "../types/DeserializedEntity";
 import { defineEntity } from "./defineEntity";
 
 /**
@@ -11,11 +14,12 @@ import { defineEntity } from "./defineEntity";
 export const commitEntities = (
   definitions: EntityDefinition[],
   initializers: EntityInitializer[],
-  memory: DeserializationMemory
+  memory: DeserializationMemory,
+  root: DeserializedEntity
 ) => {
   const allDefinitionIds = uniq([
     ...definitions.map((d) => d.id),
-    ...initializers.map((i) => i.definitionId),
+    ...defined(initializers.map((i) => i.definitionId)),
   ]);
 
   // Remove expired entity constructors
@@ -36,7 +40,9 @@ export const commitEntities = (
   const removedInstanceIds = without(currentInstanceIds, ...initializerIds);
   for (const id of removedInstanceIds) {
     if (memory.entityInstances.has(id)) {
-      memory.entityInstances.delete(id);
+      const entity = memory.entityInstances.get(id)!;
+      entity.setParent(undefined); // Remove from ECS
+      memory.entityInstances.delete(id); // Remove from deserialization memory
     }
   }
 
@@ -59,12 +65,44 @@ export const commitEntities = (
   // Define new or redefine existing entity instances
   for (const init of initializers) {
     let entity = memory.entityInstances.get(init.id);
-    const definition = definitions.find((def) => def.id === init.definitionId)!;
-    const DefinedEntity = memory.entityConstructors.get(init.definitionId)!;
-    if (!entity) {
-      entity = new DefinedEntity();
-      memory.entityInstances.set(init.id, entity);
+    if (init.definitionId) {
+      // Instantiate entity using an EntityDefinition
+      const def = definitions.find((def) => def.id === init.definitionId)!;
+      const DefinedEntity = memory.entityConstructors.get(init.definitionId)!;
+      if (!entity) {
+        entity = new DefinedEntity(init.id);
+        memory.entityInstances.set(init.id, entity);
+      }
+      entity.define(
+        init.name || def.name,
+        def.components,
+        init.components,
+        memory
+      );
+    } else {
+      // Instantiate entity without an EntityDefinition
+      if (!entity) {
+        entity = new RedefinableEntity(init.id);
+        memory.entityInstances.set(init.id, entity);
+      }
+      entity.define(init.name, [], init.components, memory);
     }
-    entity.define(definition, init, memory);
+    if (init.isActive !== undefined) {
+      entity.isActive = init.isActive;
+    }
+  }
+
+  // Redefine entity parent-child relationships
+  for (const init of initializers) {
+    const child = memory.entityInstances.get(init.id)!;
+    const parent = init.parentId
+      ? memory.entityInstances.get(init.parentId)
+      : root;
+    if (!parent) {
+      throw new Error(
+        "EntityInitializer tried to reference unknown parent entity"
+      );
+    }
+    child.setParent(parent);
   }
 };
