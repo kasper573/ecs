@@ -4,7 +4,7 @@ import { DNDType } from "./DNDType";
 export const libraryNodeDragSpec = (node: TypedLibraryNode) => ({
   options: { dropEffect: "move" },
   type: getDragTypeForNode(node),
-  item: node as unknown,
+  item: node,
 });
 
 function getDragTypeForNode(node: TypedLibraryNode) {

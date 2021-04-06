@@ -1,11 +1,10 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import { useDrop } from "react-dnd";
-import styled from "styled-components";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfLibraryNode } from "../selectors/selectListOfLibraryNode";
-import { LibraryTree } from "../components/LibraryTree";
+import { CommonTreeView } from "../components/CommonTreeView";
 import { core } from "../core";
 import { Panel } from "../components/Panel";
 import { uuid } from "../../ecs-common/uuid";
@@ -13,7 +12,14 @@ import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSyste
 import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MenuFor } from "../components/MenuFor";
-import { AddIcon } from "../icons";
+import {
+  AddIcon,
+  ComponentDefinitionIcon,
+  EntityDefinitionIcon,
+  FolderClosedIcon,
+  FolderIcon,
+  FolderOpenIcon,
+} from "../icons";
 import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 import { useContextMenu } from "../hooks/useContextMenu";
@@ -24,6 +30,9 @@ import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { createRenameLibraryNodeAction } from "../actions/createRenameLibraryNodeAction";
 import { createDeleteLibraryNodeAction } from "../actions/createDeleteLibraryNodeAction";
 import { createDuplicateLibraryNodeAction } from "../actions/createDuplicateLibraryNodeAction";
+import { CreateTreeOptions } from "../tree/createTree";
+import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
+import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 
 export const LibraryPanel = () => {
   const store = useStore();
@@ -164,22 +173,51 @@ export const LibraryPanel = () => {
           </MenuFor>
         )}
       </PanelHeader>
-      <LibraryTreeWithLeftMargin
+      <CommonTreeView
+        nodes={nodes}
         selected={selectedNode}
-        library={nodes}
+        initialExpanded={getInitialExpanded}
+        onSelectedChange={handleSelect}
+        treeOptions={treeOptions}
         itemProps={{
           menuItems: menuItemFactory.node,
           onMoveNode: handleMoveNode,
+          treeItemProps: getItemProps,
+          dragSpec: libraryNodeDragSpec,
+          dropSpec: (node, onDrop) =>
+            libraryNodeDropSpec(node, onDrop, () => store.getState().present),
         }}
-        onSelectedChange={handleSelect}
       />
     </Panel>
   );
 };
 
-const LibraryTreeWithLeftMargin = styled(LibraryTree)`
-  margin-left: ${({ theme }) => theme.spacing(2)}px;
-`;
-
 // Is safe as root node since belonging to the root means to have no parent
 const rootNode = { type: "folder" } as TypedLibraryNode;
+
+function getItemProps(value: TypedLibraryNode) {
+  const isFolder = value.type === "folder";
+  const LabelIcon = treeItemIcons[value.type];
+  const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
+  const expandIcon = isFolder ? <FolderClosedIcon /> : <LabelIcon />;
+  return {
+    collapseIcon,
+    expandIcon,
+    label: value.name,
+  };
+}
+
+const treeItemIcons = {
+  folder: FolderIcon,
+  entity: EntityDefinitionIcon,
+  component: ComponentDefinitionIcon,
+};
+
+const treeOptions: CreateTreeOptions<TypedLibraryNode, LibraryNodeId> = {
+  compareFn: compareLibraryTreeNodes,
+  getId: (node) => node.nodeId,
+  getParentId: (node) => node.parentNodeId,
+};
+
+const getInitialExpanded = (nodes: TypedLibraryNode[]) =>
+  nodes.filter((n) => n.type === "folder" && !n.parentNodeId);
