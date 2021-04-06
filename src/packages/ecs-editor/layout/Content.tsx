@@ -9,7 +9,7 @@ import { SystemHeader } from "./SystemHeader";
 import { PanelContainer } from "./PanelContainer";
 import { RuntimePanel } from "./RuntimePanel";
 import { InspectorPanel } from "./InspectorPanel";
-import { InstancesPanel } from "./InstancesPanel";
+import { HierarchyPanel } from "./HierarchyPanel";
 import { LibraryPanel } from "./LibraryPanel";
 
 export const Content = () => {
@@ -36,7 +36,7 @@ export const Content = () => {
       <PanelContainer>
         <RuntimePanel />
         <InspectorPanel />
-        <InstancesPanel />
+        <HierarchyPanel />
         <LibraryPanel />
       </PanelContainer>
     </>

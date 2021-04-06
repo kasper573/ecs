@@ -16,15 +16,15 @@ export const PanelContainer = styled.div`
   grid-template-columns: auto 300px 300px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "${panels.Runtime} ${panels.Instances} ${panels.Inspector}"
-    "${panels.Runtime} ${panels.Instances} ${panels.Library}"
+    "${panels.Runtime} ${panels.Hierarchy} ${panels.Inspector}"
+    "${panels.Runtime} ${panels.Hierarchy} ${panels.Library}"
   ;
   ${({ theme }) => theme.breakpoints.down("md")} {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
       "${panels.Runtime} ${panels.Inspector}"
-      "${panels.Instances} ${panels.Library}"
+      "${panels.Hierarchy} ${panels.Library}"
     ;
   }
   ${({ theme }) => theme.breakpoints.down("xs")} {
@@ -32,7 +32,7 @@ export const PanelContainer = styled.div`
     grid-template-rows: 33vh 33vh 33vh 33vh;
     grid-template-areas:
       "${panels.Runtime}"
-      "${panels.Instances}"
+      "${panels.Hierarchy}"
       "${panels.Inspector}"
       "${panels.Library}"
     ;

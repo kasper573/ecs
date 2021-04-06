@@ -34,7 +34,7 @@ import { MenuFor } from "../components/MenuFor";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { TreeNode } from "../tree/TreeNode";
 
-export const InstancesPanel = () => {
+export const HierarchyPanel = () => {
   const { entityDefinitions } = useSelector(selectECS);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
@@ -118,9 +118,9 @@ export const InstancesPanel = () => {
   }
 
   return (
-    <Panel name={PanelName.Instances} {...rootContextMenuProps}>
+    <Panel name={PanelName.Hierarchy} {...rootContextMenuProps}>
       {rootContextMenu}
-      <PanelHeader title={PanelName.Instances}>
+      <PanelHeader title={PanelName.Hierarchy}>
         <MenuFor items={menuItemFactory.create}>
           {(props) => (
             <Tooltip title="New">

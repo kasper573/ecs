@@ -3,7 +3,7 @@
  */
 export enum PanelName {
   Runtime = "Runtime",
-  Instances = "Instances",
+  Hierarchy = "Hierarchy",
   Inspector = "Inspector",
   Library = "Library",
 }
