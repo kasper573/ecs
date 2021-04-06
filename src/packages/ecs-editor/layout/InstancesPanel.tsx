@@ -1,14 +1,21 @@
-import { Typography } from "@material-ui/core";
+import { IconButton, Tooltip, Typography } from "@material-ui/core";
+import { useDrop } from "react-dnd";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
-import { CreateEntityInitializerButton } from "../buttons/CreateEntityInitializerButton";
 import { core } from "../core";
 import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
-import { CrudList } from "../components/CrudList";
-import { EntityInitializerIcon } from "../icons";
+import {
+  AddIcon,
+  EntityContainerOpenIcon,
+  EntityInitializerIcon,
+  EntityContainerClosedIcon,
+} from "../icons";
 import { Panel } from "../components/Panel";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import {
+  EntityInitializer,
+  EntityInitializerId,
+} from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
 import {
   EntityDefinition,
@@ -18,8 +25,15 @@ import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-
 import { selectECS } from "../selectors/selectECS";
+import { CommonTreeView } from "../components/CommonTreeView";
+import { CreateTreeOptions } from "../tree/createTree";
+import { entityInitializerDragSpec } from "../dnd/entityInitializerDragSpec";
+import { entityInitializerDropSpec } from "../dnd/entityInitializerDropSpec";
+import { createEntityInitializerMenuFactory } from "../functions/createEntityInitializerMenuFactory";
+import { MenuFor } from "../components/MenuFor";
+import { useContextMenu } from "../hooks/useContextMenu";
+import { TreeNode } from "../tree/TreeNode";
 
 export const InstancesPanel = () => {
   const { entityDefinitions } = useSelector(selectECS);
@@ -28,13 +42,34 @@ export const InstancesPanel = () => {
   const dispatch = useDispatch();
   const store = useStore();
 
-  const [{ showRenameDialog, showDeleteDialog, createTitle }] = useCrudDialogs(
+  const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
+    entityInitializerDropSpec(
+      rootNode,
+      handleMoveToRoot,
+      () => store.getState().present
+    )
+  );
+
+  const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "instance",
     (instance) => instance.name,
     {
       rename: handleRename,
       remove: handleDelete,
     }
+  );
+
+  const menuItemFactory = createEntityInitializerMenuFactory(
+    Object.values(entityDefinitions),
+    () => {},
+    handleInitialize,
+    showRenameDialog,
+    handleDuplicate,
+    showDeleteDialog
+  );
+
+  const [rootContextMenuProps, rootContextMenu] = useContextMenu(
+    menuItemFactory.common
   );
 
   function handleDelete(entityInitializer: EntityInitializer) {
@@ -58,12 +93,16 @@ export const InstancesPanel = () => {
     );
   }
 
-  function handleInitialize(entityDefinition: EntityDefinition) {
+  function handleInitialize(
+    entityDefinition: EntityDefinition,
+    parentId?: EntityInitializerId
+  ) {
     const { system } = store.getState().present.selection;
     dispatch(
       core.actions.createEntityInitializer({
         systemId: system!,
         id: uuid(),
+        parentId,
         name: entityDefinition.name,
         definitionId: entityDefinition.id,
         components: [],
@@ -71,23 +110,56 @@ export const InstancesPanel = () => {
     );
   }
 
+  function handleMoveEntity(
+    entity: EntityInitializer,
+    target: EntityInitializer
+  ) {
+    dispatch(
+      core.actions.moveEntityInitializer({
+        id: entity.id,
+        targetId: target.id,
+      })
+    );
+  }
+
+  function handleMoveToRoot(entity: EntityInitializer) {
+    if (canDropToRoot) {
+      handleMoveEntity(entity, rootNode);
+    }
+  }
+
   return (
-    <Panel name={PanelName.Instances}>
+    <Panel ref={rootDrop} name={PanelName.Instances} {...rootContextMenuProps}>
+      {rootContextMenu}
       <PanelHeader title={PanelName.Instances}>
-        <CreateEntityInitializerButton
-          title={createTitle}
-          onCreate={handleInitialize}
-        />
+        <MenuFor items={menuItemFactory.create}>
+          {(props) => (
+            <Tooltip title="New">
+              <IconButton edge="end" aria-label="New" {...props}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </MenuFor>
       </PanelHeader>
-      <CrudList
-        active={selectedEntity}
-        items={entities}
-        getItemProps={(item) => getItemProps(item, entityDefinitions)}
-        getItemKey={getItemKey}
-        onSelectItem={handleSelected}
-        onDuplicateItem={handleDuplicate}
-        onUpdateItem={showRenameDialog}
-        onDeleteItem={showDeleteDialog}
+      <CommonTreeView
+        nodes={entities}
+        selected={selectedEntity}
+        initialExpanded={getInitialExpanded}
+        onSelectedChange={handleSelected}
+        treeOptions={treeOptions}
+        itemProps={{
+          menuItems: menuItemFactory.entity,
+          onMoveNode: handleMoveEntity,
+          treeItemProps: (node) => getItemProps(node, entityDefinitions),
+          dragSpec: entityInitializerDragSpec,
+          dropSpec: (entity, onDrop) =>
+            entityInitializerDropSpec(
+              entity,
+              onDrop,
+              () => store.getState().present
+            ),
+        }}
       />
       <DropBox spec={entityDefinitionDropSpec(handleInitialize)}>
         <Typography>Drop to create instance</Typography>
@@ -96,19 +168,40 @@ export const InstancesPanel = () => {
   );
 };
 
-const getItemKey = ({ id }: EntityInitializer) => id;
+// Is safe as root node since belonging to the root means to have no parent
+const rootNode = {} as EntityInitializer;
 
-const getItemProps = (
-  { name, definitionId }: EntityInitializer,
+function getItemProps(
+  { value: { name, definitionId }, children }: TreeNode<EntityInitializer>,
   definitions: Record<EntityDefinitionId, EntityDefinition>
-) => {
+) {
   const definitionName = definitionId && definitions[definitionId]?.name;
   const displayName =
     definitionName && definitionName !== name
       ? `${name} (${definitionName})`
       : name;
+  const isContainer = children.length > 0;
+  const collapseIcon = isContainer ? (
+    <EntityContainerOpenIcon />
+  ) : (
+    <EntityInitializerIcon />
+  );
+  const expandIcon = isContainer ? (
+    <EntityContainerClosedIcon />
+  ) : (
+    <EntityInitializerIcon />
+  );
   return {
-    name: displayName,
-    icon: EntityInitializerIcon,
+    collapseIcon,
+    expandIcon,
+    label: displayName,
   };
+}
+
+const treeOptions: CreateTreeOptions<EntityInitializer, EntityInitializerId> = {
+  getId: (entity) => entity.id,
+  getParentId: (entity) => entity.parentId,
 };
+
+const getInitialExpanded = (entities: EntityInitializer[]) =>
+  entities.filter((entity) => !entity.parentId);

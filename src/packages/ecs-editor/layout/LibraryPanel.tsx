@@ -33,6 +33,7 @@ import { createDuplicateLibraryNodeAction } from "../actions/createDuplicateLibr
 import { CreateTreeOptions } from "../tree/createTree";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
+import { TreeNode } from "../tree/TreeNode";
 
 export const LibraryPanel = () => {
   const store = useStore();
@@ -195,7 +196,7 @@ export const LibraryPanel = () => {
 // Is safe as root node since belonging to the root means to have no parent
 const rootNode = { type: "folder" } as TypedLibraryNode;
 
-function getItemProps(value: TypedLibraryNode) {
+function getItemProps({ value }: TreeNode<TypedLibraryNode>) {
   const isFolder = value.type === "folder";
   const LabelIcon = treeItemIcons[value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;

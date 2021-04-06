@@ -5,6 +5,8 @@ import {
   ChevronRight as CollapseIcon,
   ExpandMore as ExpandIcon,
   Folder as FolderIcon,
+  Receipt as EntityInitializerIcon,
+  Inbox as EntityContainerIcon,
 } from "@material-ui/icons";
 import { createIconWithMarginIcon } from "./components/IconWithMarginIcon";
 
@@ -12,7 +14,6 @@ export {
   Label as PropertyIcon,
   Map as SystemIcon,
   Extension as EntityDefinitionIcon,
-  Receipt as EntityInitializerIcon,
   Menu as MenuIcon,
   Settings as DevToolsIcon,
   Settings as ComponentDefinitionIcon,
@@ -26,7 +27,13 @@ export {
   Brightness7 as LightThemeIcon,
 } from "@material-ui/icons";
 
-export { ExpandIcon, CollapseIcon, FolderIcon };
+export {
+  EntityInitializerIcon,
+  EntityContainerIcon,
+  ExpandIcon,
+  CollapseIcon,
+  FolderIcon,
+};
 
 export const FolderOpenIcon = createIconWithMarginIcon(
   ExpandIcon,
@@ -37,5 +44,17 @@ export const FolderOpenIcon = createIconWithMarginIcon(
 export const FolderClosedIcon = createIconWithMarginIcon(
   CollapseIcon,
   FolderIcon,
+  0.25
+);
+
+export const EntityContainerOpenIcon = createIconWithMarginIcon(
+  ExpandIcon,
+  EntityContainerIcon,
+  0.25
+);
+
+export const EntityContainerClosedIcon = createIconWithMarginIcon(
+  ExpandIcon,
+  EntityContainerIcon,
   0.25
 );

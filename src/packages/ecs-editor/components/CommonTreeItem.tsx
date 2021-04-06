@@ -23,7 +23,7 @@ export type CommonTreeItemProps<T, Id extends string> = {
     onDrop: (dropped: T) => void
   ) => DropTargetHookSpec<T, unknown, { canDrop: boolean }>;
   getNodeId: (value: T) => Id;
-  treeItemProps: (value: T) => Omit<TreeItemProps, "nodeId">;
+  treeItemProps: (node: TreeNode<T>) => Omit<TreeItemProps, "nodeId">;
 };
 
 export function CommonTreeItem<T, Id extends string>(
@@ -64,7 +64,7 @@ export function CommonTreeItem<T, Id extends string>(
         $highlightDrop={canDrop}
         key={nodeId}
         nodeId={nodeId}
-        {...treeItemProps(node.value)}
+        {...treeItemProps(node)}
         {...triggerProps}
       >
         <CommonTreeItemList

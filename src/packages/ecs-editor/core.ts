@@ -30,6 +30,7 @@ import { createLibraryFolder } from "./reducers/createLibraryFolder";
 import { setThemeType } from "./reducers/setThemeType";
 import { moveLibraryNode } from "./reducers/moveLibraryNode";
 import { resetComponentInitializerProperty } from "./reducers/resetComponentInitializerProperty";
+import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -43,6 +44,7 @@ export const core = createSlice({
     deleteSystemDefinition,
     createEntityInitializer,
     renameEntityInitializer,
+    moveEntityInitializer,
     duplicateEntityInitializer,
     deleteEntityInitializer,
     setSelectedSystemDefinition,
