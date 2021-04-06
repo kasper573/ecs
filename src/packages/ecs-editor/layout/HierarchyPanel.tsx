@@ -16,15 +16,11 @@ import {
   EntityInitializerId,
 } from "../../ecs-serializable/types/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
-import {
-  EntityDefinition,
-  EntityDefinitionId,
-} from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { DropBox } from "../components/DropBox";
 import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { selectECS } from "../selectors/selectECS";
 import { CommonTreeView } from "../components/CommonTreeView";
 import { CreateTreeOptions } from "../tree/createTree";
 import { entityInitializerDragSpec } from "../dnd/entityInitializerDragSpec";
@@ -33,9 +29,10 @@ import { createEntityInitializerMenuFactory } from "../functions/createEntityIni
 import { MenuFor } from "../components/MenuFor";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { TreeNode } from "../tree/TreeNode";
+import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 
 export const HierarchyPanel = () => {
-  const { entityDefinitions } = useSelector(selectECS);
+  const entityDefinitions = useSelector(selectListOfEntityDefinition);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
@@ -51,7 +48,7 @@ export const HierarchyPanel = () => {
   );
 
   const menuItemFactory = createEntityInitializerMenuFactory(
-    Object.values(entityDefinitions),
+    entityDefinitions,
     handleInitializeEmpty,
     handleInitialize,
     showRenameDialog,
@@ -140,7 +137,7 @@ export const HierarchyPanel = () => {
         itemProps={{
           menuItems: menuItemFactory.entity,
           onMoveNode: handleMoveEntity,
-          treeItemProps: (node) => getItemProps(node, entityDefinitions),
+          treeItemProps: getItemProps,
           dragSpec: entityInitializerDragSpec,
           dropSpec: (entity, onDrop) =>
             entityInitializerDropSpec(
@@ -158,30 +155,17 @@ export const HierarchyPanel = () => {
   );
 };
 
-function getItemProps(
-  { value: { name, definitionId }, children }: TreeNode<EntityInitializer>,
-  definitions: Record<EntityDefinitionId, EntityDefinition>
-) {
-  const definitionName = definitionId && definitions[definitionId]?.name;
-  const displayName =
-    definitionName && definitionName !== name
-      ? `${name} (${definitionName})`
-      : name;
-  const isContainer = children.length > 0;
-  const collapseIcon = isContainer ? (
-    <EntityContainerOpenIcon />
-  ) : (
-    <EntityInitializerIcon />
-  );
-  const expandIcon = isContainer ? (
-    <EntityContainerClosedIcon />
-  ) : (
-    <EntityInitializerIcon />
-  );
+function getItemProps({
+  value: { name },
+  children,
+}: TreeNode<EntityInitializer>) {
+  const y = children.length > 0;
+  const collapse = y ? <EntityContainerOpenIcon /> : <EntityInitializerIcon />;
+  const expand = y ? <EntityContainerClosedIcon /> : <EntityInitializerIcon />;
   return {
-    collapseIcon,
-    expandIcon,
-    label: displayName,
+    collapseIcon: collapse,
+    expandIcon: expand,
+    label: name,
   };
 }
 

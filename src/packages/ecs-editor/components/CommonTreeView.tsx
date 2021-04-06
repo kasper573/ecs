@@ -1,9 +1,11 @@
-import { ChangeEvent, ReactNode, useState } from "react";
+import { ChangeEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { TreeView, TreeViewProps } from "@material-ui/lab";
 import styled from "styled-components";
 import { useDrop } from "react-dnd";
-import { CreateTreeOptions } from "../tree/createTree";
-import { useTree } from "../tree/useTree";
+import { uniq } from "lodash";
+import { createTree, CreateTreeOptions } from "../tree/createTree";
+import { getAncestorNodes } from "../tree/getAncestorNodes";
+import { useAsRef } from "../../ecs-common/useAsRef";
 import {
   CommonTreeItemList,
   CommonTreeItemListProps,
@@ -29,7 +31,10 @@ export function CommonTreeView<T, Id extends string>({
   children,
   ...treeViewProps
 }: CommonTreeViewProps<T, Id>) {
-  const [nodeMap, treeRoots] = useTree(nodes, treeOptions);
+  const [treeRoots, nodeMap] = useMemo(() => createTree(nodes, treeOptions), [
+    nodes,
+    treeOptions,
+  ]);
   const [expanded, setExpanded] = useState(() =>
     initialExpanded(nodes).map(treeOptions.getId)
   );
@@ -49,7 +54,24 @@ export function CommonTreeView<T, Id extends string>({
     setExpanded(ids as Id[]);
 
   const handleSelect = (e: ChangeEvent<{}>, id: string) =>
-    onSelectedChange(nodeMap.get(id as Id)!);
+    onSelectedChange(nodeMap.get(id as Id)!.value);
+
+  // Auto expand the required nodes to show the new selection
+  // (useful when selections change externally, ie. "go to definition")
+  const ref = useAsRef({ nodeMap, treeOptions, expanded });
+  useEffect(() => {
+    if (selected) {
+      const { nodeMap, treeOptions } = ref.current;
+      const showNode = nodeMap.get(treeOptions.getId(selected))!;
+      const requiredToShow = getAncestorNodes(showNode).map(treeOptions.getId);
+      setExpanded(
+        uniq([
+          ...ref.current.expanded, // Keep current expansion
+          ...requiredToShow, // Expand to show selection
+        ])
+      );
+    }
+  }, [selected, ref]);
 
   return (
     <Grow ref={rootDrop}>

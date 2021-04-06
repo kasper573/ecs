@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { Typography } from "@material-ui/core";
+import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
 import { PanelHeader } from "../components/PanelHeader";
 import { PanelName } from "../types/PanelName";
-import { EntityInitializerIcon } from "../icons";
+import { EntityDefinitionIcon, EntityInitializerIcon } from "../icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
@@ -133,6 +133,12 @@ export const EntityInitializerEditor = ({
     }
   );
 
+  const setDefinitionSelected = useCallback(() => {
+    if (entityDefinition) {
+      dispatch(core.actions.setSelectedLibraryNode(entityDefinition.nodeId));
+    }
+  }, [entityDefinition, dispatch]);
+
   return (
     <>
       <PanelHeader title={PanelName.Inspector}>
@@ -141,7 +147,15 @@ export const EntityInitializerEditor = ({
       <InspectedObjectInfo
         icon={<EntityInitializerIcon />}
         name={entityInitializer.name}
-      />
+      >
+        {entityDefinition && (
+          <Tooltip title={`Go to definition: ${entityDefinition.name}`}>
+            <IconButton onClick={setDefinitionSelected}>
+              <EntityDefinitionIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </InspectedObjectInfo>
       <ComponentInitializerList
         baseItems={entityDefinition?.components}
         primaryItems={entityInitializer.components}

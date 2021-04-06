@@ -17,7 +17,7 @@ import { NodeHelpers } from "./NodeHelpers";
 export const createTree = <Node, Id>(
   nodes: Node[],
   { getId, getParentId, rootId, compareFn }: CreateTreeOptions<Node, Id>
-): TreeNode<Node>[] => {
+) => {
   const treeNodeMap = new Map<Id, TreeNode<Node>>();
   const childrenMap = new Map<Id | undefined, TreeNode<Node>[]>();
 
@@ -35,6 +35,9 @@ export const createTree = <Node, Id>(
     const id = getId(node);
     const treeNode = treeNodeMap.get(id)!;
     treeNode.children = childrenMap.get(id) ?? [];
+    for (const child of treeNode.children) {
+      child.parent = treeNode;
+    }
 
     // Apply sort to all children
     if (compareFn) {
@@ -50,7 +53,7 @@ export const createTree = <Node, Id>(
     rootNodes.sort(compareFn);
   }
 
-  return rootNodes;
+  return [rootNodes, treeNodeMap] as const;
 };
 
 export type CreateTreeOptions<Node, Id> = NodeHelpers<Node, Id> & {

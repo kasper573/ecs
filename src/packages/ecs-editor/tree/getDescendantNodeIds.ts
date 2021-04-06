@@ -6,7 +6,7 @@ export const getDescendantNodeIds = <Node, Id>(
   rootId: Id,
   helpers: NodeHelpers<Node, Id>
 ) => {
-  const queue = createTree(nodes, { ...helpers, rootId });
+  const [queue] = createTree(nodes, { ...helpers, rootId });
   const ids: Id[] = [];
   while (queue.length) {
     const descendant = queue.shift()!;
