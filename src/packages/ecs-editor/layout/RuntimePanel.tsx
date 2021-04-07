@@ -1,5 +1,4 @@
-import { IconButton, Tooltip } from "@material-ui/core";
-import React from "react";
+import { IconButton } from "@material-ui/core";
 import { useSystemSync } from "../hooks/useSystemSync";
 import { ResetIcon } from "../icons";
 import { Panel } from "../components/Panel";
