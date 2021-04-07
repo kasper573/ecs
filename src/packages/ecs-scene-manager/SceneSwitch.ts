@@ -14,7 +14,7 @@ export class SceneSwitch extends Interactive.extend({
   }
   get targetScene() {
     return this.sceneManager?.scenes?.find(
-      (scene) => scene.name === this.targetSceneName
+      (scene) => scene.name.toLowerCase() === this.targetSceneName.toLowerCase()
     );
   }
   constructor() {
