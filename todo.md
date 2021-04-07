@@ -7,12 +7,17 @@
 
 # Tasks
 
+- Entity.isActive editor/runtime sync
+  Move System instance state location up to the Editor component root and share it via context.
+  Then create useSystem hook that subscribes to system updates using a memoized selector
+  (otherwise a render loop would severely ruin editor performance).
+  Use this hook to select and subscribe to the active state of all entity instances and use it to dim inactive entities.
+
 - Convert ActionPoller to ECS component
 - TreeView drag in instances panel should allow movement into a folder by dropping between items
   (this is also how reordering should be done)
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects
-- Entity.isActive editor/runtime sync
 
 - Update Collectable to use an Entity that has Inventory component as target.
   (Make entity instances draggable and component properties drop zones)
