@@ -34,10 +34,10 @@ export const Content = () => {
     <>
       <SystemHeader />
       <PanelContainer>
-        <RuntimePanel />
-        <InspectorPanel />
-        <HierarchyPanel />
         <LibraryPanel />
+        <HierarchyPanel />
+        <InspectorPanel />
+        <RuntimePanel />
       </PanelContainer>
     </>
   );

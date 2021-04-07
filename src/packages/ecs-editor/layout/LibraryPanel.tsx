@@ -33,6 +33,7 @@ import { CreateTreeOptions } from "../tree/createTree";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { TreeNode } from "../tree/TreeNode";
+import { Intro } from "../../intro/Intro";
 
 export const LibraryPanel = () => {
   const store = useStore();
@@ -146,7 +147,16 @@ export const LibraryPanel = () => {
   return (
     <Panel name={PanelName.Library} {...rootContextMenuProps}>
       {rootContextMenu}
-      <PanelHeader title="Library">
+      <PanelHeader
+        title={
+          <Intro
+            introId="WhatIsTheLibrary"
+            message="The library contains components and entity definitions. These are used to populate the Hierarchy."
+          >
+            <span>Library</span>
+          </Intro>
+        }
+      >
         {selectedSystem && (
           <MenuFor items={menuItemFactory.create}>
             {(props) => (

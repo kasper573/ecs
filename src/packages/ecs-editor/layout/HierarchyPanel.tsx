@@ -30,6 +30,7 @@ import { MenuFor } from "../components/MenuFor";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { TreeNode } from "../tree/TreeNode";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
+import { Intro } from "../../intro/Intro";
 
 export const HierarchyPanel = () => {
   const entityDefinitions = useSelector(selectListOfEntityDefinition);
@@ -117,7 +118,20 @@ export const HierarchyPanel = () => {
   return (
     <Panel name={PanelName.Hierarchy} {...rootContextMenuProps}>
       {rootContextMenu}
-      <PanelHeader title={PanelName.Hierarchy}>
+      <PanelHeader
+        title={
+          <Intro
+            introId="WhatIsTheHierarchy"
+            message={
+              "The Hierarchy represents what objects (entities) your system contains. " +
+              "Click an entity to inspect it. " +
+              "You can also drag to move, and right click to rename or delete entities."
+            }
+          >
+            <span>{PanelName.Hierarchy}</span>
+          </Intro>
+        }
+      >
         <MenuFor items={menuItemFactory.create}>
           {(props) => (
             <Tooltip title="New">

@@ -4,8 +4,6 @@ import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition"
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../icons";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
@@ -17,6 +15,7 @@ import { useDialog } from "../hooks/useDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityDefinitionEditorProps = {
@@ -118,9 +117,9 @@ export const EntityDefinitionEditor = ({
 
   return (
     <>
-      <PanelHeader title={PanelName.Inspector}>
+      <InspectorPanelHeader>
         <SelectComponentDefinitionButton onSelected={addComponent} />
-      </PanelHeader>
+      </InspectorPanelHeader>
       <InspectedObjectInfo
         icon={<EntityDefinitionIcon />}
         name={entityDefinition.name}

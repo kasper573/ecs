@@ -1,8 +1,6 @@
 import React, { useCallback } from "react";
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
-import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../types/PanelName";
 import { EntityDefinitionIcon, EntityInitializerIcon } from "../icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
@@ -19,6 +17,7 @@ import { useDialog } from "../hooks/useDialog";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -141,9 +140,9 @@ export const EntityInitializerEditor = ({
 
   return (
     <>
-      <PanelHeader title={PanelName.Inspector}>
+      <InspectorPanelHeader>
         <SelectComponentDefinitionButton onSelected={addComponent} />
-      </PanelHeader>
+      </InspectorPanelHeader>
       <InspectedObjectInfo
         icon={<EntityInitializerIcon />}
         name={entityInitializer.name}

@@ -1,11 +1,10 @@
 import { ListItemSecondaryAction } from "@material-ui/core";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, ReactNode } from "react";
 import { OpaqueListSubheader } from "./OpaqueListSubheader";
 
-export const PanelHeader = ({
-  title,
-  children,
-}: PropsWithChildren<{ title: string }>) => (
+export type PanelHeaderProps = PropsWithChildren<{ title: ReactNode }>;
+
+export const PanelHeader = ({ title, children }: PanelHeaderProps) => (
   <OpaqueListSubheader>
     {title}
     <ListItemSecondaryAction>{children}</ListItemSecondaryAction>

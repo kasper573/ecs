@@ -4,7 +4,7 @@ import { useSelector } from "../store";
 import { selectInspectedObject } from "../selectors/selectInspectedObject";
 import { InspectedObjectEditor } from "../editors/InspectedObjectEditor";
 import { Panel } from "../components/Panel";
-import { PanelHeader } from "../components/PanelHeader";
+import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 
 export const InspectorPanel = () => {
   const inspected = useSelector(selectInspectedObject);
@@ -13,7 +13,7 @@ export const InspectorPanel = () => {
       {inspected ? (
         <InspectedObjectEditor value={inspected} />
       ) : (
-        <PanelHeader title={PanelName.Inspector} />
+        <InspectorPanelHeader />
       )}
     </Panel>
   );

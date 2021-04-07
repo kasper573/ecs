@@ -1,14 +1,13 @@
-import { PanelHeader } from "../components/PanelHeader";
-import { PanelName } from "../types/PanelName";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { FolderIcon } from "../icons";
 import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 
 export type LibraryFolderEditorProps = { value: LibraryFolder };
 
 export const LibraryFolderEditor = ({ value }: LibraryFolderEditorProps) => (
   <>
-    <PanelHeader title={PanelName.Inspector} />
+    <InspectorPanelHeader />
     <InspectedObjectInfo icon={<FolderIcon />} name={value.name} />
   </>
 );

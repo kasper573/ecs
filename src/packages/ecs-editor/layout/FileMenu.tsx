@@ -1,15 +1,10 @@
-import {
-  IconButton,
-  IconButtonProps,
-  MenuItem,
-  Tooltip,
-} from "@material-ui/core";
+import { IconButton, IconButtonProps, MenuItem } from "@material-ui/core";
 import { MenuIcon } from "../icons";
 import { useSelector } from "../store";
 import { MenuFor } from "../components/MenuFor";
 import { useSystemCrud } from "../hooks/useSystemCrud";
-import { Intro } from "../../intro/Intro";
 import { selectHasSystems } from "../selectors/selectHasSystems";
+import { IntroWithDefaultTooltip } from "../../intro/IntroWithDefaultTooltip";
 
 export const FileMenu = (buttonProps: IconButtonProps) => {
   const hasSystems = useSelector(selectHasSystems);
@@ -24,24 +19,16 @@ export const FileMenu = (buttonProps: IconButtonProps) => {
       ]}
     >
       {(props) => (
-        <Intro
+        <IntroWithDefaultTooltip
+          defaultTooltip={{ title: "File" }}
           introId="WhereAreTheSystems"
-          message="You can create additional or switch systems in the file menu."
+          message="You can create additional, or switch systems in the file menu."
           when={hasSystems}
         >
-          {({ isIntroVisible }) => {
-            const button = (
-              <IconButton {...props} {...buttonProps}>
-                <MenuIcon />
-              </IconButton>
-            );
-            if (isIntroVisible) {
-              // Avoid material-ui warning about nested tooltips
-              return button;
-            }
-            return <Tooltip title="File">{button}</Tooltip>;
-          }}
-        </Intro>
+          <IconButton {...props} {...buttonProps}>
+            <MenuIcon />
+          </IconButton>
+        </IntroWithDefaultTooltip>
       )}
     </MenuFor>
   );
