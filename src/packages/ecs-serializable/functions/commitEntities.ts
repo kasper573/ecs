@@ -41,7 +41,7 @@ export const commitEntities = (
   for (const id of removedInstanceIds) {
     if (memory.entityInstances.has(id)) {
       const entity = memory.entityInstances.get(id)!;
-      entity.setParent(undefined); // Remove from ECS
+      entity.dispose();
       memory.entityInstances.delete(id); // Remove from deserialization memory
     }
   }

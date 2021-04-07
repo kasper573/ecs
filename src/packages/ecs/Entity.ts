@@ -1,7 +1,7 @@
 import { uuid } from "../ecs-common/uuid";
 import { ComponentInstance } from "./Component";
 import { System } from "./System";
-import { Container } from "./Container";
+import { Container, getFrozenContainer } from "./Container";
 import { descendants } from "./descendants";
 
 export class Entity<Id extends string = string> implements EntityOptions<Id> {
@@ -10,9 +10,14 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
   name: string;
   readonly id: Id;
 
+  private _isDisposed = false;
   private _parent?: Entity<Id>;
   private _system?: System;
   private _childrenById = {} as Record<Id, Entity<Id>>;
+
+  get isDisposed() {
+    return this._isDisposed;
+  }
 
   get parent() {
     return this._parent;
@@ -34,19 +39,50 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     return descendants(this);
   }
 
-  readonly children = new Container<Entity<Id>>();
-  readonly components = new Container<ComponentInstance>();
+  get children() {
+    return this._children;
+  }
+
+  get components() {
+    return this._components;
+  }
+
+  private _children = new Container<Entity<Id>>();
+  private _components = new Container<ComponentInstance>();
+
   readonly observations: Function[] = [];
 
   dispose() {
+    if (this._isDisposed) {
+      return;
+    }
+
+    // Clear all components first
+    // (since their unmount operation may still need the entity/system references we're about to dispose)
+    for (const entity of descendants(this, undefined, true)) {
+      entity.components.clear();
+    }
+
+    // Dispose and clear children
+    for (const child of this.children) {
+      child.dispose();
+    }
+    this.children.clear();
+
+    // Remove from parent
     if (this.parent) {
       this.parent.children.remove(this);
     }
-    this.components.clear();
-    this.children.clear();
+
+    // Stop array observations
     for (const stop of this.observations) {
       stop();
     }
+
+    // Lock further usage of this instance
+    this._isDisposed = true;
+    this._components = getFrozenContainer(this._components);
+    this._children = getFrozenContainer(this._children);
   }
 
   constructor(

@@ -25,3 +25,6 @@ export class Container<T> extends TypeCollection<T> {
     return mountObservableArray(this, onMount);
   }
 }
+
+export const getFrozenContainer = <T extends Container<any>>(c: T): T =>
+  Object.freeze(new Container(...c)) as T;

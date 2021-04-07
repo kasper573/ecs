@@ -17,9 +17,7 @@ export class System<EntityId extends string = string> {
   }
 
   dispose() {
-    for (const entity of this.root.descendants) {
-      entity.dispose();
-    }
+    this.root.dispose();
   }
 
   getContext<T>(propertyName: string) {
