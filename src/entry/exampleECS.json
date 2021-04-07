@@ -141,13 +141,15 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "30924e59-4456-4bcd-ad45-3eaeae486619",
       "parentId": "1e076296-2b0f-4052-8845-31719d963117",
-      "name": "Cellar",
+      "name": "Cellar warp",
       "definitionId": "7dbdaa96-d3da-4021-bd9e-77df44874a2f",
       "components": [
         {
           "id": "f65d27aa-1e9c-4e7d-adbf-f17fa3ee156c",
           "definitionId": "ded3157a-1d7e-4920-90ae-63c8baf68242",
-          "properties": {}
+          "properties": {
+            "targetSceneName": "cellar"
+          }
         }
       ]
     },
@@ -155,13 +157,15 @@
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "ffc5a39c-7643-4242-9d20-02c176d34b55",
       "parentId": "d95c66db-adab-4f62-875f-46c61fcfe11f",
-      "name": "Room",
+      "name": "Room warp",
       "definitionId": "7dbdaa96-d3da-4021-bd9e-77df44874a2f",
       "components": [
         {
           "id": "f65d27aa-1e9c-4e7d-adbf-f17fa3ee156c",
           "definitionId": "ded3157a-1d7e-4920-90ae-63c8baf68242",
-          "properties": {}
+          "properties": {
+            "targetSceneName": "room"
+          }
         }
       ]
     }
