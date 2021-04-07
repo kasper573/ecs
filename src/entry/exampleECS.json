@@ -147,10 +147,7 @@
         {
           "id": "f65d27aa-1e9c-4e7d-adbf-f17fa3ee156c",
           "definitionId": "ded3157a-1d7e-4920-90ae-63c8baf68242",
-          "properties": {
-            "action": "Enter cellar",
-            "targetSceneName": "Cellar"
-          }
+          "properties": {}
         }
       ]
     },
@@ -164,10 +161,7 @@
         {
           "id": "f65d27aa-1e9c-4e7d-adbf-f17fa3ee156c",
           "definitionId": "ded3157a-1d7e-4920-90ae-63c8baf68242",
-          "properties": {
-            "action": "Leave cellar",
-            "targetSceneName": "Room"
-          }
+          "properties": {}
         }
       ]
     }
