@@ -1,6 +1,7 @@
-import { TooltipProps } from "@material-ui/core";
+import { MenuItem, TooltipProps } from "@material-ui/core";
 import styled from "styled-components";
 import React, { useContext, useEffect, useMemo } from "react";
+import { useContextMenu } from "../ecs-editor/hooks/useContextMenu";
 import { IntroId, IntroMount, MountId } from "./types/IntroState";
 import { selectOpenMount } from "./functions/selectOpenMount";
 import { nextMountId } from "./functions/nextMountId";
@@ -27,6 +28,9 @@ export const Intro = ({
 }: IntroProps) => {
   const mountId = useMemo<MountId>(nextMountId, []);
   const [state, dispatch] = useContext(IntroContext);
+  const [contextMenuTrigger, contextMenu] = useContextMenu([
+    <MenuItem onClick={restore}>What's this?</MenuItem>,
+  ]);
 
   useEffect(() => {
     dispatch({ type: "SET", mount: { mountId, introId, when } });
@@ -35,20 +39,34 @@ export const Intro = ({
     };
   }, [dispatch, introId, mountId, message, when]);
 
+  function restore() {
+    dispatch({ type: "RESTORE", introId });
+  }
+
   const renderChildren =
     typeof children === "function" ? children : () => children;
 
   const open = selectOpenMount(state);
   if (open?.mountId !== mountId) {
-    return renderChildren({ isIntroVisible: false });
+    return (
+      <>
+        {contextMenu}
+        <span {...contextMenuTrigger}>
+          {renderChildren({ isIntroVisible: false })}
+        </span>
+      </>
+    );
   }
 
   return (
-    <IntroContent>
-      <IntroTooltip title={message} introId={open.introId}>
-        {renderChildren({ isIntroVisible: true })}
-      </IntroTooltip>
-    </IntroContent>
+    <>
+      {contextMenu}
+      <IntroContent>
+        <IntroTooltip title={message} introId={open.introId}>
+          {renderChildren({ isIntroVisible: true })}
+        </IntroTooltip>
+      </IntroContent>
+    </>
   );
 };
 

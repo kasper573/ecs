@@ -24,9 +24,15 @@ export function introStateReducer(
       delete mounted[action.mountId];
       return { ...state, mounted };
     }
-    case "DISMISS":
+    case "DISMISS": {
       const resolved = { ...state.resolved, [action.introId]: true };
       saveResolved(resolved);
       return { ...state, resolved };
+    }
+    case "RESTORE": {
+      const resolved = { ...state.resolved, [action.introId]: false };
+      saveResolved(resolved);
+      return { ...state, resolved };
+    }
   }
 }

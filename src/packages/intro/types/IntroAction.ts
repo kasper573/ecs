@@ -6,4 +6,10 @@ type RemoveAction = { type: "REMOVE"; mountId: MountId };
 
 type DismissAction = { type: "DISMISS"; introId: IntroId };
 
-export type IntroAction = SetAction | RemoveAction | DismissAction;
+type RestoreAction = { type: "RESTORE"; introId: IntroId };
+
+export type IntroAction =
+  | SetAction
+  | RemoveAction
+  | DismissAction
+  | RestoreAction;
