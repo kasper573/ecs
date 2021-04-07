@@ -22,7 +22,6 @@ export const Console = ({ children, onCommand, ...props }: ConsoleProps) => {
       <InputFieldContainer>
         {"> "}
         <InputField
-          autoFocus
           value={command}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
