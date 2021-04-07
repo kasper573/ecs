@@ -25,6 +25,7 @@ export {
   DynamicFeed as GenerateIcon,
   Brightness4 as DarkThemeIcon,
   Brightness7 as LightThemeIcon,
+  Cancel as CloseIcon,
 } from "@material-ui/icons";
 
 export {

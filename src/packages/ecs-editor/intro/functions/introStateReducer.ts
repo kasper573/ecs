@@ -29,6 +29,14 @@ export function introStateReducer(
       saveResolved(resolved);
       return { ...state, resolved };
     }
+    case "DISMISS_ALL_MOUNTED": {
+      const resolved = { ...state.resolved };
+      for (const mount of Object.values(state.mounted)) {
+        resolved[mount.introId] = true;
+      }
+      saveResolved(resolved);
+      return { ...state, resolved };
+    }
     case "RESTORE": {
       const resolved = { ...state.resolved, [action.introId]: false };
       saveResolved(resolved);

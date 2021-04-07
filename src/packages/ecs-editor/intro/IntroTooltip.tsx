@@ -1,6 +1,13 @@
-import { Button, Tooltip, TooltipProps, Typography } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Tooltip,
+  TooltipProps,
+  Typography,
+} from "@material-ui/core";
 import React, { useContext } from "react";
 import styled from "styled-components";
+import { CloseIcon } from "../icons";
 import { IntroContext } from "./IntroContext";
 import { IntroId } from "./types/IntroState";
 
@@ -25,12 +32,21 @@ export const IntroTooltip = ({
         <TooltipContent>
           <Typography color="inherit">{title}</Typography>
           <Button
+            autoFocus
+            disableFocusRipple
             variant="contained"
             color="primary"
             onClick={() => dispatch({ type: "DISMISS", introId })}
           >
             Got it
           </Button>
+          <Tooltip title="End guide">
+            <CloseButton
+              onClick={() => dispatch({ type: "DISMISS_ALL_MOUNTED" })}
+            >
+              <CloseIcon />
+            </CloseButton>
+          </Tooltip>
         </TooltipContent>
       }
     >
@@ -40,6 +56,7 @@ export const IntroTooltip = ({
 };
 
 const TooltipContent = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.spacing(1)}px;
@@ -48,4 +65,10 @@ const TooltipContent = styled.div`
     margin-top: ${({ theme }) => theme.spacing(1)}px;
     align-self: flex-end;
   }
+`;
+
+const CloseButton = styled(IconButton).attrs({ size: "small" })`
+  position: absolute;
+  top: -18px;
+  right: -22px;
 `;
