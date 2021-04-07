@@ -26,7 +26,10 @@ export const InspectedObjectInfo = ({
         <ListItemAvatar>
           <Avatar>{icon}</Avatar>
         </ListItemAvatar>
-        <ListItemText primary={name} />
+        <ListItemText
+          primary={name}
+          primaryTypographyProps={{ noWrap: true }}
+        />
         {children && (
           <ListItemSecondaryAction>{children}</ListItemSecondaryAction>
         )}

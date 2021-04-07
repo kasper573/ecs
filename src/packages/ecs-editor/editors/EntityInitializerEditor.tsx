@@ -18,6 +18,7 @@ import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
+import { getEntityDisplayName } from "../functions/getEntityDisplayName";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 
 export type EntityInitializerEditorProps = {
@@ -145,10 +146,13 @@ export const EntityInitializerEditor = ({
       </InspectorPanelHeader>
       <InspectedObjectInfo
         icon={<EntityInitializerIcon />}
-        name={entityInitializer.name}
+        name={getEntityDisplayName(
+          entityInitializer.name,
+          entityDefinition?.name
+        )}
       >
         {entityDefinition && (
-          <Tooltip title={`Go to definition: ${entityDefinition.name}`}>
+          <Tooltip title="Go to definition">
             <IconButton onClick={setDefinitionSelected}>
               <EntityDefinitionIcon />
             </IconButton>
