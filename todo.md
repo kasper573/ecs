@@ -69,6 +69,7 @@
   (replace hard coded menu items with menuItems prop, just like TreeView)
 - Explore hook categorization ("rendering hooks" vs "behavior hooks")
   Should I stop using rendering hooks in favor of event controlled components (ie. passing in an EventEmitter to control state)
+- Refactor actions and reducers into proper slices (intro module should also redux instead of context)
 
 # Bugs
 

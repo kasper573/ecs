@@ -1,7 +1,7 @@
 import { MenuItem, TooltipProps } from "@material-ui/core";
 import styled from "styled-components";
 import React, { useContext, useEffect, useMemo } from "react";
-import { useContextMenu } from "../ecs-editor/hooks/useContextMenu";
+import { useContextMenu } from "../hooks/useContextMenu";
 import { IntroId, IntroMount, MountId } from "./types/IntroState";
 import { selectOpenMount } from "./functions/selectOpenMount";
 import { nextMountId } from "./functions/nextMountId";

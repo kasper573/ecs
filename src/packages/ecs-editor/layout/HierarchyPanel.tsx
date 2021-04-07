@@ -30,7 +30,7 @@ import { MenuFor } from "../components/MenuFor";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { TreeNode } from "../tree/TreeNode";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
-import { Intro } from "../../intro/Intro";
+import { Intro } from "../intro/Intro";
 
 export const HierarchyPanel = () => {
   const entityDefinitions = useSelector(selectListOfEntityDefinition);

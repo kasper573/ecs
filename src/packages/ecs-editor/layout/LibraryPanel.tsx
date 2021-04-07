@@ -33,7 +33,7 @@ import { CreateTreeOptions } from "../tree/createTree";
 import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { TreeNode } from "../tree/TreeNode";
-import { Intro } from "../../intro/Intro";
+import { Intro } from "../intro/Intro";
 
 export const LibraryPanel = () => {
   const store = useStore();

@@ -1,4 +1,4 @@
-import { Intro } from "../../intro/Intro";
+import { Intro } from "../intro/Intro";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader, PanelHeaderProps } from "./PanelHeader";
 

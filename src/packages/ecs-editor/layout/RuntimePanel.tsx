@@ -6,7 +6,7 @@ import { Panel } from "../components/Panel";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { RenderTarget } from "../components/RenderTarget";
-import { Intro } from "../../intro/Intro";
+import { Intro } from "../intro/Intro";
 
 export const RuntimePanel = () => {
   const [system, resetSystem] = useSystemSync();

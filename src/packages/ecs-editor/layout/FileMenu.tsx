@@ -4,7 +4,7 @@ import { useSelector } from "../store";
 import { MenuFor } from "../components/MenuFor";
 import { useSystemCrud } from "../hooks/useSystemCrud";
 import { selectHasSystems } from "../selectors/selectHasSystems";
-import { IntroWithDefaultTooltip } from "../../intro/IntroWithDefaultTooltip";
+import { IntroWithDefaultTooltip } from "../intro/IntroWithDefaultTooltip";
 
 export const FileMenu = (buttonProps: IconButtonProps) => {
   const hasSystems = useSelector(selectHasSystems);

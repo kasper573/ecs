@@ -16,8 +16,8 @@ import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
 import { AppBarContent } from "../layout/AppBarContent";
 import { Content } from "../layout/Content";
-import { IntroProvider } from "../../intro/IntroProvider";
-import { IntroDimmer } from "../../intro/IntroDimmer";
+import { IntroProvider } from "../intro/IntroProvider";
+import { IntroDimmer } from "../intro/IntroDimmer";
 
 /**
  * Renders controls to CRUD systems, entities, components and properties.

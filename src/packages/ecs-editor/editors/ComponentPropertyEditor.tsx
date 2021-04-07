@@ -10,7 +10,7 @@ import {
 } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { createComponentPropertyDefinition } from "../../ecs-serializable/functions/createComponentPropertyDefinition";
 import { isFunctionDefinition } from "../../ecs-serializable/functions/isFunctionDefinition";
-import { Intro } from "../../intro/Intro";
+import { Intro } from "../intro/Intro";
 import { renderComponentPropertyValueEditor } from "./ComponentPropertyValueEditor";
 
 export type ComponentPropertyEditorProps = {
