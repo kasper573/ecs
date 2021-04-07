@@ -36,6 +36,8 @@ export const useSystemSync = () => {
   };
 
   const resetRuntime = () => {
+    system.dispose();
+    memory.clear();
     setSystemAndMemory(
       createSystemWithMemory(ecs, selection.system, nativeComponents)
     );
