@@ -17,6 +17,10 @@
 - Update Collectable to use an Entity that has Inventory component as target.
   (Make entity instances draggable and component properties drop zones)
 
+- Make it possible to change icon for components (and indirectly entities)
+  Leaf entities containing only one component get that components icon.
+  Leaf entities containing multiple components get recipe icon.
+
 - Implement create definition for instance action
 - Implement "Apply to definition" action for each component property
 - Implement apply prop diff to definition action
