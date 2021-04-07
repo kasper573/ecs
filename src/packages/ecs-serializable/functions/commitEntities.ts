@@ -42,7 +42,8 @@ export const commitEntities = (
     if (memory.entityInstances.has(id)) {
       const entity = memory.entityInstances.get(id)!;
       entity.dispose();
-      memory.entityInstances.delete(id); // Remove from deserialization memory
+      memory.componentProperties.delete(entity.id);
+      memory.entityInstances.delete(id);
     }
   }
 

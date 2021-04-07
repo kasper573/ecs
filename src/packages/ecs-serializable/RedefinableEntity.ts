@@ -6,7 +6,6 @@ import {
 } from "./types/ComponentInitializer";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
-import { getComponentInstanceId } from "./types/ComponentInstancePropertyMap";
 import { DeserializedEntity } from "./types/DeserializedEntity";
 import { EntityInitializerId } from "./types/EntityInitializer";
 
@@ -36,7 +35,7 @@ export class RedefinableEntity extends DeserializedEntity {
       const id = component.id as ComponentInitializerId;
       if (!initializerIds.includes(id)) {
         this.components.remove(component);
-        memory.componentProperties.delete(getComponentInstanceId(this.id, id));
+        memory.componentProperties.get(this.id)?.delete(id);
       }
     }
 
@@ -65,12 +64,9 @@ export class RedefinableEntity extends DeserializedEntity {
       }
 
       // Determine which properties have been changed
-      const componentInstanceId = getComponentInstanceId(
-        this.id,
-        componentInitializer.id
-      );
       const allPropertyNames = typedKeys(Component.propertyInfos);
-      const pm = memory.componentProperties.get(componentInstanceId) ?? {};
+      const pm =
+        memory.componentProperties.pull(this.id, componentInitializer.id) ?? {};
       for (const propertyName of allPropertyNames) {
         const oldBaseValue = pm.base && pm.base[propertyName];
         const oldPrimaryValue = pm.primary && pm.primary[propertyName];
@@ -100,7 +96,7 @@ export class RedefinableEntity extends DeserializedEntity {
       }
 
       // Memorize new properties for comparison next update
-      memory.componentProperties.set(componentInstanceId, {
+      memory.componentProperties.push(this.id, componentInitializer.id, {
         base: base?.properties,
         primary: primary?.properties,
       });
