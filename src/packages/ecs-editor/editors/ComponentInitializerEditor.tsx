@@ -12,6 +12,7 @@ import { typedKeys } from "../../ecs-common/typedKeys";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";
 
 export type ComponentInitializerEditorProps = {
+  isVisible?: boolean;
   base?: ComponentInitializer;
   primary: ComponentInitializer;
   definition: ComponentDefinition;
@@ -29,6 +30,7 @@ export const ComponentInitializerEditor = ({
   definition,
   onUpdate,
   onReset,
+  isVisible,
 }: ComponentInitializerEditorProps) => {
   const nativeComponents = useContext(NativeComponentsContext);
   const nativeComponent = nativeComponents[definition.nativeComponent];
@@ -39,6 +41,7 @@ export const ComponentInitializerEditor = ({
         {propertyNames.map((propertyName) => (
           <ComponentPropertyEditor
             key={propertyName}
+            isVisible={isVisible}
             baseProperties={base?.properties}
             primaryProperties={primary.properties}
             propertyName={propertyName}

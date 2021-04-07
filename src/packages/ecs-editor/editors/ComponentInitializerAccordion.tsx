@@ -5,7 +5,7 @@ import {
   MenuItem,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { useContextMenu } from "../hooks/useContextMenu";
@@ -34,6 +34,8 @@ export const ComponentInitializerAccordion = ({
   onRemove = noop,
   onRestore = noop,
 }: ComponentInitializerAccordionProps) => {
+  const [isExpanded, setExpanded] = useState(false);
+
   const initializer = primary || base;
   if (!initializer) {
     throw new Error("primary or base must be specified");
@@ -44,6 +46,8 @@ export const ComponentInitializerAccordion = ({
   if (!definition) {
     throw new Error("Cannot render without entity definition");
   }
+
+  const toggleExpanded = () => setExpanded((is) => !is);
 
   const [toggleProps, contextMenu] = useContextMenu([
     onDuplicate && (
@@ -56,7 +60,7 @@ export const ComponentInitializerAccordion = ({
     ),
   ]);
   return (
-    <Accordion elevation={0}>
+    <Accordion expanded={isExpanded} onChange={toggleExpanded} elevation={0}>
       <AccordionSummary {...toggleProps} expandIcon={<ExpandIcon />}>
         <Typography>
           {definition.name}
@@ -72,6 +76,7 @@ export const ComponentInitializerAccordion = ({
             definition={definition}
             onUpdate={onUpdate}
             onReset={onReset}
+            isVisible={isExpanded}
           />
         </AccordionDetails>
       )}

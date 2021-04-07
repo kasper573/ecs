@@ -10,6 +10,7 @@ import {
 } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
 import { createComponentPropertyDefinition } from "../../ecs-serializable/functions/createComponentPropertyDefinition";
 import { isFunctionDefinition } from "../../ecs-serializable/functions/isFunctionDefinition";
+import { Intro } from "../../intro/Intro";
 import { renderComponentPropertyValueEditor } from "./ComponentPropertyValueEditor";
 
 export type ComponentPropertyEditorProps = {
@@ -19,6 +20,7 @@ export type ComponentPropertyEditorProps = {
   propertyInfo: PropertyInfo<ComponentPropertyValue>;
   onUpdate: (newValue: ComponentPropertyValueDefinition) => void;
   onReset: () => void;
+  isVisible?: boolean;
 };
 
 export const ComponentPropertyEditor = ({
@@ -28,6 +30,7 @@ export const ComponentPropertyEditor = ({
   propertyInfo,
   onUpdate,
   onReset,
+  isVisible = true,
 }: ComponentPropertyEditorProps) => {
   const value = primaryProperties.hasOwnProperty(propertyName)
     ? primaryProperties[propertyName]
@@ -74,7 +77,15 @@ export const ComponentPropertyEditor = ({
     <>
       <TableRow key={propertyName} onContextMenu={openMenu}>
         <TableCell>
-          <PropertyName $hasBaseDiff={hasBaseDiff}>{propertyName}</PropertyName>
+          <Intro
+            message="This property value has changed. You can right click and reset to the original value."
+            introId="ResetPropertyValue"
+            when={isVisible && hasBaseDiff}
+          >
+            <PropertyName $hasBaseDiff={hasBaseDiff}>
+              {propertyName}
+            </PropertyName>
+          </Intro>
         </TableCell>
         <TableCell>{valueEditor}</TableCell>
       </TableRow>
