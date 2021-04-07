@@ -16,6 +16,8 @@ import { DragLayer } from "../dnd/DragLayer";
 import { Dialogs } from "../hooks/useDialog";
 import { AppBarContent } from "../layout/AppBarContent";
 import { Content } from "../layout/Content";
+import { IntroProvider } from "../../intro/IntroProvider";
+import { IntroDimmer } from "../../intro/IntroDimmer";
 
 /**
  * Renders controls to CRUD systems, entities, components and properties.
@@ -29,14 +31,17 @@ export const Editor = () => {
   return (
     <StyledThemeProvider theme={theme}>
       <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <GlobalStyle />
-        <Layout appBar={<AppBarContent />}>
-          <Content />
-        </Layout>
-        <DragLayer />
-        <Dialogs />
-        <Hotkeys />
+        <IntroProvider>
+          <CssBaseline />
+          <GlobalStyle />
+          <Layout appBar={<AppBarContent />}>
+            <Content />
+          </Layout>
+          <DragLayer />
+          <Dialogs />
+          <Hotkeys />
+          <IntroDimmer />
+        </IntroProvider>
       </MuiThemeProvider>
     </StyledThemeProvider>
   );
