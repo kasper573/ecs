@@ -23,6 +23,8 @@
 - Implement apply instance diff to definition action
 - Scope support for tree views
 
+- system template support, create empty demoable template that is used when creating the first system
+
 - Property bag refactor/removal
 
   - Situational component properties (define what this means before you start working. Will need property overloads).
