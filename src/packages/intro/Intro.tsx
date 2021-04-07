@@ -14,6 +14,7 @@ export type IntroProps = {
   message: string;
   when?: IntroMount["when"];
   children: TooltipProps["children"] | IntroChildrenRenderer;
+  canRestore?: boolean;
 };
 
 export type IntroChildrenRenderer = (props: {
@@ -25,12 +26,19 @@ export const Intro = ({
   introId,
   message,
   when = true,
+  canRestore = true,
 }: IntroProps) => {
   const mountId = useMemo<MountId>(nextMountId, []);
   const [state, dispatch] = useContext(IntroContext);
-  const [contextMenuTrigger, contextMenu] = useContextMenu([
+  let [contextMenuTrigger, contextMenu] = useContextMenu([
     <MenuItem onClick={restore}>What's this?</MenuItem>,
   ]);
+
+  // Disable context menu if opting out of restore function
+  if (!canRestore) {
+    contextMenu = false;
+    contextMenuTrigger = { onContextMenu: () => {} };
+  }
 
   useEffect(() => {
     dispatch({ type: "SET", mount: { mountId, introId, when } });

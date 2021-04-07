@@ -81,6 +81,7 @@ export const ComponentPropertyEditor = ({
             message="This property value has changed. You can right click and reset to the original value."
             introId="ResetPropertyValue"
             when={isVisible && hasBaseDiff}
+            canRestore={false}
           >
             <PropertyName $hasBaseDiff={hasBaseDiff}>
               {propertyName}
