@@ -7,6 +7,17 @@
 
 # Tasks
 
+- Onboarding component:
+  <IntroTooltip
+  title="This property value has changed. You can right click and select reset to revert to the original value"
+  id="ResetPropertyValue" // store in localstorage and only show once
+  when={hasBaseDiff} // show only when this property is true. If omitted, show at any time
+  />
+- Convert ActionPoller to ECS component
+- TreeView drag in instances panel should allow movement into a folder by dropping between items
+  (this is also how reordering should be done)
+- Create Reactive component (should behave as mobx reaction/when)
+- Create equivalent of unity scriptable objects
 - Entity.isActive editor/runtime sync
 
 - Update Collectable to use an Entity that has Inventory component as target.
