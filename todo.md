@@ -75,7 +75,3 @@
 
 - NestedMenuItem package breaks auto focus for fields in dialogs opened by the menu item
 - redux-undo sometimes undos way too much. Repro: delete campfire, undo.
-
-# Notes
-
-No we want notes!
