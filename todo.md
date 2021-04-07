@@ -7,12 +7,6 @@
 
 # Tasks
 
-- Onboarding component:
-  <IntroTooltip
-  title="This property value has changed. You can right click and select reset to revert to the original value"
-  id="ResetPropertyValue" // store in localstorage and only show once
-  when={hasBaseDiff} // show only when this property is true. If omitted, show at any time
-  />
 - Convert ActionPoller to ECS component
 - TreeView drag in instances panel should allow movement into a folder by dropping between items
   (this is also how reordering should be done)
@@ -24,6 +18,7 @@
   (Make entity instances draggable and component properties drop zones)
 
 - Implement create definition for instance action
+- Implement "Apply to definition" action for each component property
 - Implement apply prop diff to definition action
 - Implement apply instance diff to definition action
 - Scope support for tree views
@@ -48,7 +43,6 @@
 # Nice to have
 
 - Localization
-- Implement "Apply to definition" action for each component property
 - Copy paste objects and component properties (separate duplicate into copy and paste actions)
 - Implement multi select (Inspector should support editing shared elements of selections)
 - Implement duplicate system action
@@ -61,12 +55,11 @@
 
 # Refactor
 
-- Rename defaultECS to exampleECS
 - Refactor/simplify/improve mock functions for ecs-serializable unit tests
 - Cover more (all!) test cases in ecs-serializable
 - replace zod (zod doesn't support readonly)
 - ComponentInitializerId should also be universally unique
-- Get rid of / simplify CridList/CrudListItem into CommonList/CommonListItem
+- Get rid of / simplify CrydList/CrudListItem into CommonList/CommonListItem
   (replace hard coded menu items with menuItems prop, just like TreeView)
 - Explore hook categorization ("rendering hooks" vs "behavior hooks")
   Should I stop using rendering hooks in favor of event controlled components (ie. passing in an EventEmitter to control state)
