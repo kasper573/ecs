@@ -50,6 +50,7 @@
   - By adding a single file script with a Component.extends
   - By adding multiple files hosted on server
   - implement inspector for ComponentDefinition
+- TreeViewItem rename should be inline, also bind it to F2 hotkey or double click
 
 # Nice to have
 
