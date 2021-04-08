@@ -81,3 +81,4 @@
 
 - NestedMenuItem package breaks auto focus for fields in dialogs opened by the menu item
 - redux-undo sometimes undos way too much. Repro: delete campfire, undo.
+- Removing TextAdventureRenderer from entity instance (but not definition) does not actually remove the runtime component
