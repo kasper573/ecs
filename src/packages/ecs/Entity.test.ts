@@ -41,6 +41,31 @@ describe("Entity components", () => {
     entity.components.remove(cmp);
     expect(cmp.entity).toBeUndefined();
   });
+
+  test("gets mounted when added to an entity", () => {
+    let mounted = false;
+    const component = new Component().configure({
+      mount: () => {
+        mounted = true;
+      },
+    });
+
+    new Entity([component]);
+    expect(mounted).toEqual(true);
+  });
+
+  test("gets unmounted when removed from an entity", () => {
+    let unmounted = false;
+    const component = new Component().configure({
+      mount: () => () => {
+        unmounted = true;
+      },
+    });
+
+    const entity = new Entity([component]);
+    entity.components.remove(component);
+    expect(unmounted).toEqual(true);
+  });
 });
 
 it("disposing a system disposes all entities in the hierarchy", () => {

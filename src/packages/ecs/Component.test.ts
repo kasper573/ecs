@@ -3,31 +3,6 @@ import { Entity } from "./Entity";
 import { Component } from "./Component";
 import { System } from "./System";
 
-test("Component gets mounted when added to an entity", () => {
-  let mounted = false;
-  const component = new Component().configure({
-    mount: () => {
-      mounted = true;
-    },
-  });
-
-  new Entity([component]);
-  expect(mounted).toEqual(true);
-});
-
-test("Component gets unmounted when removed from an entity", () => {
-  let unmounted = false;
-  const component = new Component().configure({
-    mount: () => () => {
-      unmounted = true;
-    },
-  });
-
-  const entity = new Entity([component]);
-  entity.components.remove(component);
-  expect(unmounted).toEqual(true);
-});
-
 test("declarative component property can derive from their associated entity", () => {
   const createComponent = () =>
     new TestComponent().configure({
