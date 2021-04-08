@@ -1,47 +1,50 @@
 import { EventEmitter } from "events";
-import { without } from "lodash";
 import TypedEmitter from "typed-emitter";
 
 export class ObservableArray<T> extends Array<T> {
   readonly events: TypedEmitter<ObservableArrayEvents<T>> = new EventEmitter();
 
-  push(...items: T[]): number {
-    return automateEvents(() => super.push(...items), this);
+  push(...added: T[]): number {
+    const result = super.push(...added);
+    this.events.emit("change", added, empty);
+    return result;
   }
 
   pop(): T | undefined {
-    return automateEvents(() => super.pop(), this);
+    const lengthBefore = this.length;
+    const removed = super.pop();
+    if (this.length !== lengthBefore) {
+      this.events.emit("change", empty, [removed!]);
+    }
+    return removed;
   }
 
   splice(start: number, deleteCount: number, ...items: T[]): T[] {
-    return automateEvents(
-      () => super.splice(start, deleteCount, ...items),
-      this
-    );
+    const removed = super.splice(start, deleteCount, ...items);
+    if (removed.length) {
+      this.events.emit("change", items, removed);
+    }
+    return removed;
   }
 
   shift(): T | undefined {
-    return automateEvents(() => super.shift(), this);
+    const lengthBefore = this.length;
+    const removed = super.shift();
+    if (this.length !== lengthBefore) {
+      this.events.emit("change", empty, [removed!]);
+    }
+    return removed;
   }
 
-  unshift(...items: T[]): number {
-    return automateEvents(() => super.unshift(...items), this);
+  unshift(...added: T[]): number {
+    const result = super.unshift(...added);
+    this.events.emit("change", added, empty);
+    return result;
   }
 }
 
-const automateEvents = <F extends (...args: A[]) => R, T, A, R>(
-  fun: F,
-  array: ObservableArray<T>
-): R => {
-  const before = [...array];
-  const ret = fun();
-  const after = [...array];
-  const added = without(after, ...before);
-  const removed = without(before, ...after);
-  array.events.emit("change", added, removed);
-  return ret;
-};
+const empty = Object.freeze([]);
 
 export type ObservableArrayEvents<T> = {
-  change: (added: T[], removed: T[]) => void;
+  change: (added: readonly T[], removed: readonly T[]) => void;
 };
