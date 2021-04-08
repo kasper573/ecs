@@ -21,6 +21,20 @@ test("Entity children lose their parent reference when removed", () => {
   expect(child.parent).toBeUndefined();
 });
 
+test("Initializing an entity with the same child entity instance twice becomes only one added child", () => {
+  const child = new Entity();
+  const parent = new Entity([], [child, child]);
+  expect(parent.children.length).toBe(1);
+});
+
+test("Adding the same entity instance twice as entity child does not become two added children", () => {
+  const child = new Entity();
+  const parent = new Entity();
+  parent.children.push(child);
+  parent.children.push(child);
+  expect(parent.children.length).toBe(1);
+});
+
 describe("Entity components", () => {
   test("are given a reference to their entity on initialization", () => {
     const cmp = new Component();
