@@ -193,6 +193,19 @@ it("can dispose a single entity with components", () => {
   expectDisposed(a);
 });
 
+describe("prevents circular entity structures", () => {
+  test("an entity cannot become its own parent", () => {
+    const a = new Entity();
+    expect(() => a.setParent(a)).toThrow();
+  });
+  test("an entity cannot become a child of its current descendant", () => {
+    const a = new Entity();
+    const b = new Entity();
+    b.setParent(a); // a -> b
+    expect(() => a.setParent(b)).toThrow();
+  });
+});
+
 function expectDisposed(entity: Entity) {
   expect(entity.parent).toBeUndefined();
   expect(entity.components.length).toBe(0);

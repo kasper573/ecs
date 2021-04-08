@@ -4,6 +4,7 @@ import { System } from "./System";
 import { Container, getFrozenContainer } from "./Container";
 import { descendants } from "./descendants";
 import { createMount } from "./createMount";
+import { isOrHasAncestor } from "./isOrHasAncestor";
 
 export class Entity<Id extends string = string> implements EntityOptions<Id> {
   isActive: boolean = true;
@@ -140,6 +141,11 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     if (this.parent === newParent) {
       return;
     }
+
+    if (newParent && isOrHasAncestor(newParent, this)) {
+      throw new Error("Circular entity structures not allowed");
+    }
+
     const didRemove = this.remove(false);
     this._parent = newParent;
 
