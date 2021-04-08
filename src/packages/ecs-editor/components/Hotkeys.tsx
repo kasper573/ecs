@@ -1,5 +1,6 @@
 import useHotkeys from "react-use-hotkeys";
 import { ActionCreators } from "redux-undo";
+import { memo } from "react";
 import { useDispatch, useStore } from "../store";
 import { useDialog } from "../hooks/useDialog";
 import {
@@ -9,7 +10,7 @@ import {
 import { isInputEvent } from "../functions/isInputEvent";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 
-export const Hotkeys = () => {
+export const Hotkeys = memo(() => {
   const store = useStore();
   const dispatch = useDispatch();
 
@@ -33,4 +34,4 @@ export const Hotkeys = () => {
   useHotkeys("control+shift+z", () => dispatch(ActionCreators.redo()), []);
 
   return null;
-};
+});

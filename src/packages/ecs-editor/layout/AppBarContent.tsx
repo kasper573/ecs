@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { IconButton, Toolbar as MuiToolbar, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "../store";
@@ -8,7 +8,7 @@ import { DarkThemeIcon, LightThemeIcon } from "../icons";
 import { FileMenu } from "./FileMenu";
 import { DevToolsButton } from "./DevToolsButton";
 
-export const AppBarContent = () => {
+export const AppBarContent = memo(() => {
   const dispatch = useDispatch();
   const themeType = useSelector(selectThemeType);
   const nextThemeType = themeType === "light" ? "dark" : "light";
@@ -33,7 +33,7 @@ export const AppBarContent = () => {
       </Actions>
     </Toolbar>
   );
-};
+});
 
 const Toolbar = styled(MuiToolbar).attrs({ disableGutters: true })`
   display: flex;

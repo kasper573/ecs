@@ -1,5 +1,5 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { shallowEqual } from "react-redux";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
@@ -37,7 +37,7 @@ import { useSystemSelector } from "../hooks/useSystemSelector";
 import { SystemSyncContext } from "../hooks/useSystemSync";
 import { getRuntimeEntityActiveStates } from "../functions/getRuntimeEntityActiveStates";
 
-export const HierarchyPanel = () => {
+export const HierarchyPanel = memo(() => {
   const [system] = useContext(SystemSyncContext);
   const entityDefinitions = useSelector(selectListOfEntityDefinition);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
@@ -179,7 +179,7 @@ export const HierarchyPanel = () => {
       </CommonTreeView>
     </Panel>
   );
-};
+});
 
 function getItemProps({
   value: { name },

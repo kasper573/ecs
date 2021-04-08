@@ -1,4 +1,5 @@
 import { IconButton, Tooltip } from "@material-ui/core";
+import { memo } from "react";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { useDispatch, useSelector, useStore } from "../store";
@@ -35,7 +36,7 @@ import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { TreeNode } from "../tree/TreeNode";
 import { Intro } from "../intro/Intro";
 
-export const LibraryPanel = () => {
+export const LibraryPanel = memo(() => {
   const store = useStore();
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
@@ -186,7 +187,7 @@ export const LibraryPanel = () => {
       />
     </Panel>
   );
-};
+});
 
 function getItemProps({ value }: TreeNode<TypedLibraryNode>) {
   const isFolder = value.type === "folder";

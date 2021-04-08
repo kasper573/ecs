@@ -1,5 +1,5 @@
 import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { DeleteIcon, EditIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
@@ -8,7 +8,7 @@ import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
 import { core } from "../core";
 
-export const SystemHeader = () => {
+export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
@@ -55,7 +55,7 @@ export const SystemHeader = () => {
       )}
     </Row>
   );
-};
+});
 
 const Row = styled(Toolbar)`
   display: flex;

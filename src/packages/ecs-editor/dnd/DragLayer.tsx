@@ -1,11 +1,12 @@
 import { useDragLayer } from "react-dnd";
 import styled from "styled-components";
 import { XYCoord } from "react-dnd/dist/types/types/monitors";
+import { memo } from "react";
 import { zIndex } from "../zIndex";
 import { DNDType } from "./DNDType";
 import { DragPreviewForItem } from "./DragPreviewForItem";
 
-export const DragLayer = () => {
+export const DragLayer = memo(() => {
   const { isDragging, itemType, item, currentOffset } = useDragLayer(
     (monitor) => ({
       itemType: monitor.getItemType(),
@@ -23,7 +24,7 @@ export const DragLayer = () => {
       <DragPreviewForItem type={itemType as DNDType} item={item} />
     </Position>
   );
-};
+});
 
 const createTransform = ({ x, y }: XYCoord) => ({
   style: {

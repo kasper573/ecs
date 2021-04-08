@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
+import { memo } from "react";
 import { useSelector } from "../store";
 import { selectHasSystems } from "../selectors/selectHasSystems";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
@@ -13,7 +14,7 @@ import { InspectorPanel } from "./InspectorPanel";
 import { HierarchyPanel } from "./HierarchyPanel";
 import { LibraryPanel } from "./LibraryPanel";
 
-export const Content = () => {
+export const Content = memo(() => {
   const hasSystem = useSelector(selectHasSystems);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const { showCreateDialog, showSelectDialog } = useSystemCrud();
@@ -44,7 +45,7 @@ export const Content = () => {
       </PanelContainer>
     </SystemSyncContext.Provider>
   );
-};
+});
 
 const SystemCrudButtons = styled(Center)`
   .MuiButton-root + .MuiButton-root {

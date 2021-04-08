@@ -1,15 +1,15 @@
 import styled, { DefaultTheme, useTheme } from "styled-components";
 import { Backdrop as MuiBackdrop } from "@material-ui/core";
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { IntroContext } from "./IntroContext";
 import { selectOpenMount } from "./functions/selectOpenMount";
 
-export const IntroDimmer = () => {
+export const IntroDimmer = memo(() => {
   const theme = useTheme();
   const [state] = useContext(IntroContext);
   const open = selectOpenMount(state) !== undefined;
   return <Backdrop open={open} style={{ zIndex: zIndex(theme) }} />;
-};
+});
 
 export const zIndex = (theme: DefaultTheme) => theme.zIndex.drawer + 1;
 

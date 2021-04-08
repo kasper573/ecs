@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { Fragment, ReactNode } from "react";
+import { Fragment, memo, ReactNode } from "react";
 import {
   createContext,
   useCallback,
@@ -40,7 +40,7 @@ export function useDialog<Args extends unknown[]>(
   return open;
 }
 
-export const Dialogs = () => {
+export const Dialogs = memo(() => {
   const [state, setState] = useState<Record<DialogId, DialogState>>({});
   const events = useContext(DialogEventsContext);
   useEvents(events, {
@@ -84,7 +84,7 @@ export const Dialogs = () => {
       })}
     </>
   );
-};
+});
 
 type DialogState<Args extends any[] = unknown[]> = {
   component: DialogComponent;
