@@ -43,28 +43,68 @@ describe("Entity components", () => {
   });
 
   test("gets mounted when added to an entity", () => {
-    let mounted = false;
-    const component = new Component().configure({
-      mount: () => {
-        mounted = true;
-      },
-    });
-
+    const [component, events, clearEvents] = createSpyComponent();
+    clearEvents();
     new Entity([component]);
-    expect(mounted).toEqual(true);
+    expect(events).toEqual(["mount"]);
   });
 
   test("gets unmounted when removed from an entity", () => {
-    let unmounted = false;
-    const component = new Component().configure({
-      mount: () => () => {
-        unmounted = true;
-      },
+    const [component, events, clearEvents] = createSpyComponent();
+    const entity = new Entity([component]);
+    clearEvents();
+    entity.components.remove(component);
+    expect(events).toEqual(["unmount"]);
+  });
+
+  describe("gets remounted", () => {
+    test("when owner entity changes parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      const parent1 = new Entity();
+      owner.setParent(parent1);
+
+      clearEvents();
+      const parent2 = new Entity();
+      owner.setParent(parent2);
+
+      expect(events.slice(-2)).toEqual(["unmount", "mount"]);
     });
 
-    const entity = new Entity([component]);
-    entity.components.remove(component);
-    expect(unmounted).toEqual(true);
+    test("when owner entity is removed from their parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      new Entity([], [owner]);
+
+      clearEvents();
+      owner.remove();
+      expect(events.slice(-2)).toEqual(["unmount", "mount"]);
+    });
+
+    test("when owner entity ancestry changes", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      const parent = new Entity([], [owner]);
+      new Entity([], [parent]);
+
+      clearEvents();
+      parent.setParent(new Entity());
+      expect(events.slice(-2)).toEqual(["unmount", "mount"]);
+    });
+
+    test("when owner entity.parent is removed from their parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      new Entity([], [owner]);
+
+      clearEvents();
+      owner.remove();
+      expect(events.slice(-2)).toEqual(["unmount", "mount"]);
+    });
   });
 });
 
@@ -97,4 +137,18 @@ function expectDisposed(entity: Entity) {
   expect(entity.components.events.listenerCount("change")).toBe(0);
   expect(entity.children.length).toBe(0);
   expect(entity.children.events.listenerCount("change")).toBe(0);
+}
+
+function createSpyComponent() {
+  const events: Array<"mount" | "unmount"> = [];
+  const component = new Component().configure({
+    mount: () => {
+      events.push("mount");
+      return () => {
+        events.push("unmount");
+      };
+    },
+  });
+  const clearEvents = () => events.splice(0, events.length);
+  return [component, events, clearEvents] as const;
 }

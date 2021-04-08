@@ -1,31 +1,16 @@
 import { ObservableArray } from "./ObservableArray";
 import { connectObservableArray } from "./connectObservableArray";
+import { createMount, OnMount } from "./createMount";
 
 export function mountObservableArray<T>(
   obs: ObservableArray<T>,
   onMount: OnMount<T>
 ) {
-  const mounted = new Map<T, OnUnmount>();
-  const tryUnmount = (item: T) => {
-    const onUnmount = mounted.get(item);
-    if (onUnmount) {
-      onUnmount();
-      mounted.delete(item);
-    }
-  };
-  const mount = (item: T) => {
-    tryUnmount(item);
-    const onUnmount = onMount(item);
-    if (onUnmount) {
-      mounted.set(item, onUnmount);
-    }
-  };
-
+  const { mount, unmount } = createMount(onMount);
   return connectObservableArray(obs, (added, removed) => {
-    added.forEach(mount);
-    removed.forEach(tryUnmount);
+    for (const item of added) {
+      mount(item);
+    }
+    removed.forEach(unmount);
   });
 }
-
-export type OnMount<T> = (item: T) => OnUnmount | undefined | void;
-export type OnUnmount = () => unknown;

@@ -1,7 +1,8 @@
 import { ObservableArrayEvents } from "./ObservableArray";
 import { connectObservableArray } from "./connectObservableArray";
-import { mountObservableArray, OnMount } from "./mountObservableArray";
+import { mountObservableArray } from "./mountObservableArray";
 import { TypeCollection } from "./TypeCollection";
+import { OnMount } from "./createMount";
 
 export class Container<T> extends TypeCollection<T> {
   remove(...toRemove: T[]) {

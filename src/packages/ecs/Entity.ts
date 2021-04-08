@@ -3,6 +3,7 @@ import { ComponentInstance } from "./Component";
 import { System } from "./System";
 import { Container, getFrozenContainer } from "./Container";
 import { descendants } from "./descendants";
+import { createMount } from "./createMount";
 
 export class Entity<Id extends string = string> implements EntityOptions<Id> {
   isActive: boolean = true;
@@ -39,6 +40,10 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     return descendants(this);
   }
 
+  get descendantsAndSelf() {
+    return descendants(this, undefined, true);
+  }
+
   get children() {
     return this._children;
   }
@@ -50,17 +55,17 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
   private _children = new Container<Entity<Id>>();
   private _components = new Container<ComponentInstance>();
   private readonly observations: Function[] = [];
+  private readonly componentMounts = createMount<ComponentInstance>();
 
   dispose() {
     if (this._isDisposed) {
       return;
     }
 
-    // Clear all components first
+    // Unmount all components first
     // (since their unmount operation may still need the entity/system references we're about to dispose)
-    for (const entity of descendants(this, undefined, true)) {
-      entity.components.clear();
-    }
+    this.unmountComponents();
+    this.components.clear();
 
     // Dispose and clear children
     for (const child of this.children) {
@@ -69,9 +74,7 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     this.children.clear();
 
     // Remove from parent
-    if (this.parent) {
-      this.parent.children.remove(this);
-    }
+    this.remove();
 
     // Stop observations
     while (this.observations.length) {
@@ -97,11 +100,9 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     this.observations = [
       this.components.mount((component) => {
         component.configure({ entity: this });
-        const unmountComponent = component.mount();
+        this.componentMounts.mount(component, component.mount);
         return () => {
-          if (unmountComponent) {
-            unmountComponent();
-          }
+          this.componentMounts.unmount(component);
           component.configure({ entity: undefined });
         };
       }),
@@ -139,11 +140,10 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     if (this.parent === newParent) {
       return;
     }
-    if (this.parent) {
-      this.parent.children.remove(this);
-    }
+    this.remove();
     this._parent = newParent;
     if (newParent) {
+      this.mountComponents();
       if (!newParent.children.includes(this)) {
         newParent.children.push(this);
       }
@@ -153,6 +153,37 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
       for (const descendant of this.descendants) {
         descendant._system = this._system;
       }
+    }
+  }
+
+  remove() {
+    if (this.parent) {
+      this.mountComponents(); // Remount to tell components the associated entity tree is changing
+      this.parent?.children.remove(this);
+    }
+  }
+
+  private mountComponents() {
+    for (const component of entityComponents(this.descendantsAndSelf)) {
+      if (component.entity) {
+        component.entity.componentMounts.mount(component, component.mount);
+      }
+    }
+  }
+
+  private unmountComponents() {
+    for (const component of entityComponents(this.descendantsAndSelf)) {
+      if (component.entity) {
+        component.entity.componentMounts.unmount(component);
+      }
+    }
+  }
+}
+
+function* entityComponents(entities: Iterable<Entity>) {
+  for (const entity of entities) {
+    for (const component of entity.components) {
+      yield component;
     }
   }
 }
