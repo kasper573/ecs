@@ -1,8 +1,10 @@
+import * as zod from "zod";
 import { Entity } from "../ecs/Entity";
 import { Component, componentProperties } from "../ecs/Component";
 
 export class SceneManager extends Component.extend({
   isActive: { ...componentProperties.isActive, hidden: true },
+  initialSceneName: { type: zod.string().optional() },
 }) {
   private activeSceneId?: string;
   private activeScene?: Entity;
@@ -24,6 +26,14 @@ export class SceneManager extends Component.extend({
   get scenes() {
     return this.entity?.children;
   }
+  get initialScene() {
+    if (!this.scenes) {
+      return;
+    }
+    return this.initialSceneName
+      ? this.scenes.find((s) => s.name.toLowerCase() === this.initialSceneName)
+      : this.scenes[0];
+  }
 
   private setActiveScene(activeScene = this.activeScene) {
     this.activeScene = activeScene;
@@ -44,12 +54,14 @@ export class SceneManager extends Component.extend({
       isActive: true,
       mount: () =>
         this.scenes?.mount((scene) => {
-          if (!this.activeScene) {
-            this.setActiveScene(scene);
-          }
           scene.isActive = scene === this.activeScene;
           return () => (scene.isActive = true);
         }),
+      update: () => {
+        if (!this.activeScene && this.initialScene) {
+          this.setActiveScene(this.initialScene);
+        }
+      },
     });
   }
 
