@@ -7,12 +7,6 @@
 
 # Tasks
 
-- Entity.isActive editor/runtime sync
-  Move System instance state location up to the Editor component root and share it via context.
-  Then create useSystem hook that subscribes to system updates using a memoized selector
-  (otherwise a render loop would severely ruin editor performance).
-  Use this hook to select and subscribe to the active state of all entity instances and use it to dim inactive entities.
-
 - Convert ActionPoller to ECS component
 - TreeView drag in instances panel should allow movement into a folder by dropping between items
   (this is also how reordering should be done)
@@ -82,3 +76,4 @@
 - NestedMenuItem package breaks auto focus for fields in dialogs opened by the menu item
 - redux-undo sometimes undos way too much. Repro: delete campfire, undo.
 - Removing TextAdventureRenderer from entity instance (but not definition) does not actually remove the runtime component
+- Cannot perform actions for interactives in inventory
