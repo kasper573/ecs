@@ -66,8 +66,7 @@ describe("Entity components", () => {
       owner.setParent(parent1);
 
       clearEvents();
-      const parent2 = new Entity();
-      owner.setParent(parent2);
+      owner.setParent(new Entity());
 
       expect(events.slice(-2)).toEqual(["unmount", "mount"]);
     });
