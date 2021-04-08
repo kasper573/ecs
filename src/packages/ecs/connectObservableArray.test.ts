@@ -3,7 +3,7 @@ import { ObservableArray } from "./ObservableArray";
 
 test("emits existing items as added on connect", () => {
   const obs = new ObservableArray(1, 2, 3);
-  let emitted: number[] = [];
+  let emitted: ReadonlyArray<number> = [];
   const disconnect = connectObservableArray(obs, (items) => (emitted = items));
   expect(emitted).toEqual([1, 2, 3]);
   disconnect();
@@ -11,7 +11,7 @@ test("emits existing items as added on connect", () => {
 
 test("emits added items", () => {
   const obs = new ObservableArray(1, 2, 3);
-  let emitted: number[] = [];
+  let emitted: ReadonlyArray<number> = [];
   const disconnect = connectObservableArray(obs, (items) => (emitted = items));
   obs.push(4, 5, 6);
   expect(emitted).toEqual([4, 5, 6]);
@@ -20,7 +20,7 @@ test("emits added items", () => {
 
 test("emits removed items", () => {
   const obs = new ObservableArray(1, 2, 3);
-  let emitted: number[] = [];
+  let emitted: ReadonlyArray<number> = [];
   const disconnect = connectObservableArray(
     obs,
     (added, removed) => (emitted = removed)
@@ -32,7 +32,7 @@ test("emits removed items", () => {
 
 test("emits remaining items as removed on disconnect", () => {
   const obs = new ObservableArray(1, 2, 3);
-  let emitted: number[] = [];
+  let emitted: ReadonlyArray<number> = [];
   const disconnect = connectObservableArray(
     obs,
     (added, removed) => (emitted = removed)
@@ -43,8 +43,8 @@ test("emits remaining items as removed on disconnect", () => {
 
 test("emits no items after disconnecting", () => {
   const obs = new ObservableArray<number>(9, 8, 7);
-  let added: number[];
-  let removed: number[];
+  let added: ReadonlyArray<number>;
+  let removed: ReadonlyArray<number>;
 
   const disconnect = connectObservableArray(obs, (a, r) => {
     added = a;
