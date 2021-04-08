@@ -1,4 +1,10 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { createSystem } from "../../ecs-serializable/functions/createSystem";
 import { useSelector } from "../store";
 import { selectAll } from "../selectors/selectAll";
@@ -11,6 +17,7 @@ import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
 import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { createECSDefinition } from "../../ecs-serializable/functions/createECSDefinition";
+import { System } from "../../ecs/System";
 
 /**
  * Automates system initialization and updates.
@@ -70,3 +77,8 @@ const createSystemWithMemory = (
   );
   return [system, memory] as const;
 };
+
+export const SystemSyncContext = createContext<readonly [System, () => void]>([
+  new System(),
+  () => {},
+]);

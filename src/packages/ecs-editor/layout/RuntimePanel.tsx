@@ -1,5 +1,6 @@
 import { IconButton } from "@material-ui/core";
-import { useSystemSync } from "../hooks/useSystemSync";
+import { useContext } from "react";
+import { SystemSyncContext } from "../hooks/useSystemSync";
 import { ResetIcon } from "../icons";
 import { Panel } from "../components/Panel";
 import { PanelName } from "../types/PanelName";
@@ -8,7 +9,7 @@ import { RenderTarget } from "../components/RenderTarget";
 import { IntroWithDefaultTooltip } from "../intro/IntroWithDefaultTooltip";
 
 export const RuntimePanel = () => {
-  const [system, resetSystem] = useSystemSync();
+  const [system, resetSystem] = useContext(SystemSyncContext);
   return (
     <Panel name={PanelName.Runtime}>
       <PanelHeader title={PanelName.Runtime}>

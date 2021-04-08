@@ -1,4 +1,6 @@
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
+import { useContext } from "react";
+import { shallowEqual } from "react-redux";
 import { PanelName } from "../types/PanelName";
 import { PanelHeader } from "../components/PanelHeader";
 import { core } from "../core";
@@ -31,13 +33,22 @@ import { useContextMenu } from "../hooks/useContextMenu";
 import { TreeNode } from "../tree/TreeNode";
 import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
 import { Intro } from "../intro/Intro";
+import { useSystemSelector } from "../hooks/useSystemSelector";
+import { SystemSyncContext } from "../hooks/useSystemSync";
+import { getRuntimeEntityActiveStates } from "../functions/getRuntimeEntityActiveStates";
 
 export const HierarchyPanel = () => {
+  const [system] = useContext(SystemSyncContext);
   const entityDefinitions = useSelector(selectListOfEntityDefinition);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
   const entities = useSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
   const store = useStore();
+  const isRuntimeActive = useSystemSelector(
+    system,
+    getRuntimeEntityActiveStates,
+    shallowEqual
+  );
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "instance",
@@ -149,6 +160,7 @@ export const HierarchyPanel = () => {
         onSelectedChange={handleSelected}
         treeOptions={treeOptions}
         itemProps={{
+          faded: (entity) => !isRuntimeActive[entity.id],
           menuItems: menuItemFactory.entity,
           onMoveNode: handleMoveEntity,
           treeItemProps: getItemProps,

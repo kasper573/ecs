@@ -5,6 +5,7 @@ import { selectHasSystems } from "../selectors/selectHasSystems";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { useSystemCrud } from "../hooks/useSystemCrud";
 import { Center } from "../components/Center";
+import { SystemSyncContext, useSystemSync } from "../hooks/useSystemSync";
 import { SystemHeader } from "./SystemHeader";
 import { PanelContainer } from "./PanelContainer";
 import { RuntimePanel } from "./RuntimePanel";
@@ -16,6 +17,8 @@ export const Content = () => {
   const hasSystem = useSelector(selectHasSystems);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const { showCreateDialog, showSelectDialog } = useSystemCrud();
+  const systemSync = useSystemSync();
+
   if (!selectedSystem) {
     return (
       <SystemCrudButtons>
@@ -31,7 +34,7 @@ export const Content = () => {
     );
   }
   return (
-    <>
+    <SystemSyncContext.Provider value={systemSync}>
       <SystemHeader />
       <PanelContainer>
         <LibraryPanel />
@@ -39,7 +42,7 @@ export const Content = () => {
         <InspectorPanel />
         <RuntimePanel />
       </PanelContainer>
-    </>
+    </SystemSyncContext.Provider>
   );
 };
 

@@ -24,6 +24,7 @@ export type CommonTreeItemProps<T, Id extends string> = {
   ) => DropTargetHookSpec<T, unknown, { canDrop: boolean }>;
   getNodeId: (value: T) => Id;
   treeItemProps: (node: TreeNode<T>) => Omit<TreeItemProps, "nodeId">;
+  faded?: (value: T) => boolean;
 };
 
 export function CommonTreeItem<T, Id extends string>(
@@ -34,6 +35,7 @@ export function CommonTreeItem<T, Id extends string>(
     treeItemProps,
     onMoveNode = emptyObject,
     menuItems = emptyArray,
+    faded = no,
     dragSpec,
     dropSpec,
     getNodeId,
@@ -62,6 +64,7 @@ export function CommonTreeItem<T, Id extends string>(
       <TreeItemWithoutFocusColor
         ref={attachDndRef}
         $highlightDrop={canDrop}
+        $faded={faded(node.value)}
         key={nodeId}
         nodeId={nodeId}
         {...treeItemProps(node)}
@@ -76,12 +79,22 @@ export function CommonTreeItem<T, Id extends string>(
   );
 }
 
-const TreeItemWithoutFocusColor = styled(TreeItem)<{ $highlightDrop: boolean }>`
+const TreeItemWithoutFocusColor = styled(TreeItem)<{
+  $faded: boolean;
+  $highlightDrop: boolean;
+}>`
   &.MuiTreeItem-root:not(.Mui-selected):focus
     > .MuiTreeItem-content
     .MuiTreeItem-label {
     background-color: transparent;
   }
+
+  transition: ${({ theme }) =>
+    theme.transitions.create("opacity", {
+      duration: theme.transitions.duration.shortest,
+      easing: theme.transitions.easing.sharp,
+    })};
+  opacity: ${({ $faded }) => ($faded ? 0.5 : 1)};
 
   // the only direct child div is a .MuiTreeItem-content
   > div {
@@ -92,3 +105,4 @@ const TreeItemWithoutFocusColor = styled(TreeItem)<{ $highlightDrop: boolean }>`
 
 const emptyObject = () => ({});
 const emptyArray = () => [];
+const no = () => false;
