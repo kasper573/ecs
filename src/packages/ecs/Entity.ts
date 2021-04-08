@@ -49,8 +49,7 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
 
   private _children = new Container<Entity<Id>>();
   private _components = new Container<ComponentInstance>();
-
-  readonly observations: Function[] = [];
+  private readonly observations: Function[] = [];
 
   dispose() {
     if (this._isDisposed) {
@@ -74,8 +73,9 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
       this.parent.children.remove(this);
     }
 
-    // Stop array observations
-    for (const stop of this.observations) {
+    // Stop observations
+    while (this.observations.length) {
+      const stop = this.observations.shift()!;
       stop();
     }
 
