@@ -13,8 +13,7 @@ export const describeSystem = (
     ...customDescribers,
   };
   const parts: string[] = [];
-  const memory = system.entities.findComponent(InteractionMemory)?.items;
-  const lastResult = memory && memory[memory.length - 1];
+  const lastResult = system.entities.findComponent(InteractionMemory)?.peek;
   if (lastResult) {
     parts.push(lastResult);
   }
