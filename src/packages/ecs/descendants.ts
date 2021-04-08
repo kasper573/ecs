@@ -4,19 +4,17 @@ import { WithoutMutations } from "./WithoutMutations";
 
 export function descendants<Id extends string>(
   start: Entity<Id>,
-  filter: (e: Entity<Id>) => boolean = any,
+  filter?: (e: Entity<Id>) => boolean,
   includeSelf = false
 ): WithoutMutations<EntityCollection<Id>> {
   const selected = new EntityCollection<Id>();
   const queue = includeSelf ? [start] : [...start.children];
   for (let i = 0; i < queue.length; i++) {
     const next = queue[i];
-    if (filter(next)) {
+    if (!filter || filter(next)) {
       selected.push(next);
       queue.push(...next.children);
     }
   }
   return selected;
 }
-
-const any = () => true;
