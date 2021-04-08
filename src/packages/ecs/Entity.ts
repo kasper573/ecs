@@ -140,27 +140,34 @@ export class Entity<Id extends string = string> implements EntityOptions<Id> {
     if (this.parent === newParent) {
       return;
     }
-    this.remove();
+    const didRemove = this.remove(false);
     this._parent = newParent;
-    if (newParent) {
-      this.mountComponents();
-      if (!newParent.children.includes(this)) {
-        newParent.children.push(this);
-      }
+
+    if (newParent && !newParent.children.includes(this)) {
+      newParent.children.push(this);
     }
+
     if (this._system !== newParent?.system) {
       this._system = newParent?.system;
       for (const descendant of this.descendants) {
         descendant._system = this._system;
       }
     }
+
+    if (didRemove || newParent) {
+      this.mountComponents();
+    }
   }
 
-  remove() {
-    if (this.parent) {
-      this.mountComponents(); // Remount to tell components the associated entity tree is changing
+  remove(remountComponents = true) {
+    if (this.parent?.children.includes(this)) {
+      if (remountComponents) {
+        this.mountComponents(); // Remount to tell components the associated entity tree is changing
+      }
       this.parent?.children.remove(this);
+      return true;
     }
+    return false;
   }
 
   private mountComponents() {

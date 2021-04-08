@@ -119,6 +119,55 @@ describe("Entity components", () => {
       expect(events.slice(-2)).toEqual(["unmount", "mount"]);
     });
   });
+
+  describe("gets remounted only once", () => {
+    test("when owner entity changes parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      const parent1 = new Entity();
+      owner.setParent(parent1);
+
+      clearEvents();
+      owner.setParent(new Entity());
+
+      expect(events).toEqual(["unmount", "mount"]);
+    });
+
+    test("when owner entity is removed from their parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      new Entity([], [owner]);
+
+      clearEvents();
+      owner.remove();
+      expect(events).toEqual(["unmount", "mount"]);
+    });
+
+    test("when owner entity ancestry changes", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      const parent = new Entity([], [owner]);
+      new Entity([], [parent]);
+
+      clearEvents();
+      parent.setParent(new Entity());
+      expect(events).toEqual(["unmount", "mount"]);
+    });
+
+    test("when owner entity.parent is removed from their parent", () => {
+      const [component, events, clearEvents] = createSpyComponent();
+
+      const owner = new Entity([component]);
+      new Entity([], [owner]);
+
+      clearEvents();
+      owner.remove();
+      expect(events).toEqual(["unmount", "mount"]);
+    });
+  });
 });
 
 it("disposing a system disposes all entities in the hierarchy", () => {
