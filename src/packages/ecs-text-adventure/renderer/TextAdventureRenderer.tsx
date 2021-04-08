@@ -1,25 +1,37 @@
-import { render, unmountComponentAtNode } from "react-dom";
+import { render } from "react-dom";
 import { Component } from "../../ecs/Component";
 import { TextSystem } from "./TextSystem";
 
 export class TextAdventureRenderer extends Component {
-  get renderTarget() {
-    return this.entity?.system?.getContext<Element>("renderTarget");
-  }
-  clearRenderTarget() {
-    if (this.renderTarget) {
-      unmountComponentAtNode(this.renderTarget);
+  private targetElement?: Element;
+
+  private stopRendering() {
+    if (this.targetElement) {
+      this.targetElement?.remove();
+      this.targetElement = undefined;
     }
   }
+
+  private renderAdventure() {
+    const container = this.entity?.system?.getContext<Element>("renderTarget");
+    if (!this.targetElement && container instanceof Element) {
+      this.targetElement = document.createElement("div");
+      container.appendChild(this.targetElement);
+    }
+    if (!this.targetElement) {
+      return;
+    }
+    render(<TextSystem system={this.entity?.system!} />, this.targetElement);
+  }
+
   constructor() {
     super({
-      mount: () => () => this.clearRenderTarget(),
+      mount: () => () => this.stopRendering(),
       update: () => {
-        const target = this.renderTarget;
         if (!this.isActive) {
-          this.clearRenderTarget();
-        } else if (target instanceof Element) {
-          render(<TextSystem system={this.entity?.system!} />, target);
+          this.stopRendering();
+        } else {
+          this.renderAdventure();
         }
       },
     });
