@@ -28,7 +28,7 @@ export class SceneManager extends Component.extend({
   }
   get initialScene() {
     if (!this.scenes) {
-      return;
+      return undefined;
     }
     return this.initialSceneName
       ? this.scenes.find((s) => s.name.toLowerCase() === this.initialSceneName)
