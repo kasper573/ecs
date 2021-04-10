@@ -5,6 +5,7 @@ import { CommonTreeItemProps } from "./CommonTreeItem";
 type CommonTreeDropDividerProps<T, Id extends string> = {
   destination: T | undefined;
   order: number;
+  depth?: number;
 } & Pick<CommonTreeItemProps<T, Id>, "onMoveNode" | "dropSpec">;
 
 export function CommonTreeDropDivider<T, Id extends string>({
@@ -12,6 +13,7 @@ export function CommonTreeDropDivider<T, Id extends string>({
   destination,
   onMoveNode,
   dropSpec,
+  depth = 0,
 }: CommonTreeDropDividerProps<T, Id>) {
   const [{ canDrop }, drop] = useDrop(dropSpec(destination, handleDrop));
 
@@ -22,7 +24,7 @@ export function CommonTreeDropDivider<T, Id extends string>({
   }
 
   return (
-    <DropZonePlacement>
+    <DropZonePlacement $depth={depth}>
       <DropZoneSize ref={drop}>
         <DropZoneLine $visible={canDrop} />
       </DropZoneSize>
@@ -30,10 +32,14 @@ export function CommonTreeDropDivider<T, Id extends string>({
   );
 }
 
-const DropZonePlacement = styled.div`
+const DropZonePlacement = styled.div<{ $depth: number }>`
   height: 0;
   position: relative;
-  z-index: 1; // To place above CommonTreeItem
+  z-index: ${
+    ({ $depth }) =>
+      1 + // +1 To place above CommonTreeItem
+      $depth // + depth to place above ancestor drop dividers
+  };
 `;
 
 const DropZoneSize = styled.div`

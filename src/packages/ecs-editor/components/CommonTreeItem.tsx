@@ -26,6 +26,7 @@ export type CommonTreeItemProps<T, Id extends string> = {
   treeItemProps: (node: TreeNode<T>) => Omit<TreeItemProps, "nodeId">;
   faded?: (value: T) => boolean;
   dndDivider?: boolean;
+  depth?: number;
 };
 
 export function CommonTreeItem<T, Id extends string>(
@@ -40,6 +41,7 @@ export function CommonTreeItem<T, Id extends string>(
     dragSpec,
     dropSpec,
     getNodeId,
+    depth = 0,
   } = itemProps;
   const [, drag, preview] = useDrag(dragSpec(node.value));
   const [{ canDrop }, drop] = useDrop(dropSpec(node.value, handleDrop));
@@ -74,6 +76,7 @@ export function CommonTreeItem<T, Id extends string>(
         <CommonTreeItemList
           nodes={node.children}
           itemProps={omit(itemProps, "node")}
+          depth={depth + 1}
         />
       </TreeItemWithoutFocusColor>
     </>
