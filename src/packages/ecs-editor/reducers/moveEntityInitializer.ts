@@ -5,22 +5,28 @@ import {
   EntityInitializer,
   EntityInitializerId,
 } from "../../ecs-serializable/types/EntityInitializer";
+import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
 
 export const moveEntityInitializer = createEditorStateReducer<{
   id: EntityInitializerId;
-  targetId?: EntityInitializerId;
-}>(({ ecs: { entityInitializers } }, { payload: { id, targetId } }) => {
+  targetId: EntityInitializerId | undefined;
+  order: number;
+}>(({ ecs: { entityInitializers } }, { payload: { id, targetId, order } }) => {
   const list = Object.values(entityInitializers);
   if (!canMoveNodeTo(list, id, targetId, treeOptions)) {
     throw new Error("Illegal entity initializer move");
   }
 
   // Find node to mutate
-  const entity = entityInitializers[id];
-  if (!entity) {
+  const moved = entityInitializers[id];
+  if (!moved) {
     throw new Error("Could not find entity initializer to move");
   }
-  entity.parentId = targetId;
+
+  moved.parentId = targetId;
+  moved.order = order;
+
+  reorderEntityInitializers(list, moved);
 });
 
 const treeOptions: CreateTreeOptions<EntityInitializer, EntityInitializerId> = {

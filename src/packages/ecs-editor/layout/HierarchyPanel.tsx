@@ -36,6 +36,7 @@ import { Intro } from "../intro/Intro";
 import { useSystemSelector } from "../hooks/useSystemSelector";
 import { SystemSyncContext } from "../hooks/useSystemSync";
 import { getRuntimeEntityActiveStates } from "../functions/getRuntimeEntityActiveStates";
+import { compareEntityInitializers } from "../functions/compareEntityInitializers";
 
 export const HierarchyPanel = memo(() => {
   const [system] = useContext(SystemSyncContext);
@@ -198,6 +199,7 @@ function getItemProps({
 }
 
 const treeOptions: CreateTreeOptions<EntityInitializer, EntityInitializerId> = {
+  compareFn: (a, b) => compareEntityInitializers(a.value, b.value),
   getId: (entity) => entity.id,
   getParentId: (entity) => entity.parentId,
 };
