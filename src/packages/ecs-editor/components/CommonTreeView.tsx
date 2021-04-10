@@ -50,8 +50,11 @@ export function CommonTreeView<T, Id extends string>({
     }
   }
 
-  const handleToggle = (e: ChangeEvent<{}>, ids: string[]) =>
-    setExpanded(ids as Id[]);
+  const handleToggle = (e: ChangeEvent, ids: string[]) => {
+    if (isTreeViewItemIcon(e.target)) {
+      setExpanded(ids as Id[]);
+    }
+  };
 
   const handleSelect = (e: ChangeEvent<{}>, id: string) =>
     onSelectedChange(nodeMap.get(id as Id)!.value);
@@ -78,7 +81,7 @@ export function CommonTreeView<T, Id extends string>({
       <TreeViewWithLeftMargin
         expanded={expanded}
         selected={selected ? treeOptions.getId(selected) : ""}
-        onNodeToggle={handleToggle}
+        onNodeToggle={handleToggle as TreeViewProps["onNodeToggle"]}
         onNodeSelect={handleSelect}
         {...treeViewProps}
       >
@@ -99,3 +102,7 @@ const Grow = styled.div`
 const TreeViewWithLeftMargin = styled(TreeView)`
   margin-left: ${({ theme }) => theme.spacing(2)}px;
 `;
+
+// An SVG icon would have path/svg as event source
+const isTreeViewItemIcon = (target: Element) =>
+  ["path", "svg"].includes(target.tagName);
