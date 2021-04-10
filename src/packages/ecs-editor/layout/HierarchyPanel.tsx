@@ -103,16 +103,18 @@ export const HierarchyPanel = memo(() => {
     parentId?: EntityInitializerId
   ) {
     const { system } = store.getState().present.selection;
+    const id: EntityInitializerId = uuid();
     dispatch(
       core.actions.createEntityInitializer({
         systemId: system!,
-        id: uuid(),
+        id,
         parentId,
         name: entityDefinition?.name ?? "Empty",
         definitionId: entityDefinition?.id,
         components: [],
       })
     );
+    dispatch(core.actions.setSelectedEntityInitializer(id));
   }
 
   function handleMoveEntity(

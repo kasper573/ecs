@@ -35,6 +35,8 @@ import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { TreeNode } from "../tree/TreeNode";
 import { Intro } from "../intro/Intro";
+import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 
 export const LibraryPanel = memo(() => {
   const store = useStore();
@@ -93,28 +95,28 @@ export const LibraryPanel = memo(() => {
   );
 
   function handleCreateFolder(name: string, parentNodeId?: LibraryNodeId) {
-    dispatch(
-      core.actions.createLibraryFolder({
-        nodeId: uuid(),
-        id: uuid(),
-        systemId: selectedSystem?.id!,
-        parentNodeId,
-        name,
-      })
-    );
+    const folder: LibraryFolder = {
+      nodeId: uuid(),
+      id: uuid(),
+      systemId: selectedSystem?.id!,
+      parentNodeId,
+      name,
+    };
+    dispatch(core.actions.createLibraryFolder(folder));
+    dispatch(core.actions.setSelectedLibraryNode(folder.nodeId));
   }
 
   function handleCreateEntity(name: string, parentNodeId?: LibraryNodeId) {
-    dispatch(
-      core.actions.createEntityDefinition({
-        nodeId: uuid(),
-        id: uuid(),
-        systemId: selectedSystem?.id!,
-        parentNodeId,
-        name,
-        components: [],
-      })
-    );
+    const def: EntityDefinition = {
+      nodeId: uuid(),
+      id: uuid(),
+      systemId: selectedSystem?.id!,
+      parentNodeId,
+      name,
+      components: [],
+    };
+    dispatch(core.actions.createEntityDefinition(def));
+    dispatch(core.actions.setSelectedLibraryNode(def.nodeId));
   }
 
   function handleRenameNode(target: TypedLibraryNode, name: string) {
