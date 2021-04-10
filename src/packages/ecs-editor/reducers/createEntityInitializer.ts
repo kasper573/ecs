@@ -25,7 +25,10 @@ export const createEntityInitializer = createEditorStateReducer<EntityInitialize
         definition
       );
     } finally {
-      reorderEntityInitializers(Object.values(entityInitializers), initializer);
+      reorderEntityInitializers(
+        Object.values(entityInitializers),
+        entityInitializers[initializer.id]
+      );
     }
   }
 );
