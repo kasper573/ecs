@@ -10,7 +10,7 @@ import { CrudList } from "../components/CrudList";
 import { combine } from "../../ecs-common/combine";
 import { SystemIcon } from "../icons";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
 import { useDialog } from "./useDialog";
 import { useCrudDialogs } from "./useCrudDialogs";
 
@@ -28,9 +28,8 @@ export const useSystemCrud = () => {
 
   function handleCreate(name: string) {
     const system: SystemDefinition = { id: uuid(), name };
-    const entity: EntityInitializer = {
-      id: uuid(),
-      order: 0,
+    const entity = {
+      id: uuid() as EntityInitializerId,
       systemId: system.id,
       name: "Empty",
       components: [],

@@ -1,5 +1,5 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
 import { uuid } from "../../ecs-common/uuid";
 import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
@@ -21,9 +21,9 @@ test("creating an entity initializer copies all components from definition (with
     id: uuid(),
   };
 
-  const entityInitializer: EntityInitializer = {
+  const entityInitializer = {
     systemId: system.id,
-    id: uuid(),
+    id: uuid() as EntityInitializerId,
     definitionId: entityDefinition.id,
     name: entityDefinition.name,
     components: [initializerComponent],

@@ -3,11 +3,19 @@ import { EntityInitializer } from "../../ecs-serializable/types/EntityInitialize
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
 
-export const createEntityInitializer = createEditorStateReducer<EntityInitializer>(
+export const createEntityInitializer = createEditorStateReducer<
+  Omit<EntityInitializer, "order">
+>(
   (
     { ecs: { entityInitializers, entityDefinitions } },
-    { payload: initializer }
+    { payload: initializerWithoutOrder }
   ) => {
+    // Assign a temporary order that will be overwritten by the reorder function
+    const initializer: EntityInitializer = {
+      ...initializerWithoutOrder,
+      order: 0,
+    };
+
     try {
       if (!initializer.definitionId) {
         // Entity without definition
