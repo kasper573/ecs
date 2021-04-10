@@ -14,6 +14,9 @@ export function CommonTreeItemList<T, Id extends string>({
   itemProps,
   depth = 0,
 }: CommonTreeItemListProps<T, Id>) {
+  if (!nodes.length) {
+    return null;
+  }
   const dividerDestination = nodes[0] && nodes[0].parent?.value;
   return (
     <>
