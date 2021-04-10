@@ -7,8 +7,6 @@
 
 # Tasks
 
-- Convert ActionPoller to ECS component
-- TreeViewItem should not toggle when selecting
 - TreeView drag in instances panel should allow movement into a folder by dropping between items
   (this is also how reordering should be done)
 - Create Reactive component (should behave as mobx reaction/when)
@@ -46,6 +44,8 @@
   - By adding multiple files hosted on server
   - implement inspector for ComponentDefinition
 - TreeViewItem rename should be inline, also bind it to F2 hotkey or double click
+
+- Convert ActionPoller to ECS component
 
 # Nice to have
 
