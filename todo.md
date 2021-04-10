@@ -46,6 +46,7 @@
 - TreeViewItem rename should be inline, also bind it to F2 hotkey or double click
 
 - Convert ActionPoller to ECS component
+- TreeView drag should be cancelable by escape key
 
 # Nice to have
 

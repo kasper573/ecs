@@ -15,7 +15,7 @@ import { CommonTreeItemList } from "./CommonTreeItemList";
 
 export type CommonTreeItemProps<T, Id extends string> = {
   node: TreeNode<T>;
-  onMoveNode?: (source: T, destination?: T) => void;
+  onMoveNode?: (source: T, destination?: T, order?: number) => void;
   menuItems?: (value: T, props: MenuItemRendererProps) => MaybeMenuItemElements;
   dragSpec: (value: T) => DragSourceHookSpec<T, unknown, {}>;
   dropSpec: (
@@ -25,6 +25,7 @@ export type CommonTreeItemProps<T, Id extends string> = {
   getNodeId: (value: T) => Id;
   treeItemProps: (node: TreeNode<T>) => Omit<TreeItemProps, "nodeId">;
   faded?: (value: T) => boolean;
+  dndDivider?: boolean;
 };
 
 export function CommonTreeItem<T, Id extends string>(

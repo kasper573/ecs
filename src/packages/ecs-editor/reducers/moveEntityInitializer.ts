@@ -10,7 +10,7 @@ import { reorderEntityInitializers } from "../functions/reorderEntityInitializer
 export const moveEntityInitializer = createEditorStateReducer<{
   id: EntityInitializerId;
   targetId: EntityInitializerId | undefined;
-  order: number;
+  order?: number;
 }>(({ ecs: { entityInitializers } }, { payload: { id, targetId, order } }) => {
   const list = Object.values(entityInitializers);
   if (!canMoveNodeTo(list, id, targetId, treeOptions)) {
@@ -24,9 +24,7 @@ export const moveEntityInitializer = createEditorStateReducer<{
   }
 
   moved.parentId = targetId;
-  moved.order = order;
-
-  reorderEntityInitializers(list, moved);
+  reorderEntityInitializers(list, moved, order);
 });
 
 const treeOptions: CreateTreeOptions<EntityInitializer, EntityInitializerId> = {

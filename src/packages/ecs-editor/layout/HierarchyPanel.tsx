@@ -118,13 +118,14 @@ export const HierarchyPanel = memo(() => {
 
   function handleMoveEntity(
     entity: EntityInitializer,
-    target?: EntityInitializer
+    target?: EntityInitializer,
+    order?: number
   ) {
     dispatch(
       core.actions.moveEntityInitializer({
         id: entity.id,
         targetId: target?.id,
-        order: 0,
+        order,
       })
     );
   }
@@ -167,6 +168,7 @@ export const HierarchyPanel = memo(() => {
           menuItems: menuItemFactory.entity,
           onMoveNode: handleMoveEntity,
           treeItemProps: getItemProps,
+          dndDivider: true,
           dragSpec: entityInitializerDragSpec,
           dropSpec: (entity, onDrop) =>
             entityInitializerDropSpec(
