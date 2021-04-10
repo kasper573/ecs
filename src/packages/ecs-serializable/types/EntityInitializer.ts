@@ -14,6 +14,10 @@ export type EntityInitializer = {
    */
   parentId?: EntityInitializerId;
   /**
+   * The sort order among its siblings. Undefined means 0.
+   */
+  order: number;
+  /**
    * Used for presentation
    */
   name: string;

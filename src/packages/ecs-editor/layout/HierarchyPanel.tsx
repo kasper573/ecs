@@ -107,6 +107,7 @@ export const HierarchyPanel = memo(() => {
         systemId: system!,
         id: uuid(),
         parentId,
+        order: 0,
         name: entityDefinition?.name ?? "Empty",
         definitionId: entityDefinition?.id,
         components: [],
@@ -122,6 +123,7 @@ export const HierarchyPanel = memo(() => {
       core.actions.moveEntityInitializer({
         id: entity.id,
         targetId: target?.id,
+        order: 0,
       })
     );
   }

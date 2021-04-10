@@ -67,6 +67,7 @@
   },
   "entityInitializers": {
     "4a7ba7e0-4b2a-4a5b-bb94-7daffb586220": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "4a7ba7e0-4b2a-4a5b-bb94-7daffb586220",
       "name": "Modules",
@@ -90,6 +91,7 @@
       ]
     },
     "8d50812e-3f7b-41db-83ee-8335e4258b92": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "8d50812e-3f7b-41db-83ee-8335e4258b92",
       "parentId": "1e076296-2b0f-4052-8845-31719d963117",
@@ -109,6 +111,7 @@
       ]
     },
     "e3e035e4-6ea6-4fd7-99a2-c99f5ba52d16": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "e3e035e4-6ea6-4fd7-99a2-c99f5ba52d16",
       "name": "Scenes",
@@ -122,6 +125,7 @@
       ]
     },
     "1e076296-2b0f-4052-8845-31719d963117": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "1e076296-2b0f-4052-8845-31719d963117",
       "parentId": "e3e035e4-6ea6-4fd7-99a2-c99f5ba52d16",
@@ -130,6 +134,7 @@
       "components": []
     },
     "d95c66db-adab-4f62-875f-46c61fcfe11f": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "d95c66db-adab-4f62-875f-46c61fcfe11f",
       "parentId": "e3e035e4-6ea6-4fd7-99a2-c99f5ba52d16",
@@ -138,6 +143,7 @@
       "components": []
     },
     "30924e59-4456-4bcd-ad45-3eaeae486619": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "30924e59-4456-4bcd-ad45-3eaeae486619",
       "parentId": "1e076296-2b0f-4052-8845-31719d963117",
@@ -154,6 +160,7 @@
       ]
     },
     "ffc5a39c-7643-4242-9d20-02c176d34b55": {
+      "order": 0,
       "systemId": "a9bb47f4-a613-43cb-a3e0-98e6007c0047",
       "id": "ffc5a39c-7643-4242-9d20-02c176d34b55",
       "parentId": "d95c66db-adab-4f62-875f-46c61fcfe11f",

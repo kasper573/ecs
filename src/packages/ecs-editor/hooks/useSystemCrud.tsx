@@ -30,6 +30,7 @@ export const useSystemCrud = () => {
     const system: SystemDefinition = { id: uuid(), name };
     const entity: EntityInitializer = {
       id: uuid(),
+      order: 0,
       systemId: system.id,
       name: "Empty",
       components: [],

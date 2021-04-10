@@ -126,6 +126,7 @@ const mockEntityInitializers = (
       const init: EntityInitializer = {
         systemId,
         id: id("entity-initializer"),
+        order: 0,
         definitionId: def.id,
         name: `${def.name}${n}`,
         components: def.components.map(inheritComponentInitializer),
