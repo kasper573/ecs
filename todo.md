@@ -7,8 +7,6 @@
 
 # Tasks
 
-- TreeView drag in instances panel should allow movement into a folder by dropping between items
-  (this is also how reordering should be done)
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects
 
