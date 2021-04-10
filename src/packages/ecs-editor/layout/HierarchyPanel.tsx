@@ -128,6 +128,8 @@ export const HierarchyPanel = memo(() => {
         order,
       })
     );
+
+    dispatch(core.actions.setSelectedEntityInitializer(entity.id));
   }
 
   return (

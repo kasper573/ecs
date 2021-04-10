@@ -143,6 +143,7 @@ export const LibraryPanel = memo(() => {
         targetId: target?.nodeId,
       })
     );
+    dispatch(core.actions.setSelectedLibraryNode(node.nodeId));
   }
 
   return (
