@@ -5,7 +5,7 @@ import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { combine } from "../../ecs-common/combine";
-import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
+import { cloneWithIndexAsKey } from "../../ecs-common/cloneWithIndexAsKey";
 
 export const createLibraryMenuFactory = (
   onCreateFolder: (parentNodeId?: LibraryNodeId) => void,

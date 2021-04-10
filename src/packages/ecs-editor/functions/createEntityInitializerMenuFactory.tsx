@@ -8,7 +8,7 @@ import {
   EntityInitializerId,
 } from "../../ecs-serializable/types/EntityInitializer";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { cloneWithIndexAsKey } from "./cloneWithIndexAsKey";
+import { cloneWithIndexAsKey } from "../../ecs-common/cloneWithIndexAsKey";
 
 export const createEntityInitializerMenuFactory = (
   entityDefinitions: EntityDefinition[],
