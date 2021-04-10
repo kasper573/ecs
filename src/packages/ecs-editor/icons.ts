@@ -55,7 +55,7 @@ export const EntityContainerOpenIcon = createIconWithMarginIcon(
 );
 
 export const EntityContainerClosedIcon = createIconWithMarginIcon(
-  ExpandIcon,
+  CollapseIcon,
   EntityContainerIcon,
   0.25
 );
