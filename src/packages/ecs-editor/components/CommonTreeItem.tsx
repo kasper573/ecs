@@ -93,15 +93,13 @@ const TreeItemWithoutFocusColor = styled(TreeItem)<{
     background-color: transparent;
   }
 
-  transition: ${({ theme }) =>
-    theme.transitions.create("opacity", {
-      duration: theme.transitions.duration.shortest,
-      easing: theme.transitions.easing.sharp,
-    })};
-  opacity: ${({ $faded }) => ($faded ? 0.5 : 1)};
-
-  // the only direct child div is a .MuiTreeItem-content
-  > div {
+  & > .MuiTreeItem-content {
+    transition: ${({ theme }) =>
+      theme.transitions.create("opacity", {
+        duration: theme.transitions.duration.shortest,
+        easing: theme.transitions.easing.sharp,
+      })};
+    opacity: ${({ $faded }) => ($faded ? 0.5 : 1)};
     background-color: ${({ theme, $highlightDrop }) =>
       $highlightDrop ? theme.palette.divider : "transparent"};
   }

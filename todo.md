@@ -7,6 +7,8 @@
 
 # Tasks
 
+- Only enable pointer-events for CommonTreeDropDivider when dragging something droppable
+
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects
 
