@@ -39,16 +39,7 @@ export function CommonTreeView<T, Id extends string>({
     initialExpanded(nodes).map(treeOptions.getId)
   );
 
-  const [{ canDrop: canDropToRoot }, rootDrop] = useDrop(
-    itemProps.dropSpec(undefined, handleMoveToRoot)
-  );
-
-  function handleMoveToRoot(dragged: T) {
-    const { onMoveNode } = itemProps;
-    if (onMoveNode && canDropToRoot) {
-      onMoveNode(dragged);
-    }
-  }
+  const [, rootDrop] = useDrop(itemProps.dropSpec());
 
   const handleToggle = (e: ChangeEvent, ids: string[]) => {
     if (isTreeViewItemIcon(e.target)) {

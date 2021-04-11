@@ -4,11 +4,11 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
 
 export const createEntityInitializer = createEditorStateReducer<
-  Omit<EntityInitializer, "order">
+  PartialFor<EntityInitializer, "order">
 >(
   (
     { ecs: { entityInitializers, entityDefinitions } },
-    { payload: initializerWithoutOrder }
+    { payload: { order: desiredOrder, ...initializerWithoutOrder } }
   ) => {
     // Assign a temporary order that will be overwritten by the reorder function
     const initializer: EntityInitializer = {
@@ -35,7 +35,8 @@ export const createEntityInitializer = createEditorStateReducer<
     } finally {
       reorderEntityInitializers(
         Object.values(entityInitializers),
-        entityInitializers[initializer.id]
+        entityInitializers[initializer.id],
+        desiredOrder
       );
     }
   }

@@ -181,11 +181,14 @@ export const LibraryPanel = memo(() => {
         treeOptions={treeOptions}
         itemProps={{
           menuItems: menuItemFactory.node,
-          onMoveNode: handleMoveNode,
           treeItemProps: getItemProps,
           dragSpec: libraryNodeDragSpec,
-          dropSpec: (node, onDrop) =>
-            libraryNodeDropSpec(node, onDrop, () => store.getState().present),
+          dropSpec: (target) =>
+            libraryNodeDropSpec(
+              target,
+              (dropped) => handleMoveNode(dropped, target),
+              () => store.getState().present
+            ),
         }}
       />
     </Panel>

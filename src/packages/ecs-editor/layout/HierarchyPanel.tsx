@@ -1,4 +1,4 @@
-import { IconButton, Tooltip, Typography } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import { memo, useContext } from "react";
 import { shallowEqual } from "react-redux";
 import { PanelName } from "../types/PanelName";
@@ -8,9 +8,9 @@ import { useDispatch, useSelector, useStore } from "../store";
 import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
 import {
   AddIcon,
+  EntityContainerClosedIcon,
   EntityContainerOpenIcon,
   EntityInitializerIcon,
-  EntityContainerClosedIcon,
 } from "../icons";
 import { Panel } from "../components/Panel";
 import {
@@ -20,13 +20,14 @@ import {
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
 import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { DropBox } from "../components/DropBox";
-import { entityDefinitionDropSpec } from "../dnd/entityDefinitionDropSpec";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { CommonTreeView } from "../components/CommonTreeView";
 import { CreateTreeOptions } from "../tree/createTree";
 import { entityInitializerDragSpec } from "../dnd/entityInitializerDragSpec";
-import { entityInitializerDropSpec } from "../dnd/entityInitializerDropSpec";
+import {
+  EntityInitializerDropObjectTyped,
+  entityInitializerDropSpec,
+} from "../dnd/entityInitializerDropSpec";
 import { createEntityInitializerMenuFactory } from "../functions/createEntityInitializerMenuFactory";
 import { MenuFor } from "../components/MenuFor";
 import { useContextMenu } from "../hooks/useContextMenu";
@@ -37,6 +38,7 @@ import { useSystemSelector } from "../hooks/useSystemSelector";
 import { SystemSyncContext } from "../hooks/useSystemSync";
 import { getRuntimeEntityActiveStates } from "../functions/getRuntimeEntityActiveStates";
 import { compareEntityInitializers } from "../functions/compareEntityInitializers";
+import { DNDType } from "../dnd/DNDType";
 
 export const HierarchyPanel = memo(() => {
   const [system] = useContext(SystemSyncContext);
@@ -100,7 +102,8 @@ export const HierarchyPanel = memo(() => {
 
   function handleInitialize(
     entityDefinition?: EntityDefinition,
-    parentId?: EntityInitializerId
+    parentId?: EntityInitializerId,
+    order?: number
   ) {
     const { system } = store.getState().present.selection;
     const id: EntityInitializerId = uuid();
@@ -109,6 +112,7 @@ export const HierarchyPanel = memo(() => {
         systemId: system!,
         id,
         parentId,
+        order,
         name: entityDefinition?.name ?? "Empty",
         definitionId: entityDefinition?.id,
         components: [],
@@ -117,20 +121,24 @@ export const HierarchyPanel = memo(() => {
     dispatch(core.actions.setSelectedEntityInitializer(id));
   }
 
-  function handleMoveEntity(
-    entity: EntityInitializer,
+  function handleDropEntity(
+    dropped: EntityInitializerDropObjectTyped,
     target?: EntityInitializer,
     order?: number
   ) {
+    if (dropped.type === DNDType.EntityDefinition) {
+      return handleInitialize(dropped.definition, target?.id, order);
+    }
+
     dispatch(
       core.actions.moveEntityInitializer({
-        id: entity.id,
+        id: dropped.initializer.id,
         targetId: target?.id,
         order,
       })
     );
 
-    dispatch(core.actions.setSelectedEntityInitializer(entity.id));
+    dispatch(core.actions.setSelectedEntityInitializer(dropped.initializer.id));
   }
 
   return (
@@ -169,22 +177,17 @@ export const HierarchyPanel = memo(() => {
         itemProps={{
           faded: (entity) => !isRuntimeActive[entity.id],
           menuItems: menuItemFactory.entity,
-          onMoveNode: handleMoveEntity,
           treeItemProps: getItemProps,
           dndDivider: true,
           dragSpec: entityInitializerDragSpec,
-          dropSpec: (entity, onDrop) =>
+          dropSpec: (target, order) =>
             entityInitializerDropSpec(
-              entity,
-              onDrop,
+              target,
+              (dropped) => handleDropEntity(dropped, target, order),
               () => store.getState().present
             ),
         }}
-      >
-        <DropBox spec={entityDefinitionDropSpec(handleInitialize)}>
-          <Typography>Drop to create instance</Typography>
-        </DropBox>
-      </CommonTreeView>
+      />
     </Panel>
   );
 });

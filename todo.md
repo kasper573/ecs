@@ -7,6 +7,7 @@
 
 # Tasks
 
+- Allow instantiating entity definitions by DND at any depth in the hierarchy
 - Only enable pointer-events for CommonTreeDropDivider when dragging something droppable
 
 - Create Reactive component (should behave as mobx reaction/when)

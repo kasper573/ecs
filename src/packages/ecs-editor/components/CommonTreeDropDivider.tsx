@@ -6,22 +6,15 @@ type CommonTreeDropDividerProps<T, Id extends string> = {
   destination: T | undefined;
   order: number;
   depth?: number;
-} & Pick<CommonTreeItemProps<T, Id>, "onMoveNode" | "dropSpec">;
+} & Pick<CommonTreeItemProps<T, Id>, "dropSpec">;
 
 export function CommonTreeDropDivider<T, Id extends string>({
   order,
   destination,
-  onMoveNode,
   dropSpec,
   depth = 0,
 }: CommonTreeDropDividerProps<T, Id>) {
-  const [{ canDrop }, drop] = useDrop(dropSpec(destination, handleDrop));
-
-  function handleDrop(dragged: T) {
-    if (canDrop && onMoveNode) {
-      onMoveNode(dragged, destination, order);
-    }
-  }
+  const [{ canDrop }, drop] = useDrop(dropSpec(destination, order));
 
   return (
     <DropZonePlacement $depth={depth}>

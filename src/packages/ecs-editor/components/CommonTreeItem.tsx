@@ -15,12 +15,11 @@ import { CommonTreeItemList } from "./CommonTreeItemList";
 
 export type CommonTreeItemProps<T, Id extends string> = {
   node: TreeNode<T>;
-  onMoveNode?: (source: T, destination?: T, order?: number) => void;
   menuItems?: (value: T, props: MenuItemRendererProps) => MaybeMenuItemElements;
   dragSpec: (value: T) => DragSourceHookSpec<T, unknown, {}>;
   dropSpec: (
-    target: T | undefined,
-    onDrop: (dropped: T) => void
+    value?: T,
+    order?: number
   ) => DropTargetHookSpec<T, unknown, { canDrop: boolean }>;
   getNodeId: (value: T) => Id;
   treeItemProps: (node: TreeNode<T>) => Omit<TreeItemProps, "nodeId">;
@@ -35,7 +34,6 @@ export function CommonTreeItem<T, Id extends string>(
   const {
     node,
     treeItemProps,
-    onMoveNode = emptyObject,
     menuItems = emptyArray,
     faded = no,
     dragSpec,
@@ -44,7 +42,7 @@ export function CommonTreeItem<T, Id extends string>(
     depth = 0,
   } = itemProps;
   const [, drag, preview] = useDrag(dragSpec(node.value));
-  const [{ canDrop }, drop] = useDrop(dropSpec(node.value, handleDrop));
+  const [{ canDrop }, drop] = useDrop(dropSpec(node.value));
   useEmptyDNDPreview(preview);
   const [triggerProps, contextMenu] = useContextMenu((props) =>
     menuItems(node.value, props)
@@ -52,12 +50,6 @@ export function CommonTreeItem<T, Id extends string>(
   function attachDndRef(el: HTMLElement) {
     drag(el);
     drop(el);
-  }
-
-  function handleDrop(dragged: T) {
-    if (canDrop) {
-      onMoveNode(dragged, node.value);
-    }
   }
 
   const nodeId = getNodeId(node.value);
@@ -105,6 +97,5 @@ const TreeItemWithoutFocusColor = styled(TreeItem)<{
   }
 `;
 
-const emptyObject = () => ({});
 const emptyArray = () => [];
 const no = () => false;

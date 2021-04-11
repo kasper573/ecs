@@ -1,4 +1,4 @@
-import { DropTargetMonitor } from "react-dnd";
+import { DropTargetHookSpec, DropTargetMonitor } from "react-dnd";
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { EditorState } from "../types/EditorState";
 import { canMoveNodeTo } from "../tree/canMoveNodeTo";
@@ -11,18 +11,12 @@ export const libraryNodeDropSpec = (
   targetNode: TypedLibraryNode | undefined,
   handleDrop: (node: TypedLibraryNode) => void,
   getEditorState: () => EditorState
-) => ({
-  drop: handleDrop,
-  // Can move library items to root or to folders
-  accept:
-    !targetNode || targetNode.type === "folder"
-      ? [
-          DNDType.EntityDefinition,
-          DNDType.ComponentDefinition,
-          DNDType.LibraryFolder,
-        ]
-      : [],
-  collect: (monitor: DropTargetMonitor) => {
+): DropTargetHookSpec<
+  TypedLibraryNode,
+  any,
+  { canDrop: boolean; isOver: boolean }
+> => {
+  const collect = (monitor: DropTargetMonitor) => {
     const isOver = monitor.isOver({ shallow: true });
     const draggedNodeId = monitor.getItem<TypedLibraryNode | undefined>()
       ?.nodeId;
@@ -38,8 +32,26 @@ export const libraryNodeDropSpec = (
       isOver,
       canDrop: isOver && canMove,
     };
-  },
-});
+  };
+  return {
+    drop: (dragged, monitor) => {
+      const { canDrop } = collect(monitor);
+      if (canDrop) {
+        handleDrop(dragged);
+      }
+    },
+    // Can move library items to root or to folders
+    accept:
+      !targetNode || targetNode.type === "folder"
+        ? [
+            DNDType.EntityDefinition,
+            DNDType.ComponentDefinition,
+            DNDType.LibraryFolder,
+          ]
+        : [],
+    collect,
+  };
+};
 
 const treeOptions: CreateTreeOptions<LibraryFolder, LibraryNodeId> = {
   getId: (node) => node.nodeId,
