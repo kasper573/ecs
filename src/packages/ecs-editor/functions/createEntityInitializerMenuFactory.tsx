@@ -1,4 +1,4 @@
-import React from "react";
+import { MouseEvent } from "react";
 import { MenuItem } from "@material-ui/core";
 import NestedMenuItem from "material-ui-nested-menu-item";
 import { MenuItemRendererProps } from "../hooks/useMenu";
@@ -17,9 +17,9 @@ export const createEntityInitializerMenuFactory = (
     definition: EntityDefinition,
     parentEntityId?: EntityInitializerId
   ) => void,
-  onRenameEntity: (entity: EntityInitializer) => void,
-  onDuplicateEntity: (entity: EntityInitializer) => void,
-  onDeleteEntity: (entity: EntityInitializer) => void
+  onRename: (entity: EntityInitializer) => void,
+  onDuplicate: (entity: EntityInitializer) => void,
+  onDelete: (entity: EntityInitializer) => void
 ) => {
   function getCreateMenuItems(
     { close }: MenuItemRendererProps,
@@ -58,35 +58,18 @@ export const createEntityInitializerMenuFactory = (
   }
 
   function getMenuItemsForEntity(
-    entity: EntityInitializer,
+    ei: EntityInitializer,
     { close }: MenuItemRendererProps
   ) {
+    const closeAnd = (and: (x: typeof ei) => void) => (ev: MouseEvent) => {
+      close(ev);
+      and(ei);
+    };
     return [
-      ...getCommonMenuItems({ close }, entity.id),
-      <MenuItem
-        onClick={(e) => {
-          close(e);
-          onRenameEntity(entity);
-        }}
-      >
-        Rename
-      </MenuItem>,
-      <MenuItem
-        onClick={(e) => {
-          close(e);
-          onDuplicateEntity(entity);
-        }}
-      >
-        Duplicate
-      </MenuItem>,
-      <MenuItem
-        onClick={(e) => {
-          close(e);
-          onDeleteEntity(entity);
-        }}
-      >
-        Delete
-      </MenuItem>,
+      ...getCommonMenuItems({ close }, ei.id),
+      <MenuItem onClick={closeAnd(onRename)}>Rename</MenuItem>,
+      <MenuItem onClick={closeAnd(onDuplicate)}>Duplicate</MenuItem>,
+      <MenuItem onClick={closeAnd(onDelete)}>Delete</MenuItem>,
     ];
   }
 
