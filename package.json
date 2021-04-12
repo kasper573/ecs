@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@reduxjs/toolkit": "^1.5.0",
+    "events": "^3.3.0",
     "immer": "^9.0.1",
     "lodash.groupby": "^4.6.0",
     "lodash.omit": "^4.5.0",
@@ -19,6 +20,7 @@
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
     "react-dom": "^17.0.1",
+    "react-hot-loader": "^4.13.0",
     "react-redux": "^7.2.3",
     "react-use-hotkeys": "^1.1.2",
     "redux": "^4.0.5",
@@ -26,48 +28,22 @@
     "reselect": "^4.0.0",
     "serialize-javascript": "^5.0.1",
     "styled-components": "^5.2.1",
+    "tmi.js": "^1.7.5",
     "use-debounce": "^6.0.0",
     "uuid": "^8.3.2",
-    "web-vitals": "^0.2.4",
     "zod": "^1.11.12"
   },
   "scripts": {
-    "start:game": "cross-env REACT_APP_ENTRY=game react-app-rewired start",
-    "start:editor": "cross-env REACT_APP_ENTRY=editor react-app-rewired start",
-    "build:game": "cross-env REACT_APP_ENTRY=game react-app-rewired build",
-    "build:editor": "cross-env REACT_APP_ENTRY=editor react-app-rewired build",
-    "test": "react-app-rewired test",
-    "test:coverage": "react-app-rewired test --coverage --watchAll",
-    "test:circular": "react-app-rewired test --detectOpenHandles",
-    "test:circular:coverage": "react-app-rewired test --detectOpenHandles --coverage --watchAll",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ext js,ts,tsx src",
-    "lint-fix": "eslint --ext js,ts,tsx src --fix"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/packages/**/*.{js,jsx,ts,tsx}",
-      "!src/packages/shared-components/**",
-      "!src/packages/example-game/**",
-      "!<rootDir>/node_modules/**"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": 80
-      }
-    },
-    "coverageReporters": [
-      "text"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "start:game": "cd packages/example-game && cross-env NODE_ENV=development webpack-dev-server",
+    "start:editor": "cd packages/ecs-editor && cross-env NODE_ENV=development webpack-dev-server",
+    "build:game": "cd packages/example-game && snowpack build",
+    "build:editor": "cd packages/ecs-editor && snowpack build",
+    "test": "jest",
+    "test:coverage": "jest --coverage --watchAll",
+    "test:circular": "jest --detectOpenHandles",
+    "test:circular:coverage": "jest --detectOpenHandles --coverage --watchAll",
+    "lint": "eslint --ext js,ts,tsx packages",
+    "lint-fix": "eslint --ext js,ts,tsx packages --fix"
   },
   "browserslist": {
     "production": [
@@ -93,10 +69,16 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/preset-typescript": "^7.13.0",
+    "@hot-loader/react-dom": "^17.0.1",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
+    "@types/jest": "^26.0.22",
     "@types/lodash.omit": "^4.5.6",
     "@types/lodash.without": "^4.4.6",
     "@types/node": "^12.0.0",
@@ -106,21 +88,39 @@
     "@types/styled-components": "^5.1.4",
     "@types/tmi.js": "^1.7.0",
     "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.2",
+    "babel-preset-react-app": "^10.0.0",
     "cancelable-promise": "^3.2.0",
+    "copy-webpack-plugin": "^8.1.1",
     "cross-env": "^7.0.3",
-    "dotenv": "^8.2.0",
+    "eslint": "^7.24.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.7.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^4.0.0",
+    "fork-ts-checker-webpack-plugin": "^6.2.1",
+    "html-webpack-plugin": "^4.4.1",
     "husky": "^4.3.6",
+    "jest": "^26.6.3",
     "lint-staged": "^10.5.3",
+    "node-polyfill-webpack-plugin": "^1.1.0",
     "prettier": "^2.2.1",
-    "react-app-rewire-styled-components": "^3.0.2",
-    "react-app-rewired": "^2.1.8",
-    "react-scripts": "4.0.1",
-    "tmi.js": "^1.7.1",
-    "ts-jest": "^26.4.4",
+    "react-refresh": "^0.9.0",
+    "ts-jest": "^26.5.4",
     "ts-node": "^9.1.1",
+    "type-fest": "^1.0.1",
     "typed-emitter": "^1.3.1",
-    "typescript": "^4.1.3"
+    "typescript": "^4.2.4",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

@@ -7,16 +7,14 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types", "./src/types"],
     "downlevelIteration": true,
+    "experimentalDecorators": true,
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["packages", "types"],
+  "exclude": ["node_modules"]
 }
