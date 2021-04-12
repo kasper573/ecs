@@ -39,9 +39,6 @@
     "build:game": "cd packages/example-game && snowpack build",
     "build:editor": "cd packages/ecs-editor && snowpack build",
     "test": "jest",
-    "test:coverage": "jest --coverage --watchAll",
-    "test:circular": "jest --detectOpenHandles",
-    "test:circular:coverage": "jest --detectOpenHandles --coverage --watchAll",
     "lint": "eslint --ext js,ts,tsx packages",
     "lint-fix": "eslint --ext js,ts,tsx packages --fix"
   },
