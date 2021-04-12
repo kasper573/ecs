@@ -1,7 +1,7 @@
 import {
   ComponentPropertyFunctionDefinition,
   ComponentPropertyValueDefinition,
-} from "../types/ComponentPropertiesDefinition";
+} from "../definition/ComponentPropertiesDefinition";
 
 export const isFunctionDefinition = (
   value: ComponentPropertyValueDefinition

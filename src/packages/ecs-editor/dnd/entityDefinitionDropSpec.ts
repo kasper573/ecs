@@ -1,5 +1,5 @@
 import { DropTargetMonitor } from "react-dnd";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import { DNDType } from "./DNDType";
 
 export const entityDefinitionDropSpec = (

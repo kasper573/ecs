@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 
-import { ComponentDefinitionId } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinitionId } from "../../ecs-serializable/definition/ComponentDefinition";
 
 export const selectComponentDefinition = (
   { ecs: { componentDefinitions } }: EditorState,

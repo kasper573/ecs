@@ -1,4 +1,4 @@
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { ComponentDefinitionIcon } from "../icons";
 

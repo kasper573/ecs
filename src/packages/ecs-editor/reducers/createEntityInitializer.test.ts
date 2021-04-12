@@ -1,7 +1,7 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 import { uuid } from "../../ecs-common/uuid";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
 import { createEntityInitializer } from "./createEntityInitializer";
 

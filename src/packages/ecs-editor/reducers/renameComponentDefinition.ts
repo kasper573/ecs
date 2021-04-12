@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { ComponentDefinitionId } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinitionId } from "../../ecs-serializable/definition/ComponentDefinition";
 
 export const renameComponentDefinition = createEditorStateReducer<{
   id: ComponentDefinitionId;

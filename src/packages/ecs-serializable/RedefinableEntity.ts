@@ -3,11 +3,11 @@ import { typedKeys } from "../ecs-common/typedKeys";
 import {
   ComponentInitializer,
   ComponentInitializerId,
-} from "./types/ComponentInitializer";
+} from "./definition/ComponentInitializer";
 import { DeserializationMemory } from "./DeserializationMemory";
 import { createComponentProperty } from "./functions/createComponentProperty";
 import { DeserializedEntity } from "./types/DeserializedEntity";
-import { EntityInitializerId } from "./types/EntityInitializer";
+import { EntityInitializerId } from "./definition/EntityInitializer";
 
 export class RedefinableEntity extends DeserializedEntity {
   constructor(id: EntityInitializerId, name?: string) {

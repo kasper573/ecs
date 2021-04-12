@@ -1,5 +1,5 @@
 import { System } from "../../ecs/System";
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 
 export const getRuntimeEntityActiveStates = (system: System) =>
   system.root.activeDescendants.reduce(

@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { ExpandIcon } from "../icons";
 import { useSelector } from "../store";

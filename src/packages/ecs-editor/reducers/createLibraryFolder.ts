@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
 
 export const createLibraryFolder = createEditorStateReducer<LibraryFolder>(
   ({ ecs: { libraryFolders } }, { payload: folder }) => {

@@ -2,7 +2,7 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 import {
   EntityDefinition,
   EntityDefinitionId,
-} from "../../ecs-serializable/types/EntityDefinition";
+} from "../../ecs-serializable/definition/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { duplicateName } from "../functions/duplicateName";
 

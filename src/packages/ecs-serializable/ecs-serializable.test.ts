@@ -8,18 +8,21 @@ import { createSystem as realCreateSystem } from "./functions/createSystem";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "./types/EntityInitializer";
+} from "./definition/EntityInitializer";
 import {
   ComponentDefinition,
   ComponentDefinitionId,
-} from "./types/ComponentDefinition";
-import { EntityDefinition, EntityDefinitionId } from "./types/EntityDefinition";
-import { SystemDefinition } from "./types/SystemDefinition";
+} from "./definition/ComponentDefinition";
+import {
+  EntityDefinition,
+  EntityDefinitionId,
+} from "./definition/EntityDefinition";
+import { SystemDefinition } from "./definition/SystemDefinition";
 import { DeserializationMemory } from "./DeserializationMemory";
-import { ComponentInitializer } from "./types/ComponentInitializer";
+import { ComponentInitializer } from "./definition/ComponentInitializer";
 import { createComponentPropertyDefinition } from "./functions/createComponentPropertyDefinition";
 import { createECSDefinition } from "./functions/createECSDefinition";
-import { ECSDefinition } from "./types/ECSDefinition";
+import { ECSDefinition } from "./definition/ECSDefinition";
 import { NativeComponents } from "./types/NativeComponents";
 
 class Foo extends Component.extend({

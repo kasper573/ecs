@@ -2,10 +2,10 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 import {
   LibraryNode,
   LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
+} from "../../ecs-serializable/definition/LibraryNode";
 import { canMoveNodeTo } from "../tree/canMoveNodeTo";
 import { CreateTreeOptions } from "../tree/createTree";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
 
 export const moveLibraryNode = createEditorStateReducer<{
   id: LibraryNodeId;

@@ -11,7 +11,7 @@ import { Editor } from "../packages/ecs-editor/editors/Editor";
 import { createStore } from "../packages/ecs-editor/store";
 import { NativeComponentsContext } from "../packages/ecs-editor/NativeComponentsContext";
 import { createEditorState } from "../packages/ecs-editor/functions/createEditorState";
-import { ECSDefinition } from "../packages/ecs-serializable/types/ECSDefinition";
+import { ECSDefinition } from "../packages/ecs-serializable/definition/ECSDefinition";
 import { Inventory } from "../packages/ecs-text-adventure/collectable/Inventory";
 import { InteractionMemory } from "../packages/ecs-text-adventure/interactive/InteractionMemory";
 import { SceneManager } from "../packages/ecs-scene-manager/SceneManager";

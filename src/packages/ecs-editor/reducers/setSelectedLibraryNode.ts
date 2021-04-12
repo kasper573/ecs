@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNodeId } from "../../ecs-serializable/definition/LibraryNode";
 import {
   setSelectedObject,
   setSelectedObjectAction,

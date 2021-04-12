@@ -1,7 +1,7 @@
 import {
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
-} from "../types/ComponentPropertiesDefinition";
+} from "../definition/ComponentPropertiesDefinition";
 import { deserializeJS } from "../jsSerializer";
 import { isFunctionDefinition } from "./isFunctionDefinition";
 

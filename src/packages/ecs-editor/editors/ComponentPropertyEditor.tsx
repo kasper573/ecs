@@ -7,7 +7,7 @@ import {
   ComponentPropertiesDefinition,
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
-} from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+} from "../../ecs-serializable/definition/ComponentPropertiesDefinition";
 import { createComponentPropertyDefinition } from "../../ecs-serializable/functions/createComponentPropertyDefinition";
 import { isFunctionDefinition } from "../../ecs-serializable/functions/isFunctionDefinition";
 import { Intro } from "../intro/Intro";

@@ -1,5 +1,5 @@
-import { ECSDefinition } from "../types/ECSDefinition";
-import { SystemDefinitionId } from "../types/SystemDefinition";
+import { ECSDefinition } from "../definition/ECSDefinition";
+import { SystemDefinitionId } from "../definition/SystemDefinition";
 import { createECSDefinition } from "./createECSDefinition";
 
 export const getECSDefinitionForSystem = (

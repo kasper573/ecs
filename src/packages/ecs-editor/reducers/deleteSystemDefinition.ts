@@ -1,6 +1,6 @@
 import { removeNominal } from "../../ecs-common/removeNominal";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/definition/SystemDefinition";
 import { core } from "../core";
 import { deleteEntityDefinition } from "./deleteEntityDefinition";
 import { deleteLibraryFolder } from "./deleteLibraryFolder";

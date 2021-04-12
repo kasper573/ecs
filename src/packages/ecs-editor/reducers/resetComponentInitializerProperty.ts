@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { ComponentInitializerId } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializerId } from "../../ecs-serializable/definition/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 import { getTargetComponent } from "./setComponentInitializerProperty";
 

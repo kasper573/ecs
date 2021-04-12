@@ -1,8 +1,8 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
-import { ComponentInitializerId } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializerId } from "../../ecs-serializable/definition/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
-import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { ComponentPropertyValueDefinition } from "../../ecs-serializable/definition/ComponentPropertiesDefinition";
 import { EditorState } from "../types/EditorState";
 
 type setComponentPropertyPayload = ComponentInitializerReducerPayload<{

@@ -1,6 +1,6 @@
-import { ComponentInitializerId } from "./ComponentInitializer";
-import { ComponentPropertiesDefinition } from "./ComponentPropertiesDefinition";
-import { EntityInitializerId } from "./EntityInitializer";
+import { ComponentInitializerId } from "../definition/ComponentInitializer";
+import { ComponentPropertiesDefinition } from "../definition/ComponentPropertiesDefinition";
+import { EntityInitializerId } from "../definition/EntityInitializer";
 
 export class ComponentPropertyMemoryMap extends Map<
   EntityInitializerId,

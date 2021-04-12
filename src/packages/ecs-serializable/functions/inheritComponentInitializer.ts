@@ -1,4 +1,4 @@
-import { ComponentInitializer } from "../types/ComponentInitializer";
+import { ComponentInitializer } from "../definition/ComponentInitializer";
 
 export const inheritComponentInitializer = ({
   id,

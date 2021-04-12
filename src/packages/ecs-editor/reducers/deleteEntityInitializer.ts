@@ -1,5 +1,5 @@
 import { removeNominal } from "../../ecs-common/removeNominal";
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
 export const deleteEntityInitializer = createEditorStateReducer<EntityInitializerId>(

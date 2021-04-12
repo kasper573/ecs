@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/definition/SystemDefinition";
 import {
   setSelectedObject,
   setSelectedObjectAction,

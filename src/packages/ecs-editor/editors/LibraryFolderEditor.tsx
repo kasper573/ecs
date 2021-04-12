@@ -1,6 +1,6 @@
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { FolderIcon } from "../icons";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
 import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 
 export type LibraryFolderEditorProps = { value: LibraryFolder };

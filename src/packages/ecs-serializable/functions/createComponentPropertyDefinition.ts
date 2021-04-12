@@ -1,7 +1,7 @@
 import {
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
-} from "../types/ComponentPropertiesDefinition";
+} from "../definition/ComponentPropertiesDefinition";
 import { serializeJS } from "../jsSerializer";
 
 export const createComponentPropertyDefinition = (

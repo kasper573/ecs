@@ -1,7 +1,7 @@
 import {
   ComponentProperties,
   ComponentPropertiesDefinition,
-} from "../types/ComponentPropertiesDefinition";
+} from "../definition/ComponentPropertiesDefinition";
 import { createComponentProperty } from "./createComponentProperty";
 
 /**

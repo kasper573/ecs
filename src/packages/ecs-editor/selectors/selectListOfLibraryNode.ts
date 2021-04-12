@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/definition/SystemDefinition";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 import { selectListOfLibraryFolder } from "./selectListOfLibraryFolder";
 import { selectListOfComponentDefinition } from "./selectListOfComponentDefinition";

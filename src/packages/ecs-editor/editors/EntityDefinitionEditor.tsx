@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { Typography } from "@material-ui/core";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { EntityDefinitionIcon } from "../icons";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { useDispatch, useStore } from "../store";
 import { core } from "../core";
 import { DropBox } from "../components/DropBox";
@@ -14,7 +14,7 @@ import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec"
 import { useDialog } from "../hooks/useDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
-import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { ComponentPropertyValueDefinition } from "../../ecs-serializable/definition/ComponentPropertiesDefinition";
 import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 import { ComponentInitializerList } from "./ComponentInitializerList";
 

@@ -1,5 +1,5 @@
 import { EditorState } from "../types/EditorState";
-import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinitionId } from "../../ecs-serializable/definition/EntityDefinition";
 
 export const selectEntityDefinition = (
   { ecs: { entityDefinitions } }: EditorState,

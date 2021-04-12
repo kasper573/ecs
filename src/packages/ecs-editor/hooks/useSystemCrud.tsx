@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Dialog, DialogTitle } from "@material-ui/core";
 import { core } from "../core";
 import { uuid } from "../../ecs-common/uuid";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinition } from "../../ecs-serializable/definition/SystemDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { useDispatch, useSelector } from "../store";
@@ -10,7 +10,7 @@ import { CrudList } from "../components/CrudList";
 import { combine } from "../../ecs-common/combine";
 import { SystemIcon } from "../icons";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 import { useDialog } from "./useDialog";
 import { useCrudDialogs } from "./useCrudDialogs";
 

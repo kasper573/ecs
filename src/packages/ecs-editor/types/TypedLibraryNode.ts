@@ -1,6 +1,6 @@
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
 
 export type TypedLibraryNode =
   | LibraryNodeType<EntityDefinition, "entity">

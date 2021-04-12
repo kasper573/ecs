@@ -20,7 +20,7 @@ import {
   FolderIcon,
   FolderOpenIcon,
 } from "../icons";
-import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNodeId } from "../../ecs-serializable/definition/LibraryNode";
 import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
 import { useContextMenu } from "../hooks/useContextMenu";
 import { createLibraryMenuFactory } from "../functions/createLibraryMenuFactory";
@@ -35,8 +35,8 @@ import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
 import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
 import { TreeNode } from "../tree/TreeNode";
 import { Intro } from "../intro/Intro";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 
 export const LibraryPanel = memo(() => {
   const store = useStore();

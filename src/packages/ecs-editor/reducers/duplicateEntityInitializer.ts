@@ -3,7 +3,7 @@ import { uuid } from "../../ecs-common/uuid";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
+} from "../../ecs-serializable/definition/EntityInitializer";
 import { duplicateName } from "../functions/duplicateName";
 
 export const duplicateEntityInitializer = createEditorStateReducer<EntityInitializerId>(

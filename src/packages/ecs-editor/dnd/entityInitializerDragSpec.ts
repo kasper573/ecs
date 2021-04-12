@@ -1,4 +1,4 @@
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 import { DNDType } from "./DNDType";
 
 export const entityInitializerDragSpec = (entity: EntityInitializer) => ({

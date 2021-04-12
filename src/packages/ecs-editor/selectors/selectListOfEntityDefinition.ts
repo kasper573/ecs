@@ -1,6 +1,6 @@
 import { EditorState } from "../types/EditorState";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
-import { SystemDefinitionId } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinitionId } from "../../ecs-serializable/definition/SystemDefinition";
 
 const selectParams = (
   state: EditorState,

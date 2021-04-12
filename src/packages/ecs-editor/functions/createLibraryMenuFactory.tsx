@@ -1,7 +1,7 @@
 import { MouseEvent } from "react";
 import { MenuItem } from "@material-ui/core";
 import NestedMenuItem from "material-ui-nested-menu-item";
-import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryNodeId } from "../../ecs-serializable/definition/LibraryNode";
 import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { MenuItemRendererProps } from "../hooks/useMenu";
 import { combine } from "../../ecs-common/combine";

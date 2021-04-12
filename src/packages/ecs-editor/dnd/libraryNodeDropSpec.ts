@@ -3,8 +3,8 @@ import { TypedLibraryNode } from "../types/TypedLibraryNode";
 import { EditorState } from "../types/EditorState";
 import { canMoveNodeTo } from "../tree/canMoveNodeTo";
 import { CreateTreeOptions } from "../tree/createTree";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
-import { LibraryNodeId } from "../../ecs-serializable/types/LibraryNode";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
+import { LibraryNodeId } from "../../ecs-serializable/definition/LibraryNode";
 import { DNDType } from "./DNDType";
 
 export const libraryNodeDropSpec = (

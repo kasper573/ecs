@@ -2,7 +2,7 @@ import { EditorState } from "../types/EditorState";
 import {
   LibraryNode,
   LibraryNodeId,
-} from "../../ecs-serializable/types/LibraryNode";
+} from "../../ecs-serializable/definition/LibraryNode";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
 
 const selectParams = ({ ecs }: EditorState, nodeId: LibraryNodeId) =>

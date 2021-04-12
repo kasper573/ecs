@@ -1,5 +1,5 @@
 import { uuid } from "../../ecs-common/uuid";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 

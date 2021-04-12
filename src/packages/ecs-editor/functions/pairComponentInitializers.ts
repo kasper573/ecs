@@ -1,5 +1,5 @@
 import { uniq, groupBy } from "lodash";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 
 export const pairComponentInitializers = (
   baseItems: ComponentInitializer[],

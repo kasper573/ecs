@@ -1,4 +1,4 @@
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinition } from "../../ecs-serializable/definition/SystemDefinition";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
 export const createSystemDefinition = createEditorStateReducer<SystemDefinition>(

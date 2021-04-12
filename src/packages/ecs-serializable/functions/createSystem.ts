@@ -1,5 +1,5 @@
 import { NativeComponents } from "../types/NativeComponents";
-import { ECSDefinition } from "../types/ECSDefinition";
+import { ECSDefinition } from "../definition/ECSDefinition";
 import { DeserializationMemory } from "../DeserializationMemory";
 import { DeserializedSystem } from "../types/DeserializedSystem";
 import { updateSystem } from "./updateSystem";

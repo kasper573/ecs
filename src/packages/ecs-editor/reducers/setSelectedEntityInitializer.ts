@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 import {
   setSelectedObject,
   setSelectedObjectAction,

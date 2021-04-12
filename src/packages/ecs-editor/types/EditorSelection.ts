@@ -1,4 +1,4 @@
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinition } from "../../ecs-serializable/definition/SystemDefinition";
 import { InspectedValue } from "./InspectedValue";
 
 /**

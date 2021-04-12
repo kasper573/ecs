@@ -16,9 +16,9 @@ import { Panel } from "../components/Panel";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
+} from "../../ecs-serializable/definition/EntityInitializer";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import { uuid } from "../../ecs-common/uuid";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { CommonTreeView } from "../components/CommonTreeView";

@@ -3,7 +3,7 @@ import { createEditorStateReducer } from "../functions/createEditorStateReducer"
 import {
   ComponentInitializer,
   ComponentInitializerId,
-} from "../../ecs-serializable/types/ComponentInitializer";
+} from "../../ecs-serializable/definition/ComponentInitializer";
 import { ComponentInitializerReducerPayload } from "../types/ComponentInitializerReducerPayload";
 import { core } from "../core";
 import { EditorState } from "../types/EditorState";

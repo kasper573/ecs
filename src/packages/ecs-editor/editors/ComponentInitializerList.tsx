@@ -1,5 +1,5 @@
 import React from "react";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { pairComponentInitializers } from "../functions/pairComponentInitializers";
 import {
   ComponentInitializerAccordion,

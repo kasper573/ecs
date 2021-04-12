@@ -1,5 +1,5 @@
-import { EntityInitializer } from "../types/EntityInitializer";
-import { EntityDefinition } from "../types/EntityDefinition";
+import { EntityInitializer } from "../definition/EntityInitializer";
+import { EntityDefinition } from "../definition/EntityDefinition";
 import { inheritComponentInitializer } from "./inheritComponentInitializer";
 
 export const inheritEntityDefinitionComponents = (

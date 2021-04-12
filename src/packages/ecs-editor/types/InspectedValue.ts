@@ -1,5 +1,5 @@
-import { LibraryNode } from "../../ecs-serializable/types/LibraryNode";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { LibraryNode } from "../../ecs-serializable/definition/LibraryNode";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 
 /**
  * An EditorSelection value that represents what should be displayed in the inspector panel

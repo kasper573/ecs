@@ -1,5 +1,5 @@
 import { inheritEntityDefinitionComponents } from "../../ecs-serializable/functions/inheritEntityDefinitionComponents";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
 

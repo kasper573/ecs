@@ -1,7 +1,7 @@
 import { uniq } from "lodash";
 import { without } from "lodash";
-import { EntityDefinition } from "../types/EntityDefinition";
-import { EntityInitializer } from "../types/EntityInitializer";
+import { EntityDefinition } from "../definition/EntityDefinition";
+import { EntityInitializer } from "../definition/EntityInitializer";
 import { DeserializationMemory } from "../DeserializationMemory";
 import { RedefinableEntity } from "../RedefinableEntity";
 import { defined } from "../../ecs-common/defined";

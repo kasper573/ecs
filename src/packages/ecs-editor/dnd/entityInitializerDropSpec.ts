@@ -5,8 +5,8 @@ import { CreateTreeOptions } from "../tree/createTree";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+} from "../../ecs-serializable/definition/EntityInitializer";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import { DNDType } from "./DNDType";
 
 export type EntityInitializerDropObject = EntityInitializer | EntityDefinition;

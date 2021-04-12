@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { LibraryFolderId } from "../../ecs-serializable/types/LibraryFolder";
+import { LibraryFolderId } from "../../ecs-serializable/definition/LibraryFolder";
 
 export const renameLibraryFolder = createEditorStateReducer<{
   id: LibraryFolderId;

@@ -1,5 +1,5 @@
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
-import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
+import { EntityDefinitionId } from "../../ecs-serializable/definition/EntityDefinition";
 
 /**
  * Common payload for component initializer reducers

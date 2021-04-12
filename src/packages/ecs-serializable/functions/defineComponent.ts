@@ -1,4 +1,4 @@
-import { ComponentDefinition } from "../types/ComponentDefinition";
+import { ComponentDefinition } from "../definition/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
 import { Component } from "../../ecs/Component";
 

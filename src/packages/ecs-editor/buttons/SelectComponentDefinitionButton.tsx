@@ -3,7 +3,7 @@ import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { bindPopper, bindToggle } from "material-ui-popup-state";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { useSelector } from "../store";
 import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
 import { AddIcon } from "../icons";

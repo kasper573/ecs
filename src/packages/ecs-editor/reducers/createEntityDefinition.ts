@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 
 export const createEntityDefinition = createEditorStateReducer<EntityDefinition>(
   ({ ecs: { entityDefinitions } }, { payload: def }) => {

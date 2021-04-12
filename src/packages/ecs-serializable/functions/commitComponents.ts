@@ -1,5 +1,5 @@
 import { without } from "lodash";
-import { ComponentDefinition } from "../types/ComponentDefinition";
+import { ComponentDefinition } from "../definition/ComponentDefinition";
 import { NativeComponents } from "../types/NativeComponents";
 import { DeserializationMemory } from "../DeserializationMemory";
 import { defineComponent } from "./defineComponent";

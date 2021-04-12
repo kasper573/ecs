@@ -5,7 +5,7 @@ import { DeleteIcon, EditIcon } from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { SystemDefinition } from "../../ecs-serializable/types/SystemDefinition";
+import { SystemDefinition } from "../../ecs-serializable/definition/SystemDefinition";
 import { core } from "../core";
 
 export const SystemHeader = memo(() => {

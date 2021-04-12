@@ -1,21 +1,21 @@
-import { ECSDefinition } from "../types/ECSDefinition";
+import { ECSDefinition } from "../definition/ECSDefinition";
 import {
   ComponentDefinition,
   ComponentDefinitionId,
-} from "../types/ComponentDefinition";
-import { LibraryFolder, LibraryFolderId } from "../types/LibraryFolder";
+} from "../definition/ComponentDefinition";
+import { LibraryFolder, LibraryFolderId } from "../definition/LibraryFolder";
 import {
   SystemDefinition,
   SystemDefinitionId,
-} from "../types/SystemDefinition";
+} from "../definition/SystemDefinition";
 import {
   EntityDefinition,
   EntityDefinitionId,
-} from "../types/EntityDefinition";
+} from "../definition/EntityDefinition";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../types/EntityInitializer";
+} from "../definition/EntityInitializer";
 
 /**
  * Convenience factory for initializing an ECSDefinition without having to assert each record.

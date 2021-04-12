@@ -6,8 +6,8 @@ import { combine } from "../../ecs-common/combine";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+} from "../../ecs-serializable/definition/EntityInitializer";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import { cloneWithIndexAsKey } from "../../ecs-common/cloneWithIndexAsKey";
 
 export const createEntityInitializerMenuFactory = (

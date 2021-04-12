@@ -1,12 +1,12 @@
 import React, { useCallback } from "react";
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 import { EntityDefinitionIcon, EntityInitializerIcon } from "../icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { useDispatch, useSelector, useStore } from "../store";
 import { selectEntityDefinition } from "../selectors/selectEntityDefinition";
@@ -16,7 +16,7 @@ import { componentDefinitionDropSpec } from "../dnd/componentDefinitionDropSpec"
 import { useDialog } from "../hooks/useDialog";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
-import { ComponentPropertyValueDefinition } from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+import { ComponentPropertyValueDefinition } from "../../ecs-serializable/definition/ComponentPropertiesDefinition";
 import { InspectorPanelHeader } from "../components/InspectorPanelHeader";
 import { getEntityDisplayName } from "../functions/getEntityDisplayName";
 import { ComponentInitializerList } from "./ComponentInitializerList";

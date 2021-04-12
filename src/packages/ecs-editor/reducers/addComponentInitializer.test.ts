@@ -1,5 +1,5 @@
 import { mockEditorState } from "../functions/mockEditorState";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
 import { uuid } from "../../ecs-common/uuid";
 import { core } from "../core";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";

@@ -1,14 +1,14 @@
 import { ReactElement } from "react";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
 import {
   ComponentDefinitionIcon,
   EntityDefinitionIcon,
   EntityInitializerIcon,
   FolderIcon,
 } from "../icons";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 import { DNDType } from "./DNDType";
 import { DragPreview } from "./DragPreview";
 

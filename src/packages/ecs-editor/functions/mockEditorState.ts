@@ -3,17 +3,17 @@ import { EditorState } from "../types/EditorState";
 import {
   SystemDefinition,
   SystemDefinitionId,
-} from "../../ecs-serializable/types/SystemDefinition";
+} from "../../ecs-serializable/definition/SystemDefinition";
 import { uuid } from "../../ecs-common/uuid";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
-import { EntityDefinition } from "../../ecs-serializable/types/EntityDefinition";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
-import { LibraryFolder } from "../../ecs-serializable/types/LibraryFolder";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
+import { EntityDefinition } from "../../ecs-serializable/definition/EntityDefinition";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
+import { ECSDefinition } from "../../ecs-serializable/definition/ECSDefinition";
+import { LibraryFolder } from "../../ecs-serializable/definition/LibraryFolder";
 import { NativeComponents } from "../../ecs-serializable/types/NativeComponents";
 import { Component } from "../../ecs/Component";
 import { getECSDefinitionForSystem } from "../../ecs-serializable/functions/getECSDefinitionForSystem";
-import { EntityInitializer } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializer } from "../../ecs-serializable/definition/EntityInitializer";
 import { inheritComponentInitializer } from "../../ecs-serializable/functions/inheritComponentInitializer";
 import { createEditorState } from "./createEditorState";
 

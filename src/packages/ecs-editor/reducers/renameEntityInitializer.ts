@@ -1,4 +1,4 @@
-import { EntityInitializerId } from "../../ecs-serializable/types/EntityInitializer";
+import { EntityInitializerId } from "../../ecs-serializable/definition/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 
 export const renameEntityInitializer = createEditorStateReducer<{

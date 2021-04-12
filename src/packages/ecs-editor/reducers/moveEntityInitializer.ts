@@ -4,7 +4,7 @@ import { CreateTreeOptions } from "../tree/createTree";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../ecs-serializable/types/EntityInitializer";
+} from "../../ecs-serializable/definition/EntityInitializer";
 import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
 
 export const moveEntityInitializer = createEditorStateReducer<{

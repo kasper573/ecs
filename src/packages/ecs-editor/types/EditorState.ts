@@ -1,5 +1,5 @@
 import { PaletteType } from "@material-ui/core";
-import { ECSDefinition } from "../../ecs-serializable/types/ECSDefinition";
+import { ECSDefinition } from "../../ecs-serializable/definition/ECSDefinition";
 import { EditorSelectionName, EditorSelectionValues } from "./EditorSelection";
 
 /**

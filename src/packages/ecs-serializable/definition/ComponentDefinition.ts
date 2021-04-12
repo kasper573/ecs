@@ -1,4 +1,4 @@
-import { NativeComponentName } from "./NativeComponents";
+import { NativeComponentName } from "../types/NativeComponents";
 import { LibraryNode } from "./LibraryNode";
 
 export type ComponentDefinitionId = NominalString<"ComponentDefinitionId">;

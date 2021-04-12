@@ -1,5 +1,5 @@
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
-import { EntityDefinitionId } from "../../ecs-serializable/types/EntityDefinition";
+import { EntityDefinitionId } from "../../ecs-serializable/definition/EntityDefinition";
 
 export const renameEntityDefinition = createEditorStateReducer<{
   id: EntityDefinitionId;

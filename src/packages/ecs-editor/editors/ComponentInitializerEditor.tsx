@@ -1,12 +1,12 @@
 import { Table, TableBody } from "@material-ui/core";
 import { useContext } from "react";
-import { ComponentInitializer } from "../../ecs-serializable/types/ComponentInitializer";
-import { ComponentDefinition } from "../../ecs-serializable/types/ComponentDefinition";
+import { ComponentInitializer } from "../../ecs-serializable/definition/ComponentInitializer";
+import { ComponentDefinition } from "../../ecs-serializable/definition/ComponentDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import {
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
-} from "../../ecs-serializable/types/ComponentPropertiesDefinition";
+} from "../../ecs-serializable/definition/ComponentPropertiesDefinition";
 import { PropertyInfo } from "../../property-bag/types/PropertyInfo";
 import { typedKeys } from "../../ecs-common/typedKeys";
 import { ComponentPropertyEditor } from "./ComponentPropertyEditor";

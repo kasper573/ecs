@@ -1,6 +1,6 @@
 import { RedefinableEntity } from "../RedefinableEntity";
-import { EntityDefinition } from "../types/EntityDefinition";
-import { EntityInitializerId } from "../types/EntityInitializer";
+import { EntityDefinition } from "../definition/EntityDefinition";
+import { EntityInitializerId } from "../definition/EntityInitializer";
 
 export const defineEntity = (definition: EntityDefinition) =>
   class DefinedEntity extends RedefinableEntity {
