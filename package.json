@@ -36,8 +36,8 @@
   "scripts": {
     "start:game": "cd packages/example-game && cross-env NODE_ENV=development webpack-dev-server",
     "start:editor": "cd packages/ecs-editor && cross-env NODE_ENV=development webpack-dev-server",
-    "build:game": "cd packages/example-game && snowpack build",
-    "build:editor": "cd packages/ecs-editor && snowpack build",
+    "build:game": "cd packages/example-game && cross-env NODE_ENV=production webpack",
+    "build:editor": "cd packages/ecs-editor && cross-env NODE_ENV=production webpack",
     "test": "jest",
     "lint": "eslint --ext js,ts,tsx packages",
     "lint-fix": "eslint --ext js,ts,tsx packages --fix"
