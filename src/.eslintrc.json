@@ -1,4 +1,0 @@
-{
-  "plugins": ["import"],
-  "rules": { "import/order": ["error"] }
-}
