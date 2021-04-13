@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { System } from "../../../ecs/src/System";
+import { System } from "../ecs/src/System";
 
 export const RenderTarget = ({ system }: { system: System }) => {
   const [renderTarget, setRenderTarget] = useState<HTMLDivElement | null>(null);
