@@ -44,5 +44,6 @@ module.exports = {
   },
   devServer: {
     hot: true,
+    port: process.env.WEBPACK_DEV_SERVER_PORT,
   },
 };
