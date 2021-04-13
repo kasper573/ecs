@@ -1,11 +1,12 @@
 # Abstract
 
 - Replace NativeComponents solution with serializable JS/TS (or something?)
-- Persisting object definitions
 - Sandbox user submitted scripts
 - Script editor (monaco?)
 
 # Tasks
+
+- Validate parsed ECS definitions
 
 - Allow instantiating entity definitions by DND at any depth in the hierarchy
 - Only enable pointer-events for CommonTreeDropDivider when dragging something droppable

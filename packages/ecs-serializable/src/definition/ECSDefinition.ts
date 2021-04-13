@@ -9,7 +9,7 @@ import {
 
 /**
  * An easily serializable entity component system.
- * (The entire data structure supports JSON.stringify and JSON.parse)
+ * (The entire data structure is JSON serializable)
  */
 export type ECSDefinition = {
   systems: Record<SystemDefinitionId, SystemDefinition>;

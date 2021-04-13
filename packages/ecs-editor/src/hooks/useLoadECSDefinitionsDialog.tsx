@@ -2,7 +2,7 @@ import { useDispatch, useStore } from "../store";
 import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { ECSDefinition } from "../../../ecs-serializable/src/definition/ECSDefinition";
 import { ConfirmDialog } from "../dialogs/ConfirmDialog";
-import { loadECSDefinitionsFromFS } from "../functions/loadECSDefinitionsFromFS";
+import { loadECSDefinitionsFromFS } from "../storage/fsECSDefinitions";
 import { getIntersectingSystemDefinitions } from "../functions/getIntersectingSystemDefinitions";
 import { grammaticalJoin } from "../functions/grammaticalJoin";
 import { core } from "../core";

@@ -19,6 +19,7 @@ import { NativeComponentsContext } from "../NativeComponentsContext";
 import { GenerateIcon, SaveIcon } from "../icons";
 import { selectECS } from "../selectors/selectECS";
 import { SimpleDialog } from "../dialogs/SimpleDialog";
+import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
 
 export const DevTools = forwardRef<HTMLDivElement>(
   (props: HTMLAttributes<HTMLDivElement>, ref) => {
@@ -95,7 +96,7 @@ export const DevTools = forwardRef<HTMLDivElement>(
           {isECSPreviewDialogOpen && (
             <ECSPreview
               ref={ecsPreviewRef}
-              value={JSON.stringify(ecs, null, 2)}
+              value={serializeECSDefinition(ecs, 2)}
               readOnly
             />
           )}

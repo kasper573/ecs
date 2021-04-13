@@ -8,7 +8,7 @@ import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSyste
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { core } from "../core";
-import { zipECSDefinition } from "../functions/zipECSDefinition";
+import { zipECSDefinition } from "../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { selectECS } from "../selectors/selectECS";
 import { ECSDefinition } from "../../../ecs-serializable/src/definition/ECSDefinition";

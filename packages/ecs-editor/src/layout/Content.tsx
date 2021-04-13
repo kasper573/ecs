@@ -4,6 +4,7 @@ import { useSelector } from "../store";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { Center } from "../components/Center";
 import { SystemSyncContext, useSystemSync } from "../hooks/useSystemSync";
+import { cloneWithIndexAsKey } from "../../../ecs-common/src/cloneWithIndexAsKey";
 import { SystemHeader } from "./SystemHeader";
 import { PanelContainer } from "./PanelContainer";
 import { RuntimePanel } from "./RuntimePanel";
@@ -21,7 +22,7 @@ export const Content = memo(() => {
     return (
       <Center>
         <Paper>
-          <MenuList>{menuItems}</MenuList>
+          <MenuList>{menuItems.map(cloneWithIndexAsKey)}</MenuList>
         </Paper>
       </Center>
     );

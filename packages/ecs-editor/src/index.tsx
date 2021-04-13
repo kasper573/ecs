@@ -6,17 +6,21 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Describable } from "../../ecs-text-adventure/src/describable/Describable";
 import { Collectable } from "../../ecs-text-adventure/src/collectable/Collectable";
 import { Interactive } from "../../ecs-text-adventure/src/interactive/Interactive";
-import { ECSDefinition } from "../../ecs-serializable/src/definition/ECSDefinition";
 import { Inventory } from "../../ecs-text-adventure/src/collectable/Inventory";
 import { InteractionMemory } from "../../ecs-text-adventure/src/interactive/InteractionMemory";
 import { SceneManager } from "../../ecs-scene-manager/src/SceneManager";
 import { SceneSwitch } from "../../ecs-scene-manager/src/SceneSwitch";
 import { TextAdventureRenderer } from "../../ecs-text-adventure/src/renderer/TextAdventureRenderer";
+import { createECSDefinition } from "../../ecs-serializable/src/functions/createECSDefinition";
+import { reaction } from "../../ecs-common/src/reaction";
 import { createEditorState } from "./functions/createEditorState";
 import { NativeComponentsContext } from "./NativeComponentsContext";
 import { createStore } from "./store";
-import exampleECS from "./exampleECS.json";
 import { Editor } from "./editors/Editor";
+import {
+  loadECSDefinitionFromLocalStorage,
+  saveECSDefinitionToLocalStorage,
+} from "./storage/lsECSDefinition";
 
 export const nativeComponents = {
   Describable,
@@ -31,8 +35,14 @@ export const nativeComponents = {
 
 const store = createStore({
   ...createEditorState(),
-  ecs: (exampleECS as unknown) as ECSDefinition,
+  ecs: loadECSDefinitionFromLocalStorage() ?? createECSDefinition(),
 });
+
+reaction(
+  store,
+  () => store.getState().present.ecs,
+  saveECSDefinitionToLocalStorage
+);
 
 function render() {
   ReactDOM.render(
