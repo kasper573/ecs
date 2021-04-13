@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+packages/**/node_modules
 /node_modules
 /.pnp
 .pnp.js
@@ -8,17 +9,17 @@
 # testing
 /coverage
 
-# production
-/build
+# build
+packages/**/build
 
 # misc
 .idea
 .DS_Store
-packages/example-game/.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+packages/**/.env
+packages/**/.env.local
+packages/**/.env.development.local
+packages/**/.env.test.local
+packages/**/.env.production.local
 .eslintcache
 
 npm-debug.log*
