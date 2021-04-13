@@ -1,4 +1,4 @@
-import { NominalString } from "../NominalString";
+import { NominalString } from "./NominalString";
 
 /**
  * Convenience function for deleting entries of records using a

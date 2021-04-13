@@ -1,4 +1,4 @@
-import { NominalString } from "../../../ecs-common/NominalString";
+import { NominalString } from "../../../ecs-common/src/NominalString";
 import { SystemDefinitionId } from "./SystemDefinition";
 
 export type LibraryNodeId = NominalString<"LibraryNodeId">;

@@ -2,7 +2,7 @@ import { inheritEntityDefinitionComponents } from "../../../ecs-serializable/src
 import { EntityInitializer } from "../../../ecs-serializable/src/definition/EntityInitializer";
 import { createEditorStateReducer } from "../functions/createEditorStateReducer";
 import { reorderEntityInitializers } from "../functions/reorderEntityInitializers";
-import { PartialFor } from "../../../ecs-common/PartialFor";
+import { PartialFor } from "../../../ecs-common/src/PartialFor";
 
 export const createEntityInitializer = createEditorStateReducer<
   PartialFor<EntityInitializer, "order">

@@ -1,4 +1,4 @@
-import { NominalString } from "../../../ecs-common/NominalString";
+import { NominalString } from "../../../ecs-common/src/NominalString";
 import { ComponentInitializer } from "./ComponentInitializer";
 import { LibraryNode } from "./LibraryNode";
 
