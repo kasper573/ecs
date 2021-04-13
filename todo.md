@@ -6,6 +6,8 @@
 
 # Tasks
 
+- Option to save runtime to disk
+- Publish game feature
 - Validate parsed ECS definitions
 
 - Allow instantiating entity definitions by DND at any depth in the hierarchy
