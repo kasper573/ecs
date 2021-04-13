@@ -1,3 +1,4 @@
+import { NominalString } from "../../../ecs-common/NominalString";
 import { EntityDefinitionId } from "./EntityDefinition";
 import { SystemDefinitionId } from "./SystemDefinition";
 import { ComponentInitializer } from "./ComponentInitializer";

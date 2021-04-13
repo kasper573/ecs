@@ -1,3 +1,5 @@
+import { NominalString } from "../NominalString";
+
 /**
  * Convenience function for deleting entries of records using a
  * NominalString as key without the need of manual type assertions.
