@@ -3,6 +3,7 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const DotenvPlugin = require("dotenv-webpack");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const extensions = [".js", ".jsx", ".tsx", ".ts"];
@@ -27,6 +28,7 @@ module.exports = {
     isDevelopment && new ReactRefreshPlugin(),
     isDevelopment && new ForkTsCheckerWebpackPlugin(),
     isDevelopment && new ESLintWebpackPlugin({ extensions }),
+    new DotenvPlugin(),
     new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       filename: "./index.html",
