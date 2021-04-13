@@ -10,9 +10,13 @@ import { updateSystem } from "./updateSystem";
 export const createSystem = (
   ecs: ECSDefinition,
   memory: DeserializationMemory,
-  nativeComponents: NativeComponents
+  nativeComponents: NativeComponents,
+  context?: Record<string, unknown>
 ) => {
   const system = new DeserializedSystem();
+  if (context) {
+    system.setContext(context);
+  }
   updateSystem(system, ecs, memory, nativeComponents);
   return system;
 };

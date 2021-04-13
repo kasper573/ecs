@@ -26,8 +26,13 @@ export class System<EntityId extends string = string> {
       : undefined;
   }
 
-  setContext(propertyName: string, value: unknown) {
-    this.context[propertyName] = value;
+  setContext(...args: ContextArgs) {
+    if (args.length === 1) {
+      this.context = args[0];
+    } else {
+      const [propertyName, value] = args;
+      this.context[propertyName] = value;
+    }
   }
 
   update() {
@@ -44,6 +49,10 @@ export class System<EntityId extends string = string> {
     this.update();
   }
 }
+
+type ContextArgs =
+  | [propertyName: string, value: unknown]
+  | [Record<string, unknown>];
 
 type SystemEvents = {
   update: () => void;
