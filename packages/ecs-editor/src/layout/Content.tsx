@@ -1,10 +1,7 @@
-import { Button } from "@material-ui/core";
-import styled from "styled-components";
+import { MenuList, Paper } from "@material-ui/core";
 import { memo } from "react";
 import { useSelector } from "../store";
-import { selectHasSystems } from "../selectors/selectHasSystems";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { useSystemCrud } from "../hooks/useSystemCrud";
 import { Center } from "../components/Center";
 import { SystemSyncContext, useSystemSync } from "../hooks/useSystemSync";
 import { SystemHeader } from "./SystemHeader";
@@ -13,25 +10,20 @@ import { RuntimePanel } from "./RuntimePanel";
 import { InspectorPanel } from "./InspectorPanel";
 import { HierarchyPanel } from "./HierarchyPanel";
 import { LibraryPanel } from "./LibraryPanel";
+import { useFileMenuItems } from "./FileMenu";
 
 export const Content = memo(() => {
-  const hasSystem = useSelector(selectHasSystems);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
-  const { showCreateDialog, showSelectDialog } = useSystemCrud();
   const systemSync = useSystemSync();
+  const menuItems = useFileMenuItems();
 
   if (!selectedSystem) {
     return (
-      <SystemCrudButtons>
-        {hasSystem && (
-          <Button variant="outlined" color="primary" onClick={showSelectDialog}>
-            Select system
-          </Button>
-        )}
-        <Button variant="contained" color="primary" onClick={showCreateDialog}>
-          New system
-        </Button>
-      </SystemCrudButtons>
+      <Center>
+        <Paper>
+          <MenuList>{menuItems}</MenuList>
+        </Paper>
+      </Center>
     );
   }
   return (
@@ -46,9 +38,3 @@ export const Content = memo(() => {
     </SystemSyncContext.Provider>
   );
 });
-
-const SystemCrudButtons = styled(Center)`
-  .MuiButton-root + .MuiButton-root {
-    margin-top: ${({ theme }) => theme.spacing(1)}px;
-  }
-`;

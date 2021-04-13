@@ -5,19 +5,13 @@ import { MenuFor } from "../components/MenuFor";
 import { useSystemCrud } from "../hooks/useSystemCrud";
 import { selectHasSystems } from "../selectors/selectHasSystems";
 import { IntroWithDefaultTooltip } from "../intro/IntroWithDefaultTooltip";
+import { useLoadECSDefinitionsDialog } from "../hooks/useLoadECSDefinitionsDialog";
 
 export const FileMenu = (buttonProps: IconButtonProps) => {
   const hasSystems = useSelector(selectHasSystems);
-  const { showCreateDialog, showSelectDialog } = useSystemCrud();
+  const items = useFileMenuItems();
   return (
-    <MenuFor
-      items={[
-        <MenuItem onClick={showCreateDialog}>New system</MenuItem>,
-        hasSystems && (
-          <MenuItem onClick={showSelectDialog}>Select system</MenuItem>
-        ),
-      ]}
-    >
+    <MenuFor items={items}>
       {(props) => (
         <IntroWithDefaultTooltip
           defaultTooltip={{ title: "File" }}
@@ -32,4 +26,15 @@ export const FileMenu = (buttonProps: IconButtonProps) => {
       )}
     </MenuFor>
   );
+};
+
+export const useFileMenuItems = () => {
+  const hasSystems = useSelector(selectHasSystems);
+  const { showCreateDialog, showSelectDialog } = useSystemCrud();
+  const showLoadDialog = useLoadECSDefinitionsDialog();
+  return [
+    <MenuItem onClick={showCreateDialog}>New system</MenuItem>,
+    hasSystems && <MenuItem onClick={showSelectDialog}>Select system</MenuItem>,
+    <MenuItem onClick={showLoadDialog}>Load systems</MenuItem>,
+  ];
 };

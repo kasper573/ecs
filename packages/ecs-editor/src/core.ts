@@ -31,6 +31,7 @@ import { setThemeType } from "./reducers/setThemeType";
 import { moveLibraryNode } from "./reducers/moveLibraryNode";
 import { resetComponentInitializerProperty } from "./reducers/resetComponentInitializerProperty";
 import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
+import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -69,6 +70,7 @@ export const core = createSlice({
     duplicateComponentDefinition,
     setEditorState,
     setThemeType,
+    commitECSDefinitions,
   },
   extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
 });
