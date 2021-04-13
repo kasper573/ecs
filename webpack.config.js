@@ -1,3 +1,4 @@
+const fs = require("fs");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
@@ -28,7 +29,9 @@ module.exports = {
     isDevelopment && new ReactRefreshPlugin(),
     isDevelopment && new ForkTsCheckerWebpackPlugin(),
     isDevelopment && new ESLintWebpackPlugin({ extensions }),
-    new DotenvPlugin(),
+    new DotenvPlugin({
+      path: fs.existsSync(".env") ? ".env" : ".env.example",
+    }),
     new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       filename: "./index.html",
