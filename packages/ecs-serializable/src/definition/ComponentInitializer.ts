@@ -1,3 +1,4 @@
+import { NominalString } from "../../../ecs-common/NominalString";
 import { ComponentDefinitionId } from "./ComponentDefinition";
 import { ComponentPropertiesDefinition } from "./ComponentPropertiesDefinition";
 

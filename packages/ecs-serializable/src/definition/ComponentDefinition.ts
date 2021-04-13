@@ -1,4 +1,5 @@
 import { NativeComponentName } from "../types/NativeComponents";
+import { NominalString } from "../../../ecs-common/NominalString";
 import { LibraryNode } from "./LibraryNode";
 
 export type ComponentDefinitionId = NominalString<"ComponentDefinitionId">;
