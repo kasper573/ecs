@@ -1,5 +1,4 @@
 import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
-import React, { memo } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
 import {
@@ -10,21 +9,22 @@ import {
   UnpublishIcon,
   ViewPublishedIcon,
 } from "../icons";
-import { useDispatch, useSelector } from "../store";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
+import { useDispatch, useStore } from "../store";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { core } from "../core";
 import { zipECSDefinition } from "../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
-import { selectECS } from "../selectors/selectECS";
 import { getPublishedSystemLink } from "../../../ecs-api-client/getPublishedSystemLink";
 import { useSystemPublisher } from "../hooks/useSystemPublisher";
 
-export const SystemHeader = memo(() => {
+export type SystemHeaderProps = {
+  system: SystemDefinition;
+};
+
+export const SystemHeader = ({ system }: SystemHeaderProps) => {
   const dispatch = useDispatch();
-  const ecs = useSelector(selectECS);
-  const selectedSystem = useSelector(selectSelectedSystemDefinition);
+  const store = useStore();
   const {
     isPublished,
     canPublish,
@@ -32,7 +32,7 @@ export const SystemHeader = memo(() => {
     publish,
     unpublish,
     snackbar,
-  } = useSystemPublisher(selectedSystem?.id);
+  } = useSystemPublisher(system.id);
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
@@ -51,75 +51,69 @@ export const SystemHeader = memo(() => {
   }
 
   async function saveECSDefinitionToDisk() {
-    const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
+    const selectedECS = getECSDefinitionForSystem(
+      store.getState().present.ecs,
+      system.id
+    );
     const zipped = await zipECSDefinition(selectedECS);
-    saveAs(zipped, `${selectedSystem!.name}.zip`);
+    saveAs(zipped, `${system!.name}.zip`);
   }
 
   return (
     <Row>
-      <EditorTitle>
-        {selectedSystem ? selectedSystem.name : "No system selected"}
-      </EditorTitle>
-      {selectedSystem && (
-        <>
-          <Tooltip title={isPublished ? "View published" : "Publish to view"}>
-            <span>
-              <IconButton
-                disabled={!isPublished}
-                component="a"
-                href={getPublishedSystemLink(selectedSystem.id)}
-                target="_blank"
-              >
-                <ViewPublishedIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-          <Tooltip title={canUnpublish ? "Unpublish" : "Not published"}>
-            <span>
-              <IconButton disabled={!canUnpublish} onClick={unpublish}>
-                <UnpublishIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-          <Tooltip title={canPublish ? "Publish" : "Sign in to publish"}>
-            <span>
-              <IconButton disabled={!canPublish} onClick={publish}>
-                <PublishIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-          <Tooltip title="Save to disk">
-            <IconButton onClick={saveECSDefinitionToDisk}>
-              <SaveIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Rename system">
-            <IconButton onClick={() => showRenameDialog(selectedSystem)}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete system">
-            <IconButton
-              edge="end"
-              onClick={() => showDeleteDialog(selectedSystem)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </>
-      )}
+      <SystemName>{system.name}</SystemName>
+      <Tooltip title={isPublished ? "View published" : "Publish to view"}>
+        <span>
+          <IconButton
+            disabled={!isPublished}
+            component="a"
+            href={getPublishedSystemLink(system.id)}
+            target="_blank"
+          >
+            <ViewPublishedIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title={canUnpublish ? "Unpublish" : "Not published"}>
+        <span>
+          <IconButton disabled={!canUnpublish} onClick={unpublish}>
+            <UnpublishIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title={canPublish ? "Publish" : "Sign in to publish"}>
+        <span>
+          <IconButton disabled={!canPublish} onClick={publish}>
+            <PublishIcon />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title="Save to disk">
+        <IconButton onClick={saveECSDefinitionToDisk}>
+          <SaveIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Rename system">
+        <IconButton onClick={() => showRenameDialog(system)}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Delete system">
+        <IconButton edge="end" onClick={() => showDeleteDialog(system)}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
       {snackbar}
     </Row>
   );
-});
+};
 
 const Row = styled(Toolbar)`
   display: flex;
   justify-content: flex-end;
 `;
 
-const EditorTitle = styled(Typography).attrs({
+const SystemName = styled(Typography).attrs({
   component: "span",
   noWrap: true,
 })`

@@ -29,7 +29,7 @@ export const Content = memo(() => {
   }
   return (
     <SystemSyncContext.Provider value={systemSync}>
-      <SystemHeader />
+      <SystemHeader system={selectedSystem} />
       <PanelContainer>
         <LibraryPanel />
         <HierarchyPanel />
