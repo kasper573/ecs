@@ -25,6 +25,8 @@ export async function publishSystem(
   }
 }
 
-export type PublishSystemResult =
-  | { type: "success" }
-  | { type: "error"; message: string };
+export type PublishSystemResult = PublishSuccess | PublishError;
+
+export type PublishSuccess = { type: "success" };
+
+export type PublishError = { type: "error"; message: string };

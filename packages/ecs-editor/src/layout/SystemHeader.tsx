@@ -1,7 +1,14 @@
-import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
-import React, { memo } from "react";
+import {
+  IconButton,
+  Snackbar,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
+import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
+import { Alert } from "@material-ui/lab";
 import {
   DeleteIcon,
   EditIcon,
@@ -17,7 +24,7 @@ import { core } from "../core";
 import { zipECSDefinition } from "../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { selectECS } from "../selectors/selectECS";
-import { publishSystem, PublishSystemResult } from "../api/publishSystem";
+import { PublishError, publishSystem } from "../api/publishSystem";
 import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
 import { useDialog } from "../hooks/useDialog";
 import { SimpleDialog } from "../dialogs/SimpleDialog";
@@ -27,21 +34,21 @@ export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
   const ecs = useSelector(selectECS);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const closeSnackbar = () => setSnackbarOpen(false);
+
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
     (system) => system.name,
     { rename: handleSystemRename, remove: handleSystemDelete }
   );
 
-  const showPublishResult = useDialog((props, result: PublishSystemResult) =>
-    result.type === "success" ? (
-      <SimpleDialog {...props} title="Publish successful!" />
-    ) : (
-      <SimpleDialog {...props} title="Publish failed">
-        {result.message}
-      </SimpleDialog>
-    )
-  );
+  const showPublishError = useDialog((props, { message }: PublishError) => (
+    <SimpleDialog {...props} title="Publish failed">
+      {message}
+    </SimpleDialog>
+  ));
 
   function handleSystemRename(system: SystemDefinition, name: string) {
     dispatch(
@@ -62,7 +69,12 @@ export const SystemHeader = memo(() => {
   async function publishECSDefinition() {
     const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
     const result = await publishSystem(serializeECSDefinition(selectedECS));
-    showPublishResult(result);
+    if (result.type === "error") {
+      showPublishError(result);
+    } else {
+      setSnackbarMessage("Publish successful!");
+      setSnackbarOpen(true);
+    }
   }
 
   return (
@@ -114,6 +126,16 @@ export const SystemHeader = memo(() => {
           </Tooltip>
         </>
       )}
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        ClickAwayListenerProps={{ onClickAway: noop }}
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Row>
   );
 });
@@ -129,3 +151,5 @@ const EditorTitle = styled(Typography).attrs({
 })`
   margin: 0 ${({ theme }) => theme.spacing(1.5)}px;
 `;
+
+const noop = () => {};
