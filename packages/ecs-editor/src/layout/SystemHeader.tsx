@@ -7,6 +7,7 @@ import {
   EditIcon,
   PublishIcon,
   SaveIcon,
+  UnpublishIcon,
   ViewPublishedIcon,
 } from "../icons";
 import { useDispatch, useSelector } from "../store";
@@ -24,12 +25,14 @@ export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
   const ecs = useSelector(selectECS);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
-  const [
+  const {
     isPublished,
     canPublish,
-    publishSystem,
-    publishSnackbar,
-  ] = useSystemPublisher(selectedSystem?.id);
+    canUnpublish,
+    publish,
+    unpublish,
+    snackbar,
+  } = useSystemPublisher(selectedSystem?.id);
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
@@ -60,7 +63,7 @@ export const SystemHeader = memo(() => {
       </EditorTitle>
       {selectedSystem && (
         <>
-          <Tooltip title={isPublished ? "View published" : "Not published"}>
+          <Tooltip title={isPublished ? "View published" : "Publish to view"}>
             <span>
               <IconButton
                 disabled={!isPublished}
@@ -72,9 +75,16 @@ export const SystemHeader = memo(() => {
               </IconButton>
             </span>
           </Tooltip>
+          <Tooltip title={canUnpublish ? "Unpublish" : "Not published"}>
+            <span>
+              <IconButton disabled={!canUnpublish} onClick={unpublish}>
+                <UnpublishIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
           <Tooltip title={canPublish ? "Publish" : "Sign in to publish"}>
             <span>
-              <IconButton disabled={!canPublish} onClick={publishSystem}>
+              <IconButton disabled={!canPublish} onClick={publish}>
                 <PublishIcon />
               </IconButton>
             </span>
@@ -99,7 +109,7 @@ export const SystemHeader = memo(() => {
           </Tooltip>
         </>
       )}
-      {publishSnackbar}
+      {snackbar}
     </Row>
   );
 });
