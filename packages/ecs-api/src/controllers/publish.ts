@@ -12,7 +12,7 @@ const limit = "20kb";
 const json = express.json({ limit });
 const checkScopes = jwtAuthz(["read:current_user"]);
 
-export const postPublish = [
+export const publishHandlers = [
   checkJWT,
   checkScopes,
   tryHandler(json, catchJsonError, publish),

@@ -8,7 +8,7 @@ import { SystemDefinitionId } from "../../../ecs-serializable/src/definition/Sys
 
 const checkScopes = jwtAuthz(["read:current_user"]);
 
-export const deleteUnpublish = [checkJWT, checkScopes, unpublish];
+export const unpublishHandlers = [checkJWT, checkScopes, unpublish];
 
 async function unpublish(request: Request, response: Response) {
   const systemId = request.params.id as SystemDefinitionId | undefined;

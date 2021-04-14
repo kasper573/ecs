@@ -1,17 +1,17 @@
-import { postPublish } from "./controllers/postPublish";
+import { publishHandlers } from "./controllers/publish";
 import { getSystem } from "./controllers/getSystem";
-import { deleteUnpublish } from "./controllers/deleteUnpublish";
+import { unpublishHandlers } from "./controllers/unpublish";
 
 export const routes = [
   {
     path: "/publish",
     method: "post" as const,
-    handlers: postPublish,
+    handlers: publishHandlers,
   },
   {
     path: "/unpublish/:id",
     method: "delete" as const,
-    handlers: deleteUnpublish,
+    handlers: unpublishHandlers,
   },
   {
     path: "/system/:id",
