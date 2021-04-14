@@ -22,6 +22,8 @@ export {
   Add as AddIcon,
   RotateLeft as ResetIcon,
   SaveAlt as SaveIcon,
+  Publish as PublishIcon,
+  OpenInNew as ViewPublishedIcon,
   DynamicFeed as GenerateIcon,
   Brightness4 as DarkThemeIcon,
   Brightness7 as LightThemeIcon,

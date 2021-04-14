@@ -2,7 +2,13 @@ import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
 import React, { memo } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
-import { DeleteIcon, EditIcon, SaveIcon } from "../icons";
+import {
+  DeleteIcon,
+  EditIcon,
+  PublishIcon,
+  SaveIcon,
+  ViewPublishedIcon,
+} from "../icons";
 import { useDispatch, useSelector } from "../store";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { useCrudDialogs } from "../hooks/useCrudDialogs";
@@ -11,7 +17,11 @@ import { core } from "../core";
 import { zipECSDefinition } from "../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { selectECS } from "../selectors/selectECS";
-import { ECSDefinition } from "../../../ecs-serializable/src/definition/ECSDefinition";
+import { publishSystem, PublishSystemResult } from "../api/publishSystem";
+import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
+import { useDialog } from "../hooks/useDialog";
+import { SimpleDialog } from "../dialogs/SimpleDialog";
+import { getPublishedSystemLink } from "../api/getPublishedSystemLink";
 
 export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
@@ -21,6 +31,16 @@ export const SystemHeader = memo(() => {
     "system",
     (system) => system.name,
     { rename: handleSystemRename, remove: handleSystemDelete }
+  );
+
+  const showPublishResult = useDialog((props, result: PublishSystemResult) =>
+    result.type === "success" ? (
+      <SimpleDialog {...props} title="Publish successful!" />
+    ) : (
+      <SimpleDialog {...props} title="Publish failed">
+        {result.message}
+      </SimpleDialog>
+    )
   );
 
   function handleSystemRename(system: SystemDefinition, name: string) {
@@ -33,9 +53,16 @@ export const SystemHeader = memo(() => {
     dispatch(core.actions.deleteSystemDefinition(system.id));
   }
 
-  async function saveECSDefinitionToDisk(ecs: ECSDefinition, name: string) {
-    const zipped = await zipECSDefinition(ecs);
-    saveAs(zipped, `${name}.zip`);
+  async function saveECSDefinitionToDisk() {
+    const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
+    const zipped = await zipECSDefinition(selectedECS);
+    saveAs(zipped, `${selectedSystem!.name}.zip`);
+  }
+
+  async function publishECSDefinition() {
+    const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
+    const result = await publishSystem(serializeECSDefinition(selectedECS));
+    showPublishResult(result);
   }
 
   return (
@@ -45,15 +72,25 @@ export const SystemHeader = memo(() => {
       </EditorTitle>
       {selectedSystem && (
         <>
+          <Tooltip title="View published">
+            <IconButton
+              component="a"
+              aria-label="View published"
+              href={getPublishedSystemLink(selectedSystem.id)}
+              target="_blank"
+            >
+              <ViewPublishedIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Publish">
+            <IconButton aria-label="Publish" onClick={publishECSDefinition}>
+              <PublishIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Save to disk">
             <IconButton
               aria-label="Save to disk"
-              onClick={() =>
-                saveECSDefinitionToDisk(
-                  getECSDefinitionForSystem(ecs, selectedSystem.id),
-                  selectedSystem.name
-                )
-              }
+              onClick={saveECSDefinitionToDisk}
             >
               <SaveIcon />
             </IconButton>
