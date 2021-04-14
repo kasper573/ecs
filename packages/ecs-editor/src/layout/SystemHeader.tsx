@@ -9,6 +9,7 @@ import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
 import { Alert } from "@material-ui/lab";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
   DeleteIcon,
   EditIcon,
@@ -33,10 +34,12 @@ import { getPublishedSystemLink } from "../api/getPublishedSystemLink";
 export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
   const ecs = useSelector(selectECS);
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const closeSnackbar = () => setSnackbarOpen(false);
+  const allowPublish = isAuthenticated;
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
@@ -67,8 +70,12 @@ export const SystemHeader = memo(() => {
   }
 
   async function publishECSDefinition() {
+    const accessToken = await getAccessTokenSilently();
     const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
-    const result = await publishSystem(serializeECSDefinition(selectedECS));
+    const result = await publishSystem(
+      serializeECSDefinition(selectedECS),
+      accessToken
+    );
     if (result.type === "error") {
       showPublishError(result);
     } else {
@@ -94,31 +101,29 @@ export const SystemHeader = memo(() => {
               <ViewPublishedIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Publish">
-            <IconButton aria-label="Publish" onClick={publishECSDefinition}>
-              <PublishIcon />
-            </IconButton>
+          <Tooltip title={allowPublish ? "Publish" : "Sign in to publish"}>
+            <span>
+              <IconButton
+                disabled={!allowPublish}
+                onClick={publishECSDefinition}
+              >
+                <PublishIcon />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Save to disk">
-            <IconButton
-              aria-label="Save to disk"
-              onClick={saveECSDefinitionToDisk}
-            >
+            <IconButton onClick={saveECSDefinitionToDisk}>
               <SaveIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Rename system">
-            <IconButton
-              aria-label="Rename system"
-              onClick={() => showRenameDialog(selectedSystem)}
-            >
+            <IconButton onClick={() => showRenameDialog(selectedSystem)}>
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete system">
             <IconButton
               edge="end"
-              aria-label="Delete system"
               onClick={() => showDeleteDialog(selectedSystem)}
             >
               <DeleteIcon />

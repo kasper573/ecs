@@ -1,20 +1,27 @@
 import { default as express, Request, Response } from "express";
 import { getManager } from "typeorm";
+import jwtAuthz from "express-jwt-authz";
 import { PublishedSystem } from "../models/PublishedSystem";
 import { parseECSDefinition } from "../../../ecs-serializable/src/parseECSDefinition";
-import { getSessionUserId } from "../functions/getSessionUserId";
+import { getUserId } from "../functions/getUserId";
 import { SerializedECSDefinition } from "../../../ecs-serializable/src/types/SerializedECSDefinition";
 import { tryHandler } from "../functions/tryHandler";
+import { checkJWT } from "../middlewares/checkJWT";
 
 const limit = "20kb";
 const json = express.json({ limit });
+const checkScopes = jwtAuthz(["read:current_user"]);
 
-export const postPublish = tryHandler(json, catchJsonError, publish);
+export const postPublish = [
+  checkJWT,
+  checkScopes,
+  tryHandler(json, catchJsonError, publish),
+];
 
 async function publish(request: Request, response: Response) {
   const serializedECS: SerializedECSDefinition = request.body.ecs;
   const ecs = parseECSDefinition(serializedECS);
-  const userId = getSessionUserId(request)!;
+  const userId = await getUserId(request);
   if (!userId) {
     response.status(403).send("Cannot publish without auth");
     return;
@@ -33,7 +40,7 @@ async function publish(request: Request, response: Response) {
     p.ecs = serializedECS;
     p.name = system.name;
     p.systemId = system.id;
-    p.userId = userId;
+    p.userId = userId!;
   }
 
   const repo = getManager().getRepository(PublishedSystem);

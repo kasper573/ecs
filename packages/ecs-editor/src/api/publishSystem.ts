@@ -1,12 +1,16 @@
 import { SerializedECSDefinition } from "../../../ecs-serializable/src/types/SerializedECSDefinition";
 
 export async function publishSystem(
-  ecs: SerializedECSDefinition
+  ecs: SerializedECSDefinition,
+  accessToken: string
 ): Promise<PublishSystemResult> {
   try {
     const response = await fetch(`${process.env.ECS_API_URL}/publish`, {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
       body: JSON.stringify({ ecs }),
     });
     if (response.status === 200) {
