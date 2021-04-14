@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { IconButton, Toolbar as MuiToolbar, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "../store";
@@ -7,6 +7,7 @@ import { selectThemeType } from "../selectors/selectThemeType";
 import { DarkThemeIcon, LightThemeIcon } from "../icons";
 import { FileMenu } from "./FileMenu";
 import { DevToolsButton } from "./DevToolsButton";
+import { UserActions } from "./UserActions";
 
 export const AppBarContent = memo(() => {
   const dispatch = useDispatch();
@@ -22,14 +23,11 @@ export const AppBarContent = memo(() => {
       <Actions>
         <DevToolsButton />
         <Tooltip title={themeToggleTooltip}>
-          <IconButton
-            aria-label={themeToggleTooltip}
-            edge="end"
-            onClick={toggleTheme}
-          >
+          <IconButton aria-label={themeToggleTooltip} onClick={toggleTheme}>
             <ThemeToggleIcon />
           </IconButton>
         </Tooltip>
+        <UserActions />
       </Actions>
     </Toolbar>
   );

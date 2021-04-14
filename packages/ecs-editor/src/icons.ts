@@ -24,6 +24,7 @@ export {
   SaveAlt as SaveIcon,
   Publish as PublishIcon,
   OpenInNew as ViewPublishedIcon,
+  AccountCircle as UserIcon,
   DynamicFeed as GenerateIcon,
   Brightness4 as DarkThemeIcon,
   Brightness7 as LightThemeIcon,

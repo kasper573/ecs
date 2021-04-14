@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { Auth0Provider } from "@auth0/auth0-react";
 import { createECSDefinition } from "../../ecs-serializable/src/functions/createECSDefinition";
 import { reaction } from "../../ecs-common/src/reaction";
 import nativeComponents from "../../ecs-native-components";
@@ -14,6 +15,7 @@ import {
   loadECSDefinitionFromLocalStorage,
   saveECSDefinitionToLocalStorage,
 } from "./storage/lsECSDefinition";
+import { auth0Config } from "./fixtures/auth0Config";
 
 const store = createStore({
   ...createEditorState(),
@@ -32,7 +34,9 @@ function render() {
       <DndProvider backend={HTML5Backend}>
         <NativeComponentsContext.Provider value={nativeComponents}>
           <Provider store={store}>
-            <Editor />
+            <Auth0Provider {...auth0Config}>
+              <Editor />
+            </Auth0Provider>
           </Provider>
         </NativeComponentsContext.Provider>
       </DndProvider>
