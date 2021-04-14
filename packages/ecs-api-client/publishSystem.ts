@@ -1,4 +1,4 @@
-import { SerializedECSDefinition } from "../../../ecs-serializable/src/types/SerializedECSDefinition";
+import { SerializedECSDefinition } from "../ecs-serializable/src/types/SerializedECSDefinition";
 
 export async function publishSystem(
   ecs: SerializedECSDefinition,

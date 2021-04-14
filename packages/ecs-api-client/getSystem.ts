@@ -1,7 +1,7 @@
-import { SystemDefinitionId } from "../../ecs-serializable/src/definition/SystemDefinition";
-import { SerializedECSDefinition } from "../../ecs-serializable/src/types/SerializedECSDefinition";
+import { SystemDefinitionId } from "../ecs-serializable/src/definition/SystemDefinition";
+import { SerializedECSDefinition } from "../ecs-serializable/src/types/SerializedECSDefinition";
 
-export async function fetchECSDefinition(id: SystemDefinitionId) {
+export async function getSystem(id: SystemDefinitionId) {
   try {
     const response = await fetch(
       `${process.env.ECS_API_URL}/system/${encodeURIComponent(id)}`

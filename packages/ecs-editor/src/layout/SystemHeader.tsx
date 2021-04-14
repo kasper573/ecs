@@ -1,15 +1,7 @@
-import {
-  IconButton,
-  Snackbar,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
-import React, { memo, useState } from "react";
+import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
-import { Alert } from "@material-ui/lab";
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   DeleteIcon,
   EditIcon,
@@ -25,33 +17,25 @@ import { core } from "../core";
 import { zipECSDefinition } from "../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { selectECS } from "../selectors/selectECS";
-import { PublishError, publishSystem } from "../api/publishSystem";
-import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
-import { useDialog } from "../hooks/useDialog";
-import { SimpleDialog } from "../dialogs/SimpleDialog";
-import { getPublishedSystemLink } from "../api/getPublishedSystemLink";
+import { getPublishedSystemLink } from "../../../ecs-api-client/getPublishedSystemLink";
+import { useSystemPublisher } from "../hooks/useSystemPublisher";
 
 export const SystemHeader = memo(() => {
   const dispatch = useDispatch();
   const ecs = useSelector(selectECS);
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
-  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const closeSnackbar = () => setSnackbarOpen(false);
-  const allowPublish = isAuthenticated;
+  const [
+    isPublished,
+    canPublish,
+    publishSystem,
+    publishSnackbar,
+  ] = useSystemPublisher(selectedSystem?.id);
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
     (system) => system.name,
     { rename: handleSystemRename, remove: handleSystemDelete }
   );
-
-  const showPublishError = useDialog((props, { message }: PublishError) => (
-    <SimpleDialog {...props} title="Publish failed">
-      {message}
-    </SimpleDialog>
-  ));
 
   function handleSystemRename(system: SystemDefinition, name: string) {
     dispatch(
@@ -69,21 +53,6 @@ export const SystemHeader = memo(() => {
     saveAs(zipped, `${selectedSystem!.name}.zip`);
   }
 
-  async function publishECSDefinition() {
-    const accessToken = await getAccessTokenSilently();
-    const selectedECS = getECSDefinitionForSystem(ecs, selectedSystem!.id);
-    const result = await publishSystem(
-      serializeECSDefinition(selectedECS),
-      accessToken
-    );
-    if (result.type === "error") {
-      showPublishError(result);
-    } else {
-      setSnackbarMessage("Publish successful!");
-      setSnackbarOpen(true);
-    }
-  }
-
   return (
     <Row>
       <EditorTitle>
@@ -91,22 +60,21 @@ export const SystemHeader = memo(() => {
       </EditorTitle>
       {selectedSystem && (
         <>
-          <Tooltip title="View published">
-            <IconButton
-              component="a"
-              aria-label="View published"
-              href={getPublishedSystemLink(selectedSystem.id)}
-              target="_blank"
-            >
-              <ViewPublishedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={allowPublish ? "Publish" : "Sign in to publish"}>
+          <Tooltip title={isPublished ? "View published" : "Not published"}>
             <span>
               <IconButton
-                disabled={!allowPublish}
-                onClick={publishECSDefinition}
+                disabled={!isPublished}
+                component="a"
+                href={getPublishedSystemLink(selectedSystem.id)}
+                target="_blank"
               >
+                <ViewPublishedIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title={canPublish ? "Publish" : "Sign in to publish"}>
+            <span>
+              <IconButton disabled={!canPublish} onClick={publishSystem}>
                 <PublishIcon />
               </IconButton>
             </span>
@@ -131,16 +99,7 @@ export const SystemHeader = memo(() => {
           </Tooltip>
         </>
       )}
-      <Snackbar
-        open={isSnackbarOpen}
-        autoHideDuration={6000}
-        ClickAwayListenerProps={{ onClickAway: noop }}
-        onClose={closeSnackbar}
-      >
-        <Alert onClose={closeSnackbar} severity="success">
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      {publishSnackbar}
     </Row>
   );
 });
@@ -156,5 +115,3 @@ const EditorTitle = styled(Typography).attrs({
 })`
   margin: 0 ${({ theme }) => theme.spacing(1.5)}px;
 `;
-
-const noop = () => {};

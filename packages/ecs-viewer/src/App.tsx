@@ -6,7 +6,7 @@ import { DeserializationMemory } from "../../ecs-serializable/src/Deserializatio
 import nativeComponents from "../../ecs-native-components";
 import { RenderTarget } from "../../ecs-render-target/RenderTarget";
 import { parseECSDefinition } from "../../ecs-serializable/src/parseECSDefinition";
-import { fetchECSDefinition } from "./fetchECSDefinition";
+import { getSystem } from "../../ecs-api-client/getSystem";
 
 export const App = ({ id }: { id?: SystemDefinitionId }) => {
   const [system, setSystem] = useState<System>();
@@ -15,7 +15,7 @@ export const App = ({ id }: { id?: SystemDefinitionId }) => {
 
   useEffect(() => {
     async function fetch(id: SystemDefinitionId) {
-      const serializedECS = await fetchECSDefinition(id);
+      const serializedECS = await getSystem(id);
       if (!serializedECS) {
         setError("Could not get system for specified id");
         return;
