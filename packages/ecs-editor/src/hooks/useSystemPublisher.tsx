@@ -4,7 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { publishSystem } from "../../../ecs-api-client/publishSystem";
 import { SimpleDialog } from "../dialogs/SimpleDialog";
-import { getSystemPublishedState } from "../../../ecs-api-client/getSystemPublishedState";
+import { isSystemPublished } from "../../../ecs-api-client/isSystemPublished";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
 import { useStore } from "../store";
@@ -14,7 +14,7 @@ import { useDialog } from "./useDialog";
 
 export function useSystemPublisher(systemId?: SystemDefinitionId) {
   const store = useStore();
-  const [isPublished, setPublishedState] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -25,10 +25,9 @@ export function useSystemPublisher(systemId?: SystemDefinitionId) {
   // Refresh published state every time system id changes
   useEffect(() => {
     async function refresh(id: SystemDefinitionId) {
-      const newState = await getSystemPublishedState(id);
-      setPublishedState(newState);
+      setIsPublished(await isSystemPublished(id));
     }
-    setPublishedState(false);
+    setIsPublished(false);
     if (systemId) {
       refresh(systemId);
     }
@@ -51,7 +50,7 @@ export function useSystemPublisher(systemId?: SystemDefinitionId) {
     } else {
       setSnackbarMessage("System unpublished");
       setSnackbarOpen(true);
-      setPublishedState(false);
+      setIsPublished(false);
     }
   }
 
@@ -73,7 +72,7 @@ export function useSystemPublisher(systemId?: SystemDefinitionId) {
     } else {
       setSnackbarMessage("Publish successful");
       setSnackbarOpen(true);
-      setPublishedState(true);
+      setIsPublished(true);
     }
   }
 
