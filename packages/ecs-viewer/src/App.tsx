@@ -15,12 +15,12 @@ export const App = ({ id }: { id?: SystemDefinitionId }) => {
 
   useEffect(() => {
     async function fetch(id: SystemDefinitionId) {
-      const serializedECS = await getSystem(id);
-      if (!serializedECS) {
+      const result = await getSystem(id);
+      if (result.type === "error") {
         setError("Could not get system for specified id");
         return;
       }
-      const ecs = parseECSDefinition(serializedECS);
+      const ecs = parseECSDefinition(result.ecs);
       if (!ecs) {
         setError("Could not parse system definition");
         return;

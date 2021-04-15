@@ -25,7 +25,8 @@ export function useSystemPublisher(systemId?: SystemDefinitionId) {
   // Refresh published state every time system id changes
   useEffect(() => {
     async function refresh(id: SystemDefinitionId) {
-      setIsPublished(await isSystemPublished(id));
+      const result = await isSystemPublished(id);
+      setIsPublished(result.type === "success" && result.published);
     }
     setIsPublished(false);
     if (systemId) {

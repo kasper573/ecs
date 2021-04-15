@@ -1,12 +1,7 @@
 import { SystemDefinitionId } from "../ecs-serializable/src/definition/SystemDefinition";
+import { ecsApi } from "./ecsApi";
 
-export async function isSystemPublished(id: SystemDefinitionId) {
-  try {
-    const response = await fetch(
-      `${process.env.ECS_API_URL}/published/${encodeURIComponent(id)}`
-    );
-    const result = await response.text();
-    return result === "1";
-  } catch {}
-  return false;
-}
+export const isSystemPublished = (id: SystemDefinitionId) =>
+  ecsApi(`/published/${encodeURIComponent(id)}`, {}, async (response) => ({
+    published: "1" === (await response.text()),
+  }));

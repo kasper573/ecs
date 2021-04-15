@@ -1,14 +1,12 @@
 import { SystemDefinitionId } from "../ecs-serializable/src/definition/SystemDefinition";
 import { SerializedECSDefinition } from "../ecs-serializable/src/types/SerializedECSDefinition";
+import { ecsApi } from "./ecsApi";
 
-export async function getSystem(id: SystemDefinitionId) {
-  try {
-    const response = await fetch(
-      `${process.env.ECS_API_URL}/system/${encodeURIComponent(id)}`
-    );
-    const result: GetSystemResult = await response.json();
-    return result?.ecs;
-  } catch {}
-}
+export const getSystem = (id: SystemDefinitionId) =>
+  ecsApi(
+    `/system/${encodeURIComponent(id)}`,
+    {},
+    (response) => response.json() as Promise<GetSystemSuccess>
+  );
 
-type GetSystemResult = { ecs: SerializedECSDefinition } | undefined;
+type GetSystemSuccess = { ecs: SerializedECSDefinition };
