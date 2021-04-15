@@ -43,20 +43,22 @@ reaction(
 );
 
 function render() {
+  // ConnectedRouter fires location changes twice in strict mode,
+  // so to reduce verbose redux logs we render it outside strict mode
   ReactDOM.render(
-    <React.StrictMode>
-      <DndProvider backend={HTML5Backend}>
-        <NativeComponentsContext.Provider value={nativeComponents}>
-          <Provider store={store}>
-            <ConnectedRouter history={history}>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <React.StrictMode>
+          <DndProvider backend={HTML5Backend}>
+            <NativeComponentsContext.Provider value={nativeComponents}>
               <Auth0Provider {...auth0Config}>
                 <App />
               </Auth0Provider>
-            </ConnectedRouter>
-          </Provider>
-        </NativeComponentsContext.Provider>
-      </DndProvider>
-    </React.StrictMode>,
+            </NativeComponentsContext.Provider>
+          </DndProvider>
+        </React.StrictMode>
+      </ConnectedRouter>
+    </Provider>,
     document.getElementById("root")
   );
 }
