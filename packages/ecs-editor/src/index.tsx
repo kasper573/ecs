@@ -18,28 +18,17 @@ import {
   saveECSDefinitionToLocalStorage,
 } from "./storage/lsECSDefinition";
 import { auth0Config } from "./fixtures/auth0Config";
-import {
-  loadSelectionFromLocalStorage,
-  saveSelectionToLocalStorage,
-} from "./storage/lsSelection";
 
 const history = createBrowserHistory();
 const store = createStore(history, {
   ...createEditorState(),
   ecs: loadECSDefinitionFromLocalStorage() ?? createECSDefinition(),
-  selection: loadSelectionFromLocalStorage() ?? {},
 });
 
 reaction(
   store,
   () => store.getState().editor.present.ecs,
   saveECSDefinitionToLocalStorage
-);
-
-reaction(
-  store,
-  () => store.getState().editor.present.selection,
-  saveSelectionToLocalStorage
 );
 
 function render() {

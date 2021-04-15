@@ -4,7 +4,6 @@ import { createRootState } from "../store";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
 import { selectECS } from "./selectECS";
-import { selectEditorSelection } from "./selectEditorSelection";
 import { selectEntityDefinition } from "./selectEntityDefinition";
 import { selectHasSystems } from "./selectHasSystems";
 import { selectInspectedObject } from "./selectInspectedObject";
@@ -30,8 +29,6 @@ describe("selector returns identical values given the same parameters", () => {
   test("selectComponentDefinition", () =>
     testIdentity(selectComponentDefinition, editorState, cDef.id));
   test("selectECS", () => testIdentity(selectECS, editorState));
-  test("selectEditorSelection", () =>
-    testIdentity(selectEditorSelection, editorState));
   test("selectEntityDefinition", () =>
     testIdentity(selectEntityDefinition, editorState, eDef.id));
   test("selectHasSystems", () => testIdentity(selectHasSystems, editorState));

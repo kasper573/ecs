@@ -38,11 +38,9 @@ export const mockEditorState = (
   return {
     ...createEditorState(),
     ecs,
-    selection: {
-      inspected: entity && {
-        type: "entityInitializer",
-        id: entity.id,
-      },
+    inspected: entity && {
+      type: "entityInitializer",
+      id: entity.id,
     },
   };
 };

@@ -13,29 +13,19 @@ export type DeleteTarget = [
 export const createDeleteAction = (
   state: EditorState
 ): DeleteTarget | undefined => {
-  const { selection, mostRecentSelectionName } = state;
-  if (!mostRecentSelectionName) {
-    return;
-  }
-  switch (mostRecentSelectionName) {
-    case "inspected":
-      const inspected = selection[mostRecentSelectionName];
-      if (!inspected) {
+  const { inspected } = state;
+  switch (inspected?.type) {
+    case "libraryNode":
+      const node = selectLibraryNode(state, inspected.id);
+      if (!node) {
         return;
       }
-      switch (inspected.type) {
-        case "libraryNode":
-          const node = selectLibraryNode(state, inspected.id);
-          if (!node) {
-            return;
-          }
-          const action = createDeleteLibraryNodeAction(node);
-          return [action, node.name];
-        case "entityInitializer":
-          return [
-            core.actions.deleteEntityInitializer(inspected.id),
-            selectSelectedEntityInitializer(state)!.name,
-          ];
-      }
+      const action = createDeleteLibraryNodeAction(node);
+      return [action, node.name];
+    case "entityInitializer":
+      return [
+        core.actions.deleteEntityInitializer(inspected.id),
+        selectSelectedEntityInitializer(state)!.name,
+      ];
   }
 };

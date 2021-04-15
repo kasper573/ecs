@@ -15,15 +15,24 @@ import {
 import { History } from "history";
 import { EditorState } from "./types/EditorState";
 import { core, noUndoActions } from "./core";
+import { ensureValidInspection } from "./reducers/ensureValidInspection";
 
-export const createRootReducer = (history: History): Reducer<EditorRootState> =>
-  combineReducers({
+export const createRootReducer = (
+  history: History
+): Reducer<EditorRootState> => {
+  const reducer = combineReducers({
     router: connectRouter(history),
     editor: undoable(core.reducer, {
       filter: excludeAction(["@@INIT", ...noUndoActions]),
       limit: 30,
     }),
   });
+  return (state, action) => {
+    const intermediateState = reducer(state, action);
+    const finalState = ensureValidInspection(intermediateState);
+    return finalState;
+  };
+};
 
 export const createRootState = (
   history: History,
