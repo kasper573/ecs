@@ -16,6 +16,7 @@ module.exports = {
   devtool: "source-map",
   output: {
     filename: "bundle.js",
+    publicPath: "/",
   },
   module: {
     rules: [
@@ -47,5 +48,6 @@ module.exports = {
   devServer: {
     hot: true,
     port: process.env.WEBPACK_DEV_SERVER_PORT,
+    historyApiFallback: true,
   },
 };

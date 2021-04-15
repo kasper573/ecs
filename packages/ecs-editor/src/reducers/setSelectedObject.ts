@@ -1,20 +1,16 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import {
   EditorSelectionName,
-  editorSelectionOrder,
   EditorSelectionValues,
 } from "../types/EditorSelection";
 import { createEditorState } from "../functions/createEditorState";
-import { getDefaultSelectionValue } from "../functions/getDefaultSelectionValue";
 
 type SelectedObjectOption<K extends keyof EditorSelectionValues> = {
   type: K;
   value: EditorSelectionValues[K];
 };
 
-type SetSelectedObjectPayload =
-  | SelectedObjectOption<"system">
-  | SelectedObjectOption<"inspected">;
+type SetSelectedObjectPayload = SelectedObjectOption<"inspected">;
 
 export const setSelectedObjectAction = createAction<SetSelectedObjectPayload>(
   "setSelectedObject"
@@ -45,24 +41,6 @@ export const setSelectedObject = createReducer(createEditorState(), (builder) =>
       ) => {
         state.selection[type] = value;
       })(type, value);
-
-      // Reset selection for objects below the selected object
-      const nextObjectName =
-        editorSelectionOrder[editorSelectionOrder.indexOf(type) + 1];
-      if (!nextObjectName) {
-        return; // Nothing to reset
-      }
-      const startIndex = editorSelectionOrder.indexOf(nextObjectName);
-      editorSelectionOrder
-        .slice(startIndex)
-        .forEach(
-          <ObjectName extends EditorSelectionName>(objectName: ObjectName) => {
-            state.selection[objectName] = getDefaultSelectionValue(
-              state,
-              objectName
-            );
-          }
-        );
     }
   )
 );

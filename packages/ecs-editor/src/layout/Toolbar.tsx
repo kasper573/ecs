@@ -1,10 +1,5 @@
 import { ReactNode } from "react";
-import {
-  IconButton,
-  Toolbar as MuiToolbar,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
+import { IconButton, Toolbar as MuiToolbar, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "../store";
 import { core } from "../core";

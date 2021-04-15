@@ -1,4 +1,6 @@
+import { createMemoryHistory } from "history";
 import { mockEditorState } from "../functions/mockEditorState";
+import { createRootState } from "../store";
 import { selectAll } from "./selectAll";
 import { selectComponentDefinition } from "./selectComponentDefinition";
 import { selectECS } from "./selectECS";
@@ -17,38 +19,40 @@ import { selectSelectedLibraryNode } from "./selectSelectedLibraryNode";
 
 // Suite disabled until createMemoizedSelector has been properly implemented
 describe("selector returns identical values given the same parameters", () => {
-  const state = mockEditorState();
-  const cDef = Object.values(state.ecs.componentDefinitions)[0];
-  const eDef = Object.values(state.ecs.entityDefinitions)[0];
-  const system = Object.values(state.ecs.systems)[0];
+  const history = createMemoryHistory();
+  const editorState = mockEditorState();
+  const rootState = createRootState(history, editorState);
+  const cDef = Object.values(editorState.ecs.componentDefinitions)[0];
+  const eDef = Object.values(editorState.ecs.entityDefinitions)[0];
+  const system = Object.values(editorState.ecs.systems)[0];
 
-  test("selectAll", () => testIdentity(selectAll, state));
+  test("selectAll", () => testIdentity(selectAll, editorState));
   test("selectComponentDefinition", () =>
-    testIdentity(selectComponentDefinition, state, cDef.id));
-  test("selectECS", () => testIdentity(selectECS, state));
+    testIdentity(selectComponentDefinition, editorState, cDef.id));
+  test("selectECS", () => testIdentity(selectECS, editorState));
   test("selectEditorSelection", () =>
-    testIdentity(selectEditorSelection, state));
+    testIdentity(selectEditorSelection, editorState));
   test("selectEntityDefinition", () =>
-    testIdentity(selectEntityDefinition, state, eDef.id));
-  test("selectHasSystems", () => testIdentity(selectHasSystems, state));
+    testIdentity(selectEntityDefinition, editorState, eDef.id));
+  test("selectHasSystems", () => testIdentity(selectHasSystems, editorState));
   test("selectInspectedObject", () =>
-    testIdentity(selectInspectedObject, state));
+    testIdentity(selectInspectedObject, editorState));
   test("selectLibraryNode", () =>
-    testIdentity(selectLibraryNode, state, eDef.nodeId));
+    testIdentity(selectLibraryNode, editorState, eDef.nodeId));
   test("selectListOfComponentDefinition", () =>
-    testIdentity(selectListOfComponentDefinition, state, system.id));
+    testIdentity(selectListOfComponentDefinition, rootState, system.id));
   test("selectListOfEntityDefinition", () =>
-    testIdentity(selectListOfEntityDefinition, state, system.id));
+    testIdentity(selectListOfEntityDefinition, rootState, system.id));
   test("selectListOfLibraryFolder", () =>
-    testIdentity(selectListOfLibraryFolder, state, system.id));
+    testIdentity(selectListOfLibraryFolder, rootState, system.id));
   test("selectListOfLibraryNode", () =>
-    testIdentity(selectListOfLibraryNode, state, system.id));
+    testIdentity(selectListOfLibraryNode, rootState, system.id));
   test("selectSelectedEntityInitializer", () =>
-    testIdentity(selectSelectedEntityInitializer, state));
+    testIdentity(selectSelectedEntityInitializer, editorState));
   test("selectSelectedLibraryNode", () =>
-    testIdentity(selectSelectedLibraryNode, state));
+    testIdentity(selectSelectedLibraryNode, editorState));
   test("selectSelectedSystemDefinition", () =>
-    testIdentity(selectSelectedSystemDefinition, state));
+    testIdentity(selectSelectedSystemDefinition, rootState));
 });
 
 function testIdentity<T extends (...args: any) => any>(

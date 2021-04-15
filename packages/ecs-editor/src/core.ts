@@ -3,7 +3,6 @@ import { createEditorState } from "./functions/createEditorState";
 import { createSystemDefinition } from "./reducers/createSystemDefinition";
 import { renameSystemDefinition } from "./reducers/renameSystemDefinition";
 import { deleteSystemDefinition } from "./reducers/deleteSystemDefinition";
-import { setSelectedSystemDefinition } from "./reducers/setSelectedSystemDefinition";
 import { createEntityInitializer } from "./reducers/createEntityInitializer";
 import { renameEntityInitializer } from "./reducers/renameEntityInitializer";
 import { deleteEntityInitializer } from "./reducers/deleteEntityInitializer";
@@ -47,7 +46,6 @@ export const core = createSlice({
     moveEntityInitializer,
     duplicateEntityInitializer,
     deleteEntityInitializer,
-    setSelectedSystemDefinition,
     setSelectedEntityInitializer,
     setSelectedLibraryNode,
     moveLibraryNode,
@@ -73,9 +71,12 @@ export const core = createSlice({
   },
 });
 
-export const noUndoActions = ([
+export const noUndoActionList: Array<keyof typeof core.actions> = [
   "setSelectedEntityInitializer",
   "setSelectedLibraryNode",
-  "setSelectedSystemDefinition",
   "setThemeType",
-] as Array<keyof typeof core.actions>).map((name) => `${core.name}/${name}`);
+];
+
+export const noUndoActions = noUndoActionList.map(
+  (name) => `${core.name}/${name}`
+);

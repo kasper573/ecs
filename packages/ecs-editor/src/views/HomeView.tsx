@@ -4,13 +4,12 @@ import { AddIcon, MenuIcon, SystemIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { MenuFor } from "../components/MenuFor";
-import { core } from "../core";
 import { useSystemCrud } from "../hooks/useSystemCrud";
 import { useLoadECSDefinitionsDialog } from "../hooks/useLoadECSDefinitionsDialog";
 import { CommonCard, CommonCardLabel } from "../components/CommonCard";
 import { CommonCardContainer } from "../components/CommonCardContainer";
 import { ContentPadding } from "../layout/ContentPadding";
-import { createGotoSystemDefinition } from "../actions/createGotoSystemDefinition";
+import { systemRoute } from "../routes/systemRoute";
 
 export const HomeView = () => {
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ export const HomeView = () => {
         {systems.map((system) => (
           <CommonCard
             key={system.id}
-            onClick={() => dispatch(createGotoSystemDefinition(system.id))}
+            onClick={() => dispatch(systemRoute.push(system))}
           >
             <LargeSystemIcon />
             <CommonCardLabel>

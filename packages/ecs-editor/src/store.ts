@@ -8,6 +8,7 @@ import {
 import undoable, { excludeAction, StateWithHistory } from "redux-undo";
 import {
   connectRouter,
+  RouterLocation,
   routerMiddleware,
   RouterState,
 } from "connected-react-router";
@@ -15,9 +16,7 @@ import { History } from "history";
 import { EditorState } from "./types/EditorState";
 import { core, noUndoActions } from "./core";
 
-export const createRootReducer = (
-  history: History<unknown>
-): Reducer<EditorRootState> =>
+export const createRootReducer = (history: History): Reducer<EditorRootState> =>
   combineReducers({
     router: connectRouter(history),
     editor: undoable(core.reducer, {
@@ -26,29 +25,32 @@ export const createRootReducer = (
     }),
   });
 
-export const createStore = (
-  history: History<unknown>,
-  initialState: EditorState
-) =>
+export const createRootState = (
+  history: History,
+  editorState: EditorState
+): EditorRootState => ({
+  router: {
+    action: history.action,
+    location: history.location as RouterLocation<unknown>,
+  },
+  editor: {
+    past: [],
+    present: editorState,
+    future: [],
+  },
+});
+
+export const createStore = (history: History, editorState: EditorState) =>
   configureStore({
     reducer: createRootReducer(history),
     middleware: (defaults) => defaults().concat(routerMiddleware(history)),
-    preloadedState: {
-      router: {
-        action: history.action,
-        location: history.location,
-      },
-      editor: {
-        past: [],
-        present: initialState,
-        future: [],
-      },
-    },
+    preloadedState: createRootState(history, editorState),
   });
 
 type EditorStore = ReturnType<typeof createStore>;
 type EditorDispatch = EditorStore["dispatch"];
-type EditorRootState = {
+
+export type EditorRootState = {
   editor: StateWithHistory<EditorState>;
   router: RouterState;
 };

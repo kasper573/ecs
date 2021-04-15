@@ -2,7 +2,6 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { core } from "../core";
 import { EditorState } from "../types/EditorState";
 import { selectLibraryNode } from "../selectors/selectLibraryNode";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
 import { createDeleteLibraryNodeAction } from "./createDeleteLibraryNodeAction";
 
@@ -19,15 +18,6 @@ export const createDeleteAction = (
     return;
   }
   switch (mostRecentSelectionName) {
-    case "system":
-      const systemId = selection[mostRecentSelectionName];
-      if (!systemId) {
-        return;
-      }
-      return [
-        core.actions.deleteSystemDefinition(systemId),
-        selectSelectedSystemDefinition(state)!.name,
-      ];
     case "inspected":
       const inspected = selection[mostRecentSelectionName];
       if (!inspected) {

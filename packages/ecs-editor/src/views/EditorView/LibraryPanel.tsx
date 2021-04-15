@@ -2,7 +2,12 @@ import { IconButton, Tooltip } from "@material-ui/core";
 import { memo } from "react";
 import { PanelName } from "../../types/PanelName";
 import { PanelHeader } from "../../components/PanelHeader";
-import { useDispatch, useSelector, useStore } from "../../store";
+import {
+  useDispatch,
+  useRootSelector,
+  useSelector,
+  useStore,
+} from "../../store";
 import { selectListOfLibraryNode } from "../../selectors/selectListOfLibraryNode";
 import { CommonTreeView } from "../../components/CommonTreeView";
 import { core } from "../../core";
@@ -41,9 +46,9 @@ import { EntityDefinition } from "../../../../ecs-serializable/src/definition/En
 export const LibraryPanel = memo(() => {
   const store = useStore();
   const dispatch = useDispatch();
-  const selectedSystem = useSelector(selectSelectedSystemDefinition);
+  const selectedSystem = useRootSelector(selectSelectedSystemDefinition);
   const selectedNode = useSelector(selectSelectedLibraryNode);
-  const nodes = useSelector(selectListOfLibraryNode);
+  const nodes = useRootSelector(selectListOfLibraryNode);
 
   const showCreateFolderDialog = useDialog(
     (props, parentNodeId?: LibraryNodeId) => (

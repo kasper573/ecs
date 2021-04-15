@@ -1,9 +1,10 @@
 import { memo } from "react";
 import styled from "styled-components";
-import { useSelector } from "../../store";
+import { useRootSelector } from "../../store";
 import { selectSelectedSystemDefinition } from "../../selectors/selectSelectedSystemDefinition";
 import { SystemSyncContext, useSystemSync } from "../../hooks/useSystemSync";
 import { ContentPadding } from "../../layout/ContentPadding";
+import { NotFoundView } from "../NotFoundView";
 import { SystemActions } from "./SystemActions";
 import { PanelContainer } from "./PanelContainer";
 import { LibraryPanel } from "./LibraryPanel";
@@ -12,12 +13,15 @@ import { InspectorPanel } from "./InspectorPanel";
 import { RuntimePanel } from "./RuntimePanel";
 
 export const EditorView = memo(() => {
-  const selectedSystem = useSelector(selectSelectedSystemDefinition);
+  const selectedSystem = useRootSelector(selectSelectedSystemDefinition);
   const systemSync = useSystemSync();
+  if (!selectedSystem) {
+    return <NotFoundView />;
+  }
   return (
     <SystemSyncContext.Provider value={systemSync}>
       <AdjustedContentPadding>
-        {selectedSystem && <SystemActions system={selectedSystem} />}
+        <SystemActions system={selectedSystem} />
         <PanelContainer>
           <LibraryPanel />
           <HierarchyPanel />

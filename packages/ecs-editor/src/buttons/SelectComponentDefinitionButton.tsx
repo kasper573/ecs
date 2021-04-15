@@ -4,7 +4,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { bindPopper, bindToggle } from "material-ui-popup-state";
 import { ComponentDefinition } from "../../../ecs-serializable/src/definition/ComponentDefinition";
-import { useSelector } from "../store";
+import { useRootSelector } from "../store";
 import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
 import { AddIcon } from "../components/icons";
 import { CommonPopper } from "../components/CommonPopper";
@@ -16,7 +16,7 @@ export type SelectComponentDefinitionButtonProps = {
 export const SelectComponentDefinitionButton = ({
   onSelected,
 }: SelectComponentDefinitionButtonProps) => {
-  const components = useSelector(selectListOfComponentDefinition);
+  const components = useRootSelector(selectListOfComponentDefinition);
   const popupState = usePopupState({
     variant: "popper",
     popupId: "select-component-definition",

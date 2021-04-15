@@ -4,7 +4,7 @@ import { HomeView } from "./views/HomeView";
 import { Layout } from "./layout/Layout";
 import { NotFoundView } from "./views/NotFoundView";
 import { EditorTitle } from "./views/EditorView/EditorTitle";
-import { createGotoSystemDefinitionPath } from "./actions/createGotoSystemDefinition";
+import { systemRoute } from "./routes/systemRoute";
 
 /**
  * All routes in the application.
@@ -16,7 +16,7 @@ export const Routes = () => (
         <HomeView />
       </Layout>
     </Route>
-    <Route path={createGotoSystemDefinitionPath(":id")}>
+    <Route {...systemRoute.props}>
       <Layout title={<EditorTitle />}>
         <EditorView />
       </Layout>

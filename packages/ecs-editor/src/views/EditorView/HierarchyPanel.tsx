@@ -4,7 +4,12 @@ import { shallowEqual } from "react-redux";
 import { PanelName } from "../../types/PanelName";
 import { PanelHeader } from "../../components/PanelHeader";
 import { core } from "../../core";
-import { useDispatch, useSelector, useStore } from "../../store";
+import {
+  useDispatch,
+  useRootSelector,
+  useSelector,
+  useStore,
+} from "../../store";
 import { selectListOfEntityInitializer } from "../../selectors/selectListOfEntityInitializer";
 import {
   AddIcon,
@@ -39,12 +44,13 @@ import { SystemSyncContext } from "../../hooks/useSystemSync";
 import { getRuntimeEntityActiveStates } from "../../functions/getRuntimeEntityActiveStates";
 import { compareEntityInitializers } from "../../functions/compareEntityInitializers";
 import { DNDType } from "../../dnd/DNDType";
+import { selectSelectedSystemDefinition } from "../../selectors/selectSelectedSystemDefinition";
 
 export const HierarchyPanel = memo(() => {
   const [system] = useContext(SystemSyncContext);
-  const entityDefinitions = useSelector(selectListOfEntityDefinition);
+  const entityDefinitions = useRootSelector(selectListOfEntityDefinition);
   const selectedEntity = useSelector(selectSelectedEntityInitializer);
-  const entities = useSelector(selectListOfEntityInitializer);
+  const entities = useRootSelector(selectListOfEntityInitializer);
   const dispatch = useDispatch();
   const store = useStore();
   const isRuntimeActive = useSystemSelector(
@@ -105,11 +111,14 @@ export const HierarchyPanel = memo(() => {
     parentId?: EntityInitializerId,
     order?: number
   ) {
-    const { system } = store.getState().editor.present.selection;
+    const system = selectSelectedSystemDefinition(store.getState());
+    if (!system) {
+      return;
+    }
     const id: EntityInitializerId = uuid();
     dispatch(
       core.actions.createEntityInitializer({
-        systemId: system!,
+        systemId: system.id,
         id,
         parentId,
         order,

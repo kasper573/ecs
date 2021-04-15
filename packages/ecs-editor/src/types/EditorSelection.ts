@@ -1,4 +1,3 @@
-import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { InspectedValue } from "./InspectedValue";
 
 /**
@@ -7,7 +6,6 @@ import { InspectedValue } from "./InspectedValue";
 export type EditorSelectionValues = Partial<EditorSelectionValuesDefined>;
 
 export type EditorSelectionValuesDefined = {
-  system: SystemDefinition["id"];
   inspected: InspectedValue;
 };
 
@@ -15,12 +13,3 @@ export type EditorSelectionValuesDefined = {
  * Names of all known objects in the editor
  */
 export type EditorSelectionName = keyof EditorSelectionValues;
-
-/**
- * The hierarchical order of all selections.
- * Selecting any of these objects will reset selection for all descendants.
- */
-export const editorSelectionOrder: EditorSelectionName[] = [
-  "system",
-  "inspected",
-];
