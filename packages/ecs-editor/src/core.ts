@@ -17,7 +17,6 @@ import { setComponentInitializerProperty } from "./reducers/setComponentInitiali
 import { deleteLibraryFolder } from "./reducers/deleteLibraryFolder";
 import { deleteComponentDefinition } from "./reducers/deleteComponentDefinition";
 import { setEditorState } from "./reducers/setEditorState";
-import { ensureSelection } from "./reducers/ensureSelection";
 import { createComponentDefinition } from "./reducers/createComponentDefinition";
 import { renameComponentDefinition } from "./reducers/renameComponentDefinition";
 import { renameEntityDefinition } from "./reducers/renameEntityDefinition";
@@ -72,7 +71,6 @@ export const core = createSlice({
     setThemeType,
     commitECSDefinitions,
   },
-  extraReducers: (builder) => builder.addMatcher(() => true, ensureSelection),
 });
 
 export const noUndoActions = ([

@@ -30,6 +30,7 @@ export {
   Brightness4 as DarkThemeIcon,
   Brightness7 as LightThemeIcon,
   Cancel as CloseIcon,
+  ArrowBack as BackIcon,
 } from "@material-ui/icons";
 
 export {

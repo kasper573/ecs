@@ -1,25 +1,43 @@
 import { memo } from "react";
-import { IconButton, Toolbar as MuiToolbar, Tooltip } from "@material-ui/core";
+import {
+  IconButton,
+  Toolbar as MuiToolbar,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "../store";
 import { core } from "../core";
 import { selectThemeType } from "../selectors/selectThemeType";
-import { DarkThemeIcon, LightThemeIcon } from "../icons";
-import { FileMenu } from "./FileMenu";
+import { BackIcon, DarkThemeIcon, LightThemeIcon } from "../icons";
+import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { DevToolsButton } from "./DevToolsButton";
 import { UserActions } from "./UserActions";
 
-export const AppBarContent = memo(() => {
+export const Toolbar = memo(() => {
   const dispatch = useDispatch();
   const themeType = useSelector(selectThemeType);
+  const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const nextThemeType = themeType === "light" ? "dark" : "light";
   const ThemeToggleIcon = themeToggleIcons[themeType];
   const themeToggleTooltip = themeToggleTooltips[themeType];
+
   const toggleTheme = () => dispatch(core.actions.setThemeType(nextThemeType));
+  const goHome = () => dispatch(core.actions.setSelectedSystemDefinition());
 
   return (
-    <Toolbar>
-      <FileMenu edge="start" />
+    <Container>
+      {selectedSystem && (
+        <>
+          <Tooltip title="Home">
+            <IconButton edge="start" onClick={goHome}>
+              <BackIcon />
+            </IconButton>
+          </Tooltip>
+          <SystemName>{selectedSystem.name}</SystemName>
+        </>
+      )}
+      <Grow />
       <Actions>
         <DevToolsButton />
         <Tooltip title={themeToggleTooltip}>
@@ -29,15 +47,25 @@ export const AppBarContent = memo(() => {
         </Tooltip>
         <UserActions />
       </Actions>
-    </Toolbar>
+    </Container>
   );
 });
 
-const Toolbar = styled(MuiToolbar).attrs({ disableGutters: true })`
+const Container = styled(MuiToolbar).attrs({ disableGutters: true })`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+`;
+
+const Grow = styled.span`
+  flex: 1;
+`;
+
+const SystemName = styled(Typography).attrs({
+  component: "span",
+  noWrap: true,
+})`
+  margin: 0 ${({ theme }) => theme.spacing(1.5)}px;
 `;
 
 const Actions = styled.div`

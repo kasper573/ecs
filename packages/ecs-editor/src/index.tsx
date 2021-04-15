@@ -10,22 +10,33 @@ import nativeComponents from "../../ecs-native-components";
 import { createEditorState } from "./functions/createEditorState";
 import { NativeComponentsContext } from "./NativeComponentsContext";
 import { createStore } from "./store";
-import { Editor } from "./editors/Editor";
+import { App } from "./App";
 import {
   loadECSDefinitionFromLocalStorage,
   saveECSDefinitionToLocalStorage,
 } from "./storage/lsECSDefinition";
 import { auth0Config } from "./fixtures/auth0Config";
+import {
+  loadSelectionFromLocalStorage,
+  saveSelectionToLocalStorage,
+} from "./storage/lsSelection";
 
 const store = createStore({
   ...createEditorState(),
   ecs: loadECSDefinitionFromLocalStorage() ?? createECSDefinition(),
+  selection: loadSelectionFromLocalStorage() ?? {},
 });
 
 reaction(
   store,
   () => store.getState().present.ecs,
   saveECSDefinitionToLocalStorage
+);
+
+reaction(
+  store,
+  () => store.getState().present.selection,
+  saveSelectionToLocalStorage
 );
 
 function render() {
@@ -35,7 +46,7 @@ function render() {
         <NativeComponentsContext.Provider value={nativeComponents}>
           <Provider store={store}>
             <Auth0Provider {...auth0Config}>
-              <Editor />
+              <App />
             </Auth0Provider>
           </Provider>
         </NativeComponentsContext.Provider>

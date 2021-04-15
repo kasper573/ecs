@@ -5,24 +5,24 @@ import {
   CssBaseline,
   MuiThemeProvider,
 } from "@material-ui/core";
-import { Layout } from "../layout/Layout";
-import { Hotkeys } from "../components/Hotkeys";
-import { useSelector } from "../store";
-import { lightTheme } from "../fixtures/lightTheme";
-import { darkTheme } from "../fixtures/darkTheme";
-import { selectThemeType } from "../selectors/selectThemeType";
-import { GlobalStyle } from "../layout/GlobalStyle";
-import { DragLayer } from "../dnd/DragLayer";
-import { Dialogs } from "../hooks/useDialog";
-import { AppBarContent } from "../layout/AppBarContent";
-import { Content } from "../layout/Content";
-import { IntroProvider } from "../intro/IntroProvider";
-import { IntroDimmer } from "../intro/IntroDimmer";
+import { Layout } from "./layout/Layout";
+import { Hotkeys } from "./components/Hotkeys";
+import { useSelector } from "./store";
+import { lightTheme } from "./fixtures/lightTheme";
+import { darkTheme } from "./fixtures/darkTheme";
+import { selectThemeType } from "./selectors/selectThemeType";
+import { GlobalStyle } from "./layout/GlobalStyle";
+import { DragLayer } from "./dnd/DragLayer";
+import { Dialogs } from "./hooks/useDialog";
+import { Toolbar } from "./layout/Toolbar";
+import { Routes } from "./layout/Routes";
+import { IntroProvider } from "./intro/IntroProvider";
+import { IntroDimmer } from "./intro/IntroDimmer";
 
 /**
  * Renders controls to CRUD systems, entities, components and properties.
  */
-export const Editor = () => {
+export const App = () => {
   const themeType = useSelector(selectThemeType);
   const theme = useMemo(
     () => createMuiTheme(themeType === "light" ? lightTheme : darkTheme),
@@ -34,8 +34,8 @@ export const Editor = () => {
         <IntroProvider>
           <CssBaseline />
           <GlobalStyle />
-          <Layout appBar={<AppBarContent />}>
-            <Content />
+          <Layout appBar={<Toolbar />}>
+            <Routes />
           </Layout>
           <DragLayer />
           <Dialogs />
