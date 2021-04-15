@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Auth0Provider } from "@auth0/auth0-react";
+import { createBrowserHistory } from "history";
+import { ConnectedRouter } from "connected-react-router";
 import { createECSDefinition } from "../../ecs-serializable/src/functions/createECSDefinition";
 import { reaction } from "../../ecs-common/src/reaction";
 import nativeComponents from "../../ecs-native-components";
@@ -21,7 +23,8 @@ import {
   saveSelectionToLocalStorage,
 } from "./storage/lsSelection";
 
-const store = createStore({
+const history = createBrowserHistory();
+const store = createStore(history, {
   ...createEditorState(),
   ecs: loadECSDefinitionFromLocalStorage() ?? createECSDefinition(),
   selection: loadSelectionFromLocalStorage() ?? {},
@@ -29,13 +32,13 @@ const store = createStore({
 
 reaction(
   store,
-  () => store.getState().present.ecs,
+  () => store.getState().editor.present.ecs,
   saveECSDefinitionToLocalStorage
 );
 
 reaction(
   store,
-  () => store.getState().present.selection,
+  () => store.getState().editor.present.selection,
   saveSelectionToLocalStorage
 );
 
@@ -45,9 +48,11 @@ function render() {
       <DndProvider backend={HTML5Backend}>
         <NativeComponentsContext.Provider value={nativeComponents}>
           <Provider store={store}>
-            <Auth0Provider {...auth0Config}>
-              <App />
-            </Auth0Provider>
+            <ConnectedRouter history={history}>
+              <Auth0Provider {...auth0Config}>
+                <App />
+              </Auth0Provider>
+            </ConnectedRouter>
           </Provider>
         </NativeComponentsContext.Provider>
       </DndProvider>

@@ -40,7 +40,7 @@ export function useLoadECSDefinitionsDialog() {
   async function loadAndCommit() {
     const ecsList = await loadECSDefinitionsFromFS();
     const conflictingSystems = getIntersectingSystemDefinitions(
-      store.getState().present.ecs,
+      store.getState().editor.present.ecs,
       ecsList
     );
     if (conflictingSystems.length > 0) {

@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { CloseIcon } from "../icons";
+import { CloseIcon } from "../components/icons";
 import { IntroContext } from "./IntroContext";
 import { IntroId } from "./types/IntroState";
 

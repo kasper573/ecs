@@ -6,7 +6,7 @@ import { bindPopper, bindToggle } from "material-ui-popup-state";
 import { ComponentDefinition } from "../../../ecs-serializable/src/definition/ComponentDefinition";
 import { useSelector } from "../store";
 import { selectListOfComponentDefinition } from "../selectors/selectListOfComponentDefinition";
-import { AddIcon } from "../icons";
+import { AddIcon } from "../components/icons";
 import { CommonPopper } from "../components/CommonPopper";
 
 export type SelectComponentDefinitionButtonProps = {

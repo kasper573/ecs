@@ -1,7 +1,10 @@
 import React, { useCallback } from "react";
 import { IconButton, Tooltip, Typography } from "@material-ui/core";
 import { EntityInitializer } from "../../../ecs-serializable/src/definition/EntityInitializer";
-import { EntityDefinitionIcon, EntityInitializerIcon } from "../icons";
+import {
+  EntityDefinitionIcon,
+  EntityInitializerIcon,
+} from "../components/icons";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
 import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefinitionButton";
 import { ComponentDefinition } from "../../../ecs-serializable/src/definition/ComponentDefinition";
@@ -120,7 +123,7 @@ export const EntityInitializerEditor = ({
   const askToDeleteComponent = useDialog(
     (props, initializer: ComponentInitializer) => {
       const definition = selectComponentDefinition(
-        store.getState().present,
+        store.getState().editor.present,
         initializer?.definitionId
       );
       return (

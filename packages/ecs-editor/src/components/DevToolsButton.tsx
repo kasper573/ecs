@@ -2,9 +2,9 @@ import { usePopupState } from "material-ui-popup-state/hooks";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { bindPopper, bindToggle } from "material-ui-popup-state";
 import React, { memo } from "react";
-import { DevToolsIcon } from "../icons";
-import { CommonPopper } from "../components/CommonPopper";
-import { DevTools } from "../components/DevTools";
+import { DevToolsIcon } from "./icons";
+import { CommonPopper } from "./CommonPopper";
+import { DevTools } from "./DevTools";
 
 export const DevToolsButton = memo(() => {
   const popupState = usePopupState({

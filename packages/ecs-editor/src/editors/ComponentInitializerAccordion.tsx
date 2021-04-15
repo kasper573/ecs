@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ComponentInitializer } from "../../../ecs-serializable/src/definition/ComponentInitializer";
 import { useContextMenu } from "../hooks/useContextMenu";
-import { ExpandIcon } from "../icons";
+import { ExpandIcon } from "../components/icons";
 import { useSelector } from "../store";
 import { selectComponentDefinition } from "../selectors/selectComponentDefinition";
 import {

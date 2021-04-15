@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Avatar, IconButton, MenuItem } from "@material-ui/core";
 import { useAuth0 } from "@auth0/auth0-react";
+import { UserIcon } from "../components/icons";
 import { MenuFor } from "../components/MenuFor";
-import { UserIcon } from "../icons";
 
 export const UserActions = () => {
   const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();

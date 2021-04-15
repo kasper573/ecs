@@ -1,8 +1,6 @@
-import { memo } from "react";
+import { ReactNode } from "react";
 import {
-  Fade,
   IconButton,
-  Slide,
   Toolbar as MuiToolbar,
   Tooltip,
   Typography,
@@ -11,38 +9,23 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "../store";
 import { core } from "../core";
 import { selectThemeType } from "../selectors/selectThemeType";
-import { BackIcon, DarkThemeIcon, LightThemeIcon } from "../icons";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { usePrevious } from "../hooks/usePrevious";
-import { DevToolsButton } from "./DevToolsButton";
+import { DarkThemeIcon, LightThemeIcon } from "../components/icons";
+import { DevToolsButton } from "../components/DevToolsButton";
 import { UserActions } from "./UserActions";
 
-export const Toolbar = memo(() => {
+export type ToolbarProps = { title?: ReactNode };
+
+export const Toolbar = ({ title }: ToolbarProps) => {
   const dispatch = useDispatch();
   const themeType = useSelector(selectThemeType);
-  const selectedSystem = useSelector(selectSelectedSystemDefinition);
-  const previousSystem = usePrevious(selectedSystem);
-  const displayedSystem = selectedSystem ?? previousSystem;
-
   const nextThemeType = themeType === "light" ? "dark" : "light";
   const ThemeToggleIcon = themeToggleIcons[themeType];
   const themeToggleTooltip = themeToggleTooltips[themeType];
-
   const toggleTheme = () => dispatch(core.actions.setThemeType(nextThemeType));
-  const goHome = () => dispatch(core.actions.setSelectedSystemDefinition());
 
   return (
     <Container>
-      <Fade in={!!selectedSystem}>
-        <div>
-          <Tooltip title="Home">
-            <IconButton edge="start" onClick={goHome}>
-              <BackIcon />
-            </IconButton>
-          </Tooltip>
-          <Title>{displayedSystem?.name}</Title>
-        </div>
-      </Fade>
+      {title}
       <Grow />
       <Actions>
         <DevToolsButton />
@@ -55,7 +38,7 @@ export const Toolbar = memo(() => {
       </Actions>
     </Container>
   );
-});
+};
 
 const Container = styled(MuiToolbar).attrs({ disableGutters: true })`
   display: flex;
@@ -65,13 +48,6 @@ const Container = styled(MuiToolbar).attrs({ disableGutters: true })`
 
 const Grow = styled.span`
   flex: 1;
-`;
-
-const Title = styled(Typography).attrs({
-  component: "span",
-  noWrap: true,
-})`
-  margin: 0 ${({ theme }) => theme.spacing(1.5)}px;
 `;
 
 const Actions = styled.div`

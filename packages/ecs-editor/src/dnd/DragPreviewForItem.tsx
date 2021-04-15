@@ -7,7 +7,7 @@ import {
   EntityDefinitionIcon,
   EntityInitializerIcon,
   FolderIcon,
-} from "../icons";
+} from "../components/icons";
 import { EntityInitializer } from "../../../ecs-serializable/src/definition/EntityInitializer";
 import { DNDType } from "./DNDType";
 import { DragPreview } from "./DragPreview";

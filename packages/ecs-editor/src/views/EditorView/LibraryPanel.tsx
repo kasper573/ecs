@@ -1,17 +1,17 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import { memo } from "react";
-import { PanelName } from "../types/PanelName";
-import { PanelHeader } from "../components/PanelHeader";
-import { useDispatch, useSelector, useStore } from "../store";
-import { selectListOfLibraryNode } from "../selectors/selectListOfLibraryNode";
-import { CommonTreeView } from "../components/CommonTreeView";
-import { core } from "../core";
-import { Panel } from "../components/Panel";
-import { uuid } from "../../../ecs-common/src/uuid";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { selectSelectedLibraryNode } from "../selectors/selectSelectedLibraryNode";
-import { TypedLibraryNode } from "../types/TypedLibraryNode";
-import { MenuFor } from "../components/MenuFor";
+import { PanelName } from "../../types/PanelName";
+import { PanelHeader } from "../../components/PanelHeader";
+import { useDispatch, useSelector, useStore } from "../../store";
+import { selectListOfLibraryNode } from "../../selectors/selectListOfLibraryNode";
+import { CommonTreeView } from "../../components/CommonTreeView";
+import { core } from "../../core";
+import { Panel } from "../../components/Panel";
+import { uuid } from "../../../../ecs-common/src/uuid";
+import { selectSelectedSystemDefinition } from "../../selectors/selectSelectedSystemDefinition";
+import { selectSelectedLibraryNode } from "../../selectors/selectSelectedLibraryNode";
+import { TypedLibraryNode } from "../../types/TypedLibraryNode";
+import { MenuFor } from "../../components/MenuFor";
 import {
   AddIcon,
   ComponentDefinitionIcon,
@@ -19,24 +19,24 @@ import {
   FolderClosedIcon,
   FolderIcon,
   FolderOpenIcon,
-} from "../icons";
-import { LibraryNodeId } from "../../../ecs-serializable/src/definition/LibraryNode";
-import { libraryNodeDropSpec } from "../dnd/libraryNodeDropSpec";
-import { useContextMenu } from "../hooks/useContextMenu";
-import { createLibraryMenuFactory } from "../functions/createLibraryMenuFactory";
-import { useDialog } from "../hooks/useDialog";
-import { NameDialog } from "../dialogs/NameDialog";
-import { DeleteDialog } from "../dialogs/DeleteDialog";
-import { createRenameLibraryNodeAction } from "../actions/createRenameLibraryNodeAction";
-import { createDeleteLibraryNodeAction } from "../actions/createDeleteLibraryNodeAction";
-import { createDuplicateLibraryNodeAction } from "../actions/createDuplicateLibraryNodeAction";
-import { CreateTreeOptions } from "../tree/createTree";
-import { compareLibraryTreeNodes } from "../functions/compareLibraryTreeNodes";
-import { libraryNodeDragSpec } from "../dnd/libraryNodeDragSpec";
-import { TreeNode } from "../tree/TreeNode";
-import { Intro } from "../intro/Intro";
-import { LibraryFolder } from "../../../ecs-serializable/src/definition/LibraryFolder";
-import { EntityDefinition } from "../../../ecs-serializable/src/definition/EntityDefinition";
+} from "../../components/icons";
+import { LibraryNodeId } from "../../../../ecs-serializable/src/definition/LibraryNode";
+import { libraryNodeDropSpec } from "../../dnd/libraryNodeDropSpec";
+import { useContextMenu } from "../../hooks/useContextMenu";
+import { createLibraryMenuFactory } from "../../functions/createLibraryMenuFactory";
+import { useDialog } from "../../hooks/useDialog";
+import { NameDialog } from "../../dialogs/NameDialog";
+import { DeleteDialog } from "../../dialogs/DeleteDialog";
+import { createRenameLibraryNodeAction } from "../../actions/createRenameLibraryNodeAction";
+import { createDeleteLibraryNodeAction } from "../../actions/createDeleteLibraryNodeAction";
+import { createDuplicateLibraryNodeAction } from "../../actions/createDuplicateLibraryNodeAction";
+import { CreateTreeOptions } from "../../tree/createTree";
+import { compareLibraryTreeNodes } from "../../functions/compareLibraryTreeNodes";
+import { libraryNodeDragSpec } from "../../dnd/libraryNodeDragSpec";
+import { TreeNode } from "../../tree/TreeNode";
+import { Intro } from "../../intro/Intro";
+import { LibraryFolder } from "../../../../ecs-serializable/src/definition/LibraryFolder";
+import { EntityDefinition } from "../../../../ecs-serializable/src/definition/EntityDefinition";
 
 export const LibraryPanel = memo(() => {
   const store = useStore();
@@ -187,7 +187,7 @@ export const LibraryPanel = memo(() => {
             libraryNodeDropSpec(
               target,
               (dropped) => handleMoveNode(dropped, target),
-              () => store.getState().present
+              () => store.getState().editor.present
             ),
         }}
       />

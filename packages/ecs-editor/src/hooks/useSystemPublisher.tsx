@@ -61,7 +61,7 @@ export function useSystemPublisher(systemId?: SystemDefinitionId) {
     }
     const accessToken = await getAccessTokenSilently();
     const selectedECS = getECSDefinitionForSystem(
-      store.getState().present.ecs,
+      store.getState().editor.present.ecs,
       systemId
     );
     const result = await publishSystem(

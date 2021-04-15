@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IconButton, MenuItem, Typography } from "@material-ui/core";
-import { AddIcon, MenuIcon, SystemIcon } from "../icons";
+import { AddIcon, MenuIcon, SystemIcon } from "../components/icons";
 import { useDispatch, useSelector } from "../store";
 import { selectListOfSystemDefinition } from "../selectors/selectListOfSystemDefinition";
 import { MenuFor } from "../components/MenuFor";
@@ -9,9 +9,10 @@ import { useSystemCrud } from "../hooks/useSystemCrud";
 import { useLoadECSDefinitionsDialog } from "../hooks/useLoadECSDefinitionsDialog";
 import { CommonCard, CommonCardLabel } from "../components/CommonCard";
 import { CommonCardContainer } from "../components/CommonCardContainer";
-import { ContentPadding } from "./ContentPadding";
+import { ContentPadding } from "../layout/ContentPadding";
+import { createGotoSystemDefinition } from "../actions/createGotoSystemDefinition";
 
-export const Home = () => {
+export const HomeView = () => {
   const dispatch = useDispatch();
   const systems = useSelector(selectListOfSystemDefinition);
   const {
@@ -41,9 +42,7 @@ export const Home = () => {
         {systems.map((system) => (
           <CommonCard
             key={system.id}
-            onClick={() =>
-              dispatch(core.actions.setSelectedSystemDefinition(system.id))
-            }
+            onClick={() => dispatch(createGotoSystemDefinition(system.id))}
           >
             <LargeSystemIcon />
             <CommonCardLabel>

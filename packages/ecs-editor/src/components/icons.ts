@@ -8,7 +8,7 @@ import {
   Receipt as EntityInitializerIcon,
   Inbox as EntityContainerIcon,
 } from "@material-ui/icons";
-import { createIconWithMarginIcon } from "./components/IconWithMarginIcon";
+import { createIconWithMarginIcon } from "./IconWithMarginIcon";
 
 export {
   Label as PropertyIcon,

@@ -1,6 +1,6 @@
 import { ComponentDefinition } from "../../../ecs-serializable/src/definition/ComponentDefinition";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
-import { ComponentDefinitionIcon } from "../icons";
+import { ComponentDefinitionIcon } from "../components/icons";
 
 export type ComponentDefinitionEditorProps = {
   value: ComponentDefinition;

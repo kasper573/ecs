@@ -1,44 +1,44 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import { memo, useContext } from "react";
 import { shallowEqual } from "react-redux";
-import { PanelName } from "../types/PanelName";
-import { PanelHeader } from "../components/PanelHeader";
-import { core } from "../core";
-import { useDispatch, useSelector, useStore } from "../store";
-import { selectListOfEntityInitializer } from "../selectors/selectListOfEntityInitializer";
+import { PanelName } from "../../types/PanelName";
+import { PanelHeader } from "../../components/PanelHeader";
+import { core } from "../../core";
+import { useDispatch, useSelector, useStore } from "../../store";
+import { selectListOfEntityInitializer } from "../../selectors/selectListOfEntityInitializer";
 import {
   AddIcon,
   EntityContainerClosedIcon,
   EntityContainerOpenIcon,
   EntityInitializerIcon,
-} from "../icons";
-import { Panel } from "../components/Panel";
+} from "../../components/icons";
+import { Panel } from "../../components/Panel";
 import {
   EntityInitializer,
   EntityInitializerId,
-} from "../../../ecs-serializable/src/definition/EntityInitializer";
-import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
-import { EntityDefinition } from "../../../ecs-serializable/src/definition/EntityDefinition";
-import { uuid } from "../../../ecs-common/src/uuid";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { CommonTreeView } from "../components/CommonTreeView";
-import { CreateTreeOptions } from "../tree/createTree";
-import { entityInitializerDragSpec } from "../dnd/entityInitializerDragSpec";
+} from "../../../../ecs-serializable/src/definition/EntityInitializer";
+import { selectSelectedEntityInitializer } from "../../selectors/selectSelectedEntityInitializer";
+import { EntityDefinition } from "../../../../ecs-serializable/src/definition/EntityDefinition";
+import { uuid } from "../../../../ecs-common/src/uuid";
+import { useCrudDialogs } from "../../hooks/useCrudDialogs";
+import { CommonTreeView } from "../../components/CommonTreeView";
+import { CreateTreeOptions } from "../../tree/createTree";
+import { entityInitializerDragSpec } from "../../dnd/entityInitializerDragSpec";
 import {
   EntityInitializerDropObjectTyped,
   entityInitializerDropSpec,
-} from "../dnd/entityInitializerDropSpec";
-import { createEntityInitializerMenuFactory } from "../functions/createEntityInitializerMenuFactory";
-import { MenuFor } from "../components/MenuFor";
-import { useContextMenu } from "../hooks/useContextMenu";
-import { TreeNode } from "../tree/TreeNode";
-import { selectListOfEntityDefinition } from "../selectors/selectListOfEntityDefinition";
-import { Intro } from "../intro/Intro";
-import { useSystemSelector } from "../hooks/useSystemSelector";
-import { SystemSyncContext } from "../hooks/useSystemSync";
-import { getRuntimeEntityActiveStates } from "../functions/getRuntimeEntityActiveStates";
-import { compareEntityInitializers } from "../functions/compareEntityInitializers";
-import { DNDType } from "../dnd/DNDType";
+} from "../../dnd/entityInitializerDropSpec";
+import { createEntityInitializerMenuFactory } from "../../functions/createEntityInitializerMenuFactory";
+import { MenuFor } from "../../components/MenuFor";
+import { useContextMenu } from "../../hooks/useContextMenu";
+import { TreeNode } from "../../tree/TreeNode";
+import { selectListOfEntityDefinition } from "../../selectors/selectListOfEntityDefinition";
+import { Intro } from "../../intro/Intro";
+import { useSystemSelector } from "../../hooks/useSystemSelector";
+import { SystemSyncContext } from "../../hooks/useSystemSync";
+import { getRuntimeEntityActiveStates } from "../../functions/getRuntimeEntityActiveStates";
+import { compareEntityInitializers } from "../../functions/compareEntityInitializers";
+import { DNDType } from "../../dnd/DNDType";
 
 export const HierarchyPanel = memo(() => {
   const [system] = useContext(SystemSyncContext);
@@ -105,7 +105,7 @@ export const HierarchyPanel = memo(() => {
     parentId?: EntityInitializerId,
     order?: number
   ) {
-    const { system } = store.getState().present.selection;
+    const { system } = store.getState().editor.present.selection;
     const id: EntityInitializerId = uuid();
     dispatch(
       core.actions.createEntityInitializer({
@@ -184,7 +184,7 @@ export const HierarchyPanel = memo(() => {
             entityInitializerDropSpec(
               target,
               (dropped) => handleDropEntity(dropped, target, order),
-              () => store.getState().present
+              () => store.getState().editor.present
             ),
         }}
       />

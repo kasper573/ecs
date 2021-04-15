@@ -1,17 +1,17 @@
 import { memo } from "react";
 import styled from "styled-components";
-import { useSelector } from "../store";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
-import { SystemSyncContext, useSystemSync } from "../hooks/useSystemSync";
+import { useSelector } from "../../store";
+import { selectSelectedSystemDefinition } from "../../selectors/selectSelectedSystemDefinition";
+import { SystemSyncContext, useSystemSync } from "../../hooks/useSystemSync";
+import { ContentPadding } from "../../layout/ContentPadding";
 import { SystemActions } from "./SystemActions";
 import { PanelContainer } from "./PanelContainer";
 import { LibraryPanel } from "./LibraryPanel";
 import { HierarchyPanel } from "./HierarchyPanel";
 import { InspectorPanel } from "./InspectorPanel";
 import { RuntimePanel } from "./RuntimePanel";
-import { ContentPadding } from "./ContentPadding";
 
-export const Editor = memo(() => {
+export const EditorView = memo(() => {
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
   const systemSync = useSystemSync();
   return (

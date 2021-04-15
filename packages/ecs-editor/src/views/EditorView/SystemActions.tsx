@@ -8,15 +8,15 @@ import {
   SaveIcon,
   UnpublishIcon,
   ViewPublishedIcon,
-} from "../icons";
-import { useDispatch, useStore } from "../store";
-import { useCrudDialogs } from "../hooks/useCrudDialogs";
-import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
-import { core } from "../core";
-import { zipECSDefinition } from "../storage/zipECSDefinition";
-import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
-import { getPublishedSystemLink } from "../../../ecs-api-client/getPublishedSystemLink";
-import { useSystemPublisher } from "../hooks/useSystemPublisher";
+} from "../../components/icons";
+import { useDispatch, useStore } from "../../store";
+import { useCrudDialogs } from "../../hooks/useCrudDialogs";
+import { SystemDefinition } from "../../../../ecs-serializable/src/definition/SystemDefinition";
+import { core } from "../../core";
+import { zipECSDefinition } from "../../storage/zipECSDefinition";
+import { getECSDefinitionForSystem } from "../../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
+import { getPublishedSystemLink } from "../../../../ecs-api-client/getPublishedSystemLink";
+import { useSystemPublisher } from "../../hooks/useSystemPublisher";
 
 export type SystemActionsProps = {
   system: SystemDefinition;
@@ -52,7 +52,7 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
 
   async function saveECSDefinitionToDisk() {
     const selectedECS = getECSDefinitionForSystem(
-      store.getState().present.ecs,
+      store.getState().editor.present.ecs,
       system.id
     );
     const zipped = await zipECSDefinition(selectedECS);
