@@ -6,11 +6,6 @@
 
 # Tasks
 
-- Add react router and control selected system by route
-  (remove selected system state, replace selection values with inspected object completely)
-- Route transitions
-- System list item animations (transition group, zoom on add/delete)
-
 - Validate parsed ECS definitions
 
 - Option to save runtime to disk
