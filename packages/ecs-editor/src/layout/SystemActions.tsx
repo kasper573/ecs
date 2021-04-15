@@ -1,4 +1,4 @@
-import { IconButton, Toolbar, Tooltip, Typography } from "@material-ui/core";
+import { IconButton, Toolbar, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { saveAs } from "file-saver";
 import {
@@ -18,11 +18,11 @@ import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functio
 import { getPublishedSystemLink } from "../../../ecs-api-client/getPublishedSystemLink";
 import { useSystemPublisher } from "../hooks/useSystemPublisher";
 
-export type SystemHeaderProps = {
+export type SystemActionsProps = {
   system: SystemDefinition;
 };
 
-export const SystemHeader = ({ system }: SystemHeaderProps) => {
+export const SystemActions = ({ system }: SystemActionsProps) => {
   const dispatch = useDispatch();
   const store = useStore();
   const {
@@ -61,7 +61,6 @@ export const SystemHeader = ({ system }: SystemHeaderProps) => {
 
   return (
     <Row>
-      <SystemName>{system.name}</SystemName>
       <Tooltip title={isPublished ? "View published" : "Publish to view"}>
         <span>
           <IconButton
@@ -111,11 +110,4 @@ export const SystemHeader = ({ system }: SystemHeaderProps) => {
 const Row = styled(Toolbar)`
   display: flex;
   justify-content: flex-end;
-`;
-
-const SystemName = styled(Typography).attrs({
-  component: "span",
-  noWrap: true,
-})`
-  margin: 0 ${({ theme }) => theme.spacing(1.5)}px;
 `;

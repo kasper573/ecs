@@ -45,12 +45,6 @@ const Content = styled(Container)`
   display: flex;
   flex-direction: column;
   flex: 1;
-  ${({ theme }) => theme.breakpoints.up("sm")} {
-    padding-bottom: ${({ theme }) => theme.spacing(8 + 1)}px;
-  }
-  ${({ theme }) => theme.breakpoints.down("sm")} {
-    padding-bottom: ${({ theme }) => theme.spacing(2)}px;
-  }
 `;
 
 // Disable any unhandled context menus

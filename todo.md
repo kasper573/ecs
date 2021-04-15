@@ -6,12 +6,14 @@
 
 # Tasks
 
-- Option to save runtime to disk
-- Publish game feature
+- Add react router and control selected system by route
+  (remove selected system state, replace selection values with inspected object completely)
+- Route transitions
+- System list item animations (transition group, zoom on add/delete)
+
 - Validate parsed ECS definitions
 
-- Allow instantiating entity definitions by DND at any depth in the hierarchy
-- Only enable pointer-events for CommonTreeDropDivider when dragging something droppable
+- Option to save runtime to disk
 
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects

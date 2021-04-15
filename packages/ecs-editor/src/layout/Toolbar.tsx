@@ -1,6 +1,8 @@
 import { memo } from "react";
 import {
+  Fade,
   IconButton,
+  Slide,
   Toolbar as MuiToolbar,
   Tooltip,
   Typography,
@@ -11,6 +13,7 @@ import { core } from "../core";
 import { selectThemeType } from "../selectors/selectThemeType";
 import { BackIcon, DarkThemeIcon, LightThemeIcon } from "../icons";
 import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
+import { usePrevious } from "../hooks/usePrevious";
 import { DevToolsButton } from "./DevToolsButton";
 import { UserActions } from "./UserActions";
 
@@ -18,6 +21,9 @@ export const Toolbar = memo(() => {
   const dispatch = useDispatch();
   const themeType = useSelector(selectThemeType);
   const selectedSystem = useSelector(selectSelectedSystemDefinition);
+  const previousSystem = usePrevious(selectedSystem);
+  const displayedSystem = selectedSystem ?? previousSystem;
+
   const nextThemeType = themeType === "light" ? "dark" : "light";
   const ThemeToggleIcon = themeToggleIcons[themeType];
   const themeToggleTooltip = themeToggleTooltips[themeType];
@@ -27,16 +33,16 @@ export const Toolbar = memo(() => {
 
   return (
     <Container>
-      {selectedSystem && (
-        <>
+      <Fade in={!!selectedSystem}>
+        <div>
           <Tooltip title="Home">
             <IconButton edge="start" onClick={goHome}>
               <BackIcon />
             </IconButton>
           </Tooltip>
-          <SystemName>{selectedSystem.name}</SystemName>
-        </>
-      )}
+          <Title>{displayedSystem?.name}</Title>
+        </div>
+      </Fade>
       <Grow />
       <Actions>
         <DevToolsButton />
@@ -61,7 +67,7 @@ const Grow = styled.span`
   flex: 1;
 `;
 
-const SystemName = styled(Typography).attrs({
+const Title = styled(Typography).attrs({
   component: "span",
   noWrap: true,
 })`
