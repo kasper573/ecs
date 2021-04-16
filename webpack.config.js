@@ -42,6 +42,7 @@ module.exports = {
       patterns: [
         { from: "./public", to: "." },
         { from: "./public/index.html", to: "./200.html" },
+        { from: "./public/index.html", to: "./404.html" },
       ],
     }),
   ].filter(Boolean),

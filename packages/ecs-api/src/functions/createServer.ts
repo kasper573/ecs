@@ -15,6 +15,8 @@ export function createServer(
     app.use(morgan(morganFormat));
   }
 
+  app.get("/ssl", (req, res) => res.status(200).send(ssl ? "yes" : "no"));
+
   // Add api routes
   routes.forEach((route) => app[route.method](route.path, route.handlers));
   if (ssl) {
