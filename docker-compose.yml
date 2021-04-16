@@ -1,11 +1,37 @@
-version: "3.5"
+version: '3.7'
 
 services:
   db:
+    container_name: db
     image: "postgres:13"
     restart: "always"
     ports:
-      - "5432:5432"
+      - 82:82
+    command: -p 82
     environment:
-      POSTGRES_PASSWORD: "ecs"
       POSTGRES_USER: "ecs"
+      POSTGRES_PASSWORD: "ecs"
+  api:
+    depends_on:
+      - db
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: yarn start:api
+    ports:
+      - 81:81
+    environment:
+      POSTGRES_URL: "postgres://ecs:ecs@db:82/ecs"
+      ECS_API_PORT: 81
+      ECS_API_CORS_ORIGIN: "https://web:80"
+  web:
+    container_name: web
+    build:
+      args:
+        run: 'export NODE_ENV=production && export ECS_API_URL=https://ecs-editor-api.herokuapp.com:3001'
+      context: .
+      dockerfile: Dockerfile.web
+    command: serve packages/ecs-editor/dist -l 80 -s
+    ports:
+      - 80:80

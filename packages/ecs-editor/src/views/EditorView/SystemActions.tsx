@@ -15,8 +15,8 @@ import { SystemDefinition } from "../../../../ecs-serializable/src/definition/Sy
 import { core } from "../../core";
 import { zipECSDefinition } from "../../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
-import { getPublishedSystemLink } from "../../../../ecs-api-client/getPublishedSystemLink";
 import { useSystemPublisher } from "../../hooks/useSystemPublisher";
+import { viewerRoute } from "../../routes/viewerRoute";
 
 export type SystemActionsProps = {
   system: SystemDefinition;
@@ -66,7 +66,7 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
           <IconButton
             disabled={!isPublished}
             component="a"
-            href={getPublishedSystemLink(system.id)}
+            href={viewerRoute.href({ id: system.id })}
             target="_blank"
           >
             <ViewPublishedIcon />

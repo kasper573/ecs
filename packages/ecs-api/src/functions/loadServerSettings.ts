@@ -6,7 +6,7 @@ export function loadServerSettings() {
     ? originStr.split(",")
     : undefined;
 
-  const port = parseInt(process.env.ECS_API_PORT ?? "80", 10);
+  const port = parseInt(process.env.ECS_API_PORT!, 10);
 
   const morganFormat: string | undefined = process.env.ECS_API_MORGAN_FORMAT;
 

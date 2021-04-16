@@ -9,6 +9,7 @@ import { ConnectedRouter } from "connected-react-router";
 import { createECSDefinition } from "../../ecs-serializable/src/functions/createECSDefinition";
 import { reaction } from "../../ecs-common/src/reaction";
 import nativeComponents from "../../ecs-native-components";
+import { auth0Config } from "../../../auth0Config";
 import { createEditorState } from "./functions/createEditorState";
 import { NativeComponentsContext } from "./NativeComponentsContext";
 import { createStore } from "./store";
@@ -17,7 +18,6 @@ import {
   loadECSDefinitionFromLocalStorage,
   saveECSDefinitionToLocalStorage,
 } from "./storage/lsECSDefinition";
-import { auth0Config } from "./fixtures/auth0Config";
 
 const history = createBrowserHistory();
 const store = createStore(history, {
@@ -40,7 +40,10 @@ function render() {
         <React.StrictMode>
           <DndProvider backend={HTML5Backend}>
             <NativeComponentsContext.Provider value={nativeComponents}>
-              <Auth0Provider {...auth0Config}>
+              <Auth0Provider
+                {...auth0Config}
+                redirectUri={window.location.origin}
+              >
                 <App />
               </Auth0Provider>
             </NativeComponentsContext.Provider>

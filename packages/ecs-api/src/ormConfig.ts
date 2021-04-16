@@ -3,11 +3,7 @@ import { PublishedSystem } from "./models/PublishedSystem";
 
 export const ormConfig: PostgresConnectionOptions = {
   type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "ecs",
-  password: "ecs",
-  database: "ecs",
+  url: process.env.POSTGRES_URL,
   synchronize: true,
   logging: false,
   entities: [PublishedSystem],

@@ -10,7 +10,7 @@ packages/**/node_modules
 /coverage
 
 # build
-packages/**/build
+packages/**/dist
 
 # misc
 .idea

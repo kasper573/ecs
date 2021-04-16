@@ -1,4 +1,5 @@
-import { push, RouterLocation } from "connected-react-router";
+import { push } from "connected-react-router";
+import { Location } from "history";
 import { RouteProps } from "react-router-dom";
 import { matchPath } from "react-router";
 
@@ -8,8 +9,11 @@ export function createRoute<Params extends { [K in keyof Params]?: string }>(
 ) {
   const pushRoute = (params: Params) => push(createPath(params));
 
-  const match = (location: RouterLocation<unknown>) =>
+  const match = (location: Location<unknown>) =>
     matchPath<Params>(location.pathname, props);
 
-  return { push: pushRoute, props, match };
+  const href = (params: Params) =>
+    `${window.location.origin}${createPath(params)}`;
+
+  return { push: pushRoute, props, match, href };
 }

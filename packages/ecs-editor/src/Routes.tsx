@@ -5,6 +5,8 @@ import { Layout } from "./layout/Layout";
 import { NotFoundView } from "./views/NotFoundView";
 import { EditorTitle } from "./views/EditorView/EditorTitle";
 import { systemRoute } from "./routes/systemRoute";
+import { viewerRoute } from "./routes/viewerRoute";
+import { ViewerView } from "./views/ViewerView";
 
 /**
  * All routes in the application.
@@ -15,6 +17,9 @@ export const Routes = () => (
       <Layout>
         <HomeView />
       </Layout>
+    </Route>
+    <Route {...viewerRoute.props}>
+      <ViewerView />
     </Route>
     <Route {...systemRoute.props}>
       <Layout title={<EditorTitle />}>

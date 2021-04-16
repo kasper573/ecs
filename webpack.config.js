@@ -1,11 +1,10 @@
-const path = require("path");
+const { DefinePlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const DotenvPlugin = require("dotenv-webpack");
-const { selectEnv } = require("./env");
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const extensions = [".js", ".jsx", ".tsx", ".ts"];
@@ -31,10 +30,8 @@ module.exports = {
     isDevelopment && new ReactRefreshPlugin(),
     isDevelopment && new ForkTsCheckerWebpackPlugin(),
     isDevelopment && new ESLintWebpackPlugin({ extensions }),
-    new DotenvPlugin({
-      // DotenvPlugin requires a relative path (selectEnv is absolute)
-      path: path.relative(__dirname, selectEnv(__dirname)),
-    }),
+    process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
+    defineExplicitEnv(),
     new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       filename: "./index.html",
@@ -46,8 +43,16 @@ module.exports = {
     extensions,
   },
   devServer: {
-    hot: true,
+    hot: isDevelopment,
     port: process.env.WEBPACK_DEV_SERVER_PORT,
     historyApiFallback: true,
   },
 };
+
+function defineExplicitEnv() {
+  const defines = {};
+  for (const key in process.env) {
+    defines[`process.env.${key}`] = JSON.stringify(process.env[key]);
+  }
+  return new DefinePlugin(defines);
+}

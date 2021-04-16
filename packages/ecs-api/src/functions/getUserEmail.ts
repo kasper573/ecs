@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
+import { auth0Config } from "../../../../auth0Config";
 
 export async function getUserEmail(accessToken: string) {
-  const response = await fetch(process.env.AUTH0_PROFILE_URI as string, {
+  const response = await fetch(auth0Config.profileUri, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
