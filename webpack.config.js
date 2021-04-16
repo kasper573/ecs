@@ -1,10 +1,10 @@
 require("./env");
+const CopyPlugin = require("copy-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 if (!process.env.NODE_ENV) {
@@ -38,10 +38,11 @@ module.exports = {
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
     new DefinePlugin(explicitEnvDefines()),
     new NodePolyfillPlugin(),
-    new HtmlWebpackPlugin({
-      filename: "./index.html",
-      template: "./public/index.html",
-      favicon: "./public/favicon.ico",
+    new CopyPlugin({
+      patterns: [
+        { from: "./public", to: "." },
+        { from: "./public/index.html", to: "./200.html" },
+      ],
     }),
   ].filter(Boolean),
   resolve: {
