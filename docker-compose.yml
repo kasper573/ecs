@@ -25,8 +25,8 @@ services:
       POSTGRES_URL: "postgres://ecs:ecs@db:3002/ecs"
       ECS_API_PORT: 3001
       ECS_API_CORS_ORIGIN: "https://ksandin-ecs-editor.surge.sh"
-      SSL_KEY: ~/ssl/key
-      SSL_CERT: ~/ssl/cert
+      SSL_KEY: /ssl/key
+      SSL_CERT: /ssl/cert
 # web server disabled. Using surge.sh instead (see github workflow)
 #  web:
 #    container_name: web
