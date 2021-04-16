@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "../../../env";
 import { createConnection } from "typeorm";
 import { ormConfig } from "./ormConfig";
 import { loadServerSettings } from "./functions/loadServerSettings";

@@ -52,13 +52,10 @@
     "zod": "^1.11.12"
   },
   "scripts": {
-    "start:game": "cd packages/example-game && webpack-dev-server",
-    "start:editor": "cd packages/ecs-editor && webpack-dev-server",
-    "start:api": "cd packages/ecs-api/src && ts-node-dev index.ts",
-    "build:game": "cd packages/example-game && webpack",
-    "build:game:analyze": "cd packages/example-game && cross-env ANALYZE_BUNDLE=1 webpack",
+    "dev:editor": "cd packages/ecs-editor && webpack-dev-server",
+    "dev:api": "cd packages/ecs-api/src && ts-node-dev index.ts",
+    "run:api": "cd packages/ecs-api/src && ts-node index.ts",
     "build:editor": "cd packages/ecs-editor && webpack",
-    "build:editor:analyze": "cd packages/ecs-editor && cross-env ANALYZE_BUNDLE=1 webpack",
     "test": "jest",
     "lint": "eslint --ext js,ts,tsx packages",
     "lint-fix": "eslint --ext js,ts,tsx packages --fix"

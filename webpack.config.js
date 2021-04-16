@@ -1,3 +1,4 @@
+require("./env");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
@@ -6,11 +7,15 @@ const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
-const isDevelopment = process.env.NODE_ENV !== "production";
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = "development";
+}
+
+const isProd = process.env.NODE_ENV === "production";
 const extensions = [".js", ".jsx", ".tsx", ".ts"];
 
 module.exports = {
-  mode: isDevelopment ? "development" : "production",
+  mode: isProd ? "production" : "development",
   entry: "./src",
   devtool: "source-map",
   output: {
@@ -27,11 +32,11 @@ module.exports = {
     ],
   },
   plugins: [
-    isDevelopment && new ReactRefreshPlugin(),
-    isDevelopment && new ForkTsCheckerWebpackPlugin(),
-    isDevelopment && new ESLintWebpackPlugin({ extensions }),
+    !isProd && new ReactRefreshPlugin(),
+    !isProd && new ForkTsCheckerWebpackPlugin(),
+    !isProd && new ESLintWebpackPlugin({ extensions }),
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
-    defineExplicitEnv(),
+    new DefinePlugin(explicitEnvDefines()),
     new NodePolyfillPlugin(),
     new HtmlWebpackPlugin({
       filename: "./index.html",
@@ -43,16 +48,16 @@ module.exports = {
     extensions,
   },
   devServer: {
-    hot: isDevelopment,
+    hot: !isProd,
     port: process.env.WEBPACK_DEV_SERVER_PORT,
     historyApiFallback: true,
   },
 };
 
-function defineExplicitEnv() {
+function explicitEnvDefines() {
   const defines = {};
   for (const key in process.env) {
     defines[`process.env.${key}`] = JSON.stringify(process.env[key]);
   }
-  return new DefinePlugin(defines);
+  return defines;
 }
