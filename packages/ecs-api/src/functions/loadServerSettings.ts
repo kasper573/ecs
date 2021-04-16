@@ -9,8 +9,10 @@ export function loadServerSettings(): ServerSettings {
     ? originStr.split(",")
     : undefined;
 
-  const key = requireFile(process.env.SSL_KEY);
-  const cert = requireFile(process.env.SSL_CERT);
+  // const key = requireFile(process.env.SSL_KEY);
+  // const cert = requireFile(process.env.SSL_CERT);
+  const key = requireFile(path.resolve(__dirname, "../server.key"));
+  const cert = requireFile(path.resolve(__dirname, "../server.cert"));
   const ssl = key && cert ? { key, cert } : undefined;
 
   return {
