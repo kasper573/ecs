@@ -24,14 +24,15 @@ services:
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:3002/ecs"
       ECS_API_PORT: 3001
-      ECS_API_CORS_ORIGIN: "http://localhost"
-  web:
-    container_name: web
-    build:
-      args:
-        run: 'export NODE_ENV=production && export ECS_API_URL=http://localhost:3001'
-      context: .
-      dockerfile: Dockerfile.web
-    command: serve packages/ecs-editor/dist -l 80 -s
-    ports:
-      - 80:80
+      ECS_API_CORS_ORIGIN: "https://ksandin-ecs-editor.surge.sh"
+# web server disabled. Using surge.sh instead (see github workflow)
+#  web:
+#    container_name: web
+#    build:
+#      args:
+#        run: 'export NODE_ENV=production && export ECS_API_URL=http://localhost:3001'
+#      context: .
+#      dockerfile: Dockerfile.web
+#    command: serve packages/ecs-editor/dist -l 80 -s
+#    ports:
+#      - 80:80
