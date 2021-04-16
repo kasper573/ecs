@@ -18,7 +18,7 @@ jobs:
         run: yarn build:editor
         env:
           NODE_ENV: production
-          ECS_API_URL: https://139.59.169.46
+          ECS_API_URL: https://139.59.169.46:3001
       - uses: dswistowski/surge-sh-action@v1.0.1
         id: deploy_to_surge
         with:
