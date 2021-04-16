@@ -14,6 +14,7 @@ services:
   api:
     depends_on:
       - db
+    restart: "always"
     container_name: api
     build:
       context: .
