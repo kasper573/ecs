@@ -2,7 +2,6 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { core } from "../core";
 import { EditorState } from "../types/EditorState";
 import { selectLibraryNode } from "../selectors/selectLibraryNode";
-import { selectSelectedSystemDefinition } from "../selectors/selectSelectedSystemDefinition";
 import { selectSelectedEntityInitializer } from "../selectors/selectSelectedEntityInitializer";
 import { createDeleteLibraryNodeAction } from "./createDeleteLibraryNodeAction";
 
@@ -14,38 +13,19 @@ export type DeleteTarget = [
 export const createDeleteAction = (
   state: EditorState
 ): DeleteTarget | undefined => {
-  const { selection, mostRecentSelectionName } = state;
-  if (!mostRecentSelectionName) {
-    return;
-  }
-  switch (mostRecentSelectionName) {
-    case "system":
-      const systemId = selection[mostRecentSelectionName];
-      if (!systemId) {
+  const { inspected } = state;
+  switch (inspected?.type) {
+    case "libraryNode":
+      const node = selectLibraryNode(state, inspected.id);
+      if (!node) {
         return;
       }
+      const action = createDeleteLibraryNodeAction(node);
+      return [action, node.name];
+    case "entityInitializer":
       return [
-        core.actions.deleteSystemDefinition(systemId),
-        selectSelectedSystemDefinition(state)!.name,
+        core.actions.deleteEntityInitializer(inspected.id),
+        selectSelectedEntityInitializer(state)!.name,
       ];
-    case "inspected":
-      const inspected = selection[mostRecentSelectionName];
-      if (!inspected) {
-        return;
-      }
-      switch (inspected.type) {
-        case "libraryNode":
-          const node = selectLibraryNode(state, inspected.id);
-          if (!node) {
-            return;
-          }
-          const action = createDeleteLibraryNodeAction(node);
-          return [action, node.name];
-        case "entityInitializer":
-          return [
-            core.actions.deleteEntityInitializer(inspected.id),
-            selectSelectedEntityInitializer(state)!.name,
-          ];
-      }
   }
 };

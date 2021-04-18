@@ -6,39 +6,36 @@ An ECS game engine and editor built with Typescript and React.
 > but both the engine and editor is built on a generic Entity Component System and could be used
 > to build other games if the proper components are developed.
 
-[Try the game editor](https://ksandin-ecs-editor.surge.sh/)
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Getting started
 
-- Copy .env.example to .env and replace the variables with your settings
-- Run `yarn run start:game` to start the prototype game
-- Run `yarn run start:editor` to start the game editor
+### Development
 
-## Available Scripts
+- Have docker set up on your system
+- Run `docker-compose up -d db` to start the postgres database (required by the api).
+- Run `yarn dev:api` to start the editor api in dev/watch mode
+- Run `yarn dev:editor` to start the editor app in dev/watch mode
+  Open [http://localhost:8080](http://localhost:8080) to view the editor in the browser.
+
+### Production
+
+- Have docker set up on your system
+- Run `docker-compose up -d` to install postgres, node api and web server for production.
+  Open [http://localhost](http://localhost) to view the dockerized editor in the browser.
+
+## Other scripts
 
 In the project directory, you can run:
 
-### `yarn start:editor` or `yarn start:game`
+### `yarn run:api`
 
-Runs the editor or prototype game in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Starts the editor API without watch mode.
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner.
 
-### `yarn build:editor` or `yarn build:game`
+### `yarn build:editor`
 
-Builds the editor or prototype game for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-The app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Builds the editor SPA for production to the `packages/ecs-editor/dist` folder.

@@ -10,9 +10,11 @@ packages/**/node_modules
 /coverage
 
 # build
-packages/**/build
+packages/**/dist
+packages/**/public/.env.runtime.json
 
 # misc
+.env.local
 .idea
 .DS_Store
 packages/**/.env

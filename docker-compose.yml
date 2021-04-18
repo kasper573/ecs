@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: db
+    image: "postgres:13"
+    restart: "always"
+    ports:
+      - 4002:4002
+    command: -p 4002
+    environment:
+      POSTGRES_USER: "ecs"
+      POSTGRES_PASSWORD: "ecs"
+  api:
+    depends_on:
+      - db
+    restart: "always"
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - 4001:4001
+    environment:
+      POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
+      ECS_API_PORT: 4001
+      ECS_API_CORS_ORIGIN: "http://139.59.169.46"
+      SSL_KEY: /ssl/key
+      SSL_CERT: /ssl/cert
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    environment:
+      ECS_API_URL: http://139.59.169.46:4001
+    ports:
+      - 80:80

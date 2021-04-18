@@ -16,10 +16,10 @@ import { useDispatch, useSelector } from "../store";
 import { core } from "../core";
 import { mockEditorState } from "../functions/mockEditorState";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { GenerateIcon, SaveIcon } from "../icons";
 import { selectECS } from "../selectors/selectECS";
 import { SimpleDialog } from "../dialogs/SimpleDialog";
 import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
+import { GenerateIcon, SaveIcon } from "./icons";
 
 export const DevTools = forwardRef<HTMLDivElement>(
   (props: HTMLAttributes<HTMLDivElement>, ref) => {

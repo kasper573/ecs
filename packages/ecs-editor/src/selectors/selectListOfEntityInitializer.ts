@@ -1,12 +1,12 @@
-import { EditorState } from "../types/EditorState";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
-import { SystemDefinitionId } from "../../../ecs-serializable/src/definition/SystemDefinition";
+import { EditorRootState } from "../store";
+import { selectSelectedSystemDefinitionId } from "./selectSelectedSystemDefinitionId";
 
 export const selectListOfEntityInitializer = createMemoizedSelector(
   (
-    state: EditorState,
-    forSystemId: SystemDefinitionId | undefined = state.selection.system
-  ) => [state.ecs.entityInitializers, forSystemId] as const,
+    state: EditorRootState,
+    forSystemId = selectSelectedSystemDefinitionId(state)
+  ) => [state.editor.present.ecs.entityInitializers, forSystemId] as const,
   ([entityInitializers, forSystemId]) =>
     Object.values(entityInitializers).filter(
       (entity) => entity.systemId === forSystemId

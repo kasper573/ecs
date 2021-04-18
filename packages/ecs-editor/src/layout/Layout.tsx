@@ -1,21 +1,19 @@
-import React, { MouseEvent, ReactElement } from "react";
+import React, { MouseEvent } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import { Container, ContainerProps } from "@material-ui/core";
 import styled, { CSSObject } from "styled-components";
+import { Toolbar, ToolbarProps } from "./Toolbar";
 
 export type LayoutProps = {
-  appBar: ReactElement;
   children: ContainerProps["children"];
-};
+} & ToolbarProps;
 
-/**
- * A layout component that wraps children in a responsive container that always has an AppBar and Drawer.
- * On desktop the drawer is permanent and on mobile it is toggled.
- */
-export const Layout = ({ children, appBar }: LayoutProps) => (
+export const Layout = ({ children, ...toolbarProps }: LayoutProps) => (
   <Root>
     <AppBar position="fixed">
-      <AppBarContainer>{appBar}</AppBarContainer>
+      <AppBarContainer>
+        <Toolbar {...toolbarProps} />
+      </AppBarContainer>
     </AppBar>
     <Content>
       <ToolbarSpacing />
@@ -45,12 +43,6 @@ const Content = styled(Container)`
   display: flex;
   flex-direction: column;
   flex: 1;
-  ${({ theme }) => theme.breakpoints.up("sm")} {
-    padding-bottom: ${({ theme }) => theme.spacing(8 + 1)}px;
-  }
-  ${({ theme }) => theme.breakpoints.down("sm")} {
-    padding-bottom: ${({ theme }) => theme.spacing(2)}px;
-  }
 `;
 
 // Disable any unhandled context menus

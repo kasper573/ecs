@@ -5,7 +5,7 @@ import { SelectComponentDefinitionButton } from "../buttons/SelectComponentDefin
 import { ComponentDefinition } from "../../../ecs-serializable/src/definition/ComponentDefinition";
 import { uuid } from "../../../ecs-common/src/uuid";
 import { InspectedObjectInfo } from "../components/InspectedObjectInfo";
-import { EntityDefinitionIcon } from "../icons";
+import { EntityDefinitionIcon } from "../components/icons";
 import { ComponentInitializer } from "../../../ecs-serializable/src/definition/ComponentInitializer";
 import { useDispatch, useStore } from "../store";
 import { core } from "../core";
@@ -102,7 +102,7 @@ export const EntityDefinitionEditor = ({
   const askToDeleteComponent = useDialog(
     (props, initializer: ComponentInitializer) => {
       const definition = selectComponentDefinition(
-        store.getState().present,
+        store.getState().editor.present,
         initializer?.definitionId
       );
       return (

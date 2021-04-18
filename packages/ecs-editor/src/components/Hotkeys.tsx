@@ -23,7 +23,7 @@ export const Hotkeys = memo(() => {
       // Ignore deletes in input elements
       return;
     }
-    const target = createDeleteAction(store.getState().present);
+    const target = createDeleteAction(store.getState().editor.present);
     if (target) {
       showDeleteDialog(target);
     }

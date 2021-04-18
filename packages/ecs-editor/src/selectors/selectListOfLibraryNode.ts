@@ -1,13 +1,13 @@
-import { EditorState } from "../types/EditorState";
-import { SystemDefinitionId } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { createMemoizedSelector } from "../functions/createMemoizedSelector";
+import { EditorRootState } from "../store";
 import { selectListOfLibraryFolder } from "./selectListOfLibraryFolder";
 import { selectListOfComponentDefinition } from "./selectListOfComponentDefinition";
 import { selectListOfEntityDefinition } from "./selectListOfEntityDefinition";
+import { selectSelectedSystemDefinitionId } from "./selectSelectedSystemDefinitionId";
 
 const selectParams = (
-  state: EditorState,
-  forSystemId: SystemDefinitionId | undefined = state.selection.system
+  state: EditorRootState,
+  forSystemId = selectSelectedSystemDefinitionId(state)
 ) =>
   [
     selectListOfEntityDefinition(state, forSystemId),

@@ -6,8 +6,7 @@ import {
   useState,
 } from "react";
 import { createSystem } from "../../../ecs-serializable/src/functions/createSystem";
-import { useSelector } from "../store";
-import { selectAll } from "../selectors/selectAll";
+import { useRootSelector, useSelector } from "../store";
 import { NativeComponentsContext } from "../NativeComponentsContext";
 import { updateSystem } from "../../../ecs-serializable/src/functions/updateSystem";
 import { getECSDefinitionForSystem } from "../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
@@ -18,15 +17,18 @@ import { SystemDefinitionId } from "../../../ecs-serializable/src/definition/Sys
 import { NativeComponents } from "../../../ecs-serializable/src/types/NativeComponents";
 import { createECSDefinition } from "../../../ecs-serializable/src/functions/createECSDefinition";
 import { System } from "../../../ecs/src/System";
+import { selectECS } from "../selectors/selectECS";
+import { selectSelectedSystemDefinitionId } from "../selectors/selectSelectedSystemDefinitionId";
 
 /**
  * Automates system initialization and updates.
  */
 export const useSystemSync = () => {
   const nativeComponents = useContext(NativeComponentsContext);
-  const { ecs, selection } = useSelector(selectAll);
+  const ecs = useSelector(selectECS);
+  const selectedSystemId = useRootSelector(selectSelectedSystemDefinitionId);
   const [[system, memory], setSystemAndMemory] = useState(() =>
-    createSystemWithMemory(ecs, selection.system, nativeComponents)
+    createSystemWithMemory(ecs, selectedSystemId, nativeComponents)
   );
   const [, forceUpdate] = useReducer((n) => n + 1, 0);
   const ref = useAsRef({ system, memory });
@@ -35,7 +37,7 @@ export const useSystemSync = () => {
     const { system, memory } = ref.current;
     updateSystem(
       system,
-      getSelectedECS(ecs, selection.system),
+      getSelectedECS(ecs, selectedSystemId),
       memory,
       nativeComponents
     );
@@ -46,12 +48,12 @@ export const useSystemSync = () => {
     system.dispose();
     memory.clear();
     setSystemAndMemory(
-      createSystemWithMemory(ecs, selection.system, nativeComponents)
+      createSystemWithMemory(ecs, selectedSystemId, nativeComponents)
     );
     forceUpdate();
   };
 
-  useEffect(updateRuntime, [ecs, ref, selection.system, nativeComponents]);
+  useEffect(updateRuntime, [ecs, ref, selectedSystemId, nativeComponents]);
 
   return [system, resetRuntime] as const;
 };

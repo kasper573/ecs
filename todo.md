@@ -6,12 +6,9 @@
 
 # Tasks
 
-- Option to save runtime to disk
-- Publish game feature
 - Validate parsed ECS definitions
 
-- Allow instantiating entity definitions by DND at any depth in the hierarchy
-- Only enable pointer-events for CommonTreeDropDivider when dragging something droppable
+- Option to save runtime to disk
 
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects

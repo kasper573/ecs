@@ -1,7 +1,7 @@
 import { IconButton, Tooltip } from "@material-ui/core";
 import { NameDialog } from "../dialogs/NameDialog";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
-import { AddIcon } from "../icons";
+import { AddIcon } from "../components/icons";
 import { useDialog } from "./useDialog";
 
 type UseCrudDialogHandlers<T> = {
