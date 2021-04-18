@@ -17,6 +17,7 @@ services:
     restart: "always"
     container_name: api
     build:
+      context: .
       dockerfile: Dockerfile.api
     ports:
       - 4001:4001
