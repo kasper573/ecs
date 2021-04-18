@@ -1,6 +1,7 @@
 require("./env");
+const path = require("path");
+const WebpackShellPlugin = require("webpack-shell-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
@@ -11,6 +12,8 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = "development";
 }
 
+const envToJsonFile = path.resolve(__dirname, "envToJson.sh");
+const envRuntimeFile = path.resolve(__dirname, ".env.runtime");
 const isProd = process.env.NODE_ENV === "production";
 const extensions = [".js", ".jsx", ".tsx", ".ts"];
 
@@ -36,7 +39,12 @@ module.exports = {
     !isProd && new ForkTsCheckerWebpackPlugin(),
     !isProd && new ESLintWebpackPlugin({ extensions }),
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
-    new DefinePlugin(explicitEnvDefines()),
+    new WebpackShellPlugin({
+      dev: !isProd,
+      onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
+        envRuntimeFile
+      )}.json`,
+    }),
     new NodePolyfillPlugin(),
     new CopyPlugin({
       patterns: [
@@ -54,11 +62,3 @@ module.exports = {
     historyApiFallback: true,
   },
 };
-
-function explicitEnvDefines() {
-  const defines = {};
-  for (const key in process.env) {
-    defines[`process.env.${key}`] = JSON.stringify(process.env[key]);
-  }
-  return defines;
-}

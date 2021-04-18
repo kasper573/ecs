@@ -1,9 +1,26 @@
-FROM node:14.15.1
+FROM node:14.15.1 AS build
 WORKDIR /app
+
 COPY package.json ./
 COPY yarn.lock ./
 RUN ["yarn", "install"]
-RUN ["yarn", "global", "add", "serve"]
 COPY . .
-ARG run='echo ""'
-RUN bash -c "$run && yarn build:editor"
+ENV NODE_ENV=production
+RUN ["yarn", "build:web"]
+
+FROM nginx
+WORKDIR /app
+
+# Update nginx config
+RUN rm -rf /etc/nginx/conf.d
+COPY nginx /etc/nginx/conf.d
+
+# Copy files necessary for syncing runtime environment variables
+COPY envToJson.sh .
+COPY .env.runtime .
+
+# Copy SPA to nginx
+COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
+
+# Sync runtime environment variables and start nginx
+CMD ["sh", "-c", "./envToJson.sh .env.runtime /usr/share/nginx/html/.env.runtime.json && nginx -g \"daemon off;\""]

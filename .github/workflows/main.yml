@@ -7,29 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install Packages
-        run: yarn install
-      - name: Build React App
-        run: yarn build:editor
-        env:
-          NODE_ENV: production
-          ECS_API_URL: https://139.59.169.46:3001
-      - uses: dswistowski/surge-sh-action@v1.0.1
-        id: deploy_to_surge
-        with:
-          domain: 'ksandin-ecs-editor.surge.sh'
-          project: './packages/ecs-editor/dist'
-          login: ${{ secrets.surge_login }}
-          token: ${{ secrets.surge_token }}
-      - name: Deploy API & DB
+      - name: Run docker-compose in DO droplet
         uses: appleboy/ssh-action@master
         with:
           host: 139.59.169.46
           username: ${{ secrets.ssh_username }}
           password: ${{ secrets.ssh_password }}
-          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout api && docker-compose up -d --remove-orphans
+          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && checkout api && docker-compose up -d --remove-orphans

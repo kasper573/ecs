@@ -11,9 +11,10 @@ packages/**/node_modules
 
 # build
 packages/**/dist
+packages/**/public/.env.runtime.json
 
 # misc
-.env
+.env.local
 .idea
 .DS_Store
 packages/**/.env

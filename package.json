@@ -52,10 +52,10 @@
     "zod": "^1.11.12"
   },
   "scripts": {
-    "dev:editor": "cd packages/ecs-editor && webpack-dev-server",
+    "dev:web": "cd packages/ecs-editor && webpack-dev-server",
     "dev:api": "cd packages/ecs-api/src && ts-node-dev index.ts",
     "run:api": "cd packages/ecs-api/src && ts-node index.ts",
-    "build:editor": "cd packages/ecs-editor && webpack",
+    "build:web": "cd packages/ecs-editor && webpack",
     "test": "jest",
     "lint": "eslint --ext js,ts,tsx packages",
     "lint-fix": "eslint --ext js,ts,tsx packages --fix"
@@ -145,6 +145,7 @@
     "webpack": "^4.44.2",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "webpack-shell-plugin": "^0.5.0"
   }
 }

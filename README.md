@@ -12,18 +12,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting started
 
-### Docker
-
 - Have docker set up on your system
-- Run `docker-compose up` to install postgres, node api and web server.
-  Open [http://localhost](http://localhost) to view the dockerized editor in the browser.
-
-### Yarn (without docker)
-
-- Copy .env.example to .env (required to run without docker)
+- Run `docker-compose up -d db` to start the postgres database (required by the api).
 - Run `yarn dev:api` to start the editor api in dev/watch mode
 - Run `yarn dev:editor` to start the editor app in dev/watch mode
   Open [http://localhost:8080](http://localhost:8080) to view the editor in the browser.
+
+### Production
+
+- Run `docker-compose up` to install postgres, node api and web server for production.
+  Open [http://localhost](http://localhost) to view the dockerized editor in the browser.
 
 ## Other scripts
 

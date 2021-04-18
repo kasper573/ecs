@@ -1,10 +1,13 @@
+import { envRuntime } from "./envRuntime";
+
 export async function ecsApi<P extends object>(
   url: string,
   init?: RequestInit,
   parseResponse: (response: Response) => Promise<P> = emptyResponse
 ): Promise<ApiResult<P>> {
   try {
-    const response = await fetch(`${process.env.ECS_API_URL}${url}`, init);
+    const { ECS_API_URL } = await envRuntime;
+    const response = await fetch(`${ECS_API_URL}${url}`, init);
     if (response.status === 200) {
       const parsed = await parseResponse(response);
       return { type: "success" as const, ...parsed };

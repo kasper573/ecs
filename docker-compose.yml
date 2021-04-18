@@ -6,8 +6,8 @@ services:
     image: "postgres:13"
     restart: "always"
     ports:
-      - 3002:3002
-    command: -p 3002
+      - 4002:4002
+    command: -p 4002
     environment:
       POSTGRES_USER: "ecs"
       POSTGRES_PASSWORD: "ecs"
@@ -17,25 +17,21 @@ services:
     restart: "always"
     container_name: api
     build:
-      context: .
       dockerfile: Dockerfile.api
-    command: yarn run:api
     ports:
-      - 3001:3001
+      - 4001:4001
     environment:
-      POSTGRES_URL: "postgres://ecs:ecs@db:3002/ecs"
-      ECS_API_PORT: 3001
-      ECS_API_CORS_ORIGIN: "https://ksandin-ecs-editor.surge.sh"
+      POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
+      ECS_API_PORT: 4001
+      ECS_API_CORS_ORIGIN: "http://localhost"
       SSL_KEY: /ssl/key
       SSL_CERT: /ssl/cert
-# web server disabled. Using surge.sh instead (see github workflow)
-#  web:
-#    container_name: web
-#    build:
-#      args:
-#        run: 'export NODE_ENV=production && export ECS_API_URL=http://localhost:3001'
-#      context: .
-#      dockerfile: Dockerfile.web
-#    command: serve packages/ecs-editor/dist -l 80 -s
-#    ports:
-#      - 80:80
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    environment:
+      ECS_API_URL: http://localhost:4001
+    ports:
+      - 80:80
