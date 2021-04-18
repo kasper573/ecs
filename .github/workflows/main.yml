@@ -13,4 +13,4 @@ jobs:
           host: 139.59.169.46
           username: ${{ secrets.ssh_username }}
           password: ${{ secrets.ssh_password }}
-          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout api && docker-compose up -d --remove-orphans
+          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout api && docker-compose up --build -d --remove-orphans
