@@ -38,14 +38,13 @@ module.exports = {
     !isProd && new ReactRefreshPlugin(),
     !isProd && new ForkTsCheckerWebpackPlugin(),
     !isProd && new ESLintWebpackPlugin({ extensions }),
-    // No need to run the shell script in prod since Dockerfile.web already runs it
-    !isProd &&
-      new WebpackShellPlugin({
-        dev: !isProd,
-        onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
-          envRuntimeFile
-        )}.json`,
-      }),
+    new WebpackShellPlugin({
+      dev: !isProd,
+      safe: isProd,
+      onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
+        envRuntimeFile
+      )}.json`,
+    }),
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
     new NodePolyfillPlugin(),
     new CopyPlugin({
