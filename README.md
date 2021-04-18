@@ -6,11 +6,11 @@ An ECS game engine and editor built with Typescript and React.
 > but both the engine and editor is built on a generic Entity Component System and could be used
 > to build other games if the proper components are developed.
 
-[Try the game editor](https://ksandin-ecs-editor.surge.sh/)
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Getting started
+
+### Development
 
 - Have docker set up on your system
 - Run `docker-compose up -d db` to start the postgres database (required by the api).
@@ -20,7 +20,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Production
 
-- Run `docker-compose up` to install postgres, node api and web server for production.
+- Have docker set up on your system
+- Run `docker-compose up -d` to install postgres, node api and web server for production.
   Open [http://localhost](http://localhost) to view the dockerized editor in the browser.
 
 ## Other scripts
