@@ -1,3 +1,4 @@
+
 name: CI
 on:
   push:
@@ -7,10 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Run docker-compose in DO droplet
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2-beta
         with:
-          host: 139.59.169.46
-          username: ${{ secrets.ssh_username }}
-          password: ${{ secrets.ssh_password }}
-          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout api && docker-compose up --build -d --remove-orphans
+          node-version: ${{ matrix.node-version }}
+      - name: Install Packages
+        run: yarn install
+      - name: Run tests
+        run: yarn test
