@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
       ECS_API_PORT: 4001
-      ECS_API_CORS_ORIGIN: "http://localhost"
+      ECS_API_CORS_ORIGIN: "http://139.59.169.46"
       SSL_KEY: /ssl/key
       SSL_CERT: /ssl/cert
   web:
@@ -33,6 +33,6 @@ services:
       context: .
       dockerfile: Dockerfile.web
     environment:
-      ECS_API_URL: http://localhost:4001
+      ECS_API_URL: http://139.59.169.46:4001
     ports:
       - 80:80
