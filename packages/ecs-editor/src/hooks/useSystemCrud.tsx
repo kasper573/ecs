@@ -3,11 +3,13 @@ import { core } from "../core";
 import { uuid } from "../../../ecs-common/src/uuid";
 import { SystemDefinition } from "../../../ecs-serializable/src/definition/SystemDefinition";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { useDispatch } from "../store";
+import { useDispatch, useStore } from "../store";
 import { EntityInitializerId } from "../../../ecs-serializable/src/definition/EntityInitializer";
+import { createDeleteSystemDefinitionAction } from "../actions/createDeleteSystemDefinitionAction";
 import { useCrudDialogs } from "./useCrudDialogs";
 
 export const useSystemCrud = () => {
+  const store = useStore();
   const nativeComponents = useContext(NativeComponentsContext);
   const dispatch = useDispatch();
 
@@ -16,8 +18,14 @@ export const useSystemCrud = () => {
     (system) => system.name,
     {
       create: handleCreate,
-      remove: (system) =>
-        dispatch(core.actions.deleteSystemDefinition(system.id)),
+      remove: (system) => {
+        for (const action of createDeleteSystemDefinitionAction(
+          system.id,
+          store
+        )) {
+          dispatch(action);
+        }
+      },
       rename: (system, name) =>
         dispatch(
           core.actions.renameSystemDefinition({ systemId: system.id, name })

@@ -17,6 +17,7 @@ import { zipECSDefinition } from "../../storage/zipECSDefinition";
 import { getECSDefinitionForSystem } from "../../../../ecs-serializable/src/functions/getECSDefinitionForSystem";
 import { useSystemPublisher } from "../../hooks/useSystemPublisher";
 import { viewerRoute } from "../../routes/viewerRoute";
+import { createDeleteSystemDefinitionAction } from "../../actions/createDeleteSystemDefinitionAction";
 
 export type SystemActionsProps = {
   system: SystemDefinition;
@@ -47,7 +48,9 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
   }
 
   function handleSystemDelete(system: SystemDefinition) {
-    dispatch(core.actions.deleteSystemDefinition(system.id));
+    for (const action of createDeleteSystemDefinitionAction(system.id, store)) {
+      dispatch(action);
+    }
   }
 
   async function saveECSDefinitionToDisk() {

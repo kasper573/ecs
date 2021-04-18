@@ -56,7 +56,7 @@ export const createStore = (history: History, editorState: EditorState) =>
     preloadedState: createRootState(history, editorState),
   });
 
-type EditorStore = ReturnType<typeof createStore>;
+export type EditorStore = ReturnType<typeof createStore>;
 type EditorDispatch = EditorStore["dispatch"];
 
 export type EditorRootState = {
