@@ -19,6 +19,7 @@ COPY nginx /etc/nginx/conf.d
 # Copy files necessary for syncing runtime environment variables
 COPY envToJson.sh .
 COPY .env.runtime .
+RUN chmod +x envToJson.sh
 
 # Copy SPA to nginx
 COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
