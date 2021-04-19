@@ -42,7 +42,7 @@ module.exports = {
     new ForkTsCheckerWebpackPlugin(),
     new ESLintWebpackPlugin({ extensions }),
     new WebpackShellPlugin({
-      dev: false, // Always only build once
+      dev: true, // Always only build once
       onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
         envRuntimeFile
       )}.json`,
