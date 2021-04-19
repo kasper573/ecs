@@ -1,5 +1,4 @@
 import { pickFile } from "js-pick-file";
-import { defined } from "../../../ecs-common/src/defined";
 import { unzipECSDefinition } from "./zipECSDefinition";
 
 export async function loadECSDefinitionsFromFS() {
@@ -14,5 +13,9 @@ export async function loadECSDefinitionsFromFS() {
   } catch {
     return []; // file picker was closed without input
   }
-  return defined(await Promise.all(files.map(unzipECSDefinition)));
+  const parseResults = await Promise.all(files.map(unzipECSDefinition));
+  return parseResults.map((result, index) => ({
+    file: files[index],
+    result,
+  }));
 }

@@ -10,16 +10,11 @@ export async function zipECSDefinition(ecs: ECSDefinition): Promise<Blob> {
   return zip.generateAsync({ type: "blob" });
 }
 
-export async function unzipECSDefinition(
-  zipContent: Blob
-): Promise<ECSDefinition | undefined> {
+export async function unzipECSDefinition(zipContent: Blob) {
   const zip = new JSZip();
   await zip.loadAsync(zipContent);
   const serialized = (await zip
     .file("ecs.json")
     ?.async("string")) as SerializedECSDefinition;
-  if (serialized) {
-    const result = parseECSDefinition(serialized);
-    return result.type === "success" ? result.ecs : undefined;
-  }
+  return parseECSDefinition(serialized);
 }
