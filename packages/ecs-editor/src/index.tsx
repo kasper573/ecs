@@ -8,16 +8,23 @@ import { createBrowserHistory } from "history";
 import { ConnectedRouter } from "connected-react-router";
 import { createECSDefinition } from "../../ecs-serializable/src/functions/createECSDefinition";
 import { reaction } from "../../ecs-common/src/reaction";
-import nativeComponents from "../../ecs-native-components";
 import { auth0Config } from "../../../auth0Config";
-import { createEditorState } from "./functions/createEditorState";
-import { NativeComponentsContext } from "./NativeComponentsContext";
-import { createStore } from "./store";
-import { App } from "./App";
+import { Describable } from "../../ecs-text-adventure/src/describable/Describable";
+import { Collectable } from "../../ecs-text-adventure/src/collectable/Collectable";
+import { Interactive } from "../../ecs-text-adventure/src/interactive/Interactive";
+import { Inventory } from "../../ecs-text-adventure/src/collectable/Inventory";
+import { InteractionMemory } from "../../ecs-text-adventure/src/interactive/InteractionMemory";
+import { SceneManager } from "../../ecs-scene-manager/src/SceneManager";
+import { SceneSwitch } from "../../ecs-scene-manager/src/SceneSwitch";
+import { TextAdventureRenderer } from "../../ecs-text-adventure/src/renderer/TextAdventureRenderer";
 import {
   loadECSDefinitionFromLocalStorage,
   saveECSDefinitionToLocalStorage,
 } from "./storage/lsECSDefinition";
+import { App } from "./App";
+import { createStore } from "./store";
+import { NativeComponentsContext } from "./NativeComponentsContext";
+import { createEditorState } from "./functions/createEditorState";
 
 const history = createBrowserHistory();
 const store = createStore(history, {
@@ -30,6 +37,17 @@ reaction(
   () => store.getState().editor.present.ecs,
   saveECSDefinitionToLocalStorage
 );
+
+const nativeComponents = {
+  Describable,
+  Collectable,
+  Interactive,
+  Inventory,
+  InteractionMemory,
+  SceneManager,
+  SceneSwitch,
+  TextAdventureRenderer,
+};
 
 function render() {
   // ConnectedRouter fires location changes twice in strict mode,
