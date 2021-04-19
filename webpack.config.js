@@ -1,6 +1,7 @@
 require("./env");
 const path = require("path");
 const WebpackShellPlugin = require("webpack-shell-plugin");
+const { HotModuleReplacementPlugin } = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
@@ -12,6 +13,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = "development";
 }
 
+const fastRefresh = Boolean(process.env.USE_FAST_REFRESH);
 const envToJsonFile = path.resolve(__dirname, "envToJson.sh");
 const envRuntimeFile = path.resolve(__dirname, ".env.runtime");
 const isProd = process.env.NODE_ENV === "production";
@@ -35,9 +37,10 @@ module.exports = {
     ],
   },
   plugins: [
-    !isProd && new ReactRefreshPlugin(),
-    !isProd && new ForkTsCheckerWebpackPlugin(),
-    !isProd && new ESLintWebpackPlugin({ extensions }),
+    fastRefresh && new ReactRefreshPlugin(),
+    fastRefresh && new HotModuleReplacementPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
+    new ESLintWebpackPlugin({ extensions }),
     new WebpackShellPlugin({
       dev: false, // Always only build once
       onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
@@ -57,7 +60,6 @@ module.exports = {
     extensions,
   },
   devServer: {
-    hot: !isProd,
     port: process.env.WEBPACK_DEV_SERVER_PORT,
     historyApiFallback: true,
   },
