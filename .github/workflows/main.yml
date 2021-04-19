@@ -10,7 +10,7 @@ jobs:
       - name: Run docker-compose in DO droplet
         uses: appleboy/ssh-action@master
         with:
-          host: 139.59.169.46
+          host: ecseditor.xyz
           username: ${{ secrets.ssh_username }}
           password: ${{ secrets.ssh_password }}
-          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout api && docker-compose up --build -d --remove-orphans
+          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && yarn test && docker-compose up --build -d --remove-orphans
