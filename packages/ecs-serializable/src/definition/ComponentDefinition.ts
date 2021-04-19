@@ -1,16 +1,24 @@
+import * as zod from "zod";
 import { NativeComponentName } from "../types/NativeComponents";
 import { NominalString } from "../../../ecs-common/src/NominalString";
-import { LibraryNode } from "./LibraryNode";
+import { genericString } from "../../../zod-extensions/genericString";
+import { libraryNodeSchema } from "./LibraryNode";
 
 export type ComponentDefinitionId = NominalString<"ComponentDefinitionId">;
 
-export type ComponentDefinition = LibraryNode & {
-  /**
-   * Automatically generated id (unique within parent System).
-   */
-  id: ComponentDefinitionId;
-  /**
-   * The native component that will be used
-   */
-  nativeComponent: NativeComponentName;
-};
+export type ComponentDefinition = zod.infer<typeof componentDefinitionSchema>;
+
+export const componentDefinitionIdSchema = genericString<ComponentDefinitionId>();
+
+export const componentDefinitionSchema = libraryNodeSchema.merge(
+  zod.object({
+    /**
+     * Automatically generated id (unique within parent System).
+     */
+    id: componentDefinitionIdSchema,
+    /**
+     * The native component that will be used
+     */
+    nativeComponent: genericString<NativeComponentName>(),
+  })
+);

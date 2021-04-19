@@ -6,10 +6,6 @@
 
 # Tasks
 
-- Validate parsed ECS definitions
-
-- Option to save runtime to disk
-
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects
 
@@ -51,6 +47,7 @@
 
 # Nice to have
 
+- Option to save runtime to disk
 - Localization
 - Copy paste objects and component properties (separate duplicate into copy and paste actions)
 - Implement multi select (Inspector should support editing shared elements of selections)

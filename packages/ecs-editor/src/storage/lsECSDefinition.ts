@@ -11,5 +11,9 @@ export function loadECSDefinitionFromLocalStorage() {
   const ecsString = localStorage.getItem("ecs") as
     | SerializedECSDefinition
     | undefined;
-  return ecsString ? parseECSDefinition(ecsString) : undefined;
+  if (!ecsString) {
+    return;
+  }
+  const result = parseECSDefinition(ecsString);
+  return result.type === "success" ? result.ecs : undefined;
 }

@@ -1,20 +1,45 @@
-import { SystemDefinition, SystemDefinitionId } from "./SystemDefinition";
-import { EntityInitializer, EntityInitializerId } from "./EntityInitializer";
-import { EntityDefinition, EntityDefinitionId } from "./EntityDefinition";
-import { LibraryFolder, LibraryFolderId } from "./LibraryFolder";
+import * as zod from "zod";
+import { genericRecord } from "../../../zod-extensions/genericRecord";
 import {
-  ComponentDefinition,
-  ComponentDefinitionId,
+  systemDefinitionIdSchema,
+  systemDefinitionSchema,
+} from "./SystemDefinition";
+import {
+  entityInitializerIdSchema,
+  entityInitializerSchema,
+} from "./EntityInitializer";
+import {
+  entityDefinitionIdSchema,
+  entityDefinitionSchema,
+} from "./EntityDefinition";
+import { libraryFolderIdSchema, libraryFolderSchema } from "./LibraryFolder";
+import {
+  componentDefinitionIdSchema,
+  componentDefinitionSchema,
 } from "./ComponentDefinition";
 
 /**
  * An easily serializable entity component system.
  * (The entire data structure is JSON serializable)
  */
-export type ECSDefinition = {
-  systems: Record<SystemDefinitionId, SystemDefinition>;
-  entityInitializers: Record<EntityInitializerId, EntityInitializer>;
-  entityDefinitions: Record<EntityDefinitionId, EntityDefinition>;
-  componentDefinitions: Record<ComponentDefinitionId, ComponentDefinition>;
-  libraryFolders: Record<LibraryFolderId, LibraryFolder>;
-};
+export type ECSDefinition = zod.infer<typeof ecsDefinitionSchema>;
+
+const test = genericRecord(systemDefinitionIdSchema, systemDefinitionSchema);
+type Test = typeof test;
+
+export const ecsDefinitionSchema = zod.object({
+  systems: genericRecord(systemDefinitionIdSchema, systemDefinitionSchema),
+  entityInitializers: genericRecord(
+    entityInitializerIdSchema,
+    entityInitializerSchema
+  ),
+  entityDefinitions: genericRecord(
+    entityDefinitionIdSchema,
+    entityDefinitionSchema
+  ),
+  componentDefinitions: genericRecord(
+    componentDefinitionIdSchema,
+    componentDefinitionSchema
+  ),
+  libraryFolders: genericRecord(libraryFolderIdSchema, libraryFolderSchema),
+});

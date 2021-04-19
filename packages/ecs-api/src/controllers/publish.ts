@@ -19,18 +19,20 @@ export const publishHandlers = [
 ];
 
 async function publish(request: Request, response: Response) {
-  const serializedECS: SerializedECSDefinition = request.body.ecs;
-  const ecs = parseECSDefinition(serializedECS);
   const userId = await getUserId(request);
   if (!userId) {
     response.status(403).send("Cannot publish without auth");
     return;
   }
-  if (!ecs) {
-    response.status(400).send("Could not parse ECSDefinition");
+  const serializedECS: SerializedECSDefinition = request.body.ecs;
+  const ecsParseResult = parseECSDefinition(serializedECS);
+  if (ecsParseResult.type === "error") {
+    response
+      .status(400)
+      .send(`Could not parse ECSDefinition: ${ecsParseResult.message}`);
     return;
   }
-  const system = Object.values(ecs.systems)[0];
+  const system = Object.values(ecsParseResult.ecs.systems)[0];
   if (!system) {
     response.status(400).send("ECSDefinition must contain at least one system");
     return;

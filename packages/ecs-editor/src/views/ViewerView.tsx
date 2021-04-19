@@ -26,12 +26,13 @@ export const ViewerView = () => {
         setError("Could not get system for specified id");
         return;
       }
-      const ecs = parseECSDefinition(result.ecs);
-      if (!ecs) {
+      const parseResult = parseECSDefinition(result.ecs);
+      if (parseResult.type === "error") {
         setError("Could not parse system definition");
         return;
       }
 
+      const { ecs } = parseResult;
       setSystemName(ecs.systems[id]?.name);
       setSystem(
         createSystem(ecs, new DeserializationMemory(), nativeComponents)

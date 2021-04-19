@@ -19,6 +19,7 @@ export async function unzipECSDefinition(
     .file("ecs.json")
     ?.async("string")) as SerializedECSDefinition;
   if (serialized) {
-    return parseECSDefinition(serialized);
+    const result = parseECSDefinition(serialized);
+    return result.type === "success" ? result.ecs : undefined;
   }
 }
