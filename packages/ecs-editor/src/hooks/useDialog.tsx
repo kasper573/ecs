@@ -20,7 +20,7 @@ import { useEvents } from "./useEvents";
 export function useDialog<Args extends unknown[]>(
   component: DialogComponent<Args>
 ) {
-  const events: DialogEvents<Args> = useContext(DialogEventsContext);
+  const events: DialogEventEmitter<Args> = useContext(DialogEventsContext);
   const id = useMemo<DialogId>(uuid, []);
   const componentRef = useAsRef(component);
 
@@ -31,6 +31,13 @@ export function useDialog<Args extends unknown[]>(
   const open = useCallback(
     (...args: Args) => {
       events.emit("add", id, componentRef.current, ...args);
+      return new Promise<void>((resolve) => {
+        events.once("didClose", (closedId) => {
+          if (closedId === id) {
+            resolve();
+          }
+        });
+      });
     },
     [events, componentRef, id]
   );
@@ -48,6 +55,7 @@ export const Dialogs = memo(() => {
     remove,
     open,
     close,
+    didClose,
   });
 
   function updateDialog(id: DialogId, update: Partial<DialogState>) {
@@ -56,6 +64,7 @@ export const Dialogs = memo(() => {
       [id]: { ...state[id], ...update },
     }));
   }
+  function didClose() {}
   function add(id: DialogId, component: DialogComponent, ...args: unknown[]) {
     updateDialog(id, { isOpen: true, component, args });
   }
@@ -70,6 +79,7 @@ export const Dialogs = memo(() => {
     updateDialog(id, { isOpen: true, args });
   }
   function close(id: DialogId) {
+    events.emit("didClose", id);
     updateDialog(id, { isOpen: false });
   }
   return (
@@ -99,11 +109,18 @@ type DialogComponent<Args extends any[] = unknown[]> = (
   ...args: Args
 ) => ReactNode;
 
-type DialogEvents<Args extends any[] = unknown[]> = TypedEmitter<{
+type DialogEvents<Args extends any[] = unknown[]> = {
   add: (id: DialogId, dialog: DialogComponent<Args>, ...args: Args) => void;
   remove: (id: DialogId) => void;
   open: (id: DialogId, ...args: Args) => void;
   close: (id: DialogId) => void;
-}>;
+  didClose: (id: DialogId) => void;
+};
 
-const DialogEventsContext = createContext<DialogEvents>(new EventEmitter());
+type DialogEventEmitter<Args extends any[] = unknown[]> = TypedEmitter<
+  DialogEvents<Args>
+>;
+
+const DialogEventsContext = createContext<DialogEventEmitter>(
+  new EventEmitter()
+);
