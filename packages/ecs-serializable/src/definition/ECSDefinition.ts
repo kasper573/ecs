@@ -18,15 +18,12 @@ import {
   componentDefinitionSchema,
 } from "./ComponentDefinition";
 
+export type ECSDefinition = zod.infer<typeof ecsDefinitionSchema>;
+
 /**
  * An easily serializable entity component system.
  * (The entire data structure is JSON serializable)
  */
-export type ECSDefinition = zod.infer<typeof ecsDefinitionSchema>;
-
-const test = genericRecord(systemDefinitionIdSchema, systemDefinitionSchema);
-type Test = typeof test;
-
 export const ecsDefinitionSchema = zod.object({
   systems: genericRecord(systemDefinitionIdSchema, systemDefinitionSchema),
   entityInitializers: genericRecord(
