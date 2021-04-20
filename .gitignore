@@ -14,6 +14,7 @@ packages/**/dist
 packages/**/public/.env.runtime.json
 
 # misc
+data
 .env.local
 .idea
 .DS_Store

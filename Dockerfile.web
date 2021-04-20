@@ -5,7 +5,6 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN ["yarn", "install"]
 COPY . .
-RUN chmod +x envToJson.sh
 ENV NODE_ENV=production
 RUN ["yarn", "build:web"]
 
