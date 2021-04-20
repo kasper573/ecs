@@ -10,6 +10,9 @@ RUN ["yarn", "build:web"]
 FROM nginx:alpine
 WORKDIR /app
 
+# Install bash
+RUN apk add bash --no-cache
+
 # Update nginx config
 RUN rm -rf /etc/nginx/conf.d
 COPY nginx /etc/nginx/conf.d
@@ -23,4 +26,4 @@ RUN chmod +x envToJson.sh
 COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
 
 # Sync runtime environment variables and start nginx
-CMD ["sh", "-c", "./envToJson.sh .env.runtime /usr/share/nginx/html/.env.runtime.json && nginx -g \"daemon off;\""]
+CMD ["bash", "-c", "./envToJson.sh .env.runtime /usr/share/nginx/html/.env.runtime.json && nginx -g \"daemon off;\""]
