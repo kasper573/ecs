@@ -1,6 +1,5 @@
-FROM node:14.15.1 AS build
+FROM node:14.16.1-slim AS build
 WORKDIR /app
-
 COPY package.json ./
 COPY yarn.lock ./
 RUN ["yarn", "install"]
@@ -8,7 +7,7 @@ COPY . .
 ENV NODE_ENV=production
 RUN ["yarn", "build:web"]
 
-FROM nginx
+FROM nginx:alpine
 WORKDIR /app
 
 # Update nginx config
