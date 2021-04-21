@@ -1,10 +1,8 @@
 # ECS &middot; [![status](https://github.com/ksandin/ecs/actions/workflows/main.yml/badge.svg)](https://github.com/ksandin/ecs/actions)
 
-An ECS game engine and editor built with Typescript and React.
+An ECS game editor built with Typescript and React.
 
-> This project is primarily focused on making text adventure games engines with twitch.tv integration,
-> but both the engine and editor is built on a generic Entity Component System and could be used
-> to build other games if the proper components are developed.
+[Try the editor](https://ecseditor.xyz/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
