@@ -22,4 +22,4 @@ jobs:
           host: ecseditor.xyz
           username: ${{ secrets.ssh_username }}
           password: ${{ secrets.ssh_password }}
-          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && docker-compose up --build --force-recreate -d --remove-orphans
+          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && git checkout docker && docker-compose up --build --force-recreate -d --remove-orphans
