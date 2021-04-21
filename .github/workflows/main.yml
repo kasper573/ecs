@@ -7,16 +7,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Docker Host
-        uses: wshihadeh/docker-deployment-action@v1
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2-beta
         with:
-          remote_docker_host: root@178.62.113.53
-          ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.DOCKER_SSH_KNOWNHOST }}
-          deployment_mode: docker-compose
-          copy_stack_file: true
-          stack_file_name: docker-compose.yml
-          keep_files: 5
-          args: up -d
-          docker_prune: 'false'
-          pull_images_first: 'false'
+          node-version: ${{ matrix.node-version }}
+      - name: Install Packages
+        run: yarn install
+      - name: Run tests
+        run: yarn test
+      - name: Run docker-compose in DO droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ecseditor.xyz
+          username: ${{ secrets.ssh_username }}
+          password: ${{ secrets.ssh_password }}
+          script: rm -rf ecs && git clone https://github.com/ksandin/ecs.git && cd ecs && docker-compose up --build --force-recreate -d --remove-orphans
