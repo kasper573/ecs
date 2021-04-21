@@ -30,7 +30,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: ghcr.io/ksandin/ecs/ecs_api:latest
+          tags: ghcr.io/yzguy/ecs/ecs_api:latest
 
       - name: Build and push Docker Web image
         uses: docker/build-push-action@v2
@@ -38,12 +38,12 @@ jobs:
           context: .
           file: Dockerfile.web
           push: true
-          tags: ghcr.io/ksandin/ecs/ecs_web:latest
+          tags: ghcr.io/yzguy/ecs/ecs_web:latest
 
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
         with:
-          remote_docker_host: root@178.62.113.53
+          remote_docker_host: root@104.236.214.217
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.DOCKER_SSH_KNOWNHOST }}
           deployment_mode: docker-compose
