@@ -7,17 +7,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2-beta
+      - name: Deploy to Docker Host
+        uses: wshihadeh/docker-deployment-action@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install Packages
-        run: yarn install
-      - name: Run tests
-        run: yarn test
-      - name: publish
-        uses: pennsignals/publish_docker-compose@v0.1.0
-        with:
-          docker_compose: "docker-compose.yml"
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          remote_docker_host: root@ecseditor.xyz
+          ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+          deployment_mode: docker-compose
+          args: up -d
+          pre_deployment_command_args: 'bundle exec rake db:migrate'
+          docker_prune: 'true'
+          pull_images_first: 'true'
