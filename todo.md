@@ -47,9 +47,8 @@
 
 # Container tasks
 
-- Use environment variable in nginx/default.conf to specify port
 - Version tagging
-- Resize DO droplet
+- Confirm that I can backup volume data from postgres by brute force dl/up using scp
 - Use a shared base image containing node modules (for api/web)
 - Use restart_policy instead of restart: always
 - See if it's possible to remove redundant yarn install

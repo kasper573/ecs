@@ -14,8 +14,7 @@ WORKDIR /app
 RUN apk add bash --no-cache
 
 # Update nginx config
-RUN rm -rf /etc/nginx/conf.d
-COPY nginx /etc/nginx/conf.d
+COPY nginx /etc/nginx
 
 # Copy files necessary for syncing runtime environment variables
 COPY envToJson.sh .
