@@ -47,6 +47,7 @@
 
 # Container tasks
 
+- Use environment variable in nginx/default.conf to specify port
 - Version tagging
 - Resize DO droplet
 - Use a shared base image containing node modules (for api/web)
