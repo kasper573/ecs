@@ -16,9 +16,7 @@ services:
       - db
     restart: "always"
     container_name: api
-    build:
-      context: .
-      dockerfile: Dockerfile.api
+    image: docker.pkg.github.com/ksandin/ecs/ecs_api:latest
     ports:
       - 4001:4001
     environment:
@@ -27,9 +25,7 @@ services:
       ECS_API_CORS_ORIGIN: "https://ecseditor.xyz"
   web:
     container_name: web
-    build:
-      context: .
-      dockerfile: Dockerfile.web
+    image: docker.pkg.github.com/ksandin/ecs/ecs_web:latest
     environment:
       ECS_API_URL: https://ecseditor.xyz:4001
     ports:
