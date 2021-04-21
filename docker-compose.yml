@@ -22,6 +22,7 @@ services:
   web:
     image: ghcr.io/ksandin/ecs/ecs_web:latest
     environment:
+      NGINX_PORT: 4000
       ECS_API_URL: https://api.ecseditor.xyz
   proxy:
     image: 'jc21/nginx-proxy-manager:latest'
