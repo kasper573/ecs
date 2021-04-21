@@ -16,6 +16,12 @@ if (!process.env.NODE_ENV) {
 const fastRefresh = Boolean(process.env.USE_FAST_REFRESH);
 const envToJsonFile = path.resolve(__dirname, "envToJson.sh");
 const envRuntimeFile = path.resolve(__dirname, ".env.runtime");
+const envOutputFile = path.resolve(
+  process.cwd(),
+  "public",
+  `${path.basename(envRuntimeFile)}.json`
+);
+
 const isProd = process.env.NODE_ENV === "production";
 const extensions = [".js", ".jsx", ".tsx", ".ts"];
 
@@ -41,12 +47,12 @@ module.exports = {
     fastRefresh && new HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new ESLintWebpackPlugin({ extensions }),
-    new WebpackShellPlugin({
-      dev: true, // Always only build once
-      onBuildStart: `${envToJsonFile} ${envRuntimeFile} ./public/${path.basename(
-        envRuntimeFile
-      )}.json`,
-    }),
+    process.env.WEBPACK_BUILD_ENV_RUNTIME &&
+      new WebpackShellPlugin({
+        dev: true, // Always only build once
+        safe: true,
+        onBuildStart: `${envToJsonFile} ${envRuntimeFile} ${envOutputFile}`,
+      }),
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
     new NodePolyfillPlugin(),
     new CopyPlugin({

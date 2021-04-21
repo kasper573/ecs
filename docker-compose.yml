@@ -2,37 +2,42 @@ version: '3.7'
 
 services:
   db:
-    container_name: db
-    image: "postgres:13"
+    image: "postgres:13-alpine"
     restart: "always"
-    ports:
-      - 4002:4002
     command: -p 4002
     environment:
       POSTGRES_USER: "ecs"
       POSTGRES_PASSWORD: "ecs"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   api:
     depends_on:
       - db
     restart: "always"
-    container_name: api
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    ports:
-      - 4001:4001
+    image: ghcr.io/ksandin/ecs/ecs_api:latest
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
       ECS_API_PORT: 4001
       ECS_API_CORS_ORIGIN: "https://ecseditor.xyz"
-      SSL_KEY: /ssl/key
-      SSL_CERT: /ssl/cert
   web:
-    container_name: web
-    build:
-      context: .
-      dockerfile: Dockerfile.web
+    image: ghcr.io/ksandin/ecs/ecs_web:latest
     environment:
-      ECS_API_URL: https://ecseditor.xyz:4001
+      ECS_API_URL: https://api.ecseditor.xyz
+  proxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: always
     ports:
-      - 80:80
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+      DISABLE_IPV6: 'true'
+    volumes:
+      - proxy-data:/data
+      - letsencrypt-data:/etc/letsencrypt
+
+volumes:
+  postgres-data:
+  proxy-data:
+  letsencrypt-data:
