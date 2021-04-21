@@ -12,7 +12,7 @@ jobs:
         with:
           remote_docker_host: root@178.62.113.53
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+          ssh_public_key: ${{ secrets.DOCKER_SSH_KNOWNHOST }}
           deployment_mode: docker-compose
           args: up -d
           pre_deployment_command_args: 'bundle exec rake db:migrate'
