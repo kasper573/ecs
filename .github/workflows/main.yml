@@ -50,6 +50,5 @@ jobs:
           copy_stack_file: true
           stack_file_name: docker-compose.yml
           args: up -d
-          pre_deployment_command_args: 'bundle exec rake db:migrate'
           docker_prune: 'true'
           pull_images_first: 'true'
