@@ -2,7 +2,6 @@ version: '3.7'
 
 services:
   db:
-    container_name: db
     image: "postgres:13"
     restart: "always"
     ports:
@@ -15,7 +14,6 @@ services:
     depends_on:
       - db
     restart: "always"
-    container_name: api
     image: ghcr.io/ksandin/ecs/ecs_api:latest
     ports:
       - 4001:4001
@@ -24,14 +22,12 @@ services:
       ECS_API_PORT: 4001
       ECS_API_CORS_ORIGIN: "https://ecseditor.xyz"
   web:
-    container_name: web
     image: ghcr.io/ksandin/ecs/ecs_web:latest
     environment:
       ECS_API_URL: https://ecseditor.xyz:4001
     ports:
       - 4000:4000
   proxy:
-    container_name: proxy
     image: 'jc21/nginx-proxy-manager:latest'
     restart: always
     ports:
