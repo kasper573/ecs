@@ -4,8 +4,6 @@ services:
   db:
     image: "postgres:13-alpine"
     restart: "always"
-    ports:
-      - 4002:4002
     command: -p 4002
     environment:
       POSTGRES_USER: "ecs"
@@ -17,8 +15,6 @@ services:
       - db
     restart: "always"
     image: ghcr.io/ksandin/ecs/ecs_api:latest
-    ports:
-      - 4001:4001
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
       ECS_API_PORT: 4001
@@ -27,8 +23,6 @@ services:
     image: ghcr.io/ksandin/ecs/ecs_web:latest
     environment:
       ECS_API_URL: https://api.ecseditor.xyz
-    ports:
-      - 4000:4000
   proxy:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: always
