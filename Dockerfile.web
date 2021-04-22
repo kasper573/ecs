@@ -19,10 +19,8 @@ COPY nginx /etc/nginx
 # Copy files necessary for syncing runtime environment variables
 COPY envToJson.sh .
 COPY .env.runtime .
-RUN chmod +x envToJson.sh
+COPY 99-env2json.sh /docker-entrypoint.d/
+RUN chmod +x envToJson.sh & chmod +x /docker-entrypoint.d/99-env2json.sh
 
 # Copy SPA to nginx
 COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
-
-# Sync runtime environment variables and start nginx
-CMD ["bash", "-c", "./envToJson.sh .env.runtime /usr/share/nginx/html/.env.runtime.json && nginx -g \"daemon off;\""]
