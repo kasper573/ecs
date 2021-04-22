@@ -1,6 +1,9 @@
 const fs = require("fs");
 const yaml = require("yaml");
 
+// Sets the value for a "." separated path for the given yaml file
+// Example: node setYaml.js myFile.yml a.b.c 123
+
 const inputFilename = process.argv[2];
 const outputFilename = inputFilename;
 const path = process.argv[3];

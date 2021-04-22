@@ -1,7 +1,8 @@
 #!/bin/bash
 
-input=$1
-output=$2
+# Converts input env file to json
+input=$1 # input file name
+output=$2 # output file name
 
 # Recreate output
 rm -f "$output"
