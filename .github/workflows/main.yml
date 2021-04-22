@@ -24,19 +24,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install Packages
-        run: yarn install
-
-      - name: Run tests
-        run: yarn test
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build Dockerfile.nodeModules
         uses: docker/build-push-action@v2
         with:
@@ -44,6 +31,16 @@ jobs:
           file: Dockerfile.nodeModules
           push: false
           tags: ecs-node-modules
+
+      - name: Run tests
+        run: docker run ecs-node-modules yarn test
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Dockerfile.api
         uses: docker/build-push-action@v2
