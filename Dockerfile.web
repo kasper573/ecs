@@ -14,7 +14,7 @@ WORKDIR /app
 RUN apk add bash --no-cache
 COPY envToJson.sh .
 RUN chmod +x envToJson.sh
-RUN echo '#!/bin/bash\n bash /app/envToJson.sh /app/.env.runtime /usr/share/nginx/html/.env.runtime.json' > /docker-entrypoint.d/90-syncEnv.sh
+RUN echo '/app/envToJson.sh /app/.env.runtime /usr/share/nginx/html/.env.runtime.json' > /docker-entrypoint.d/90-syncEnv.sh
 RUN chmod +x /docker-entrypoint.d/90-syncEnv.sh
 
 # Update nginx config

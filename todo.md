@@ -47,16 +47,16 @@
 
 # Container tasks
 
-- Version tagging
-- Confirm that I can backup volume data from postgres by brute force dl/up using scp
+- Paralellize github action jobs
 - Use a shared base image containing node modules (for api/web)
 - Use restart_policy instead of restart: always
 - See if it's possible to remove redundant yarn install
   (reuse the same installation for testing and building of web/api)
 - Bundle the api to reduce image file size
-- Not running as root
 - Attached storage (don't use postgres and sqlite docker services, use dbs provided by DO instead)
-- Ditch it all, do kubernetes
+- Not running as root
+- Confirm that I can backup volume data from postgres by brute force dl/up using scp
+- Ditch docker-compose, do kubernetes
 
 # Nice to have
 

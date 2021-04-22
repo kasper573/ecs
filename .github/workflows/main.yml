@@ -9,7 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Add short sha to environment variables (env.SHA)
+        uses: benjlevesque/short-sha@v1.2
+
+      - name: Prepare web and api image CR urls
+        run: |
+          echo "API_IMAGE=ghcr.io/${{ github.repository }}/api:${{ env.SHA }}" >> $GITHUB_ENV
+          echo "WEB_IMAGE=ghcr.io/${{ github.repository }}/web:${{ env.SHA }}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
         with:
@@ -34,7 +43,7 @@ jobs:
           context: .
           file: Dockerfile.api
           push: true
-          tags: ghcr.io/ksandin/ecs/ecs_api:latest
+          tags: ${{ env.API_IMAGE }}
 
       - name: Build and push Docker Web image
         uses: docker/build-push-action@v2
@@ -42,7 +51,7 @@ jobs:
           context: .
           file: Dockerfile.web
           push: true
-          tags: ghcr.io/ksandin/ecs/ecs_web:latest
+          tags: ${{ env.WEB_IMAGE }}
 
       - name: Make droplet able to log in to Github Container Registry
         uses: appleboy/ssh-action@master
@@ -51,6 +60,12 @@ jobs:
           username: ${{ secrets.DOCKER_SSH_USERNAME }}
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           script: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+
+      - name: Update docker-compose.yml to contain api image reference
+        run: node ./setYaml.js docker-compose.yml services.api.image ${{ env.API_IMAGE }}
+
+      - name: Update docker-compose.yml to contain web image reference
+        run: node ./setYaml.js docker-compose.yml services.web.image ${{ env.WEB_IMAGE }}
 
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
@@ -62,7 +77,6 @@ jobs:
           deployment_mode: docker-compose
           copy_stack_file: true
           stack_file_name: docker-compose.yml
-          args: up -d
+          args: up -d --no-build
           docker_prune: 'true'
           pull_images_first: 'true'
-
