@@ -6,12 +6,12 @@ on:
       - '**.md'
   workflow_dispatch:
 env:
-  SHORT_SHA: ${GITHUB_SHA::8}
+  VERSION: latest
 jobs:
   build:
     env:
-      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${{ env.SHORT_SHA }}
-      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${{ env.SHORT_SHA }}
+      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${{ env.VERSION }}
+      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${{ env.VERSION }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
