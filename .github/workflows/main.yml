@@ -5,13 +5,11 @@ on:
     paths-ignore:
       - '**.md'
   workflow_dispatch:
-env:
-  VERSION: latest
 jobs:
   build:
     env:
-      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${{ env.VERSION }}
-      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${{ env.VERSION }}
+      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${{ github.sha }}
+      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${{ github.sha }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
