@@ -25,12 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Build Dockerfile.nodeModules
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: Dockerfile.nodeModules
-          push: false
-          tags: ecs-node-modules
+        run: docker build -f Dockerfile.nodeModules -t ecs-node-modules .
 
       - name: Run tests
         run: docker run ecs-node-modules yarn test
