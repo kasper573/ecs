@@ -23,10 +23,7 @@ export const TextSystem = ({
     onCommand={(command) => performCommand(system, command)}
     {...consoleProps}
   >
-    {describeSystem(system, {
-      describeAction: (action, index) => `${index + 1}. ${action.name}`,
-      ...describers,
-    })}
+    {describeSystem(system)}
     {children}
   </Console>
 );
