@@ -1,5 +1,14 @@
 version: '3.7'
 
+x-var-api: &API
+  build:
+    context: .
+    dockerfile: Dockerfile.api
+x-var-web: &WEB
+  build:
+    context: .
+    dockerfile: Dockerfile.web
+
 services:
   db:
     image: "postgres:13-alpine"
@@ -11,16 +20,16 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
   api:
+    <<: *API
     depends_on:
       - db
     restart: "always"
-    image: ghcr.io/ksandin/ecs/ecs_api:latest
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
       ECS_API_PORT: 4001
       ECS_API_CORS_ORIGIN: "https://ecseditor.xyz"
   web:
-    image: ghcr.io/ksandin/ecs/ecs_web:latest
+    <<: *WEB
     environment:
       NGINX_PORT: 4000
       ECS_API_URL: https://api.ecseditor.xyz
@@ -39,6 +48,6 @@ services:
       - letsencrypt-data:/etc/letsencrypt
 
 volumes:
-  postgres-data:
-  proxy-data:
-  letsencrypt-data:
+  ? postgres-data
+  ? proxy-data
+  ? letsencrypt-data

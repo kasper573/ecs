@@ -56,7 +56,7 @@
 - Bundle the api to reduce image file size
 - Not running as root
 - Attached storage (don't use postgres and sqlite docker services, use dbs provided by DO instead)
-- Ditch it all, do kubernetes
+- Ditch docker-compose, do kubernetes
 
 # Nice to have
 
