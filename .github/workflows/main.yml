@@ -14,8 +14,8 @@ jobs:
 
       - name: Prepare web and api image CR urls
         run: |
-          echo "API_IMAGE=ghcr.io/${{ github.repository }}/ecs_api:${{ env.SHA }}" >> $GITHUB_ENV
-          echo "WEB_IMAGE=ghcr.io/${{ github.repository }}/web_api:${{ env.SHA }}" >> $GITHUB_ENV
+          echo "API_IMAGE=ghcr.io/${{ github.repository }}/api:${{ env.SHA }}" >> $GITHUB_ENV
+          echo "WEB_IMAGE=ghcr.io/${{ github.repository }}/web:${{ env.SHA }}" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
 
