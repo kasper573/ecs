@@ -8,9 +8,8 @@ on:
 jobs:
   build:
     env:
-      VERSION: latest
-      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${{ env.VERSION }}
-      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${{ env.VERSION }}
+      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:latest
+      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:latest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
