@@ -47,7 +47,6 @@
 
 # Container tasks
 
-- Version tagging
 - Confirm that I can backup volume data from postgres by brute force dl/up using scp
 - Use a shared base image containing node modules (for api/web)
 - Use restart_policy instead of restart: always

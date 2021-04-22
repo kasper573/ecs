@@ -62,10 +62,10 @@ jobs:
           script: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Update docker-compose.yml to contain api image reference
-        run: node ./setYamlAnchor.js docker-compose.yml API image ${{ env.API_IMAGE }}
+        run: node ./setYaml.js docker-compose.yml services.api.image ${{ env.API_IMAGE }}
 
       - name: Update docker-compose.yml to contain web image reference
-        run: node ./setYamlAnchor.js docker-compose.yml WEB image ${{ env.WEB_IMAGE }}
+        run: node ./setYaml.js docker-compose.yml services.web.image ${{ env.WEB_IMAGE }}
 
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
@@ -77,6 +77,6 @@ jobs:
           deployment_mode: docker-compose
           copy_stack_file: true
           stack_file_name: docker-compose.yml
-          args: up -d
+          args: up -d --no-build
           docker_prune: 'true'
           pull_images_first: 'true'
