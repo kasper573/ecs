@@ -37,7 +37,15 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker API image
+      - name: Build Dockerfile.nodeModules
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile.nodeModules
+          push: false
+          tags: ecs-node-modules
+
+      - name: Build and push Dockerfile.api
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -45,7 +53,7 @@ jobs:
           push: true
           tags: ${{ env.API_IMAGE }}
 
-      - name: Build and push Docker Web image
+      - name: Build and push Dockerfile.web
         uses: docker/build-push-action@v2
         with:
           context: .
