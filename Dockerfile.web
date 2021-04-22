@@ -10,17 +10,15 @@ RUN ["yarn", "build:web"]
 FROM nginx:alpine
 WORKDIR /app
 
-# Install bash
+# Tell nginx to sync environment variables on start
 RUN apk add bash --no-cache
+COPY envToJson.sh .
+RUN chmod +x envToJson.sh
+RUN echo '#!/bin/bash\n bash /app/envToJson.sh /app/.env.runtime /usr/share/nginx/html/.env.runtime.json' > /docker-entrypoint.d/90-syncEnv.sh
 
 # Update nginx config
-COPY nginx /etc/nginx/conf.d
+COPY nginx /etc/nginx
 
-# Copy files necessary for syncing runtime environment variables
-COPY envToJson.sh .
-COPY .env.runtime .
-COPY 99-env2json.sh /docker-entrypoint.d/
-RUN chmod +x envToJson.sh & chmod +x /docker-entrypoint.d/99-env2json.sh
-
-# Copy SPA to nginx
+# Copy SPA to nginx and update runtime variables
 COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
+COPY .env.runtime .
