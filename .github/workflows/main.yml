@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ docker-image-versioning ]
+    branches: [ shared-dockerfile ]
     paths-ignore:
       - '**.md'
   workflow_dispatch:

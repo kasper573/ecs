@@ -1,9 +1,4 @@
-FROM node:14.16.1-slim AS build
-WORKDIR /app
-COPY package.json ./
-COPY yarn.lock ./
-RUN ["yarn", "install"]
-COPY . .
+FROM ecs-node-modules
 ENV NODE_ENV=production
 RUN ["yarn", "build:web"]
 
