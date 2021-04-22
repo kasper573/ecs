@@ -1,5 +1,4 @@
 FROM ecs-node-modules
-ENV NODE_ENV=production
 RUN ["yarn", "build:web"]
 
 FROM nginx:alpine
