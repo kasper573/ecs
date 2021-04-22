@@ -8,11 +8,12 @@ on:
 jobs:
   build:
     env:
-      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:latest
-      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:latest
+      API_IMAGE: ghcr.io/${{ github.repository }}/ecs_api:${GITHUB_SHA::8}
+      WEB_IMAGE: ghcr.io/${{ github.repository }}/web_api:${GITHUB_SHA::8}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2-beta
         with:
@@ -58,7 +59,7 @@ jobs:
       - name: Update docker-compose.yml to contain api image reference
         run: node ./setYamlAnchor.js docker-compose.yml API image ${{ env.API_IMAGE }}
 
-      - name: Update docker-compose.yml to contain api image reference
+      - name: Update docker-compose.yml to contain web image reference
         run: node ./setYamlAnchor.js docker-compose.yml WEB image ${{ env.WEB_IMAGE }}
 
       - name: Deploy to Docker Host
