@@ -9,12 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare image environment variables
-      - uses: benjlevesque/short-sha@v1.2
+      - name: Expose short sha
+        uses: benjlevesque/short-sha@v1.2
+
+      - name: Prepare web and api images
         run: |
           echo "API_IMAGE=ghcr.io/${{ github.repository }}/ecs_api:${{ $SHA }}" >> $GITHUB_ENV
           echo "WEB_IMAGE=ghcr.io/${{ github.repository }}/web_api:${{ $SHA }}" >> $GITHUB_ENV
-      - uses: benjlevesque/short-sha@v1.2
+
+      - name: Show images
         run: |
           echo $API_IMAGE
           echo $WEB_IMAGE
