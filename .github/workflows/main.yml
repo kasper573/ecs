@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build Dockerfile.api
-        run: docker build -f Dockerfile.api -t ${{ env.API_TAG }} .
+        run: docker buildx -f Dockerfile.api -t ${{ env.API_TAG }} .
 
       - name: Run tests
         run: docker run ${{ env.API_TAG }} yarn test
