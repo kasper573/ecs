@@ -21,11 +21,6 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - name: Build Dockerfile.nodeModules
         run: docker build -f Dockerfile.nodeModules -t ecs-node-modules .
 
@@ -63,11 +58,10 @@ jobs:
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           script: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
-      - name: Update docker-compose.yml to contain api image reference
-        run: node ./scripts/setYaml.js docker-compose.yml services.api.image ${{ env.API_TAG }}
-
-      - name: Update docker-compose.yml to contain web image reference
-        run: node ./scripts/setYaml.js docker-compose.yml services.web.image ${{ env.WEB_TAG }}
+      - name: Update docker-compose.yml to contain api & web image tags
+      - uses: mikefarah/yq@master
+        with:
+          cmd: yq eval '.services.api.image = "${{ env.API_TAG }}" | .services.web.image = "${{ env.WEB_TAG }}"' --inplace docker-compose.yml
 
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
