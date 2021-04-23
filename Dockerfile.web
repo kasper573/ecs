@@ -1,4 +1,4 @@
-FROM ecs-node-modules
+FROM ecs-node-modules as build
 RUN ["yarn", "build:web"]
 
 FROM nginx:alpine
