@@ -47,10 +47,6 @@
 
 # Container tasks
 
-- See if it's possible to remove redundant yarn install
-  (reuse the same installation for testing and building of web/api)
-- Paralellize github action jobs
-- Use a shared base image containing node modules (for api/web)
 - Use restart_policy instead of restart: always
 - Bundle the api to reduce image file size
 - Attached storage (don't use postgres and sqlite docker services, use dbs provided by DO instead)
