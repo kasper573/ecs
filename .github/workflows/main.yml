@@ -35,7 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push api image
-        run: docker push ghcr.io:${{ env.API_TAG }}
+        run: docker push ${{ env.API_TAG }}
 
       - name: Build and push Dockerfile.web
         uses: docker/build-push-action@v2
