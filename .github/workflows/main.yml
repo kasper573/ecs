@@ -61,7 +61,7 @@ jobs:
       - name: Update docker-compose.yml to contain api & web image tags
         uses: mikefarah/yq@master
         with:
-          cmd: yq eval '.services.api.image = "${{ env.API_TAG }}" | .services.web.image = "${{ env.WEB_TAG }}"' --inplace docker-compose.yml
+          cmd: yq eval '.services.api.image = "${{ env.API_TAG }}" | .services.web.image = "${{ env.WEB_TAG }}" | del(.services.nodeModules)' --inplace docker-compose.yml
 
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
