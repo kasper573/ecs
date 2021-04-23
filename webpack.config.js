@@ -1,4 +1,4 @@
-require("./env");
+require("./scripts/env");
 const path = require("path");
 const WebpackShellPlugin = require("webpack-shell-plugin");
 const { HotModuleReplacementPlugin } = require("webpack");
@@ -14,7 +14,7 @@ if (!process.env.NODE_ENV) {
 }
 
 const fastRefresh = Boolean(process.env.USE_FAST_REFRESH);
-const envToJsonFile = path.resolve(__dirname, "envToJson.sh");
+const envToJsonFile = path.resolve(__dirname, "scripts/envToJson.sh");
 const envRuntimeFile = path.resolve(__dirname, ".env.runtime");
 const envOutputFile = path.resolve(
   process.cwd(),
