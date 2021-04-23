@@ -1,2 +1,7 @@
-FROM ecs-node-modules
+FROM node:14.16.1-slim
+WORKDIR /app
+COPY package.json ./
+COPY yarn.lock ./
+RUN ["yarn", "install"]
+COPY . .
 CMD ["yarn", "run:api"]

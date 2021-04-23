@@ -1,4 +1,9 @@
-FROM ecs-node-modules as build
+FROM node:14.16.1-slim as build
+WORKDIR /app
+COPY package.json ./
+COPY yarn.lock ./
+RUN ["yarn", "install"]
+COPY . .
 RUN ["yarn", "build:web"]
 
 FROM nginx:alpine
