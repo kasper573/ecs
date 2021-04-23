@@ -1,11 +1,6 @@
 version: '3.7'
 
 services:
-  nodeModules:
-    image: ecs-node-modules
-    build:
-      context: .
-      dockerfile: Dockerfile.nodeModules
   db:
     image: "postgres:13-alpine"
     restart: "always"
@@ -21,15 +16,12 @@ services:
       dockerfile: Dockerfile.api
     depends_on:
       - db
-      - nodeModules
     restart: "always"
     environment:
       POSTGRES_URL: "postgres://ecs:ecs@db:4002/ecs"
       ECS_API_PORT: 4001
       ECS_API_CORS_ORIGIN: "https://ecseditor.xyz"
   web:
-    depends_on:
-      - nodeModules
     build:
       context: .
       dockerfile: Dockerfile.web
