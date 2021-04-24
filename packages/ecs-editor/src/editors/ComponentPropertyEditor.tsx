@@ -5,12 +5,14 @@ import { useMenu } from "../hooks/useMenu";
 import { propertySupportsDeclarative } from "../../../property-bag/src/propertySupportsDeclarative";
 import {
   ComponentPropertiesDefinition,
+  ComponentPropertyPrimitive,
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
 } from "../../../ecs-serializable/src/definition/ComponentPropertiesDefinition";
 import { createComponentPropertyDefinition } from "../../../ecs-serializable/src/functions/createComponentPropertyDefinition";
 import { isFunctionDefinition } from "../../../ecs-serializable/src/functions/isFunctionDefinition";
 import { Intro } from "../intro/Intro";
+import { createDefaultPropertyDeclaration } from "../../../ecs-serializable/src/functions/createDefaultPropertyDeclaration";
 import { renderComponentPropertyValueEditor } from "./ComponentPropertyValueEditor";
 
 export type ComponentPropertyEditorProps = {
@@ -48,7 +50,11 @@ export const ComponentPropertyEditor = ({
   const setDeclarative = (toDeclarative: boolean) =>
     onUpdate(
       createComponentPropertyDefinition(
-        toDeclarative ? () => {} : propertyInfo.defaultValue
+        toDeclarative
+          ? createDefaultPropertyDeclaration(
+              propertyInfo.defaultValue as ComponentPropertyPrimitive
+            )
+          : propertyInfo.defaultValue
       )
     );
 
