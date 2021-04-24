@@ -4,6 +4,13 @@
 - Sandbox user submitted scripts
 - Script editor (monaco?)
 
+# ACE
+
+- Create Editor UI
+- Implement Editor UI for declarative component properties (without imports)
+- Implement Editor UI for custom components
+- Implement support for imports
+
 # Tasks
 
 - Create Reactive component (should behave as mobx reaction/when)
