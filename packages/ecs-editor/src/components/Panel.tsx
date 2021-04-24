@@ -1,16 +1,22 @@
 import styled from "styled-components";
 import { Paper, PaperProps } from "@material-ui/core";
-import { forwardRef } from "react";
+import { CSSProperties, forwardRef } from "react";
 import { PanelName } from "../types/PanelName";
 
-export type PanelProps = PaperProps & {
+type PanelVariant = CSSProperties["flexDirection"];
+
+export type PanelProps = Omit<PaperProps, "variant"> & {
   name?: PanelName;
+  variant?: PanelVariant;
 };
 
 const PanelBase = forwardRef(
-  ({ children, name, style, ...paperProps }: PanelProps, ref) => (
+  (
+    { children, variant = "column", name, style, ...paperProps }: PanelProps,
+    ref
+  ) => (
     <Paper ref={ref} {...paperProps} style={{ ...style, gridArea: name }}>
-      <PanelContent>{children}</PanelContent>
+      <PanelContent $variant={variant}>{children}</PanelContent>
     </Paper>
   )
 );
@@ -27,11 +33,11 @@ export const Panel = styled(PanelBase)`
   }
 `;
 
-const PanelContent = styled.div`
+const PanelContent = styled.div<{ $variant: PanelVariant }>`
   // Ensure children with position absolute is relative
   // to panel content regardless of scroll position
   position: relative;
   min-height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({ $variant }) => $variant};
 `;
