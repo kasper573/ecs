@@ -62,7 +62,7 @@ jobs:
           remote_docker_host: ${{ secrets.DOCKER_SSH_USERNAME }}@ecseditor.xyz
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.DOCKER_SSH_KNOWNHOST }}
-          deploy_path: /root/ecs
+          deploy_path: ~/ecs
           deployment_mode: docker-compose
           copy_stack_file: true
           stack_file_name: docker-compose.yml
