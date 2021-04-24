@@ -2,16 +2,16 @@ import { IconButton } from "@material-ui/core";
 import { memo, useContext } from "react";
 import { SystemSyncContext } from "../../hooks/useSystemSync";
 import { ResetIcon } from "../../components/icons";
-import { Panel } from "../../components/Panel";
+import { Panel, PanelProps } from "../../components/Panel";
 import { PanelName } from "../../types/PanelName";
 import { PanelHeader } from "../../components/PanelHeader";
 import { IntroWithDefaultTooltip } from "../../intro/IntroWithDefaultTooltip";
 import { RenderTarget } from "../../../../ecs-render-target/RenderTarget";
 
-export const RuntimePanel = memo(() => {
+export const RuntimePanel = (props: PanelProps) => {
   const [system, resetSystem] = useContext(SystemSyncContext);
   return (
-    <Panel name={PanelName.Runtime}>
+    <Panel name={PanelName.Runtime} {...props}>
       <PanelHeader title={PanelName.Runtime}>
         <IntroWithDefaultTooltip
           defaultTooltip={{ title: "Reset runtime" }}
@@ -33,4 +33,4 @@ export const RuntimePanel = memo(() => {
       <RenderTarget system={system} />
     </Panel>
   );
-});
+};
