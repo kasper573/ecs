@@ -4,5 +4,4 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN ["yarn", "install"]
 COPY . .
-USER 9000 # non privileged user
 CMD ["yarn", "run:api"]
