@@ -44,12 +44,12 @@ jobs:
           tags: ${{ env.WEB_TAG }}
 
       - name: Make droplet able to log in to Github Container Registry
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master
         with:
           host: ecseditor.xyz
           username: ${{ secrets.DOCKER_SSH_USERNAME }}
-          privateKey: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          command: sudo -S docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+          key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          script: docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update docker-compose.yml to contain api & web image tags
         uses: mikefarah/yq@master
