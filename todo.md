@@ -47,6 +47,7 @@
 
 # Container tasks
 
+- Ditch db service. Use AWS/s3 instead.
 - Use restart_policy instead of restart: always
 - Ditch docker-compose, do kubernetes
 
