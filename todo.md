@@ -48,10 +48,6 @@
 # Container tasks
 
 - Use restart_policy instead of restart: always
-- Bundle the api to reduce image file size
-- Attached storage (don't use postgres and sqlite docker services, use dbs provided by DO instead)
-- Not running as root
-- Confirm that I can backup volume data from postgres by brute force dl/up using scp
 - Ditch docker-compose, do kubernetes
 
 # Nice to have
