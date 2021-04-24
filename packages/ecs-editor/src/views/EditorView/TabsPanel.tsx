@@ -17,10 +17,14 @@ export const TabsPanel = () => {
         <ClosableTab label="Item Two" />
         <ClosableTab label="Item Three" />
       </VerticalTabs>
-      <RuntimePanel elevation={0} />
+      <ExpandedRuntimePanel elevation={0} />
     </Panel>
   );
 };
+
+const ExpandedRuntimePanel = styled(RuntimePanel)`
+  flex: 1;
+`;
 
 const VerticalTabs = styled(Tabs).attrs({
   orientation: "vertical",
