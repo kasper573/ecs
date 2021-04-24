@@ -49,7 +49,7 @@ jobs:
           host: ecseditor.xyz
           username: ${{ secrets.DOCKER_SSH_USERNAME }}
           privateKey: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          command: docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+          command: sudo docker login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update docker-compose.yml to contain api & web image tags
         uses: mikefarah/yq@master
