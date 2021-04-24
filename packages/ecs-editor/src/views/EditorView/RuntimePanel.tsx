@@ -1,5 +1,5 @@
 import { IconButton } from "@material-ui/core";
-import { memo, useContext } from "react";
+import { useContext } from "react";
 import { SystemSyncContext } from "../../hooks/useSystemSync";
 import { ResetIcon } from "../../components/icons";
 import { Panel, PanelProps } from "../../components/Panel";

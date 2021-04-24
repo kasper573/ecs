@@ -1,21 +1,36 @@
 import Tab, { TabProps } from "@material-ui/core/Tab";
 import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
-import { PropsWithChildren } from "react";
+import { MouseEvent, PropsWithChildren } from "react";
 import { CloseIcon } from "./icons";
 
-export const ClosableTab = ({ label, ...props }: TabProps) => (
+export type ClosableTabProps = TabProps & CloseButtonProps;
+
+export const ClosableTab = ({ label, onClose, ...props }: ClosableTabProps) => (
   <ClosableTabBase
-    label={<LabelWithCloseButton>{label}</LabelWithCloseButton>}
+    label={
+      <LabelWithCloseButton onClose={onClose}>{label}</LabelWithCloseButton>
+    }
     {...props}
   />
 );
 
 const ClosableTabBase = styled(Tab).attrs({ component: "span" })`
   position: relative;
+  padding: ${({ theme }) => theme.spacing(1)}px
+    ${({ theme }) => theme.spacing(2)}px;
+  .MuiTab-wrapper {
+    align-items: flex-start;
+  }
 `;
 
-const LabelWithCloseButton = ({ children }: PropsWithChildren<{}>) => (
+type CloseButtonProps = {
+  onClose?: (e: MouseEvent) => void;
+};
+
+const LabelWithCloseButton = ({
+  children,
+}: PropsWithChildren<CloseButtonProps>) => (
   <>
     {children}
     <DockedIconButton>
@@ -29,7 +44,7 @@ const DockedIconButton = styled(IconButton).attrs({
   edge: "end",
 })`
   position: absolute;
-  right: ${({ theme }) => theme.spacing(1)}px;
+  right: ${({ theme }) => theme.spacing(1.5)}px;
   .MuiSvgIcon-root {
     font-size: ${({ theme }) => theme.spacing(2)}px;
   }
