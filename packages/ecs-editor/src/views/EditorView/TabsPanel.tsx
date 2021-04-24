@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from "react";
 import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import styled from "styled-components";
 import { Panel } from "../../components/Panel";
 import { PanelName } from "../../types/PanelName";
+import { ClosableTab } from "../../components/ClosableTab";
 import { RuntimePanel } from "./RuntimePanel";
 
 export const TabsPanel = () => {
@@ -13,9 +13,9 @@ export const TabsPanel = () => {
   return (
     <Panel variant="row" name={PanelName.Tabs}>
       <VerticalTabs value={tabIndex} onChange={handleChange}>
-        <Tab label="Item One" />
-        <Tab label="Item Two" />
-        <Tab label="Item Three" />
+        <ClosableTab label="Item one" />
+        <ClosableTab label="Item Two" />
+        <ClosableTab label="Item Three" />
       </VerticalTabs>
       <RuntimePanel elevation={0} />
     </Panel>
