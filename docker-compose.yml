@@ -10,6 +10,10 @@ services:
       POSTGRES_PASSWORD: "ecs"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    # Need to expose these ports to make it possible
+    # for yarn dev:api to be able connect to db
+    ports:
+      - 4002:4002
   api:
     build:
       context: .
