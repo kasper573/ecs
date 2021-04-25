@@ -28,7 +28,7 @@ export const deleteComponentDefinition = createEditorStateReducer<ComponentDefin
     }
 
     // Remove related file
-    core.caseReducers.closeEditorFile(state, core.actions.closeEditorFile(id));
+    core.caseReducers.closeCodeFile(state, core.actions.closeCodeFile(id));
 
     // Remove component definition
     removeNominal(state.ecs.componentDefinitions, id);

@@ -155,12 +155,7 @@ export const LibraryPanel = memo(() => {
   }
 
   function handleOpenComponentFile(def: ComponentDefinition) {
-    dispatch(
-      core.actions.openEditorFile({
-        type: "componentDefinition",
-        definitionId: def.id,
-      })
-    );
+    dispatch(core.actions.openCodeFile(def.id));
   }
 
   return (

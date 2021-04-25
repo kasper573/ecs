@@ -30,7 +30,7 @@ import { moveLibraryNode } from "./reducers/moveLibraryNode";
 import { resetComponentInitializerProperty } from "./reducers/resetComponentInitializerProperty";
 import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
-import { editorFileReducers } from "./features/editorFile/editorFileReducers";
+import { codeFileReducers } from "./features/codeFile/codeFileReducers";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -69,7 +69,7 @@ export const core = createSlice({
     setEditorState,
     setThemeType,
     commitECSDefinitions,
-    ...editorFileReducers,
+    ...codeFileReducers,
   },
 });
 

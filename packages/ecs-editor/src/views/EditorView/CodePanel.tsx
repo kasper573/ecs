@@ -7,25 +7,25 @@ import { PanelName } from "../../types/PanelName";
 import { ClosableTab } from "../../components/ClosableTab";
 import { CodeEditor } from "../../editors/CodeEditor";
 import { useDispatch, useSelector } from "../../store";
-import { selectListOfEditorFile } from "../../features/editorFile/selectListOfEditorFile";
+import { selectListOfCodeFile } from "../../features/codeFile/selectListOfCodeFile";
 import { core } from "../../core";
-import { selectSelectedEditorFile } from "../../features/editorFile/selectSelectedEditorFile";
-import { EditorFileId } from "../../features/editorFile/EditorFile";
+import { selectSelectedCodeFile } from "../../features/codeFile/selectSelectedCodeFile";
+import { CodeFileId } from "../../features/codeFile/CodeFile";
 import { Center } from "../../components/Center";
 
 export const CodePanel = memo(() => {
   const dispatch = useDispatch();
-  const files = useSelector(selectListOfEditorFile);
+  const files = useSelector(selectListOfCodeFile);
 
-  const selectedFile = useSelector(selectSelectedEditorFile);
+  const selectedFile = useSelector(selectSelectedCodeFile);
   const selectedIndex = files.findIndex((file) => file.id === selectedFile?.id);
 
   const handleTabChange = (e: ChangeEvent<{}>, newIndex: number) => {
-    dispatch(core.actions.selectEditorFile(files[newIndex].id));
+    dispatch(core.actions.selectCodeFile(files[newIndex].id));
   };
 
-  const closeSelectedFile = (id: EditorFileId) =>
-    dispatch(core.actions.closeEditorFile(id));
+  const closeSelectedFile = (id: CodeFileId) =>
+    dispatch(core.actions.closeCodeFile(id));
 
   return (
     <Panel variant="row" name={PanelName.Code}>

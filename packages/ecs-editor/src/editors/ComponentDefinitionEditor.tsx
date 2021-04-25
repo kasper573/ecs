@@ -14,14 +14,7 @@ export const ComponentDefinitionEditor = ({
   value,
 }: ComponentDefinitionEditorProps) => {
   const dispatch = useDispatch();
-  const openFile = () => {
-    dispatch(
-      core.actions.openEditorFile({
-        type: "componentDefinition",
-        definitionId: value.id,
-      })
-    );
-  };
+  const openFile = () => dispatch(core.actions.openCodeFile(value.id));
   return (
     <>
       <InspectedObjectInfo
