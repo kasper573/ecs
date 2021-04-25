@@ -31,6 +31,7 @@ import { resetComponentInitializerProperty } from "./reducers/resetComponentInit
 import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
 import { codeFileReducers } from "./features/codeFile/codeFileReducers";
+import { setComponentDefinitionScript } from "./reducers/setComponentDefinitionScript";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -59,13 +60,14 @@ export const core = createSlice({
     deleteLibraryFolder,
     renameComponentDefinition,
     deleteComponentDefinition,
+    createComponentDefinition,
+    duplicateComponentDefinition,
+    setComponentDefinitionScript,
     addComponentInitializer,
     setComponentInitializerProperty,
     resetComponentInitializerProperty,
     deleteComponentInitializer,
     duplicateComponentInitializer,
-    createComponentDefinition,
-    duplicateComponentDefinition,
     setEditorState,
     setThemeType,
     commitECSDefinitions,

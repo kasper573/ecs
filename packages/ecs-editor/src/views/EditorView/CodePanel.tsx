@@ -12,6 +12,7 @@ import { core } from "../../core";
 import { selectSelectedCodeFile } from "../../features/codeFile/selectSelectedCodeFile";
 import { CodeFileId } from "../../features/codeFile/CodeFile";
 import { Center } from "../../components/Center";
+import { ECSScript } from "../../../../ecs-serializable/src/definition/ECSScript";
 
 export const CodePanel = memo(() => {
   const dispatch = useDispatch();
@@ -27,7 +28,16 @@ export const CodePanel = memo(() => {
   const closeSelectedFile = (id: CodeFileId) =>
     dispatch(core.actions.closeCodeFile(id));
 
-  const handleCodeChange = () => {};
+  const handleCodeChange = (script: ECSScript) => {
+    if (selectedFile) {
+      dispatch(
+        core.actions.setComponentDefinitionScript({
+          id: selectedFile.id,
+          script,
+        })
+      );
+    }
+  };
 
   return (
     <Panel variant="row" name={PanelName.Code}>
