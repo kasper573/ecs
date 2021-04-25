@@ -1,7 +1,7 @@
 import Tab, { TabProps } from "@material-ui/core/Tab";
 import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
-import { MouseEvent, PropsWithChildren } from "react";
+import { MouseEvent, PropsWithChildren, useCallback } from "react";
 import { CloseIcon } from "./icons";
 
 export type ClosableTabProps = TabProps & CloseButtonProps;
@@ -30,14 +30,26 @@ type CloseButtonProps = {
 
 const LabelWithCloseButton = ({
   children,
-}: PropsWithChildren<CloseButtonProps>) => (
-  <>
-    {children}
-    <DockedIconButton>
-      <CloseIcon />
-    </DockedIconButton>
-  </>
-);
+  onClose,
+}: PropsWithChildren<CloseButtonProps>) => {
+  const handleClose = useCallback(
+    (e: MouseEvent) => {
+      if (onClose) {
+        e.stopPropagation();
+        onClose(e);
+      }
+    },
+    [onClose]
+  );
+  return (
+    <>
+      {children}
+      <DockedIconButton onClick={handleClose}>
+        <CloseIcon />
+      </DockedIconButton>
+    </>
+  );
+};
 
 const DockedIconButton = styled(IconButton).attrs({
   size: "small",
