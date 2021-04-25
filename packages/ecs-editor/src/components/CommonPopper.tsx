@@ -6,6 +6,8 @@ import {
   Popper,
   PopperProps,
 } from "@material-ui/core";
+import styled from "styled-components";
+import { zIndex } from "../zIndex";
 
 type CommonPopperProps = PopperProps &
   Pick<ClickAwayListenerProps, "onClickAway">;
@@ -15,7 +17,7 @@ export const CommonPopper = ({
   onClickAway,
   ...popperProps
 }: CommonPopperProps) => (
-  <Popper {...popperProps} placement="bottom-end" transition>
+  <Container {...popperProps} placement="bottom-end" transition>
     {({ TransitionProps }) => (
       <Fade {...TransitionProps} timeout={350}>
         <Paper style={{ width: 300 }}>
@@ -25,5 +27,9 @@ export const CommonPopper = ({
         </Paper>
       </Fade>
     )}
-  </Popper>
+  </Container>
 );
+
+const Container = styled(Popper)`
+  z-index: ${zIndex.tooltip};
+`;
