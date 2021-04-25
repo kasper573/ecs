@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { createSystem } from "../../../ecs-serializable/src/functions/createSystem";
 import { useRootSelector, useSelector } from "../store";
 import { NativeComponentsContext } from "../NativeComponentsContext";
@@ -31,11 +25,11 @@ export const useSystemSync = () => {
   const [[system, memory, error], setSystemAndMemory] = useState(() =>
     createSystemWithMemory(ecs, selectedSystemId, nativeComponents)
   );
-  const [, forceUpdate] = useReducer((n) => n + 1, 0);
   const ref = useAsRef({ system, memory });
 
   const updateRuntime = () => {
-    const { system, memory } = ref.current;
+    let { system, memory } = ref.current;
+    let error: Error | undefined;
     try {
       updateSystem(
         system,
@@ -44,10 +38,11 @@ export const useSystemSync = () => {
         nativeComponents
       );
     } catch (e) {
-      setSystemAndMemory([system, memory, e]);
-      return;
+      system = new DeserializedSystem();
+      memory = new DeserializationMemory();
+      error = e;
     }
-    forceUpdate();
+    setSystemAndMemory([system, memory, error]);
   };
 
   const resetRuntime = () => {
@@ -56,7 +51,6 @@ export const useSystemSync = () => {
     setSystemAndMemory(
       createSystemWithMemory(ecs, selectedSystemId, nativeComponents)
     );
-    forceUpdate();
   };
 
   useEffect(updateRuntime, [ecs, ref, selectedSystemId, nativeComponents]);
@@ -77,7 +71,7 @@ const createSystemWithMemory = (
   selectedSystem: SystemDefinitionId | undefined,
   nativeComponents: NativeComponents
 ) => {
-  const memory = new DeserializationMemory();
+  let memory = new DeserializationMemory();
   let system: DeserializedSystem;
   let error: Error | undefined;
   try {
@@ -87,7 +81,8 @@ const createSystemWithMemory = (
       nativeComponents
     );
   } catch (e) {
-    system = new System();
+    system = new DeserializedSystem();
+    memory = new DeserializationMemory();
     error = e;
   }
   return [system, memory, error] as const;
