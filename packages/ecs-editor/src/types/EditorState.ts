@@ -1,14 +1,13 @@
 import { PaletteType } from "@material-ui/core";
+import { EntityState } from "@reduxjs/toolkit";
 import { ECSDefinition } from "../../../ecs-serializable/src/definition/ECSDefinition";
+import { EditorFile, EditorFileId } from "../features/editorFile/EditorFile";
 import { InspectedValue } from "./InspectedValue";
 
-/**
- * Immutable state representing the current state of the editor.
- * Any changes to state must be done via mutation functions in `mutations/`,
- * preferably via the main reducer `mutations/updateState.ts`.
- */
 export type EditorState = {
   ecs: ECSDefinition;
   themeType: PaletteType;
   inspected?: InspectedValue;
+  files: EntityState<EditorFile>;
+  selectedFileId?: EditorFileId;
 };

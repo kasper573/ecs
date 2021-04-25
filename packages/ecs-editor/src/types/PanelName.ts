@@ -6,5 +6,5 @@ export enum PanelName {
   Hierarchy = "Hierarchy",
   Inspector = "Inspector",
   Library = "Library",
-  Tabs = "Tabs",
+  Code = "Code",
 }

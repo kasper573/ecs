@@ -1,0 +1,68 @@
+import { ChangeEvent, memo } from "react";
+import Tabs from "@material-ui/core/Tabs";
+import styled from "styled-components";
+import { Typography } from "@material-ui/core";
+import { Panel } from "../../components/Panel";
+import { PanelName } from "../../types/PanelName";
+import { ClosableTab } from "../../components/ClosableTab";
+import { CodeEditor } from "../../editors/CodeEditor";
+import { useDispatch, useSelector } from "../../store";
+import { selectListOfEditorFile } from "../../features/editorFile/selectListOfEditorFile";
+import { core } from "../../core";
+import { selectSelectedEditorFile } from "../../features/editorFile/selectSelectedEditorFile";
+import { EditorFileId } from "../../features/editorFile/EditorFile";
+import { Center } from "../../components/Center";
+
+export const CodePanel = memo(() => {
+  const dispatch = useDispatch();
+  const files = useSelector(selectListOfEditorFile);
+
+  const selectedFile = useSelector(selectSelectedEditorFile);
+  const selectedIndex = files.findIndex((file) => file.id === selectedFile?.id);
+
+  const handleTabChange = (e: ChangeEvent<{}>, newIndex: number) => {
+    dispatch(core.actions.selectEditorFile(files[newIndex].id));
+  };
+
+  const closeSelectedFile = (id: EditorFileId) =>
+    dispatch(core.actions.closeEditorFile(id));
+
+  return (
+    <Panel variant="row" name={PanelName.Code}>
+      <VerticalTabs
+        value={selectedIndex !== -1 ? selectedIndex : false}
+        onChange={handleTabChange}
+      >
+        {files.map((file) => (
+          <ClosableTab
+            key={file.id}
+            label={file.name}
+            onClose={() => closeSelectedFile(file.id)}
+          />
+        ))}
+      </VerticalTabs>
+      <TabContent>
+        {selectedFile ? (
+          <CodeEditor value={selectedFile.content} />
+        ) : (
+          <Center>
+            <Typography>No script selected</Typography>
+          </Center>
+        )}
+      </TabContent>
+    </Panel>
+  );
+});
+
+const TabContent = styled.div`
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+`;
+
+const VerticalTabs = styled(Tabs).attrs({
+  orientation: "vertical",
+  variant: "scrollable",
+})`
+  border-right: 1px solid ${({ theme }) => theme.palette.divider};
+`;

@@ -16,22 +16,24 @@ export const PanelContainer = styled.div`
   grid-template-columns: auto 300px 300px;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
-    "${panels.Tabs} ${panels.Hierarchy} ${panels.Inspector}"
-    "${panels.Tabs} ${panels.Hierarchy} ${panels.Library}"
+    "${panels.Runtime} ${panels.Hierarchy} ${panels.Inspector}"
+    "${panels.Code} ${panels.Hierarchy} ${panels.Library}"
   ;
   ${({ theme }) => theme.breakpoints.down("md")} {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas:
-      "${panels.Tabs} ${panels.Inspector}"
+      "${panels.Runtime} ${panels.Inspector}"
       "${panels.Hierarchy} ${panels.Library}"
+      "${panels.Code} ${panels.Code}"
     ;
   }
   ${({ theme }) => theme.breakpoints.down("xs")} {
     grid-template-columns: auto;
     grid-template-rows: 220px 220px 220px 220px;
     grid-template-areas:
-      "${panels.Tabs}"
+      "${panels.Runtime}"
+      "${panels.Code}"
       "${panels.Hierarchy}"
       "${panels.Inspector}"
       "${panels.Library}"

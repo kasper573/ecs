@@ -10,7 +10,8 @@ import { PanelContainer } from "./PanelContainer";
 import { LibraryPanel } from "./LibraryPanel";
 import { HierarchyPanel } from "./HierarchyPanel";
 import { InspectorPanel } from "./InspectorPanel";
-import { TabsPanel } from "./TabsPanel";
+import { CodePanel } from "./CodePanel";
+import { RuntimePanel } from "./RuntimePanel";
 
 export const EditorView = memo(() => {
   const selectedSystem = useRootSelector(selectSelectedSystemDefinition);
@@ -26,7 +27,8 @@ export const EditorView = memo(() => {
           <LibraryPanel />
           <HierarchyPanel />
           <InspectorPanel />
-          <TabsPanel />
+          <CodePanel />
+          <RuntimePanel />
         </PanelContainer>
       </AdjustedContentPadding>
     </SystemSyncContext.Provider>

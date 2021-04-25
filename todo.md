@@ -7,11 +7,16 @@
 # ACE
 
 - Create Editor UI
-- Implement Editor UI for declarative component properties (without imports)
 - Implement Editor UI for custom components
+- Implement Editor UI for declarative component properties (without imports)
 - Implement support for imports
 
 # Tasks
+
+- bug: layout has vertical overflow when library is too big
+- double click in tree view should only trigger one select event
+- check why fast refresh is not working when editing ComponentDefinitionEditor.tsx (loses inspected state)
+- add styled components plugin to webpack
 
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects

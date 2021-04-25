@@ -4,4 +4,8 @@ import { createECSDefinition } from "../../../ecs-serializable/src/functions/cre
 export const createEditorState = (): EditorState => ({
   ecs: createECSDefinition(),
   themeType: "dark",
+  files: {
+    ids: [],
+    entities: {},
+  },
 });
