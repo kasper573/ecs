@@ -1,5 +1,6 @@
-import { IconButton } from "@material-ui/core";
+import { Button, IconButton, Typography } from "@material-ui/core";
 import { useContext } from "react";
+import styled from "styled-components";
 import { SystemSyncContext } from "../../hooks/useSystemSync";
 import { ResetIcon } from "../../components/icons";
 import { Panel, PanelProps } from "../../components/Panel";
@@ -7,9 +8,10 @@ import { PanelName } from "../../types/PanelName";
 import { PanelHeader } from "../../components/PanelHeader";
 import { IntroWithDefaultTooltip } from "../../intro/IntroWithDefaultTooltip";
 import { RenderTarget } from "../../../../ecs-render-target/RenderTarget";
+import { Center } from "../../components/Center";
 
 export const RuntimePanel = (props: PanelProps) => {
-  const [system, resetSystem] = useContext(SystemSyncContext);
+  const [system, resetSystem, systemError] = useContext(SystemSyncContext);
   return (
     <Panel name={PanelName.Runtime} {...props}>
       <PanelHeader title={PanelName.Runtime}>
@@ -30,7 +32,18 @@ export const RuntimePanel = (props: PanelProps) => {
           </IconButton>
         </IntroWithDefaultTooltip>
       </PanelHeader>
-      <RenderTarget system={system} />
+      {systemError ? (
+        <Center>
+          <SystemErrorMessage>{systemError + ""}</SystemErrorMessage>
+          <Button onClick={() => console.error(systemError)}>
+            Log to console
+          </Button>
+        </Center>
+      ) : (
+        <RenderTarget system={system} />
+      )}
     </Panel>
   );
 };
+
+const SystemErrorMessage = styled(Typography).attrs({ color: "error" })``;

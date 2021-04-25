@@ -19,6 +19,7 @@ import { createECSDefinition } from "../../../ecs-serializable/src/functions/cre
 import { System } from "../../../ecs/src/System";
 import { selectECS } from "../selectors/selectECS";
 import { selectSelectedSystemDefinitionId } from "../selectors/selectSelectedSystemDefinitionId";
+import { DeserializedSystem } from "../../../ecs-serializable/src/types/DeserializedSystem";
 
 /**
  * Automates system initialization and updates.
@@ -27,7 +28,7 @@ export const useSystemSync = () => {
   const nativeComponents = useContext(NativeComponentsContext);
   const ecs = useSelector(selectECS);
   const selectedSystemId = useRootSelector(selectSelectedSystemDefinitionId);
-  const [[system, memory], setSystemAndMemory] = useState(() =>
+  const [[system, memory, error], setSystemAndMemory] = useState(() =>
     createSystemWithMemory(ecs, selectedSystemId, nativeComponents)
   );
   const [, forceUpdate] = useReducer((n) => n + 1, 0);
@@ -35,12 +36,17 @@ export const useSystemSync = () => {
 
   const updateRuntime = () => {
     const { system, memory } = ref.current;
-    updateSystem(
-      system,
-      getSelectedECS(ecs, selectedSystemId),
-      memory,
-      nativeComponents
-    );
+    try {
+      updateSystem(
+        system,
+        getSelectedECS(ecs, selectedSystemId),
+        memory,
+        nativeComponents
+      );
+    } catch (e) {
+      setSystemAndMemory([system, memory, e]);
+      return;
+    }
     forceUpdate();
   };
 
@@ -55,7 +61,7 @@ export const useSystemSync = () => {
 
   useEffect(updateRuntime, [ecs, ref, selectedSystemId, nativeComponents]);
 
-  return [system, resetRuntime] as const;
+  return [system, resetRuntime, error] as const;
 };
 
 const getSelectedECS = (
@@ -72,15 +78,21 @@ const createSystemWithMemory = (
   nativeComponents: NativeComponents
 ) => {
   const memory = new DeserializationMemory();
-  const system = createSystem(
-    getSelectedECS(ecs, selectedSystem),
-    memory,
-    nativeComponents
-  );
-  return [system, memory] as const;
+  let system: DeserializedSystem;
+  let error: Error | undefined;
+  try {
+    system = createSystem(
+      getSelectedECS(ecs, selectedSystem),
+      memory,
+      nativeComponents
+    );
+  } catch (e) {
+    system = new System();
+    error = e;
+  }
+  return [system, memory, error] as const;
 };
 
-export const SystemSyncContext = createContext<readonly [System, () => void]>([
-  new System(),
-  () => {},
-]);
+export const SystemSyncContext = createContext<
+  readonly [System, () => void, Error | undefined]
+>([new System(), () => {}, undefined]);
