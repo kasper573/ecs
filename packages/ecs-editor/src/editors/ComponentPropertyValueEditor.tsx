@@ -9,7 +9,7 @@ import {
 import { PropertyInfo } from "../../../property-bag/src/types/PropertyInfo";
 import { propertySupportsDeclarative } from "../../../property-bag/src/propertySupportsDeclarative";
 import { isFunctionDefinition } from "../../../ecs-serializable/src/functions/isFunctionDefinition";
-import { FunctionEditor } from "./FunctionEditor";
+import { ComponentPropertyDeclarationEditor } from "./ComponentPropertyDeclarationEditor";
 
 export type ComponentPropertyValueEditorProps = {
   value: ComponentPropertyValueDefinition;
@@ -26,12 +26,12 @@ export const renderComponentPropertyValueEditor = ({
   const isDeclarative = supportsDeclarative && isFunctionDefinition(value);
 
   if (isDeclarative || isType(info.type, ZodTypes.function)) {
-    const valueAsFunc = (value ??
+    const declaration = (value ??
       emptyFunc) as ComponentPropertyFunctionDefinition;
     return (
-      <FunctionEditor
-        value={valueAsFunc.code}
-        onChange={(code) => onChange({ code })}
+      <ComponentPropertyDeclarationEditor
+        value={declaration}
+        onChange={onChange}
       />
     );
   }

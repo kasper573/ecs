@@ -27,6 +27,8 @@ export const CodePanel = memo(() => {
   const closeSelectedFile = (id: CodeFileId) =>
     dispatch(core.actions.closeCodeFile(id));
 
+  const handleCodeChange = () => {};
+
   return (
     <Panel variant="row" name={PanelName.Code}>
       <VerticalTabs
@@ -43,7 +45,10 @@ export const CodePanel = memo(() => {
       </VerticalTabs>
       <TabContent>
         {selectedFile ? (
-          <CodeEditor value={selectedFile.content} />
+          <CodeEditor
+            value={selectedFile.content}
+            onChange={handleCodeChange}
+          />
         ) : (
           <Center>
             <Typography>No script selected</Typography>
