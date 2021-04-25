@@ -2,13 +2,13 @@ import { IconButton, Popover, Tooltip } from "@material-ui/core";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { bindPopover, bindToggle } from "material-ui-popup-state";
 import styled from "styled-components";
-import { ComponentPropertyFunctionDefinition } from "../../../ecs-serializable/src/definition/ComponentPropertiesDefinition";
 import { EditIcon } from "../components/icons";
+import { ECSScript } from "../../../ecs-serializable/src/definition/ECSScript";
 import { CodeEditor } from "./CodeEditor";
 
 export type ComponentPropertyDeclarationEditorProps = {
-  value: ComponentPropertyFunctionDefinition;
-  onChange: (updated: ComponentPropertyFunctionDefinition) => void;
+  value: ECSScript;
+  onChange: (updated: ECSScript) => void;
 };
 
 export const ComponentPropertyDeclarationEditor = ({

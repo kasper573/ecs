@@ -6,11 +6,11 @@ import { editor } from "monaco-editor";
 import { useRef } from "react";
 import { useSelector } from "../store";
 import { selectThemeType } from "../selectors/selectThemeType";
-import { ComponentPropertyFunctionDefinition } from "../../../ecs-serializable/src/definition/ComponentPropertiesDefinition";
+import { ECSScript } from "../../../ecs-serializable/src/definition/ECSScript";
 
 export type CodeEditorProps = {
-  value: ComponentPropertyFunctionDefinition;
-  onChange: (updated: ComponentPropertyFunctionDefinition) => void;
+  value: ECSScript;
+  onChange: (updated: ECSScript) => void;
   options?: MonacoEditorProps["options"];
 };
 
