@@ -44,7 +44,6 @@ module.exports = {
   },
   plugins: [
     fastRefresh && new ReactRefreshPlugin(),
-    fastRefresh && new HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new ESLintWebpackPlugin({ extensions }),
     process.env.WEBPACK_BUILD_ENV_RUNTIME &&
@@ -66,6 +65,7 @@ module.exports = {
     extensions,
   },
   devServer: {
+    hotOnly: fastRefresh,
     port: process.env.WEBPACK_DEV_SERVER_PORT,
     historyApiFallback: true,
   },
