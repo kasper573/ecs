@@ -13,9 +13,6 @@
 
 # User defined windows tasks
 
-- Closing a window should remove it entirely.
-  Restoring should reopen the window gracefully wherever it seems to fit.
-- Window list toggle feature
 - Persist window state in localStorage
 - Improve code for default window state (move definition to json)
 - Remove layout container and use entire screen space for windows
