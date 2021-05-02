@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { MosaicBranch, MosaicWindow } from "react-mosaic-component";
 import { useDispatch, useSelector } from "../../store";
 import { core } from "../../core";
@@ -7,21 +7,12 @@ import { WindowState } from "./WindowState";
 import { WindowToolbarControls } from "./WindowToolbarControls";
 import { WindowId } from "./WindowId";
 import { selectWindows } from "./selectWindows";
+import { WindowDefinitionContext } from "./WindowDefinitionContext";
 
-type Window = {
-  title: string;
-  content: JSX.Element;
-};
-
-type WindowContainerProps = {
-  windowDefinitions: Record<string, Window>;
-};
-
-export const WindowContainer = ({
-  windowDefinitions,
-}: WindowContainerProps) => {
+export const WindowRenderer = () => {
   const dispatch = useDispatch();
-  const windows = useSelector(selectWindows);
+  const windowDefinitions = useContext(WindowDefinitionContext);
+  const windowState = useSelector(selectWindows);
 
   const receiveWindowState = (updated: WindowState) => {
     dispatch(core.actions.setWindowState(updated));
@@ -29,21 +20,21 @@ export const WindowContainer = ({
 
   const renderWindow = useCallback(
     (id: WindowId, path: MosaicBranch[]) => {
-      const { content, title } = windowDefinitions[id];
+      const def = windowDefinitions.find((def) => def.id === id);
       return (
         <MosaicWindow
           path={path}
-          title={title}
+          title={def?.title ?? id}
           toolbarControls={<WindowToolbarControls id={id} />}
         >
-          {content}
+          {def ? def.content : `Unknown window: "${id}"`}
         </MosaicWindow>
       );
     },
     [windowDefinitions]
   );
 
-  if (!windows) {
+  if (!windowState) {
     // Empty
     return null;
   }
@@ -51,7 +42,7 @@ export const WindowContainer = ({
   return (
     <MuiMosaic<WindowId>
       renderTile={renderWindow}
-      value={windows}
+      value={windowState}
       onChange={receiveWindowState}
     />
   );

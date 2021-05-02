@@ -43,8 +43,7 @@ import { Intro } from "../../intro/Intro";
 import { LibraryFolder } from "../../../../ecs-serializable/src/definition/LibraryFolder";
 import { EntityDefinition } from "../../../../ecs-serializable/src/definition/EntityDefinition";
 import { ComponentDefinition } from "../../../../ecs-serializable/src/definition/ComponentDefinition";
-import { isWindowOpen } from "../../features/window/isWindowOpen";
-import { editorWindowNames } from "./editorWindows";
+import { WindowId } from "../../features/window/WindowId";
 
 export const LibraryPanel = memo(() => {
   const store = useStore();
@@ -158,14 +157,7 @@ export const LibraryPanel = memo(() => {
 
   function handleOpenComponentFile(def: ComponentDefinition) {
     dispatch(core.actions.openCodeFile(def.id));
-
-    const shouldOpenWindow = !isWindowOpen(
-      store.getState().editor.present.windows,
-      editorWindowNames.code
-    );
-    if (shouldOpenWindow) {
-      dispatch(core.actions.openWindow(editorWindowNames.code));
-    }
+    dispatch(core.actions.openWindow("code" as WindowId));
   }
 
   return (
