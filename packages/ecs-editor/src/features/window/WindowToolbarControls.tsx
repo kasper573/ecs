@@ -10,7 +10,7 @@ export const WindowToolbarControls = ({ id }: { id: WindowId }) => {
   const handleClose = () => dispatch(core.actions.closeWindow(id));
   return (
     <Tooltip title="Close">
-      <IconButton size="small" edge="end" onClick={handleClose}>
+      <IconButton size="small" onClick={handleClose}>
         <CloseIcon />
       </IconButton>
     </Tooltip>

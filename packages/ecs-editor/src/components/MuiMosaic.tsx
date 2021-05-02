@@ -11,9 +11,13 @@ export const MuiMosaic: typeof MosaicWithoutDragDropContext = styled(
 )`
   & {
     background: transparent;
+    .mosaic-window {
+      border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+    }
     .mosaic-window-toolbar {
       background: ${({ theme }) => theme.palette.background.paper};
-      border-radius: ${({ theme }) => theme.shape.borderRadius}px;
+      border-radius: 0;
+      box-shadow: none;
     }
     .mosaic-window-title {
       ${({ theme }) => css(theme.typography.caption as CSSObject)}
