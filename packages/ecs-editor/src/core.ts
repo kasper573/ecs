@@ -32,7 +32,7 @@ import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
 import { codeFileReducers } from "./features/codeFile/codeFileReducers";
 import { setComponentDefinitionScript } from "./reducers/setComponentDefinitionScript";
-import { windowReducers } from "./features/window/windowReducers";
+import windowReducers from "./features/window/reducers";
 
 /**
  * A redux toolkit slice representing all actions in the editor
