@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { typedKeys } from "../../ecs-common/src/typedKeys";
 import { createEditorState } from "./functions/createEditorState";
 import { createSystemDefinition } from "./reducers/createSystemDefinition";
 import { renameSystemDefinition } from "./reducers/renameSystemDefinition";
@@ -81,6 +82,8 @@ export const noUndoActionList: Array<keyof typeof core.actions> = [
   "setSelectedEntityInitializer",
   "setSelectedLibraryNode",
   "setThemeType",
+  ...typedKeys(codeFileReducers),
+  ...typedKeys(windowReducers),
 ];
 
 export const noUndoActions = noUndoActionList.map(
