@@ -1,6 +1,6 @@
-import { getLeaves } from "react-mosaic-component";
 import { WindowState } from "./WindowState";
 import { WindowId } from "./WindowId";
+import { getOpenWindows } from "./getOpenWindows";
 
 export const isWindowOpen = (root: WindowState, id: WindowId) =>
-  getLeaves(root).includes(id);
+  getOpenWindows(root).includes(id);

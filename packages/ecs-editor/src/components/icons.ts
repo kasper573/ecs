@@ -31,6 +31,7 @@ export {
   Brightness7 as LightThemeIcon,
   Cancel as CloseIcon,
   ArrowBack as BackIcon,
+  Layers as WindowsIcon,
 } from "@material-ui/icons";
 
 export {

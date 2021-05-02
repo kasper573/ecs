@@ -4,12 +4,13 @@ import { saveAs } from "file-saver";
 import {
   DeleteIcon,
   EditIcon,
+  WindowsIcon,
   PublishIcon,
   SaveIcon,
   UnpublishIcon,
   ViewPublishedIcon,
 } from "../../components/icons";
-import { useDispatch, useStore } from "../../store";
+import { useDispatch, useSelector, useStore } from "../../store";
 import { useCrudDialogs } from "../../hooks/useCrudDialogs";
 import { SystemDefinition } from "../../../../ecs-serializable/src/definition/SystemDefinition";
 import { core } from "../../core";
@@ -18,6 +19,9 @@ import { getECSDefinitionForSystem } from "../../../../ecs-serializable/src/func
 import { useSystemPublisher } from "../../hooks/useSystemPublisher";
 import { viewerRoute } from "../../routes/viewerRoute";
 import { createDeleteSystemDefinitionAction } from "../../actions/createDeleteSystemDefinitionAction";
+import { MenuFor } from "../../components/MenuFor";
+import { selectWindows } from "../../features/window/selectWindows";
+import { createToggleWindowMenuItems } from "./editorWindows";
 
 export type SystemActionsProps = {
   system: SystemDefinition;
@@ -34,6 +38,7 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
     unpublish,
     snackbar,
   } = useSystemPublisher(system.id);
+  const windows = useSelector(selectWindows);
 
   const [{ showRenameDialog, showDeleteDialog }] = useCrudDialogs(
     "system",
@@ -64,6 +69,15 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
 
   return (
     <Row>
+      <MenuFor items={createToggleWindowMenuItems(windows, dispatch)}>
+        {(props) => (
+          <Tooltip title="Windows">
+            <IconButton {...props}>
+              <WindowsIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </MenuFor>
       <Tooltip title={isPublished ? "View published" : "Publish to view"}>
         <span>
           <IconButton

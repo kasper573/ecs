@@ -3,10 +3,10 @@ import { MosaicBranch, MosaicWindow } from "react-mosaic-component";
 import { useDispatch, useSelector } from "../../store";
 import { core } from "../../core";
 import { MuiMosaic } from "../../components/MuiMosaic";
-import { EditorState } from "../../types/EditorState";
 import { WindowState } from "./WindowState";
 import { WindowToolbarControls } from "./WindowToolbarControls";
 import { WindowId } from "./WindowId";
+import { selectWindows } from "./selectWindows";
 
 type Window = {
   title: string;
@@ -34,7 +34,7 @@ export const WindowContainer = ({
         <MosaicWindow
           path={path}
           title={title}
-          toolbarControls={<WindowToolbarControls path={path} />}
+          toolbarControls={<WindowToolbarControls id={id} />}
         >
           {content}
         </MosaicWindow>
@@ -42,6 +42,11 @@ export const WindowContainer = ({
     },
     [windowDefinitions]
   );
+
+  if (!windows) {
+    // Empty
+    return null;
+  }
 
   return (
     <MuiMosaic<WindowId>
@@ -51,5 +56,3 @@ export const WindowContainer = ({
     />
   );
 };
-
-const selectWindows = ({ windows }: EditorState) => windows;
