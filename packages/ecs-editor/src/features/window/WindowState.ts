@@ -1,8 +1,19 @@
-import { MosaicNode } from "react-mosaic-component";
+import { MosaicNode, MosaicPath } from "react-mosaic-component";
+import { WindowId } from "./WindowId";
 
 /**
- * The definition of one or a graph of windows.
+ * The current state of all windows.
  *
- * This is a graph data structure, and the entire window state is represented as a root node.
+ *
  */
-export type WindowState = MosaicNode<string>;
+export type WindowState = {
+  /**
+   * The root node representing the window graph
+   * (passed to the react-mosaic library for window rendering)
+   */
+  graph: MosaicNode<WindowId>;
+  /**
+   * The split percentages used before hiding
+   */
+  splitPercentages: Record<WindowId, number>; // 0-100
+};

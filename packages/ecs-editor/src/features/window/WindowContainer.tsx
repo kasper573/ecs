@@ -6,6 +6,7 @@ import { MuiMosaic } from "../../components/MuiMosaic";
 import { EditorState } from "../../types/EditorState";
 import { WindowState } from "./WindowState";
 import { WindowToolbarControls } from "./WindowToolbarControls";
+import { WindowId } from "./WindowId";
 
 type Window = {
   title: string;
@@ -20,21 +21,21 @@ export const WindowContainer = ({
   windowDefinitions,
 }: WindowContainerProps) => {
   const dispatch = useDispatch();
-  const windowState = useSelector(selectWindowState);
-  const handleWindowChange = (newWindows: WindowState | null) => {
-    if (newWindows) {
-      dispatch(core.actions.setWindowState(newWindows));
+  const graph = useSelector(selectWindowGraph);
+  const handleWindowChange = (newGraph: WindowState["graph"] | null) => {
+    if (newGraph) {
+      dispatch(core.actions.setWindowGraph(newGraph));
     }
   };
 
   const renderWindow = useCallback(
-    (id: string, path: MosaicBranch[]) => {
+    (id: WindowId, path: MosaicBranch[]) => {
       const { content, title } = windowDefinitions[id];
       return (
         <MosaicWindow
           path={path}
           title={title}
-          toolbarControls={<WindowToolbarControls path={path} />}
+          toolbarControls={<WindowToolbarControls id={id} />}
         >
           {content}
         </MosaicWindow>
@@ -44,12 +45,11 @@ export const WindowContainer = ({
   );
 
   return (
-    <MuiMosaic
+    <MuiMosaic<WindowId>
       renderTile={renderWindow}
-      value={windowState}
+      value={graph}
       onChange={handleWindowChange}
     />
   );
 };
-
-const selectWindowState = ({ windows }: EditorState) => windows;
+const selectWindowGraph = ({ windows }: EditorState) => windows.graph;

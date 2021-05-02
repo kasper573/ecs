@@ -1,6 +1,6 @@
 import { WindowState } from "./WindowState";
 
-export const createWindowState = (): WindowState => ({
+const defaultGraph: WindowState["graph"] = {
   direction: "row",
   first: {
     first: "runtime",
@@ -20,4 +20,9 @@ export const createWindowState = (): WindowState => ({
     splitPercentage: 41.914893617021285,
   },
   splitPercentage: 61.66394779771615,
+};
+
+export const createWindowState = (): WindowState => ({
+  graph: defaultGraph,
+  splitPercentages: {},
 });

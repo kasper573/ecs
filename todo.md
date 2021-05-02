@@ -13,7 +13,8 @@
 
 # User defined windows tasks
 
-- Opening a code file should open the code window if closed
+- Closing a window should remove it entirely.
+  Restoring should reopen the window gracefully wherever it seems to fit.
 - Window list toggle feature
 - Persist window state in localStorage
 - Improve code for default window state (move definition to json)
@@ -25,6 +26,8 @@
 
 # General tasks
 
+- user defined hotkeys
+- cross platform hotkeys
 - double click in tree view should only trigger one select event
 - add styled components plugin to webpack
 

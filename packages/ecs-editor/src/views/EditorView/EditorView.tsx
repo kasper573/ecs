@@ -7,19 +7,7 @@ import { ContentPadding } from "../../layout/ContentPadding";
 import { NotFoundView } from "../NotFoundView";
 import { WindowContainer } from "../../features/window/WindowContainer";
 import { SystemActions } from "./SystemActions";
-import { LibraryPanel } from "./LibraryPanel";
-import { HierarchyPanel } from "./HierarchyPanel";
-import { InspectorPanel } from "./InspectorPanel";
-import { CodePanel } from "./CodePanel";
-import { RuntimePanel } from "./RuntimePanel";
-
-const windows = {
-  library: { title: "Library", content: <LibraryPanel /> },
-  hierarchy: { title: "Hierarchy", content: <HierarchyPanel /> },
-  inspector: { title: "Inspector", content: <InspectorPanel /> },
-  code: { title: "Code", content: <CodePanel /> },
-  runtime: { title: "Runtime", content: <RuntimePanel /> },
-};
+import { editorWindows } from "./editorWindows";
 
 export const EditorView = memo(() => {
   const selectedSystem = useRootSelector(selectSelectedSystemDefinition);
@@ -31,7 +19,7 @@ export const EditorView = memo(() => {
     <SystemSyncContext.Provider value={systemSync}>
       <AdjustedContentPadding>
         <SystemActions system={selectedSystem} />
-        <WindowContainer windowDefinitions={windows} />
+        <WindowContainer windowDefinitions={editorWindows} />
       </AdjustedContentPadding>
     </SystemSyncContext.Provider>
   );

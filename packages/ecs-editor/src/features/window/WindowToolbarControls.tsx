@@ -3,11 +3,11 @@ import React from "react";
 import { useDispatch } from "../../store";
 import { core } from "../../core";
 import { CloseIcon } from "../../components/icons";
-import { WindowPath } from "./WindowPath";
+import { WindowId } from "./WindowId";
 
-export const WindowToolbarControls = ({ path }: { path: WindowPath }) => {
+export const WindowToolbarControls = ({ id }: { id: WindowId }) => {
   const dispatch = useDispatch();
-  const handleClose = () => dispatch(core.actions.closeWindow(path));
+  const handleClose = () => dispatch(core.actions.minimizeWindow(id));
   return (
     <Tooltip title="Close">
       <IconButton size="small" edge="end" onClick={handleClose}>
