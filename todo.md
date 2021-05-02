@@ -13,14 +13,15 @@
 
 # User defined windows tasks
 
-- Make window feature agnostic as to which windows exist
 - Opening a code file should open the code window if closed
 - Window list toggle feature
 - Persist window state in localStorage
+- Improve code for default window state (move definition to json)
 - Remove layout container and use entire screen space for windows
 - Use material-ui theme to define window line separator on hover
 - Remove fixed black background of windows
 - Let each window panel define its toolbar
+- Verify structural integrity of persisted window state on load
 
 # General tasks
 
