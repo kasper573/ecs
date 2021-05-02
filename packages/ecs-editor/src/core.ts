@@ -32,6 +32,7 @@ import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
 import { codeFileReducers } from "./features/codeFile/codeFileReducers";
 import { setComponentDefinitionScript } from "./reducers/setComponentDefinitionScript";
+import { windowReducers } from "./features/window/windowReducers";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -72,6 +73,7 @@ export const core = createSlice({
     setThemeType,
     commitECSDefinitions,
     ...codeFileReducers,
+    ...windowReducers,
   },
 });
 

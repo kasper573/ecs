@@ -11,11 +11,20 @@
 - Implement Editor UI for declarative component properties (without imports)
 - Implement support for imports
 
-# Tasks
+# User defined windows tasks
 
-- bug: layout has vertical overflow when library is too big
+- Make window feature agnostic as to which windows exist
+- Opening a code file should open the code window if closed
+- Window list toggle feature
+- Persist window state in localStorage
+- Remove layout container and use entire screen space for windows
+- Use material-ui theme to define window line separator on hover
+- Remove fixed black background of windows
+- Let each window panel define its toolbar
+
+# General tasks
+
 - double click in tree view should only trigger one select event
-- check why fast refresh is not working when editing ComponentDefinitionEditor.tsx (loses inspected state)
 - add styled components plugin to webpack
 
 - Create Reactive component (should behave as mobx reaction/when)
@@ -79,6 +88,7 @@
 
 # Refactor
 
+- rename useSelector to useEditorSelector
 - Refactor/simplify/improve mock functions for ecs-serializable unit tests
 - Cover more (all!) test cases in ecs-serializable
 - replace zod (zod doesn't support readonly)

@@ -31,6 +31,9 @@ export const Panel = styled(PanelBase)`
   ${({ theme }) => theme.breakpoints.up("sm")} {
     overflow-y: auto;
   }
+  // Expects parent node to define bounds
+  width: 100%;
+  height: 100%;
 `;
 
 const PanelContent = styled.div<{ $variant: PanelVariant }>`

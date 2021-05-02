@@ -5,13 +5,8 @@ import { selectSelectedSystemDefinition } from "../../selectors/selectSelectedSy
 import { SystemSyncContext, useSystemSync } from "../../hooks/useSystemSync";
 import { ContentPadding } from "../../layout/ContentPadding";
 import { NotFoundView } from "../NotFoundView";
+import { WindowContainer } from "../../features/window/WindowContainer";
 import { SystemActions } from "./SystemActions";
-import { PanelContainer } from "./PanelContainer";
-import { LibraryPanel } from "./LibraryPanel";
-import { HierarchyPanel } from "./HierarchyPanel";
-import { InspectorPanel } from "./InspectorPanel";
-import { CodePanel } from "./CodePanel";
-import { RuntimePanel } from "./RuntimePanel";
 
 export const EditorView = memo(() => {
   const selectedSystem = useRootSelector(selectSelectedSystemDefinition);
@@ -23,13 +18,7 @@ export const EditorView = memo(() => {
     <SystemSyncContext.Provider value={systemSync}>
       <AdjustedContentPadding>
         <SystemActions system={selectedSystem} />
-        <PanelContainer>
-          <LibraryPanel />
-          <HierarchyPanel />
-          <InspectorPanel />
-          <CodePanel />
-          <RuntimePanel />
-        </PanelContainer>
+        <WindowContainer />
       </AdjustedContentPadding>
     </SystemSyncContext.Provider>
   );
