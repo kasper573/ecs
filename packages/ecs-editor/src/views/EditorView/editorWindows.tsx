@@ -1,4 +1,5 @@
 import { typedKeys } from "../../../../ecs-common/src/typedKeys";
+import { WindowId } from "../../features/window/WindowId";
 import { LibraryPanel } from "./LibraryPanel";
 import { HierarchyPanel } from "./HierarchyPanel";
 import { InspectorPanel } from "./InspectorPanel";
@@ -19,5 +20,5 @@ export const editorWindows = {
 
 export const editorWindowNames = typedKeys(editorWindows).reduce(
   (names, name) => ({ ...names, [name]: name }),
-  {} as Record<keyof typeof editorWindows, string>
+  {} as Record<keyof typeof editorWindows, WindowId>
 );

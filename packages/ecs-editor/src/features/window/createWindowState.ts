@@ -1,28 +1,19 @@
 import { WindowState } from "./WindowState";
+import { WindowId } from "./WindowId";
 
-const defaultGraph: WindowState["graph"] = {
+export const createWindowState = (): WindowState => ({
   direction: "row",
-  first: {
-    first: "runtime",
-    second: "code",
-    direction: "column",
-    splitPercentage: 66.58354114713218,
-  },
+  first: "runtime" as WindowId,
   second: {
-    first: "hierarchy",
+    first: "hierarchy" as WindowId,
     second: {
-      first: "inspector",
-      second: "library",
+      first: "inspector" as WindowId,
+      second: "library" as WindowId,
       direction: "column",
       splitPercentage: 39.900249376558605,
     },
     direction: "row",
-    splitPercentage: 41.914893617021285,
+    splitPercentage: 50.27027027027026,
   },
-  splitPercentage: 61.66394779771615,
-};
-
-export const createWindowState = (): WindowState => ({
-  graph: defaultGraph,
-  splitPercentages: {},
+  splitPercentage: 54.730831973898866,
 });

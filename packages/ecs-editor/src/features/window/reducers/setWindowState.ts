@@ -1,8 +1,8 @@
 import { createEditorStateReducer } from "../../../functions/createEditorStateReducer";
 import { WindowState } from "../WindowState";
 
-export const setWindowGraph = createEditorStateReducer<WindowState["graph"]>(
+export const setWindowState = createEditorStateReducer<WindowState>(
   (state, { payload }) => {
-    state.windows.graph = payload;
+    state.windows = payload;
   }
 );

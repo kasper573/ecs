@@ -1,3 +1,3 @@
-import { MosaicKey } from "react-mosaic-component/lib/types";
+import { NominalString } from "../../../../ecs-common/src/NominalString";
 
-export type WindowId = MosaicKey;
+export type WindowId = NominalString<"WindowId">;

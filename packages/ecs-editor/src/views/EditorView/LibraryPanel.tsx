@@ -43,7 +43,7 @@ import { Intro } from "../../intro/Intro";
 import { LibraryFolder } from "../../../../ecs-serializable/src/definition/LibraryFolder";
 import { EntityDefinition } from "../../../../ecs-serializable/src/definition/EntityDefinition";
 import { ComponentDefinition } from "../../../../ecs-serializable/src/definition/ComponentDefinition";
-import { isWindowMinimized } from "../../features/window/isWindowMinimized";
+import { isWindowOpen } from "../../features/window/isWindowOpen";
 import { editorWindowNames } from "./editorWindows";
 
 export const LibraryPanel = memo(() => {
@@ -159,12 +159,12 @@ export const LibraryPanel = memo(() => {
   function handleOpenComponentFile(def: ComponentDefinition) {
     dispatch(core.actions.openCodeFile(def.id));
 
-    const shouldRestoreCodeWindow = isWindowMinimized(
-      store.getState().editor.present.windows.graph,
+    const shouldOpenWindow = !isWindowOpen(
+      store.getState().editor.present.windows,
       editorWindowNames.code
     );
-    if (shouldRestoreCodeWindow) {
-      dispatch(core.actions.restoreWindow(editorWindowNames.code));
+    if (shouldOpenWindow) {
+      dispatch(core.actions.openWindow(editorWindowNames.code));
     }
   }
 

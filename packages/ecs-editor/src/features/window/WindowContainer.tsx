@@ -21,11 +21,10 @@ export const WindowContainer = ({
   windowDefinitions,
 }: WindowContainerProps) => {
   const dispatch = useDispatch();
-  const graph = useSelector(selectWindowGraph);
-  const handleWindowChange = (newGraph: WindowState["graph"] | null) => {
-    if (newGraph) {
-      dispatch(core.actions.setWindowGraph(newGraph));
-    }
+  const windows = useSelector(selectWindows);
+
+  const receiveWindowState = (updated: WindowState) => {
+    dispatch(core.actions.setWindowState(updated));
   };
 
   const renderWindow = useCallback(
@@ -35,7 +34,7 @@ export const WindowContainer = ({
         <MosaicWindow
           path={path}
           title={title}
-          toolbarControls={<WindowToolbarControls id={id} />}
+          toolbarControls={<WindowToolbarControls path={path} />}
         >
           {content}
         </MosaicWindow>
@@ -47,9 +46,10 @@ export const WindowContainer = ({
   return (
     <MuiMosaic<WindowId>
       renderTile={renderWindow}
-      value={graph}
-      onChange={handleWindowChange}
+      value={windows}
+      onChange={receiveWindowState}
     />
   );
 };
-const selectWindowGraph = ({ windows }: EditorState) => windows.graph;
+
+const selectWindows = ({ windows }: EditorState) => windows;

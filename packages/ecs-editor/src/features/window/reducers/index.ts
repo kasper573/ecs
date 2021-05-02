@@ -1,11 +1,11 @@
-import { setWindowGraph } from "./setWindowGraph";
-import { restoreWindow } from "./restoreWindow";
-import { minimizeWindow } from "./minimizeWindow";
+import { setWindowState } from "./setWindowState";
+import { openWindow } from "./openWindow";
+import { closeWindow } from "./closeWindow";
 
 const windowReducers = {
-  setWindowGraph,
-  restoreWindow,
-  minimizeWindow,
+  setWindowState,
+  openWindow,
+  closeWindow,
 };
 
 export default windowReducers;
