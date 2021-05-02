@@ -3,9 +3,9 @@ import {
   ComponentPropertyValueDefinition,
 } from "../definition/ComponentPropertiesDefinition";
 import { deserializeJS } from "../jsSerializer";
-import { isFunctionDefinition } from "./isFunctionDefinition";
+import { isECSScript } from "./isECSScript";
 
 export const createComponentProperty = (
   value: ComponentPropertyValueDefinition
 ): ComponentPropertyValue =>
-  isFunctionDefinition(value) ? deserializeJS(value.code) : value;
+  isECSScript(value) ? deserializeJS(value.code) : value;

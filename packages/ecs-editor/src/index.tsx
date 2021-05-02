@@ -17,25 +17,32 @@ import { InteractionMemory } from "../../ecs-text-adventure/src/interactive/Inte
 import { SceneManager } from "../../ecs-scene-manager/src/SceneManager";
 import { SceneSwitch } from "../../ecs-scene-manager/src/SceneSwitch";
 import { TextAdventureRenderer } from "../../ecs-text-adventure/src/renderer/TextAdventureRenderer";
-import {
-  loadECSDefinitionFromLocalStorage,
-  saveECSDefinitionToLocalStorage,
-} from "./storage/lsECSDefinition";
+import { ecsDefinitionSchema } from "../../ecs-serializable/src/definition/ECSDefinition";
 import { App } from "./App";
 import { createStore } from "./store";
 import { NativeComponentsContext } from "./NativeComponentsContext";
 import { createEditorState } from "./functions/createEditorState";
+import { loadZodFromLS, saveZodToLS } from "./storage/zodLocalStorage";
+import { windowStateSchema } from "./features/window/WindowState";
+import { defaultWindowState } from "./fixtures/defaultWindowState";
 
 const history = createBrowserHistory();
 const store = createStore(history, {
   ...createEditorState(),
-  ecs: loadECSDefinitionFromLocalStorage() ?? createECSDefinition(),
+  ecs: loadZodFromLS("ecs", ecsDefinitionSchema) ?? createECSDefinition(),
+  windows: loadZodFromLS("windows", windowStateSchema) ?? defaultWindowState,
 });
 
 reaction(
   store,
   () => store.getState().editor.present.ecs,
-  saveECSDefinitionToLocalStorage
+  (ecs) => saveZodToLS("ecs", ecsDefinitionSchema, ecs)
+);
+
+reaction(
+  store,
+  () => store.getState().editor.present.windows,
+  (windows) => saveZodToLS("windows", windowStateSchema, windows)
 );
 
 const nativeComponents = {

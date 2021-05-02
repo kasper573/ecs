@@ -10,7 +10,7 @@ import {
   ComponentPropertyValueDefinition,
 } from "../../../ecs-serializable/src/definition/ComponentPropertiesDefinition";
 import { createComponentPropertyDefinition } from "../../../ecs-serializable/src/functions/createComponentPropertyDefinition";
-import { isFunctionDefinition } from "../../../ecs-serializable/src/functions/isFunctionDefinition";
+import { isECSScript } from "../../../ecs-serializable/src/functions/isECSScript";
 import { Intro } from "../intro/Intro";
 import { createDefaultPropertyDeclaration } from "../../../ecs-serializable/src/functions/createDefaultPropertyDeclaration";
 import { renderComponentPropertyValueEditor } from "./ComponentPropertyValueEditor";
@@ -42,7 +42,7 @@ export const ComponentPropertyEditor = ({
 
   const supportsDeclarative = propertySupportsDeclarative(propertyInfo);
 
-  const isDeclarative = supportsDeclarative && isFunctionDefinition(value);
+  const isDeclarative = supportsDeclarative && isECSScript(value);
 
   const hasBaseDiff =
     !!baseProperties && primaryProperties.hasOwnProperty(propertyName);

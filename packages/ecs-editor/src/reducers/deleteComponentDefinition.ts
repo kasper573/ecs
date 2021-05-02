@@ -16,7 +16,7 @@ export const deleteComponentDefinition = createEditorStateReducer<ComponentDefin
     }
 
     // Remove related components from all entity definitions in the same system
-    for (const [entity, component] of Array.from(related(state, def))) {
+    for (const [entity, component] of Array.from(relatedEntities(state, def))) {
       deleteComponentInitializer(
         state,
         core.actions.deleteComponentInitializer({
@@ -27,12 +27,15 @@ export const deleteComponentDefinition = createEditorStateReducer<ComponentDefin
       );
     }
 
+    // Remove related file
+    core.caseReducers.closeCodeFile(state, core.actions.closeCodeFile(id));
+
     // Remove component definition
     removeNominal(state.ecs.componentDefinitions, id);
   }
 );
 
-function* related(
+function* relatedEntities(
   state: EditorState,
   componentDefinition: ComponentDefinition
 ) {

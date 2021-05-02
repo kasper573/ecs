@@ -2,14 +2,14 @@ import { Switch, TextField } from "@material-ui/core";
 import { ZodTypes } from "zod";
 import { isType } from "../../../property-bag/src/isType";
 import {
-  ComponentPropertyFunctionDefinition,
   ComponentPropertyValue,
   ComponentPropertyValueDefinition,
 } from "../../../ecs-serializable/src/definition/ComponentPropertiesDefinition";
 import { PropertyInfo } from "../../../property-bag/src/types/PropertyInfo";
 import { propertySupportsDeclarative } from "../../../property-bag/src/propertySupportsDeclarative";
-import { isFunctionDefinition } from "../../../ecs-serializable/src/functions/isFunctionDefinition";
-import { FunctionEditor } from "./FunctionEditor";
+import { isECSScript } from "../../../ecs-serializable/src/functions/isECSScript";
+import { ECSScript } from "../../../ecs-serializable/src/definition/ECSScript";
+import { ComponentPropertyDeclarationEditor } from "./ComponentPropertyDeclarationEditor";
 
 export type ComponentPropertyValueEditorProps = {
   value: ComponentPropertyValueDefinition;
@@ -23,15 +23,14 @@ export const renderComponentPropertyValueEditor = ({
   onChange,
 }: ComponentPropertyValueEditorProps) => {
   const supportsDeclarative = propertySupportsDeclarative(info);
-  const isDeclarative = supportsDeclarative && isFunctionDefinition(value);
+  const isDeclarative = supportsDeclarative && isECSScript(value);
 
   if (isDeclarative || isType(info.type, ZodTypes.function)) {
-    const valueAsFunc = (value ??
-      emptyFunc) as ComponentPropertyFunctionDefinition;
+    const declaration = (value ?? emptyFunc) as ECSScript;
     return (
-      <FunctionEditor
-        value={valueAsFunc.code}
-        onChange={(code) => onChange({ code })}
+      <ComponentPropertyDeclarationEditor
+        value={declaration}
+        onChange={onChange}
       />
     );
   }
@@ -65,4 +64,4 @@ export const renderComponentPropertyValueEditor = ({
   }
 };
 
-const emptyFunc: ComponentPropertyFunctionDefinition = { code: "() => {}" };
+const emptyFunc: ECSScript = { code: "() => {}" };

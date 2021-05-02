@@ -1,3 +1,5 @@
+import { ECSScript } from "./ECSScript";
+
 export type ComponentProperties = Record<string, ComponentPropertyValue>;
 
 export type ComponentPropertiesDefinition = Record<
@@ -6,8 +8,6 @@ export type ComponentPropertiesDefinition = Record<
 >;
 
 export type ComponentPropertyPrimitive = number | string | boolean | undefined;
-
-export type ComponentPropertyFunctionDefinition = { code: string };
 
 export type ComponentPropertyFunction = () => ComponentPropertyPrimitive | void;
 
@@ -19,4 +19,4 @@ export type ComponentPropertyValue =
 export type ComponentPropertyValueDefinition =
   | ComponentPropertyPrimitive
   | ComponentPropertyPrimitive[]
-  | ComponentPropertyFunctionDefinition;
+  | ECSScript;

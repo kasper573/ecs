@@ -7,11 +7,23 @@
 # ACE
 
 - Create Editor UI
-- Implement Editor UI for declarative component properties (without imports)
 - Implement Editor UI for custom components
+- Implement Editor UI for declarative component properties (without imports)
 - Implement support for imports
 
-# Tasks
+# User defined windows tasks
+
+- Remove layout container and use entire screen space for windows
+- Use material-ui theme to define window line separator on hover
+- Remove fixed black background of windows
+- Let each window panel define its toolbar
+
+# General tasks
+
+- user defined hotkeys
+- cross platform hotkeys
+- double click in tree view should only trigger one select event
+- add styled components plugin to webpack
 
 - Create Reactive component (should behave as mobx reaction/when)
 - Create equivalent of unity scriptable objects
@@ -74,6 +86,7 @@
 
 # Refactor
 
+- rename useSelector to useEditorSelector
 - Refactor/simplify/improve mock functions for ecs-serializable unit tests
 - Cover more (all!) test cases in ecs-serializable
 - replace zod (zod doesn't support readonly)

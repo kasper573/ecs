@@ -42,6 +42,8 @@ import { TreeNode } from "../../tree/TreeNode";
 import { Intro } from "../../intro/Intro";
 import { LibraryFolder } from "../../../../ecs-serializable/src/definition/LibraryFolder";
 import { EntityDefinition } from "../../../../ecs-serializable/src/definition/EntityDefinition";
+import { ComponentDefinition } from "../../../../ecs-serializable/src/definition/ComponentDefinition";
+import { WindowId } from "../../features/window/WindowId";
 
 export const LibraryPanel = memo(() => {
   const store = useStore();
@@ -153,6 +155,11 @@ export const LibraryPanel = memo(() => {
     dispatch(core.actions.setSelectedLibraryNode(node.nodeId));
   }
 
+  function handleOpenComponentFile(def: ComponentDefinition) {
+    dispatch(core.actions.openCodeFile(def.id));
+    dispatch(core.actions.openWindow("code" as WindowId));
+  }
+
   return (
     <Panel name={PanelName.Library} {...rootContextMenuProps}>
       {rootContextMenu}
@@ -186,7 +193,8 @@ export const LibraryPanel = memo(() => {
         treeOptions={treeOptions}
         itemProps={{
           menuItems: menuItemFactory.node,
-          treeItemProps: getItemProps,
+          treeItemProps: (value) =>
+            getItemProps(value, handleOpenComponentFile),
           dragSpec: libraryNodeDragSpec,
           dropSpec: (target) =>
             libraryNodeDropSpec(
@@ -200,16 +208,28 @@ export const LibraryPanel = memo(() => {
   );
 });
 
-function getItemProps({ value }: TreeNode<TypedLibraryNode>) {
+function getItemProps(
+  { value }: TreeNode<TypedLibraryNode>,
+  onComponentDoubleClicked: (def: ComponentDefinition) => void
+) {
   const isFolder = value.type === "folder";
   const LabelIcon = treeItemIcons[value.type];
   const collapseIcon = isFolder ? <FolderOpenIcon /> : <LabelIcon />;
   const expandIcon = isFolder ? <FolderClosedIcon /> : <LabelIcon />;
-  return {
+  const props = {
     collapseIcon,
     expandIcon,
     label: value.name,
   };
+
+  if (value.type === "component") {
+    return {
+      ...props,
+      onDoubleClick: () => onComponentDoubleClicked(value),
+    };
+  }
+
+  return props;
 }
 
 const treeItemIcons = {

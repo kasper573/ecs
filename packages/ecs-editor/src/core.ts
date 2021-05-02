@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { typedKeys } from "../../ecs-common/src/typedKeys";
 import { createEditorState } from "./functions/createEditorState";
 import { createSystemDefinition } from "./reducers/createSystemDefinition";
 import { renameSystemDefinition } from "./reducers/renameSystemDefinition";
@@ -30,6 +31,9 @@ import { moveLibraryNode } from "./reducers/moveLibraryNode";
 import { resetComponentInitializerProperty } from "./reducers/resetComponentInitializerProperty";
 import { moveEntityInitializer } from "./reducers/moveEntityInitializer";
 import { commitECSDefinitions } from "./reducers/commitECSDefinitions";
+import { codeFileReducers } from "./features/codeFile/codeFileReducers";
+import { setComponentDefinitionScript } from "./reducers/setComponentDefinitionScript";
+import windowReducers from "./features/window/reducers";
 
 /**
  * A redux toolkit slice representing all actions in the editor
@@ -58,16 +62,19 @@ export const core = createSlice({
     deleteLibraryFolder,
     renameComponentDefinition,
     deleteComponentDefinition,
+    createComponentDefinition,
+    duplicateComponentDefinition,
+    setComponentDefinitionScript,
     addComponentInitializer,
     setComponentInitializerProperty,
     resetComponentInitializerProperty,
     deleteComponentInitializer,
     duplicateComponentInitializer,
-    createComponentDefinition,
-    duplicateComponentDefinition,
     setEditorState,
     setThemeType,
     commitECSDefinitions,
+    ...codeFileReducers,
+    ...windowReducers,
   },
 });
 
@@ -75,6 +82,8 @@ export const noUndoActionList: Array<keyof typeof core.actions> = [
   "setSelectedEntityInitializer",
   "setSelectedLibraryNode",
   "setThemeType",
+  ...typedKeys(codeFileReducers),
+  ...typedKeys(windowReducers),
 ];
 
 export const noUndoActions = noUndoActionList.map(

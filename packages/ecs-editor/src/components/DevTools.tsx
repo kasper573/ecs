@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   HTMLAttributes,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -16,9 +17,8 @@ import { useDispatch, useSelector } from "../store";
 import { core } from "../core";
 import { mockEditorState } from "../functions/mockEditorState";
 import { NativeComponentsContext } from "../NativeComponentsContext";
-import { selectECS } from "../selectors/selectECS";
 import { SimpleDialog } from "../dialogs/SimpleDialog";
-import { serializeECSDefinition } from "../../../ecs-serializable/src/serializeECSDefinition";
+import { selectAll } from "../selectors/selectAll";
 import { GenerateIcon, SaveIcon } from "./icons";
 
 export const DevTools = forwardRef<HTMLDivElement>(
@@ -27,7 +27,10 @@ export const DevTools = forwardRef<HTMLDivElement>(
     const [isECSPreviewDialogOpen, setECSPreviewDialogOpen] = useState(false);
     const [mockSize, setMockSize] = useState(10);
     const dispatch = useDispatch();
-    const ecs = useSelector(selectECS);
+    const state = useSelector(selectAll);
+    const serializedState = useMemo(() => JSON.stringify(state, null, 2), [
+      state,
+    ]);
     const nativeComponents = useContext(NativeComponentsContext);
 
     const mock = () =>
@@ -94,9 +97,9 @@ export const DevTools = forwardRef<HTMLDivElement>(
           onClose={() => setECSPreviewDialogOpen(false)}
         >
           {isECSPreviewDialogOpen && (
-            <ECSPreview
+            <StatePreview
               ref={ecsPreviewRef}
-              value={serializeECSDefinition(ecs, 2)}
+              value={serializedState}
               readOnly
             />
           )}
@@ -115,7 +118,7 @@ const Actions = styled.div`
   }
 `;
 
-const ECSPreview = styled.textarea`
+const StatePreview = styled.textarea`
   width: 100%;
   height: 50vh;
 `;

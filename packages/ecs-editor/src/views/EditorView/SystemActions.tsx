@@ -4,6 +4,7 @@ import { saveAs } from "file-saver";
 import {
   DeleteIcon,
   EditIcon,
+  WindowsIcon,
   PublishIcon,
   SaveIcon,
   UnpublishIcon,
@@ -18,6 +19,8 @@ import { getECSDefinitionForSystem } from "../../../../ecs-serializable/src/func
 import { useSystemPublisher } from "../../hooks/useSystemPublisher";
 import { viewerRoute } from "../../routes/viewerRoute";
 import { createDeleteSystemDefinitionAction } from "../../actions/createDeleteSystemDefinitionAction";
+import { MenuFor } from "../../components/MenuFor";
+import { useWindowMenuItems } from "../../features/window/useWindowMenuItems";
 
 export type SystemActionsProps = {
   system: SystemDefinition;
@@ -26,6 +29,7 @@ export type SystemActionsProps = {
 export const SystemActions = ({ system }: SystemActionsProps) => {
   const dispatch = useDispatch();
   const store = useStore();
+  const windowMenuItems = useWindowMenuItems();
   const {
     isPublished,
     canPublish,
@@ -64,6 +68,15 @@ export const SystemActions = ({ system }: SystemActionsProps) => {
 
   return (
     <Row>
+      <MenuFor items={windowMenuItems}>
+        {(props) => (
+          <Tooltip title="Windows">
+            <IconButton {...props}>
+              <WindowsIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </MenuFor>
       <Tooltip title={isPublished ? "View published" : "Publish to view"}>
         <span>
           <IconButton
