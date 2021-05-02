@@ -56,6 +56,8 @@ const nativeComponents = {
   TextAdventureRenderer,
 };
 
+render();
+
 function render() {
   // ConnectedRouter fires location changes twice in strict mode,
   // so to reduce verbose redux logs we render it outside strict mode
@@ -76,8 +78,17 @@ function render() {
         </React.StrictMode>
       </ConnectedRouter>
     </Provider>,
-    document.getElementById("root")
+    getRootNode()
   );
 }
 
-render();
+function getRootNode() {
+  const id = "root";
+  let root = document.getElementById(id);
+  if (!root) {
+    root = document.createElement("div");
+    root.id = id;
+    document.body.append(root);
+  }
+  return root;
+}

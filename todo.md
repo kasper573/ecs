@@ -13,6 +13,7 @@
 
 # User defined windows tasks
 
+- Let each window panel component define its toolbar components
 - Remove layout container and use entire screen space for windows
 - Use material-ui theme to define window line separator on hover
 - Remove fixed black background of windows

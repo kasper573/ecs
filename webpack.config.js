@@ -1,7 +1,7 @@
 require("./scripts/env");
 const path = require("path");
 const WebpackShellPlugin = require("webpack-shell-plugin");
-const { HotModuleReplacementPlugin } = require("webpack");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
@@ -13,7 +13,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = "development";
 }
 
-const fastRefresh = Boolean(process.env.USE_FAST_REFRESH);
+const fastRefresh = !!parseInt(process.env.USE_FAST_REFRESH);
 const envToJsonFile = path.resolve(__dirname, "scripts/envToJson.sh");
 const envRuntimeFile = path.resolve(__dirname, ".env.runtime");
 const envOutputFile = path.resolve(
@@ -30,14 +30,25 @@ module.exports = {
   entry: "./src",
   devtool: "source-map",
   output: {
-    filename: "bundle.js",
+    filename: "[name].[hash].js",
     publicPath: "/",
   },
   module: {
     rules: [
       {
         test: /\.[t|j]sx?$/,
-        use: "babel-loader",
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "react-app",
+                { flow: false, typescript: true, runtime: "automatic" },
+              ],
+            ],
+            plugins: [fastRefresh && "react-refresh/babel"].filter(Boolean),
+          },
+        },
         exclude: /node_modules/,
       },
       {
@@ -58,11 +69,9 @@ module.exports = {
       }),
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
     new NodePolyfillPlugin(),
+    new HTMLWebpackPlugin({ title: "ECS" }),
     new CopyPlugin({
-      patterns: [
-        { from: "./public", to: "." },
-        { from: "./public/index.html", to: "./200.html" },
-      ],
+      patterns: [{ from: envOutputFile, to: "." }],
     }),
   ].filter(Boolean),
   resolve: {
