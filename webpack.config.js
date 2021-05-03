@@ -40,12 +40,7 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: [
-              [
-                "react-app",
-                { flow: false, typescript: true, runtime: "automatic" },
-              ],
-            ],
+            ...require("./babel.config"),
             plugins: [fastRefresh && "react-refresh/babel"].filter(Boolean),
           },
         },
