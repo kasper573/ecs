@@ -2,7 +2,6 @@ require("./scripts/env");
 const path = require("path");
 const WebpackShellPlugin = require("webpack-shell-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
@@ -65,9 +64,6 @@ module.exports = {
     process.env.ANALYZE_BUNDLE && new BundleAnalyzerPlugin(),
     new NodePolyfillPlugin(),
     new HTMLWebpackPlugin({ title: "ECS" }),
-    new CopyPlugin({
-      patterns: [{ from: envOutputFile, to: "." }],
-    }),
   ].filter(Boolean),
   resolve: {
     extensions,
