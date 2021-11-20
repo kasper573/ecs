@@ -55,7 +55,7 @@
     "zod": "^1.11.12"
   },
   "scripts": {
-    "dev:web": "cd packages/ecs-editor && webpack-dev-server",
+    "dev:web": "cd packages/ecs-editor && webpack-dev-server --content-base public/",
     "dev:api": "cd packages/ecs-api/src && ts-node-dev index.ts",
     "run:api": "cd packages/ecs-api/src && ts-node index.ts",
     "build:web": "cd packages/ecs-editor && webpack",
