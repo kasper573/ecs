@@ -11,7 +11,7 @@ packages/**/node_modules
 
 # build
 packages/**/dist
-packages/**/public/.env.runtime.json
+packages/**/public/env.runtime.json
 
 # misc
 data

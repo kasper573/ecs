@@ -14,7 +14,7 @@ WORKDIR /app
 RUN apk add bash --no-cache
 COPY scripts/envToJson.sh .
 RUN chmod +x envToJson.sh
-RUN echo '/app/envToJson.sh /app/.env.runtime /usr/share/nginx/html/.env.runtime.json' > /docker-entrypoint.d/90-syncEnv.sh
+RUN echo '/app/envToJson.sh /app/env.runtime /usr/share/nginx/html/env.runtime.json' > /docker-entrypoint.d/90-syncEnv.sh
 RUN chmod +x /docker-entrypoint.d/90-syncEnv.sh
 
 # Update nginx config
@@ -22,4 +22,4 @@ COPY nginx /etc/nginx
 
 # Copy SPA to nginx and update runtime variables
 COPY --from=build /app/packages/ecs-editor/dist /usr/share/nginx/html/
-COPY .env.runtime .
+COPY env.runtime .
