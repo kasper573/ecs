@@ -2,10 +2,6 @@
 
 An ECS game editor built with Typescript and React.
 
-[Try the editor](https://ecseditor.xyz/)
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Getting started
 
 - Have docker set up on your system
