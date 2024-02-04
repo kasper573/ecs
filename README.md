@@ -1,4 +1,4 @@
-# ECS &middot; [![status](https://github.com/ksandin/ecs/actions/workflows/main.yml/badge.svg)](https://github.com/ksandin/ecs/actions)
+# ECS &middot; [![status](https://github.com/kasper573/ecs/actions/workflows/main.yml/badge.svg)](https://github.com/kasper573/ecs/actions)
 
 An ECS game editor built with Typescript and React.
 
